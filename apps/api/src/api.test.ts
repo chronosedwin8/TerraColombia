@@ -299,6 +299,37 @@ d('API', () => {
       }
     }, 60_000);
 
+    /**
+     * El panel de capas del mapa decide el candado con `LAYER_RULES`; la ruta de teselas
+     * decide el 403 con `meta.layer`. Si la semilla queda vieja, la interfaz vuelve a
+     * ofrecer como gratuita una capa que el servidor niega en silencio.
+     */
+    it('el catálogo servido coincide con las reglas que lee el cliente', async () => {
+      const { LAYER_RULES } = await import('@terracolombia/shared');
+      const res = await app.inject({ method: 'GET', url: '/api/v1/layers' });
+      const servidas = res.json().data.layers as Array<{
+        id: string;
+        minZoom: number;
+        maxZoom: number;
+        minPlan: string;
+      }>;
+      const discrepancias = servidas
+        .filter((l) => l.id in LAYER_RULES)
+        .flatMap((l) => {
+          const r = LAYER_RULES[l.id as keyof typeof LAYER_RULES];
+          const d: string[] = [];
+          if (l.minZoom !== r.minZoom) d.push(`${l.id}.minZoom ${l.minZoom} ≠ ${r.minZoom}`);
+          if (l.maxZoom !== r.maxZoom) d.push(`${l.id}.maxZoom ${l.maxZoom} ≠ ${r.maxZoom}`);
+          if (l.minPlan !== r.minPlan) d.push(`${l.id}.minPlan ${l.minPlan} ≠ ${r.minPlan}`);
+          return d;
+        });
+      expect(
+        discrepancias,
+        `El catálogo de meta.layer no coincide con LAYER_RULES: ${discrepancias.join('; ')}. ` +
+          'Vuelve a sembrar las capas (`pnpm db:seed`).',
+      ).toEqual([]);
+    });
+
     it('bloquea una capa de plan superior en el plan gratis', async () => {
       const res = await app.inject({
         method: 'GET',

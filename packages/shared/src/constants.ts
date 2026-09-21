@@ -59,6 +59,10 @@ export const TILE_LAYERS = [
   'h3',
   'school',
   'health_facility',
+  // `road` se servía desde la base y estaba en el catálogo de `meta.layer`, pero faltaba en
+  // esta lista, así que el cliente no podía declararla ni ofrecerla: era la única capa de
+  // contexto con datos reales inalcanzable desde el panel de capas.
+  'road',
   'protected_area',
   'hazard',
   'soil_unit',

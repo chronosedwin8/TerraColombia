@@ -19,19 +19,24 @@ import RangeSlider from '@/components/ui/RangeSlider.vue';
 withDefaults(defineProps<{ showCutSelector?: boolean }>(), { showCutSelector: true });
 
 const mapStore = useMapStore();
-const { can, minPlanFor } = useEntitlements();
+const { canSeeLayer, planNameForLayer } = useEntitlements();
 
 const groups = computed(() =>
   layersByGroup().filter((g) => g.layers.length > 0),
 );
 
+/**
+ * El candado sale del plan mínimo que declara `packages/shared`, que es la misma tabla que
+ * consulta la ruta de teselas antes de responder 403. Antes se decidía solo con
+ * `requiresEntitlement`, que estaba en `null` para `soil_unit` y `pot_zone` aunque el
+ * servidor las reserva al plan Pro: la casilla se dejaba marcar y no pasaba nada.
+ */
 function isLocked(def: LayerDefinition): boolean {
-  return def.requiresEntitlement !== null && !can(def.requiresEntitlement);
+  return !canSeeLayer(def.id);
 }
 
 function lockHint(def: LayerDefinition): string {
-  if (!def.requiresEntitlement) return '';
-  return `Disponible desde el plan ${minPlanFor(def.requiresEntitlement) ?? 'Pro'}`;
+  return isLocked(def) ? `Disponible desde el plan ${planNameForLayer(def.id)}` : '';
 }
 
 function isOn(id: TileLayer): boolean {

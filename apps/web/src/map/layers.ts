@@ -13,9 +13,14 @@
  * - Los predios solo se sirven desde zoom 14 (`PARCEL_MIN_ZOOM`); por debajo se usan
  *   los agregados H3, que el backend calcula en `analytics.h3_cell`.
  */
-import { PARCEL_MIN_ZOOM, TILE_LAYERS, type TileLayer } from '@terracolombia/shared';
+import {
+  LAYER_RULES,
+  PARCEL_MIN_ZOOM,
+  TILE_LAYERS,
+  type PlanCode,
+  type TileLayer,
+} from '@terracolombia/shared';
 import type { LayerSpecification } from 'maplibre-gl';
-import type { EntitlementFlag } from '@/composables/useEntitlements';
 
 export interface LegendItem {
   label: string;
@@ -44,16 +49,22 @@ export interface LayerDefinition {
   glossaryId: string | null;
   /** Unidad de la magnitud que pinta la capa, si aplica. */
   unit: string | null;
+  /**
+   * Zoom mínimo y máximo, y plan mínimo. No se declaran capa por capa: se inyectan desde
+   * `LAYER_RULES` de `packages/shared`, que es de donde los lee también el servidor. Cuando
+   * cada lado tenía su copia discrepaban sin que nada lo delatara: el panel ofrecía
+   * `soil_unit` como gratuita y la tesela respondía 403 en silencio, y anunciaba `hazard`
+   * desde el zoom 5 cuando el servidor no sirve nada por debajo del 7.
+   */
   minZoom: number;
   maxZoom: number;
+  minPlan: PlanCode;
   visibleByDefault: boolean;
   defaultOpacity: number;
   legend: LegendItem[];
   /** Entidad responsable, para el pie de procedencia del mapa. */
   sourceLabel: string;
   license: string;
-  /** Permiso de plan necesario; null si la capa es libre. */
-  requiresEntitlement: EntitlementFlag | null;
   /** Si responde a hover y clic mediante `feature-state`. */
   interactive: boolean;
   /** Construye las capas MapLibre de esta capa lógica. */
@@ -105,6 +116,10 @@ const C = {
   hazardHigh: '#b91c1c',
   soil: '#a16207',
   pot: '#7c3aed',
+  roadPrimary: '#ea580c',
+  roadSecondary: '#f59e0b',
+  roadLocal: '#a1a1aa',
+  roadUnpaved: '#92400e',
   h3Low: '#f1f5f9',
   h3Mid: '#7dd3c0',
   h3High: '#134e4a',
@@ -112,7 +127,10 @@ const C = {
 
 // ─── Definiciones ─────────────────────────────────────────────────────────────
 
-export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
+/** Lo propio del cliente: etiqueta, grupo, leyenda y pintado. Los zooms y el plan no. */
+type LayerStyle = Omit<LayerDefinition, 'minZoom' | 'maxZoom' | 'minPlan'>;
+
+const LAYER_STYLES: readonly LayerStyle[] = [
   {
     id: 'parcel',
     label: 'Predios',
@@ -121,8 +139,6 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
       'Terrenos de la base catastral. Aparecen a partir del zoom 14; más lejos se muestran los agregados por celda.',
     glossaryId: 'npn',
     unit: null,
-    minZoom: PARCEL_MIN_ZOOM,
-    maxZoom: 22,
     visibleByDefault: true,
     defaultOpacity: 0.55,
     legend: [
@@ -131,7 +147,6 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
     ],
     sourceLabel: 'IGAC · Base Catastral Pública',
     license: 'CC BY-SA 4.0',
-    requiresEntitlement: null,
     interactive: true,
     build: ({ sourceId, sourceLayer, opacity }) => [
       {
@@ -183,14 +198,11 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
     description: 'Huellas de construcción registradas por el catastro.',
     glossaryId: null,
     unit: 'm² construidos',
-    minZoom: 15,
-    maxZoom: 22,
     visibleByDefault: false,
     defaultOpacity: 0.7,
     legend: [{ label: 'Construcción', color: C.building }],
     sourceLabel: 'IGAC · Base Catastral Pública',
     license: 'CC BY-SA 4.0',
-    requiresEntitlement: null,
     interactive: true,
     build: ({ sourceId, sourceLayer, opacity }) => [
       {
@@ -210,14 +222,11 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
     description: 'Manzanas catastrales urbanas.',
     glossaryId: null,
     unit: null,
-    minZoom: 12,
-    maxZoom: 22,
     visibleByDefault: false,
     defaultOpacity: 0.9,
     legend: [{ label: 'Manzana', color: C.boundary }],
     sourceLabel: 'IGAC · Base Catastral Pública',
     license: 'CC BY-SA 4.0',
-    requiresEntitlement: null,
     interactive: false,
     build: ({ sourceId, sourceLayer, opacity }) => [
       {
@@ -237,14 +246,11 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
     description: 'Sectores en que el catastro divide el municipio.',
     glossaryId: null,
     unit: null,
-    minZoom: 10,
-    maxZoom: 22,
     visibleByDefault: false,
     defaultOpacity: 0.9,
     legend: [{ label: 'Sector', color: C.boundary }],
     sourceLabel: 'IGAC · Base Catastral Pública',
     license: 'CC BY-SA 4.0',
-    requiresEntitlement: null,
     interactive: false,
     build: ({ sourceId, sourceLayer, opacity }) => [
       {
@@ -269,14 +275,11 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
     description: 'Límites municipales oficiales y su estado de cobertura catastral.',
     glossaryId: 'divipola',
     unit: null,
-    minZoom: 4,
-    maxZoom: 22,
     visibleByDefault: true,
     defaultOpacity: 1,
     legend: [{ label: 'Límite municipal', color: C.boundary }],
     sourceLabel: 'IGAC · Límites oficiales / DANE · MGN',
     license: 'CC BY 4.0',
-    requiresEntitlement: null,
     interactive: true,
     build: ({ sourceId, sourceLayer, opacity }) => [
       {
@@ -316,14 +319,11 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
     description: 'Límites departamentales oficiales.',
     glossaryId: 'divipola',
     unit: null,
-    minZoom: 3,
-    maxZoom: 12,
     visibleByDefault: true,
     defaultOpacity: 1,
     legend: [{ label: 'Límite departamental', color: C.boundary }],
     sourceLabel: 'IGAC · Límites oficiales',
     license: 'CC BY 4.0',
-    requiresEntitlement: null,
     interactive: false,
     build: ({ sourceId, sourceLayer, opacity }) => [
       {
@@ -344,8 +344,6 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
       'Indicadores calculados por hexágono de tamaño igual: permite comparar zonas de forma justa y ver el país completo sin cargar predios.',
     glossaryId: 'h3',
     unit: 'predios por celda',
-    minZoom: 4,
-    maxZoom: PARCEL_MIN_ZOOM,
     visibleByDefault: true,
     defaultOpacity: 0.65,
     legend: [
@@ -355,7 +353,6 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
     ],
     sourceLabel: 'TerraColombia · agregados propios sobre IGAC y DANE',
     license: 'Indicador propio (derivado)',
-    requiresEntitlement: null,
     interactive: true,
     build: ({ sourceId, sourceLayer, opacity }) => [
       {
@@ -400,14 +397,11 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
     description: 'Establecimientos y sedes reportados por el Ministerio de Educación.',
     glossaryId: null,
     unit: null,
-    minZoom: 10,
-    maxZoom: 22,
     visibleByDefault: false,
     defaultOpacity: 1,
     legend: [{ label: 'Sede educativa', color: C.school }],
     sourceLabel: 'MEN · Directorio de establecimientos educativos',
     license: 'Datos Abiertos del Estado colombiano',
-    requiresEntitlement: null,
     interactive: true,
     build: ({ sourceId, sourceLayer, opacity }) => [
       {
@@ -433,14 +427,11 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
     description: 'IPS y sedes registradas en el REPS del Ministerio de Salud.',
     glossaryId: null,
     unit: null,
-    minZoom: 10,
-    maxZoom: 22,
     visibleByDefault: false,
     defaultOpacity: 1,
     legend: [{ label: 'Sede de salud', color: C.health }],
     sourceLabel: 'MinSalud · REPS',
     license: 'Datos Abiertos del Estado colombiano',
-    requiresEntitlement: null,
     interactive: true,
     build: ({ sourceId, sourceLayer, opacity }) => [
       {
@@ -460,20 +451,85 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
     ],
   },
   {
+    id: 'road',
+    label: 'Vías',
+    group: 'contexto',
+    description:
+      'Red vial de OpenStreetMap. La jerarquía y la superficie explican buena parte de la accesibilidad que puntúa el análisis de aptitud.',
+    glossaryId: null,
+    unit: null,
+    visibleByDefault: false,
+    defaultOpacity: 0.9,
+    legend: [
+      { label: 'Principal', color: C.roadPrimary },
+      { label: 'Secundaria', color: C.roadSecondary },
+      { label: 'Local o terciaria', color: C.roadLocal },
+      { label: 'Sin pavimentar', color: C.roadUnpaved },
+    ],
+    sourceLabel: 'OpenStreetMap',
+    license: 'ODbL 1.0',
+    interactive: true,
+    build: ({ sourceId, sourceLayer, opacity }) => [
+      {
+        id: 'tc-road-line',
+        type: 'line',
+        source: sourceId,
+        'source-layer': sourceLayer,
+        minzoom: 10,
+        paint: {
+          // La tesela publica `class` y `is_paved`; el color sigue la jerarquía y el trazo
+          // discontinuo lo reserva el destacado de vía sin pavimentar, más abajo.
+          'line-color': [
+            'match',
+            ['get', 'class'],
+            ['motorway', 'trunk', 'primary'],
+            C.roadPrimary,
+            ['secondary', 'tertiary'],
+            C.roadSecondary,
+            C.roadLocal,
+          ],
+          'line-width': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            10,
+            ['match', ['get', 'class'], ['motorway', 'trunk', 'primary'], 1.4, 0.5],
+            16,
+            ['match', ['get', 'class'], ['motorway', 'trunk', 'primary'], 4, 1.6],
+          ],
+          'line-opacity': opacity,
+        },
+      },
+      {
+        // Las vías sin pavimentar van aparte y punteadas: para decidir un acceso, que la vía
+        // exista no es lo mismo que que se pueda usar en invierno.
+        id: 'tc-road-unpaved',
+        type: 'line',
+        source: sourceId,
+        'source-layer': sourceLayer,
+        minzoom: 12,
+        filter: ['==', ['get', 'is_paved'], false],
+        paint: {
+          'line-color': C.roadUnpaved,
+          'line-width': ['interpolate', ['linear'], ['zoom'], 12, 0.8, 16, 2],
+          'line-dasharray': [2, 2],
+          'line-opacity': opacity,
+        },
+      },
+    ],
+  },
+  {
     id: 'protected_area',
     label: 'Áreas protegidas',
     group: 'riesgos',
     description: 'Áreas con protección legal ambiental inscritas en el RUNAP.',
     glossaryId: 'area_protegida',
     unit: null,
-    minZoom: 5,
-    maxZoom: 22,
     visibleByDefault: false,
     defaultOpacity: 0.35,
     legend: [{ label: 'Área protegida (RUNAP)', color: C.protected }],
     sourceLabel: 'Parques Nacionales Naturales · RUNAP',
     license: 'Datos Abiertos del Estado colombiano',
-    requiresEntitlement: null,
     interactive: true,
     build: ({ sourceId, sourceLayer, opacity }) => [
       {
@@ -502,8 +558,6 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
       'Amenaza por movimientos en masa, inundación y sismicidad a escala regional. Orienta, no reemplaza estudios de detalle.',
     glossaryId: 'amenaza',
     unit: 'nivel',
-    minZoom: 5,
-    maxZoom: 22,
     visibleByDefault: false,
     defaultOpacity: 0.45,
     legend: [
@@ -513,7 +567,6 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
     ],
     sourceLabel: 'SGC · IDEAM',
     license: 'Datos Abiertos del Estado colombiano',
-    requiresEntitlement: null,
     interactive: true,
     build: ({ sourceId, sourceLayer, opacity }) => [
       {
@@ -548,14 +601,11 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
     description: 'Unidades cartográficas de suelos, capacidad de uso y vocación (agrología).',
     glossaryId: 'capacidad_uso',
     unit: 'clase agrológica',
-    minZoom: 8,
-    maxZoom: 22,
     visibleByDefault: false,
     defaultOpacity: 0.4,
     legend: [{ label: 'Unidad de suelo', color: C.soil }],
     sourceLabel: 'IGAC · Subdirección de Agrología',
     license: 'CC BY 4.0',
-    requiresEntitlement: null,
     interactive: true,
     build: ({ sourceId, sourceLayer, opacity }) => [
       {
@@ -576,14 +626,11 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
       'Clasificación del suelo y usos del Plan de Ordenamiento. Solo existe para los municipios que publican su POT.',
     glossaryId: 'pot',
     unit: null,
-    minZoom: 10,
-    maxZoom: 22,
     visibleByDefault: false,
     defaultOpacity: 0.4,
     legend: [{ label: 'Zona del POT', color: C.pot }],
     sourceLabel: 'Municipio · ColombiaOT / IGAC',
     license: 'Licencia no declarada por la fuente',
-    requiresEntitlement: null,
     interactive: true,
     build: ({ sourceId, sourceLayer, opacity }) => [
       {
@@ -605,6 +652,16 @@ export const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
     ],
   },
 ] as const;
+
+/**
+ * El catálogo que consume la interfaz: el estilo de cada capa más las reglas de servicio
+ * que declara `packages/shared`. Al componerlo aquí, el panel no puede ofrecer una capa en
+ * un zoom donde el servidor no sirve nada, ni presentarla como gratuita si exige plan.
+ */
+export const LAYER_DEFINITIONS: readonly LayerDefinition[] = LAYER_STYLES.map((style) => ({
+  ...style,
+  ...LAYER_RULES[style.id],
+}));
 
 export const LAYER_BY_ID: Readonly<Partial<Record<TileLayer, LayerDefinition>>> =
   Object.fromEntries(LAYER_DEFINITIONS.map((l) => [l.id, l]));
