@@ -50,6 +50,24 @@ declare module 'fastify' {
   }
 }
 
+/** Una petición de tesela vectorial, que se estrangula aparte del resto de la API. */
+function isTileRequest(req: { url: string }): boolean {
+  return req.url.includes('/tiles/');
+}
+
+/**
+ * Cuánta ráfaga de teselas se admite por minuto.
+ *
+ * Un mapa no pide teselas de una en una: al mover o acercar, MapLibre lanza decenas a la vez
+ * por cada capa visible. El tope por minuto tiene que cubrir esa ráfaga o el mapa se ve roto;
+ * quien pone el techo real al consumo es la cuota diaria `tilesPerDay`, que ya se descuenta en
+ * la ruta. El mínimo de 300 es lo que hace falta para que el mapa cargue de un tirón incluso
+ * en el plan gratuito.
+ */
+function tileBurstLimit(tilesPerDay: number | undefined): number {
+  return Math.max(300, Math.floor((tilesPerDay ?? 20_000) / 100));
+}
+
 export async function buildApp(): Promise<FastifyInstance> {
   const config = loadConfig();
 
@@ -130,11 +148,22 @@ export async function buildApp(): Promise<FastifyInstance> {
       // más peticiones por minuto que una persona. No se documenta en .env.example.
       const override = Number(process.env.RATE_LIMIT_OVERRIDE ?? 0);
       if (override > 0) return override;
-      return req.auth?.entitlements.rateLimitPerMinute ?? 30;
+      const ent = req.auth?.entitlements;
+      return isTileRequest(req) ? tileBurstLimit(ent?.tilesPerDay) : (ent?.rateLimitPerMinute ?? 30);
     },
     timeWindow: '1 minute',
-    keyGenerator: (req) =>
-      req.auth?.apiKeyId ?? req.auth?.organizationId ?? req.auth?.userId ?? req.ip,
+    /**
+     * Las teselas cuentan en un cubo aparte. Al compartir cubo con el resto de la API, abrir
+     * el mapa agotaba la cuota del minuto de golpe —MapLibre pide decenas de teselas a la vez
+     * al mover o acercar— y a partir de ahí fallaba todo: el mapa se quedaba a medias y
+     * cualquier otra llamada respondía 429. Separarlas deja que el mapa funcione sin regalar
+     * cuota a las rutas caras, y el gasto total sigue acotado por `tilesPerDay`, que la ruta
+     * de teselas ya descuenta.
+     */
+    keyGenerator: (req) => {
+      const base = req.auth?.apiKeyId ?? req.auth?.organizationId ?? req.auth?.userId ?? req.ip;
+      return isTileRequest(req) ? `${base}:tiles` : base;
+    },
     /**
      * Las sondas de salud y la documentación no se estrangulan: un orquestador que consulta
      * `/health` cada pocos segundos no debe quedarse sin cuota, y bloquear `/docs` solo

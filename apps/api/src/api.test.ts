@@ -265,6 +265,40 @@ d('API', () => {
       expect(res.statusCode).toBe(400);
     });
 
+    /**
+     * Al mover o acercar el mapa, MapLibre pide decenas de teselas a la vez. Cuando
+     * compartían cubo con el resto de la API, abrir el mapa agotaba el tope del minuto
+     * —30 peticiones en el plan gratuito— y a partir de ahí fallaba todo: el mapa a medias
+     * y cualquier otra llamada con 429. Las teselas cuentan aparte y con más margen.
+     */
+    it('una ráfaga de teselas no agota la cuota por minuto de la API', async () => {
+      const previo = process.env.RATE_LIMIT_OVERRIDE;
+      delete process.env.RATE_LIMIT_OVERRIDE;
+      const { buildApp } = await import('./app.js');
+      const real = await buildApp();
+      await real.ready();
+      try {
+        // Muchas más que las 30 por minuto del plan gratuito.
+        let ultimo = 0;
+        for (let i = 0; i < 60; i += 1) {
+          const res = await real.inject({
+            method: 'GET',
+            url: `/api/v1/tiles/h3/10/${290 + i}/${480 + (i % 7)}.mvt`,
+          });
+          ultimo = res.statusCode;
+          if (ultimo === 429) break;
+        }
+        expect(ultimo, 'la ráfaga de teselas se estranguló con el tope de la API').not.toBe(429);
+
+        // Y el cubo de la API sigue intacto pese a las teselas gastadas.
+        const api = await real.inject({ method: 'GET', url: '/api/v1/search?q=soledad' });
+        expect(api.statusCode).toBe(200);
+      } finally {
+        await real.close();
+        if (previo !== undefined) process.env.RATE_LIMIT_OVERRIDE = previo;
+      }
+    }, 60_000);
+
     it('bloquea una capa de plan superior en el plan gratis', async () => {
       const res = await app.inject({
         method: 'GET',
