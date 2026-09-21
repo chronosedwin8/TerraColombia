@@ -22,7 +22,13 @@ name: terracolombia-ci
 
 services:
   postgis:
-    image: postgis/postgis:16-3.4
+    # Misma imagen que producción: si CI corriera sobre una base sin H3, las
+    # pruebas de integración pasarían por caminos distintos a los del servidor.
+    build:
+      context: ./postgres
+      args:
+        PG_MAJOR: '17'
+    image: terracolombia/postgis:17
     container_name: tc-ci-postgis
     environment:
       POSTGRES_USER: postgres

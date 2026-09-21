@@ -37,12 +37,19 @@ volumes:
 
 services:
   # ───────────────────────────────────────────────────────────────────────────
-  # Base de datos: PostgreSQL 16 + PostGIS 3.4 (versión de referencia del plan).
+  # Base de datos: PostgreSQL 17 + PostGIS 3.6 + H3 + pgRouting (imagen propia).
   # Las extensiones y EPSG:9377 los crea `postgres/init/01-extensions.sql`,
   # que docker-entrypoint ejecuta SOLO en la primera inicialización del volumen.
   # ───────────────────────────────────────────────────────────────────────────
   postgis:
-    image: postgis/postgis:16-3.4
+    # Imagen propia: la oficial de PostGIS no trae `h3` ni `h3_postgis`, y el
+    # esquema declara columnas `h3index` en ocho tablas, así que con ella la
+    # primera migración falla y el despliegue no levanta. Ver infra/postgres/Dockerfile.
+    build:
+      context: ./postgres
+      args:
+        PG_MAJOR: '17'
+    image: terracolombia/postgis:17
     container_name: tc-postgis
     restart: unless-stopped
     environment:

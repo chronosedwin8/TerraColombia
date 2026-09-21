@@ -78,13 +78,24 @@ END
 $$;
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- 3. Extensiones opcionales: H3 y pgRouting
+-- 3. H3 y pgRouting
 --
--- `h3`/`h3_postgis` y `pgrouting` no vienen en la imagen `postgis/postgis`.
--- El producto NO depende de ellas: los índices H3 se calculan en Node con
--- `h3-js` y se guardan como TEXT (docs/DECISIONES.md ADR-002). Se intenta
--- crearlas dentro de un bloque que captura el error para que la ausencia no
--- aborte la inicialización del contenedor.
+-- ATENCIÓN: H3 **ya no es opcional**. Este comentario decía que el producto no
+-- dependía de ella porque los índices se calculaban en Node con `h3-js` y se
+-- guardaban como TEXT (ADR-002). Eso dejó de ser cierto cuando el cálculo se
+-- movió a SQL: hoy el esquema declara columnas del tipo `h3index` en ocho
+-- tablas y la siembra y el paso `aggregate` llaman a `h3_lat_lng_to_cell` y
+-- `h3_polygon_to_cells`. Sin la extensión, la migración 0001 falla y no hay
+-- base de datos.
+--
+-- La imagen de `infra/postgres/Dockerfile` la instala desde el repositorio
+-- oficial de PostgreSQL (`postgresql-17-h3`). El bloque que captura el error se
+-- conserva porque este script también corre en bases ajenas —un Postgres
+-- gestionado, por ejemplo— donde conviene ver el aviso en vez de un fallo seco;
+-- pero si H3 no está, la migración siguiente lo dirá sin ambigüedad.
+--
+-- pgRouting sí es opcional: hoy las isócronas se aproximan con un círculo y así
+-- se le declara al usuario.
 -- ─────────────────────────────────────────────────────────────────────────────
 
 DO $$
