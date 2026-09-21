@@ -22,11 +22,27 @@ export interface TileLayerDef {
   snapshotFiltered: boolean;
   /** Filtro adicional fijo, ya validado (no viene del cliente). */
   extraWhere?: string;
+  /**
+   * Columna que identifica a cada entidad dentro de la capa. MapLibre la usa como
+   * `promoteId` para el resaltado al pasar el ratón y para la selección con `feature-state`.
+   *
+   * Es obligatoria en las capas interactivas: si no viaja en la tesela, MapLibre no puede
+   * asignar estado a la entidad y el resaltado y el clic quedan muertos sin ningún error.
+   * Así estaban 8 de las 13 capas.
+   */
+  featureIdColumn?: string;
+  /**
+   * Expresión SQL para el identificador cuando la columna no es publicable tal cual. La
+   * celda H3 se guarda como `h3index`, un tipo que el MVT no sabe codificar, así que hay
+   * que pasarla a texto. Es una constante del propio código, nunca entrada del cliente.
+   */
+  featureIdExpression?: string;
 }
 
 export const TILE_LAYERS: Record<string, TileLayerDef> = {
   parcel: {
     id: 'parcel',
+    featureIdColumn: 'npn',
     table: 'core.parcel',
     geomColumn: 'geom',
     columns: ['npn', 'muni_code', 'zone', 'area_geom_m2', 'built_area_m2', 'economic_use'],
@@ -36,6 +52,7 @@ export const TILE_LAYERS: Record<string, TileLayerDef> = {
   },
   building: {
     id: 'building',
+    featureIdColumn: 'id',
     table: 'core.building',
     geomColumn: 'geom',
     columns: ['parcel_npn', 'floors', 'built_area_m2', 'use'],
@@ -45,6 +62,7 @@ export const TILE_LAYERS: Record<string, TileLayerDef> = {
   },
   block: {
     id: 'block',
+    featureIdColumn: 'code',
     table: 'core.block',
     geomColumn: 'geom',
     columns: ['muni_code', 'code'],
@@ -54,6 +72,7 @@ export const TILE_LAYERS: Record<string, TileLayerDef> = {
   },
   sector: {
     id: 'sector',
+    featureIdColumn: 'code',
     table: 'core.sector',
     geomColumn: 'geom',
     columns: ['muni_code', 'code', 'name', 'zone'],
@@ -63,6 +82,7 @@ export const TILE_LAYERS: Record<string, TileLayerDef> = {
   },
   municipality: {
     id: 'municipality',
+    featureIdColumn: 'code',
     table: 'core.municipality',
     geomColumn: 'geom',
     columns: ['code', 'name', 'dept_code', 'population'],
@@ -72,6 +92,7 @@ export const TILE_LAYERS: Record<string, TileLayerDef> = {
   },
   department: {
     id: 'department',
+    featureIdColumn: 'code',
     table: 'core.department',
     geomColumn: 'geom',
     columns: ['code', 'name', 'region'],
@@ -81,6 +102,8 @@ export const TILE_LAYERS: Record<string, TileLayerDef> = {
   },
   h3: {
     id: 'h3',
+    featureIdColumn: 'h3',
+    featureIdExpression: 't.h3::text',
     table: 'analytics.h3_cell',
     geomColumn: 'geom',
     columns: [
@@ -102,6 +125,7 @@ export const TILE_LAYERS: Record<string, TileLayerDef> = {
   },
   school: {
     id: 'school',
+    featureIdColumn: 'id',
     table: 'ctx.school',
     geomColumn: 'geom',
     columns: ['name', 'sector', 'muni_code', 'enrollment'],
@@ -111,6 +135,7 @@ export const TILE_LAYERS: Record<string, TileLayerDef> = {
   },
   health_facility: {
     id: 'health_facility',
+    featureIdColumn: 'id',
     table: 'ctx.health_facility',
     geomColumn: 'geom',
     columns: ['name', 'level', 'nature', 'muni_code'],
@@ -120,6 +145,7 @@ export const TILE_LAYERS: Record<string, TileLayerDef> = {
   },
   protected_area: {
     id: 'protected_area',
+    featureIdColumn: 'id',
     table: 'ctx.protected_area',
     geomColumn: 'geom',
     columns: ['name', 'category', 'is_restrictive'],
@@ -129,6 +155,7 @@ export const TILE_LAYERS: Record<string, TileLayerDef> = {
   },
   hazard: {
     id: 'hazard',
+    featureIdColumn: 'id',
     table: 'ctx.hazard',
     geomColumn: 'geom',
     columns: ['kind', 'level', 'level_rank', 'source'],
@@ -138,6 +165,7 @@ export const TILE_LAYERS: Record<string, TileLayerDef> = {
   },
   soil_unit: {
     id: 'soil_unit',
+    featureIdColumn: 'id',
     table: 'ctx.soil_unit',
     geomColumn: 'geom',
     columns: ['symbol', 'slope_range', 'climate'],
@@ -147,6 +175,7 @@ export const TILE_LAYERS: Record<string, TileLayerDef> = {
   },
   pot_zone: {
     id: 'pot_zone',
+    featureIdColumn: 'id',
     table: 'ctx.pot_zone',
     geomColumn: 'geom',
     columns: ['muni_code', 'classification', 'use', 'source_doc'],
@@ -156,6 +185,7 @@ export const TILE_LAYERS: Record<string, TileLayerDef> = {
   },
   road: {
     id: 'road',
+    featureIdColumn: 'id',
     table: 'ctx.road',
     geomColumn: 'geom',
     columns: ['name', 'class', 'is_paved'],
@@ -191,6 +221,15 @@ export async function renderTile(
   // Se construye con `ident`, que lanza ante cualquier nombre fuera de la lista blanca.
   let colsSql = sql``;
   for (const c of layer.columns) colsSql = sql`${colsSql}, ${ident('t')}.${ident(c)}`;
+
+  // El identificador de entidad, si no está ya entre las columnas publicadas. Sin él,
+  // MapLibre no puede asignar `feature-state` y el resaltado y la selección no funcionan.
+  const idCol = layer.featureIdColumn;
+  if (idCol && !layer.columns.includes(idCol)) {
+    colsSql = layer.featureIdExpression
+      ? sql`${colsSql}, ${raw(layer.featureIdExpression)} AS ${ident(idCol)}`
+      : sql`${colsSql}, ${ident('t')}.${ident(idCol)}`;
+  }
 
   const snapshotJoin = layer.snapshotFiltered
     ? sql`JOIN meta.snapshot s ON s.id = t.snapshot_id AND s.is_active`

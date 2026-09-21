@@ -20,6 +20,7 @@ import {
   type PlanCode,
   type TileLayer,
 } from '@terracolombia/shared';
+import { CELL_AREA_KM2 } from '@terracolombia/geo';
 import type { LayerSpecification } from 'maplibre-gl';
 
 export interface LegendItem {
@@ -343,13 +344,13 @@ const LAYER_STYLES: readonly LayerStyle[] = [
     description:
       'Indicadores calculados por hexágono de tamaño igual: permite comparar zonas de forma justa y ver el país completo sin cargar predios.',
     glossaryId: 'h3',
-    unit: 'predios por celda',
+    unit: 'predios por km²',
     visibleByDefault: true,
     defaultOpacity: 0.65,
     legend: [
-      { label: 'Menor densidad', color: C.h3Low, value: 0 },
-      { label: 'Media', color: C.h3Mid },
-      { label: 'Mayor densidad', color: C.h3High },
+      { label: 'Hasta 100 predios/km²', color: C.h3Low, value: 100 },
+      { label: '1 000 predios/km²', color: C.h3Mid, value: 1000 },
+      { label: '4 000 predios/km² o más', color: C.h3High, value: 4000 },
     ],
     sourceLabel: 'TerraColombia · agregados propios sobre IGAC y DANE',
     license: 'Indicador propio (derivado)',
@@ -362,19 +363,43 @@ const LAYER_STYLES: readonly LayerStyle[] = [
         'source-layer': sourceLayer,
         maxzoom: PARCEL_MIN_ZOOM,
         paint: {
-          // `value` viene ya normalizado 0–100 por el motor de puntuación.
+          /*
+           * Se pinta la densidad de predios por km², no el conteo en bruto.
+           *
+           * Antes se interpolaba sobre `['get', 'value']`, una propiedad que la tesela nunca
+           * ha emitido: `analytics.h3_cell` no tiene esa columna. El `coalesce` la convertía
+           * en 0 siempre, así que TODOS los hexágonos salían del mismo color pálido mientras
+           * la leyenda prometía tres niveles de densidad.
+           *
+           * Se divide por el área de la celda porque el servidor sirve resolución 8 o 9
+           * según el zoom, y una celda de res 8 es siete veces mayor que una de res 9: sin
+           * normalizar, el mapa cambiaría de color al acercarse sin que el territorio haya
+           * cambiado. Las áreas son las de `CELL_AREA_KM2`, y los cortes de la rampa son los
+           * que declara la leyenda, para que el color se pueda leer.
+           */
           'fill-color': [
             'interpolate',
             ['linear'],
-            ['coalesce', ['get', 'value'], 0],
-            0,
-            C.h3Low,
-            50,
-            C.h3Mid,
+            [
+              '/',
+              ['coalesce', ['get', 'n_parcels'], 0],
+              ['case', ['==', ['get', 'res'], 9], CELL_AREA_KM2[9]!, CELL_AREA_KM2[8]!],
+            ],
             100,
+            C.h3Low,
+            1000,
+            C.h3Mid,
+            4000,
             C.h3High,
           ],
-          'fill-opacity': opacity,
+          // Una celda sin predios no es una celda de densidad baja: es una celda sin dato.
+          // Se deja transparente en vez de pintarla del color del extremo inferior.
+          'fill-opacity': [
+            'case',
+            ['==', ['coalesce', ['get', 'n_parcels'], 0], 0],
+            0,
+            opacity,
+          ],
         },
       },
       {

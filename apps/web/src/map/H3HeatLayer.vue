@@ -60,7 +60,9 @@ function asMapLibreData(collection: GeoJsonFeatureCollection): MapLibreGeoJsonDa
 function toFeatureCollection(cells: ScoredCell[]): GeoJsonFeatureCollection {
   const features: GeoJsonFeature[] = [];
   for (const cell of cells) {
-    if (cell.score < props.minScore) continue;
+    // Una celda sin puntaje no es una celda de puntaje bajo: es una a la que le faltaban
+    // indicadores obligatorios. No se pinta, porque colorearla afirmaría algo que no sabemos.
+    if (cell.score === null || cell.score < props.minScore) continue;
     try {
       features.push({
         type: 'Feature',

@@ -24,7 +24,12 @@ import {
   sourceIdFor,
   tileUrlTemplate,
 } from './layers';
-import { INITIAL_VIEW, LABEL_LAYER_ID, resolveBasemapStyle } from './style';
+import {
+  INITIAL_VIEW,
+  LABEL_LAYER_ID,
+  firstSymbolLayerId,
+  resolveBasemapStyle,
+} from './style';
 
 export interface MapFeatureHit {
   layer: TileLayer;
@@ -256,8 +261,10 @@ export function useMap(options: UseMapOptions): UseMapReturn {
       instance.addSource(sourceId, {
         type: 'vector',
         tiles: [tileUrlTemplate(layer, cutDate)],
-        minzoom: Math.max(0, Math.floor(def.minZoom) - 2),
-        maxzoom: Math.min(16, Math.ceil(def.maxZoom)),
+        // Sin el `- 2` de antes: pedir teselas dos zooms por debajo del mínimo que sirve
+        // el servidor solo gastaba presupuesto de peticiones para recibir 204.
+        minzoom: Math.max(0, Math.floor(def.minZoom)),
+        maxzoom: Math.ceil(def.maxZoom),
         // Sin `promoteId` el `feature-state` no sobrevive al borde de tesela.
         ...(idProperty ? { promoteId: { [layer]: idProperty } } : {}),
       });
@@ -268,7 +275,14 @@ export function useMap(options: UseMapOptions): UseMapReturn {
       sourceLayer: layer,
       opacity: opacity ?? def.defaultOpacity,
     });
-    const beforeId = instance.getLayer(LABEL_LAYER_ID) ? LABEL_LAYER_ID : undefined;
+    // Los datos propios van DEBAJO de las etiquetas del mapa base, o los nombres de barrio
+    // y de vía quedan tapados por los polígonos. `LABEL_LAYER_ID` solo existe en el estilo
+    // propio de Protomaps; con OpenFreeMap —que es el estilo por omisión— nunca encontraba
+    // esa capa y todo se insertaba encima de todo. Se busca la primera capa de símbolos del
+    // estilo que realmente esté cargado.
+    const beforeId = instance.getLayer(LABEL_LAYER_ID)
+      ? LABEL_LAYER_ID
+      : firstSymbolLayerId(instance.getStyle().layers);
     for (const spec of specs) {
       if (!instance.getLayer(spec.id)) instance.addLayer(spec, beforeId);
     }

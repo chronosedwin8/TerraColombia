@@ -300,6 +300,23 @@ d('API', () => {
     }, 60_000);
 
     /**
+     * MapLibre necesita un identificador por entidad (`promoteId`) para asignar
+     * `feature-state`. Sin él, el resaltado al pasar el ratón y la selección al hacer clic
+     * no hacen nada y no se produce ningún error: así estaban 8 de las 13 capas.
+     */
+    it('toda capa interactiva publica su identificador de entidad', async () => {
+      const { TILE_LAYERS } = await import('@terracolombia/db');
+      const sinId = Object.values(TILE_LAYERS)
+        .filter((l) => !l.featureIdColumn)
+        .map((l) => l.id);
+      expect(
+        sinId,
+        `Estas capas no declaran identificador, así que el resaltado y la selección ` +
+          `quedarían muertos en ellas: ${sinId.join(', ')}`,
+      ).toEqual([]);
+    });
+
+    /**
      * El panel de capas del mapa decide el candado con `LAYER_RULES`; la ruta de teselas
      * decide el 403 con `meta.layer`. Si la semilla queda vieja, la interfaz vuelve a
      * ofrecer como gratuita una capa que el servidor niega en silencio.
