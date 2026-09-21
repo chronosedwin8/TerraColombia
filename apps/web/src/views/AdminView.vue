@@ -9,7 +9,12 @@
 import { computed, onMounted, ref } from 'vue';
 import { AppError, MESSAGES, formatCop } from '@terracolombia/shared';
 import { getAdminMetrics, listCoverage, listEtlRuns, triggerEtl } from '@/api/admin';
-import type { AdminMetrics, CoverageRow, EtlRun } from '@/api/types';
+import type {
+  AdminMetrics,
+  CoverageDepartmentRow,
+  CoverageSummary,
+  EtlRun,
+} from '@/api/types';
 import TabsGroup from '@/components/ui/TabsGroup.vue';
 import BaseCard from '@/components/ui/BaseCard.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
@@ -21,7 +26,16 @@ import type { TabItem } from '@/components/ui/types';
 
 const activeTab = ref('etl');
 const runs = ref<EtlRun[]>([]);
-const coverage = ref<CoverageRow[]>([]);
+/**
+ * VERIFICADO: `GET /admin/coverage` devuelve filas de DEPARTAMENTO
+ * (`{code, name, municipalities, igac, with_parcels}`), no de municipio. La versión
+ * anterior de esta vista leía `muniCode`, `cadastralManager`, `status`, `parcelCount` y
+ * `lastCutDate`, que no existen: la tabla salía con todas las celdas vacías y el filtro
+ * reventaba con TypeError al tocar `row.muniName`.
+ */
+const coverage = ref<CoverageDepartmentRow[]>([]);
+/** El resumen nacional lo calcula el backend; no se recuenta aquí sobre la página cargada. */
+const coverageSummary = ref<CoverageSummary | null>(null);
 const metrics = ref<AdminMetrics | null>(null);
 const isLoading = ref(false);
 const error = ref<AppError | null>(null);
@@ -43,7 +57,9 @@ async function load(): Promise<void> {
       getAdminMetrics(),
     ]);
     runs.value = runList.data.items;
-    coverage.value = coverageList.data.items;
+    // `items` y `byDepartment` son el mismo arreglo; se usa `byDepartment` por ser explícito.
+    coverage.value = coverageList.data.byDepartment;
+    coverageSummary.value = coverageList.data.summary;
     metrics.value = metricData.data;
   } catch (e) {
     error.value = e instanceof AppError ? e : new AppError('INTERNAL', MESSAGES.common.error);
@@ -74,34 +90,28 @@ const filteredCoverage = computed(() => {
   const term = coverageFilter.value.trim().toLowerCase();
   if (term.length === 0) return coverage.value;
   return coverage.value.filter(
-    (row) =>
-      row.muniName.toLowerCase().includes(term) ||
-      row.deptName.toLowerCase().includes(term) ||
-      row.muniCode.includes(term),
+    (row) => row.name.toLowerCase().includes(term) || row.code.includes(term),
   );
 });
 
-const coverageSummary = computed(() => {
-  const total = coverage.value.length;
-  const full = coverage.value.filter((row) => row.status === 'full').length;
-  const partial = coverage.value.filter((row) => row.status === 'partial').length;
-  const none = coverage.value.filter((row) => row.status === 'none').length;
-  return { total, full, partial, none };
-});
-
-function statusFor(row: CoverageRow): 'ok' | 'caution' | 'blocker' | 'unknown' {
-  if (row.status === 'full') return 'ok';
-  if (row.status === 'partial') return 'caution';
-  if (row.status === 'none') return 'blocker';
-  return 'unknown';
+/**
+ * Semáforo del departamento.
+ *
+ * La API no manda un `status` por departamento, así que NO se inventa uno: se deriva de
+ * los dos conteos que sí manda —municipios del departamento y municipios con predios
+ * cargados—. Es una lectura de esas cifras, no una estimación de cobertura.
+ */
+function statusFor(row: CoverageDepartmentRow): 'ok' | 'caution' | 'blocker' {
+  if (row.with_parcels === 0) return 'blocker';
+  if (row.with_parcels >= row.municipalities) return 'ok';
+  return 'caution';
 }
 
-const COVERAGE_LABELS: Record<CoverageRow['status'], string> = {
-  full: 'Completa',
-  partial: 'Parcial',
-  none: 'Sin datos',
-  unknown: 'Sin determinar',
-};
+function coverageLabel(row: CoverageDepartmentRow): string {
+  if (row.with_parcels === 0) return 'Sin predios cargados';
+  if (row.with_parcels >= row.municipalities) return 'Todos los municipios';
+  return `${row.with_parcels} de ${row.municipalities}`;
+}
 </script>
 
 <template>
@@ -225,37 +235,54 @@ const COVERAGE_LABELS: Record<CoverageRow['status'], string> = {
       <template #coverage>
         <div class="space-y-3">
           <BaseCard title="Resumen de cobertura catastral" :heading-level="2">
-            <dl class="grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
+            <dl v-if="coverageSummary" class="grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
               <div>
-                <dt class="tc-label">Municipios listados</dt>
-                <dd class="text-lg font-semibold tabular-nums">{{ coverageSummary.total }}</dd>
+                <dt class="tc-label">Municipios del país</dt>
+                <dd class="text-lg font-semibold tabular-nums">
+                  {{ coverageSummary.total_municipalities }}
+                </dd>
               </div>
               <div>
-                <dt class="tc-label">Cobertura completa</dt>
-                <dd class="text-lg font-semibold tabular-nums">{{ coverageSummary.full }}</dd>
+                <dt class="tc-label">Jurisdicción del IGAC</dt>
+                <dd class="text-lg font-semibold tabular-nums">
+                  {{ coverageSummary.igac_municipalities }}
+                </dd>
               </div>
               <div>
-                <dt class="tc-label">Parcial</dt>
-                <dd class="text-lg font-semibold tabular-nums">{{ coverageSummary.partial }}</dd>
+                <dt class="tc-label">Con otro gestor catastral</dt>
+                <dd class="text-lg font-semibold tabular-nums">
+                  {{ coverageSummary.other_managers }}
+                </dd>
               </div>
               <div>
-                <dt class="tc-label">Sin datos</dt>
-                <dd class="text-lg font-semibold tabular-nums">{{ coverageSummary.none }}</dd>
+                <dt class="tc-label">Con predios cargados</dt>
+                <dd class="text-lg font-semibold tabular-nums">
+                  {{ coverageSummary.with_parcels }}
+                </dd>
               </div>
             </dl>
+
+            <EmptyState
+              v-else
+              title="Sin resumen de cobertura"
+              body="El endpoint de cobertura no devolvió el bloque de resumen. Revisa que las migraciones de división administrativa estén aplicadas."
+              icon="data"
+            />
+
             <p class="mt-2 text-xs text-slate-600">
-              Esta tabla es la que alimenta los avisos de cobertura de la interfaz pública. Si aquí
-              dice «sin datos», al usuario se le explica por qué y qué sí tenemos.
+              Estas cifras alimentan los avisos de cobertura de la interfaz pública. Si un
+              municipio no tiene predios cargados, al usuario se le explica por qué y qué sí
+              tenemos, en lugar de mostrarle un mapa vacío.
             </p>
           </BaseCard>
 
-          <BaseCard title="Municipios" :heading-level="2" :padded="false">
+          <BaseCard title="Departamentos" :heading-level="2" :padded="false">
             <template #actions>
               <input
                 v-model="coverageFilter"
                 class="tc-input text-xs"
                 placeholder="Filtrar por nombre o código"
-                aria-label="Filtrar municipios"
+                aria-label="Filtrar departamentos"
               />
             </template>
 
@@ -264,38 +291,46 @@ const COVERAGE_LABELS: Record<CoverageRow['status'], string> = {
                 <thead>
                   <tr>
                     <th scope="col">Código</th>
-                    <th scope="col">Municipio</th>
                     <th scope="col">Departamento</th>
-                    <th scope="col">Gestor catastral</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Predios</th>
-                    <th scope="col">Último corte</th>
+                    <th scope="col">Municipios</th>
+                    <th scope="col">Jurisdicción IGAC</th>
+                    <th scope="col">Con predios cargados</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="row in filteredCoverage" :key="row.muniCode">
-                    <td class="font-mono text-xs">{{ row.muniCode }}</td>
-                    <td>{{ row.muniName }}</td>
-                    <td>{{ row.deptName }}</td>
-                    <td>
-                      {{ row.cadastralManager ?? MESSAGES.common.notAvailable }}
-                      <span v-if="row.isIgac === true" class="text-xs text-slate-500">(IGAC)</span>
+                  <tr v-for="row in filteredCoverage" :key="row.code">
+                    <td class="font-mono text-xs">{{ row.code }}</td>
+                    <td>{{ row.name }}</td>
+                    <td class="tabular-nums">{{ row.municipalities }}</td>
+                    <td class="tabular-nums">
+                      {{ row.igac }}
+                      <span v-if="row.igac < row.municipalities" class="text-xs text-slate-500">
+                        ({{ row.municipalities - row.igac }} con gestor propio)
+                      </span>
                     </td>
                     <td>
                       <SemaphoreBadge
                         :status="statusFor(row)"
-                        :label="COVERAGE_LABELS[row.status]"
+                        :label="coverageLabel(row)"
                         size="sm"
                       />
                     </td>
-                    <td class="tabular-nums">
-                      {{ row.parcelCount ?? MESSAGES.common.notAvailable }}
-                    </td>
-                    <td>{{ row.lastCutDate ?? MESSAGES.common.notAvailable }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
+
+            <!--
+              Regla 6: se dice qué NO hay aquí. El endpoint agrega por departamento, así que
+              el gestor catastral, el conteo de predios y la fecha de corte de cada municipio
+              —que esta tabla mostraba antes en columnas siempre vacías— no están disponibles.
+            -->
+            <p class="border-t border-slate-200 px-4 py-2 text-xs text-slate-600">
+              <code>GET /admin/coverage</code> agrega por departamento. El gestor catastral, el
+              número de predios y la última fecha de corte de cada municipio no vienen en esta
+              respuesta: se consultan en la ficha municipal
+              (<code>GET /municipalities/:code</code>).
+            </p>
           </BaseCard>
         </div>
       </template>

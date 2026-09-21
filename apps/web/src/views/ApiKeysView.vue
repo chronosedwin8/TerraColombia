@@ -28,17 +28,12 @@ const isLoading = ref(false);
 const error = ref<AppError | null>(null);
 
 const newKeyName = ref('');
-const newKeyScopes = ref<string[]>(['read:parcels', 'read:context']);
+/**
+ * Entorno de la llave. VERIFICADO: es lo único, junto al nombre, que la creación admite
+ * de esta pantalla. `live` exige un plan con API; si no, la API responde PLAN_REQUIRED.
+ */
+const newKeyEnvironment = ref<'sandbox' | 'live'>('sandbox');
 const created = ref<ApiKeyCreated | null>(null);
-
-/** Alcances disponibles. Se mantienen alineados con los grupos de la GeoAPI. */
-const SCOPE_OPTIONS = [
-  { value: 'read:parcels', label: 'Leer predios y fichas' },
-  { value: 'read:context', label: 'Leer contexto (población, equipamientos, suelos)' },
-  { value: 'read:tiles', label: 'Consumir teselas vectoriales' },
-  { value: 'run:analysis', label: 'Ejecutar análisis de zona y aptitud' },
-  { value: 'write:reports', label: 'Generar informes' },
-] as const;
 
 async function load(): Promise<void> {
   isLoading.value = true;
@@ -56,14 +51,23 @@ async function load(): Promise<void> {
 
 onMounted(load);
 
+/**
+ * Crear una llave.
+ *
+ * Dos cosas que la versión anterior hacía mal:
+ *  - mandaba `scopes` en el cuerpo, que la API no acepta;
+ *  - metía la respuesta 201 en la lista como si fuera un `ApiKey`, pero `ApiKeyCreated` no
+ *    trae `createdAt`, `lastUsedAt`, `revokedAt` ni `isActive`: la fila recién creada salía
+ *    con «Invalid Date» y sin estado. Por eso se recarga la lista desde la API.
+ */
 async function create(): Promise<void> {
   const name = newKeyName.value.trim();
-  if (name.length === 0 || newKeyScopes.value.length === 0) return;
+  if (name.length === 0) return;
   try {
-    const response = await createApiKey({ name, scopes: newKeyScopes.value });
+    const response = await createApiKey({ name, environment: newKeyEnvironment.value });
     created.value = response.data;
-    keys.value = [response.data, ...keys.value];
     newKeyName.value = '';
+    await load();
   } catch (e) {
     error.value = e instanceof AppError ? e : new AppError('INTERNAL', MESSAGES.common.error);
   }
@@ -119,32 +123,39 @@ const activeKeys = computed(() => keys.value.filter((key) => key.revokedAt === n
           </template>
         </BaseField>
 
-        <fieldset>
-          <legend class="tc-label mb-1.5">Alcances</legend>
-          <label
-            v-for="scope in SCOPE_OPTIONS"
-            :key="scope.value"
-            class="flex items-start gap-2 py-0.5 text-sm"
-          >
-            <input
-              v-model="newKeyScopes"
-              type="checkbox"
-              :value="scope.value"
-              class="mt-0.5 h-4 w-4 accent-brand-600"
-            />
-            <span>
-              {{ scope.label }}
-              <code class="ml-1 text-xs text-slate-500">{{ scope.value }}</code>
-            </span>
-          </label>
-        </fieldset>
+        <BaseField
+          label="Entorno"
+          hint="En pruebas puedes llamar a la API sin consumir créditos del plan."
+        >
+          <template #default="{ id, describedBy }">
+            <select
+              :id="id"
+              v-model="newKeyEnvironment"
+              class="tc-input"
+              :aria-describedby="describedBy"
+            >
+              <option value="sandbox">Pruebas (sandbox)</option>
+              <option value="live">Producción (live)</option>
+            </select>
+          </template>
+        </BaseField>
+
+        <!--
+          Antes aquí había un selector de alcances. Se retiró porque la API no lo acepta al
+          crear la llave: el cuerpo se ignoraba y las llaves quedaban con `scopes: []`, de
+          modo que el usuario creía estar limitando permisos que en realidad no se limitaban.
+        -->
+        <p class="text-xs text-slate-600">
+          Todas las llaves comparten los permisos de tu plan: no se restringen por alcance
+          todavía. Para limitar el acceso, crea una llave por sistema y revoca la que ya no uses.
+        </p>
 
         <p class="text-xs text-amber-800">
           La llave completa se muestra una única vez, al crearla. Guárdala en tu gestor de
           secretos: no la podemos volver a mostrar porque solo conservamos su hash.
         </p>
 
-        <BaseButton type="submit" :disabled="newKeyName.trim().length === 0 || newKeyScopes.length === 0">
+        <BaseButton type="submit" :disabled="newKeyName.trim().length === 0">
           Crear llave
         </BaseButton>
       </form>
@@ -170,7 +181,8 @@ const activeKeys = computed(() => keys.value.filter((key) => key.revokedAt === n
         >
           <div class="min-w-0">
             <p class="truncate text-sm font-medium">{{ key.name }}</p>
-            <p class="font-mono text-xs text-slate-500">{{ key.maskedKey }}</p>
+            <!-- Lo público de la llave es su `prefix`; el secreto solo existió al crearla. -->
+            <p class="font-mono text-xs text-slate-500">{{ key.prefix }}…</p>
             <p class="text-xs text-slate-500">
               Creada el {{ new Date(key.createdAt).toLocaleDateString('es-CO') }} ·
               {{
@@ -179,10 +191,15 @@ const activeKeys = computed(() => keys.value.filter((key) => key.revokedAt === n
                   : 'sin usar todavía'
               }}
             </p>
-            <p class="mt-0.5 text-xs text-slate-600">{{ key.scopes.join(', ') }}</p>
+            <p v-if="key.allowedOrigins.length > 0" class="mt-0.5 text-xs text-slate-600">
+              Orígenes permitidos: {{ key.allowedOrigins.join(', ') }}
+            </p>
           </div>
 
           <div class="flex items-center gap-2">
+            <BaseBadge tone="info" size="sm">
+              {{ key.environment === 'live' ? 'Producción' : 'Pruebas' }}
+            </BaseBadge>
             <BaseBadge :tone="key.revokedAt ? 'danger' : 'success'" size="sm">
               {{ key.revokedAt ? 'Revocada' : 'Activa' }}
             </BaseBadge>
@@ -259,6 +276,14 @@ const activeKeys = computed(() => keys.value.filter((key) => key.revokedAt === n
           aria-label="Llave de API en claro"
           @focus="($event.target as HTMLInputElement).select()"
         />
+
+        <p class="mt-2 text-xs text-amber-800">{{ created.warning }}</p>
+
+        <!-- La API devuelve un `curl` listo para pegar: se muestra en vez de reescribirlo. -->
+        <p class="tc-label mt-3">Primera llamada</p>
+        <pre class="mt-1 overflow-x-auto rounded bg-slate-900 p-2 text-[11px] text-slate-100">{{
+          created.usage
+        }}</pre>
       </template>
 
       <template #footer>

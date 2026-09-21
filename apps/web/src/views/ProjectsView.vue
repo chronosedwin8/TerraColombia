@@ -5,15 +5,13 @@
  * Un proyecto agrupa zonas y búsquedas guardadas, informes generados y alertas. Cada elemento
  * guardado conserva el estado de la URL, así que reabrirlo devuelve la vista exacta.
  */
-import { computed, onMounted, ref } from 'vue';
-import { AppError, MESSAGES, type ResponseMeta } from '@terracolombia/shared';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { AppError, MESSAGES } from '@terracolombia/shared';
 import { useProjectsStore } from '@/stores/projects';
 import { useEntitlements } from '@/composables/useEntitlements';
-import { createReport, downloadReport, listReports } from '@/api/reports';
-import { emptyMeta } from '@/api/client';
-import { useJob } from '@/composables/useJob';
+import { createReport, downloadReport, getReport, listReports } from '@/api/reports';
 import { useShare } from '@/composables/useShare';
-import type { ExportFormat, ReportLevel, ReportSummary } from '@/api/types';
+import type { Alert, ExportFormat, ReportLevel, ReportSummary } from '@/api/types';
 import TabsGroup from '@/components/ui/TabsGroup.vue';
 import BaseCard from '@/components/ui/BaseCard.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
@@ -21,26 +19,46 @@ import BaseBadge from '@/components/ui/BaseBadge.vue';
 import BaseField from '@/components/ui/BaseField.vue';
 import EmptyState from '@/components/ui/EmptyState.vue';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton.vue';
-import ProvenanceFooter from '@/components/ui/ProvenanceFooter.vue';
-import JobProgress from '@/components/JobProgress.vue';
 import type { TabItem } from '@/components/ui/types';
 
 const projects = useProjectsStore();
 const { can, minPlanFor } = useEntitlements();
 const { downloadBlob } = useShare();
-const job = useJob<{ reportId: string }>();
 
 const activeTab = ref('projects');
 const newProjectName = ref('');
 const reports = ref<ReportSummary[]>([]);
-const reportsMeta = ref<ResponseMeta>(emptyMeta());
 const isLoadingReports = ref(false);
 const reportError = ref<AppError | null>(null);
 
+/**
+ * Niveles de informe. VERIFICADO: la API los valida en español
+ * (`resumen | completo | tecnico`). El mapa anterior usaba las claves en inglés, así que
+ * la etiqueta salía vacía en toda la lista y, peor, `POST /reports` se rechazaba con
+ * VALIDATION al mandarlas de vuelta.
+ */
 const REPORT_LEVEL_LABELS: Record<ReportLevel, string> = {
-  summary: 'Resumen (2 páginas)',
-  full: 'Completo',
-  technical: 'Técnico (con anexos de datos)',
+  resumen: 'Resumen (2 páginas)',
+  completo: 'Completo',
+  tecnico: 'Técnico (con anexos de datos)',
+};
+
+/** Estados del worker, tal como los devuelve la API (`done`, nunca `completed`). */
+const REPORT_STATUS_LABELS: Record<ReportSummary['status'], string> = {
+  queued: 'En cola',
+  running: 'Generando',
+  done: 'Listo',
+  failed: 'Falló',
+  canceled: 'Cancelado',
+};
+
+/** Tipos de alerta reales del worker. No existe `area_changes`. */
+const ALERT_KIND_LABELS: Record<Alert['kind'], string> = {
+  new_parcels: 'Predios nuevos en la zona',
+  parcel_changed: 'Cambios en un predio',
+  new_buildings: 'Construcciones nuevas',
+  area_change: 'Cambios en una zona',
+  indicator_threshold: 'Un indicador cruza un umbral',
 };
 
 const tabs = computed<TabItem[]>(() => [
@@ -55,13 +73,13 @@ const tabs = computed<TabItem[]>(() => [
   },
 ]);
 
+/** VERIFICADO: `GET /reports` devuelve un arreglo pelado, no `{items, nextCursor, total}`. */
 async function loadReports(): Promise<void> {
   isLoadingReports.value = true;
   reportError.value = null;
   try {
     const response = await listReports();
-    reports.value = response.data.items;
-    reportsMeta.value = response.meta;
+    reports.value = response.data;
   } catch (e) {
     reportError.value = e instanceof AppError ? e : new AppError('INTERNAL', MESSAGES.common.error);
   } finally {
@@ -69,11 +87,45 @@ async function loadReports(): Promise<void> {
   }
 }
 
+/**
+ * Sondeo del progreso de los informes.
+ *
+ * Un informe NO expone el `jobId` del worker: `POST /reports` devuelve el id del INFORME y
+ * el avance se lee en `GET /reports/:id` (o en esta misma lista, que ya trae `status` y
+ * `progress`). Por eso aquí no se usa `useJob`: se refresca la lista mientras haya alguno
+ * sin terminar y se para en cuanto todos llegan a un estado terminal.
+ */
+const POLL_INTERVAL_MS = 4000;
+let pollTimer: ReturnType<typeof setInterval> | null = null;
+
+const hasPendingReports = computed(() =>
+  reports.value.some((report) => report.status === 'queued' || report.status === 'running'),
+);
+
+function stopPolling(): void {
+  if (pollTimer) clearInterval(pollTimer);
+  pollTimer = null;
+}
+
+function ensurePolling(): void {
+  if (pollTimer !== null) return;
+  pollTimer = setInterval(() => {
+    if (!hasPendingReports.value) {
+      stopPolling();
+      return;
+    }
+    void loadReports();
+  }, POLL_INTERVAL_MS);
+}
+
 onMounted(async () => {
   await projects.load();
   if (projects.selectedProjectId) await projects.loadItems(projects.selectedProjectId);
   await Promise.all([loadReports(), projects.loadAlerts()]);
+  if (hasPendingReports.value) ensurePolling();
 });
+
+onUnmounted(stopPolling);
 
 async function create(): Promise<void> {
   const name = newProjectName.value.trim();
@@ -94,17 +146,36 @@ async function download(report: ReportSummary, format: ExportFormat): Promise<vo
   }
 }
 
-/** Reintento de un informe fallido: se encola de nuevo con los mismos parámetros. */
+/**
+ * Formatos descargables de un informe.
+ *
+ * El campo es `artifacts`, un mapa `formato → ruta del objeto generado`; sus claves son los
+ * formatos ya producidos. `formats`, que leía la versión anterior, no existe: la fila de
+ * botones de descarga salía siempre vacía.
+ */
+function downloadableFormats(report: ReportSummary): ExportFormat[] {
+  return Object.keys(report.artifacts) as ExportFormat[];
+}
+
+/**
+ * Reintento de un informe fallido.
+ *
+ * El `subject` original NO viaja en la fila de la lista: hay que pedirlo con
+ * `GET /reports/:id`. La versión anterior inventaba `{kind:'saved_analysis', analysisId}`,
+ * que la API rechazaba. Después de encolar no se sigue un `jobId` —`POST /reports` no
+ * devuelve ninguno—: se recarga la lista y el sondeo se encarga del resto.
+ */
 async function regenerate(report: ReportSummary): Promise<void> {
   try {
-    const response = await createReport({
-      kind: report.kind,
-      level: report.level,
-      title: report.title,
-      subject: { kind: 'saved_analysis', analysisId: report.id },
-      formats: report.formats.length > 0 ? report.formats : ['pdf'],
+    const detail = await getReport(report.id);
+    await createReport({
+      kind: detail.data.kind,
+      level: detail.data.level,
+      title: detail.data.title,
+      subject: detail.data.subject,
     });
-    job.track(response.data.jobId);
+    await loadReports();
+    ensurePolling();
   } catch (e) {
     reportError.value = e instanceof AppError ? e : new AppError('INTERNAL', MESSAGES.common.error);
   }
@@ -200,14 +271,6 @@ async function regenerate(report: ReportSummary): Promise<void> {
       <!-- ── Informes ───────────────────────────────────────────────────────── -->
       <template #reports>
         <div class="space-y-3">
-          <JobProgress
-            :status="job.status.value"
-            :progress="job.progress.value"
-            :stage="job.stage.value"
-            :error-message="job.error.value?.message ?? null"
-            @cancel="job.stop()"
-          />
-
           <p v-if="reportError" class="text-sm text-rose-800" role="alert">
             {{ reportError.message }}
           </p>
@@ -225,27 +288,45 @@ async function regenerate(report: ReportSummary): Promise<void> {
             <li v-for="report in reports" :key="report.id">
               <BaseCard :title="report.title" :heading-level="3">
                 <template #actions>
+                  <!-- El estado terminal bueno es `done`; `completed` no existe en la API. -->
                   <BaseBadge
                     :tone="
-                      report.status === 'completed'
+                      report.status === 'done'
                         ? 'success'
                         : report.status === 'failed'
                           ? 'danger'
                           : 'info'
                     "
                   >
-                    {{ report.status }}
+                    {{ REPORT_STATUS_LABELS[report.status] }}
                   </BaseBadge>
                 </template>
 
                 <p class="text-xs text-slate-600">
                   {{ REPORT_LEVEL_LABELS[report.level] }} · creado el
-                  {{ new Date(report.createdAt).toLocaleDateString('es-CO') }}
+                  {{ new Date(report.createdAt).toLocaleDateString('es-CO') }} ·
+                  {{ report.creditsCharged }} créditos
                 </p>
 
-                <div v-if="report.status === 'completed'" class="mt-2 flex flex-wrap gap-1.5">
+                <!-- Mientras se genera, se muestra el avance que la propia fila ya trae. -->
+                <div
+                  v-if="report.status === 'queued' || report.status === 'running'"
+                  class="mt-2 h-2 overflow-hidden rounded-full bg-slate-200"
+                  role="progressbar"
+                  :aria-valuenow="report.progress"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  :aria-label="`Progreso de ${report.title}`"
+                >
+                  <div
+                    class="h-full rounded-full bg-brand-600 transition-[width] duration-300"
+                    :style="{ width: `${report.progress}%` }"
+                  />
+                </div>
+
+                <div v-else-if="report.status === 'done'" class="mt-2 flex flex-wrap gap-1.5">
                   <BaseButton
-                    v-for="format in report.formats"
+                    v-for="format in downloadableFormats(report)"
                     :key="format"
                     variant="secondary"
                     size="sm"
@@ -255,25 +336,30 @@ async function regenerate(report: ReportSummary): Promise<void> {
                   </BaseButton>
                 </div>
 
-                <BaseButton
-                  v-else-if="report.status === 'failed'"
-                  class="mt-2"
-                  variant="secondary"
-                  size="sm"
-                  @click="regenerate(report)"
-                >
-                  Generar de nuevo
-                </BaseButton>
-
-                <template #footer>
-                  <!-- Los informes son inmutables: llevan los snapshots con los que se hicieron. -->
-                  <ProvenanceFooter :sources="report.sources" compact />
+                <template v-else-if="report.status === 'failed'">
+                  <p v-if="report.errorMessage" class="mt-2 text-sm text-rose-800">
+                    {{ report.errorMessage }}
+                  </p>
+                  <BaseButton class="mt-2" variant="secondary" size="sm" @click="regenerate(report)">
+                    Generar de nuevo
+                  </BaseButton>
                 </template>
               </BaseCard>
             </li>
           </ul>
 
-          <p class="text-xs text-slate-500">{{ MESSAGES.reports.immutable }}</p>
+          <!--
+            Regla 4: la procedencia se muestra donde la hay. `GET /reports` no devuelve las
+            fuentes de cada informe (ni en la fila ni en `meta.sources`, que llega vacío):
+            los snapshots congelados viven DENTRO del informe, en su capítulo de fuentes y
+            en el QR de verificación. Aquí se dice eso en lugar de pintar un pie de fuentes
+            vacío en cada tarjeta.
+          -->
+          <p class="text-xs text-slate-500">
+            {{ MESSAGES.reports.immutable }} El listado no repite las fuentes: cada informe
+            lleva dentro sus fechas de corte, licencias y atribuciones, y el QR de su última
+            página permite verificar que lo emitimos nosotros.
+          </p>
         </div>
       </template>
 
@@ -303,22 +389,32 @@ async function regenerate(report: ReportSummary): Promise<void> {
           >
             <div class="min-w-0">
               <p class="truncate text-sm font-medium">{{ alert.name }}</p>
+              <!--
+                Antes aquí se mostraba «N coincidencias» leyendo `alert.matchCount`, que no
+                existe: salía siempre vacío. La API tampoco trae un total acumulado (solo los
+                últimos 5 envíos), así que en su lugar se dice cuándo saltó por última vez,
+                que sí es un dato exacto.
+              -->
               <p class="text-xs text-slate-500">
-                {{ alert.kind === 'area_changes' ? 'Cambios en una zona' : 'Nuevos predios que cumplen un filtro' }}
-                ·
+                {{ ALERT_KIND_LABELS[alert.kind] }} ·
                 {{
                   alert.lastCheckedAt
                     ? `revisada el ${new Date(alert.lastCheckedAt).toLocaleDateString('es-CO')}`
                     : 'sin revisar aún'
                 }}
-                · {{ alert.matchCount }} coincidencias
+                ·
+                {{
+                  alert.lastTriggeredAt
+                    ? `saltó el ${new Date(alert.lastTriggeredAt).toLocaleDateString('es-CO')}`
+                    : 'todavía no ha saltado'
+                }}
               </p>
             </div>
             <label class="flex items-center gap-2 text-sm">
               <input
                 type="checkbox"
                 class="h-4 w-4 accent-brand-600"
-                :checked="alert.active"
+                :checked="alert.isActive"
                 @change="
                   projects.toggleAlert(alert.id, ($event.target as HTMLInputElement).checked)
                 "

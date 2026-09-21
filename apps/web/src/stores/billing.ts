@@ -44,12 +44,35 @@ export const useBillingStore = defineStore('billing', () => {
     }
   }
 
-  /** Devuelve la URL a la que redirigir. La navegación la hace la vista. */
-  async function startCheckout(plan: PlanCode, reportId?: string): Promise<string | null> {
+  /**
+   * Planes que se pueden comprar por autoservicio.
+   *
+   * VERIFICADO: `POST /billing/checkout/subscription` solo acepta `pro | business | api`.
+   * `free` es el plan por omisión, `per_report` se cobra al generar cada informe y
+   * `enterprise` se cotiza caso por caso: ninguno pasa por este checkout.
+   */
+  const PURCHASABLE_PLANS = ['pro', 'business', 'api'] as const;
+  type PurchasablePlan = (typeof PURCHASABLE_PLANS)[number];
+
+  function isPurchasable(plan: PlanCode): plan is PurchasablePlan {
+    return (PURCHASABLE_PLANS as readonly PlanCode[]).includes(plan);
+  }
+
+  /**
+   * Devuelve la URL a la que redirigir. La navegación la hace la vista.
+   *
+   * OJO: la ruta es `/billing/checkout/subscription` y el campo es `planCode`. El
+   * `/billing/checkout` genérico que llamaba la versión anterior no existe (404), así que
+   * ningún botón «Elegir este plan» llegaba nunca al proveedor de pagos.
+   */
+  async function startSubscriptionCheckout(plan: PlanCode): Promise<string | null> {
+    if (!isPurchasable(plan)) {
+      error.value = new AppError('VALIDATION', 'Este plan no se contrata en línea');
+      return null;
+    }
     try {
-      const response = await billingApi.startCheckout({
-        plan,
-        ...(reportId ? { reportId } : {}),
+      const response = await billingApi.startSubscriptionCheckout({
+        planCode: plan,
         returnUrl: `${window.location.origin}/cuenta/plan`,
       });
       return response.data.checkoutUrl;
@@ -59,7 +82,13 @@ export const useBillingStore = defineStore('billing', () => {
     }
   }
 
-  async function invite(email: string, role: TeamMember['role']): Promise<boolean> {
+  /**
+   * Invitar a alguien al equipo.
+   *
+   * El rol invitable NO es `TeamMember['role']`: la API rechaza `owner` (solo hay un
+   * propietario y es quien creó la organización), así que el tipo lo excluye.
+   */
+  async function invite(email: string, role: 'admin' | 'member' | 'viewer'): Promise<boolean> {
     try {
       const response = await billingApi.inviteMember({ email, role });
       team.value = [...team.value, response.data];
@@ -91,7 +120,8 @@ export const useBillingStore = defineStore('billing', () => {
     credits,
     seatsLeft,
     load,
-    startCheckout,
+    isPurchasable,
+    startSubscriptionCheckout,
     invite,
     removeMember,
   };

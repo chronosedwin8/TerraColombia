@@ -23,7 +23,7 @@ import BaseField from '@/components/ui/BaseField.vue';
 import EmptyState from '@/components/ui/EmptyState.vue';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton.vue';
 import type { TabItem } from '@/components/ui/types';
-import type { TeamMember } from '@/api/types';
+import type { CreditLedgerEntry } from '@/api/types';
 
 const route = useRoute();
 const billing = useBillingStore();
@@ -32,7 +32,8 @@ const { labelFor } = useEntitlements();
 
 const activeTab = ref('plans');
 const inviteEmail = ref('');
-const inviteRole = ref<TeamMember['role']>('member');
+/** La API rechaza `owner`: solo hay un propietario y es quien creó la organización. */
+const inviteRole = ref<'admin' | 'member' | 'viewer'>('member');
 
 onMounted(() => {
   void billing.load();
@@ -66,12 +67,32 @@ function priceLabel(code: PlanCode): string {
   return `${formatCop(plan.monthlyPriceCop)} al mes`;
 }
 
+/**
+ * Texto del botón de cada plan.
+ *
+ * VERIFICADO: `POST /billing/checkout/subscription` solo acepta `pro | business | api`.
+ * `free` es el plan por omisión, `per_report` se cobra al generar cada informe y
+ * `enterprise` se cotiza: ninguno se contrata desde aquí, así que el botón lo dice en vez
+ * de mandar al usuario a un checkout que responde VALIDATION.
+ */
+function actionLabel(code: PlanCode): string {
+  if (code === billing.currentPlan) return 'Tu plan actual';
+  if (code === 'enterprise') return 'Hablar con ventas';
+  if (code === 'per_report') return 'Se paga al generar el informe';
+  if (code === 'free') return 'Es el plan por omisión';
+  return 'Elegir este plan';
+}
+
+function isChoosable(code: PlanCode): boolean {
+  return code !== billing.currentPlan && (billing.isPurchasable(code) || code === 'enterprise');
+}
+
 async function choose(code: PlanCode): Promise<void> {
   if (code === 'enterprise') {
     window.location.href = 'mailto:comercial@terracolombia.co?subject=Plan%20Enterprise';
     return;
   }
-  const url = await billing.startCheckout(code);
+  const url = await billing.startSubscriptionCheckout(code);
   if (url) window.location.href = url;
 }
 
@@ -92,6 +113,25 @@ const CREDIT_LABELS: Record<keyof typeof CREDIT_COST, string> = {
   change_compare: 'Comparación de cortes',
   ai_ask: 'Pregunta al asistente',
 };
+
+/**
+ * Motivos reales de un asiento del libro de créditos (`apps/api/src/…/billing*.ts`):
+ * `purchase`, `grant_monthly`, `adjustment` y `debit_<operación>`. Se traducen aquí porque
+ * la API los devuelve como identificadores, no como texto para el usuario.
+ */
+const LEDGER_REASON_LABELS: Record<string, string> = {
+  purchase: 'Compra de créditos',
+  grant_monthly: 'Créditos del plan',
+  adjustment: 'Ajuste manual',
+};
+
+function ledgerReasonLabel(entry: CreditLedgerEntry): string {
+  const known = LEDGER_REASON_LABELS[entry.reason];
+  if (known) return known;
+  // Los consumos llegan como `debit_<operación>`; la operación ya viene aparte en `operation`.
+  if (entry.reason.startsWith('debit_')) return 'Consumo';
+  return entry.reason;
+}
 
 /** Costos en créditos como arreglo: iterar un objeto en la plantilla pierde el tipo de la clave. */
 const creditRows = computed(() =>
@@ -172,10 +212,10 @@ const creditRows = computed(() =>
               class="mt-3"
               block
               size="sm"
-              :disabled="plan.code === billing.currentPlan"
+              :disabled="!isChoosable(plan.code)"
               @click="choose(plan.code)"
             >
-              {{ plan.code === 'enterprise' ? 'Hablar con ventas' : 'Elegir este plan' }}
+              {{ actionLabel(plan.code) }}
             </BaseButton>
           </BaseCard>
         </div>
@@ -250,26 +290,51 @@ const creditRows = computed(() =>
               body="Aquí aparecerán las recargas del periodo y los descuentos por cada operación."
               icon="data"
             />
-            <table v-else class="tc-table">
-              <thead>
-                <tr>
-                  <th scope="col">Fecha</th>
-                  <th scope="col">Concepto</th>
-                  <th scope="col">Movimiento</th>
-                  <th scope="col">Saldo</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="entry in billing.ledger" :key="entry.id">
-                  <td>{{ new Date(entry.createdAt).toLocaleDateString('es-CO') }}</td>
-                  <td>{{ entry.concept }}</td>
-                  <td class="tabular-nums" :class="entry.delta < 0 ? 'text-rose-800' : 'text-emerald-800'">
-                    {{ entry.delta > 0 ? '+' : '' }}{{ entry.delta }}
-                  </td>
-                  <td class="tabular-nums">{{ entry.balance }}</td>
-                </tr>
-              </tbody>
-            </table>
+            <template v-else>
+              <table class="tc-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Motivo</th>
+                    <th scope="col">Operación</th>
+                    <th scope="col">Movimiento</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="entry in billing.ledger" :key="entry.id">
+                    <td>{{ new Date(entry.createdAt).toLocaleDateString('es-CO') }}</td>
+                    <td>
+                      {{ ledgerReasonLabel(entry) }}
+                      <span v-if="entry.note" class="block text-xs text-slate-500">
+                        {{ entry.note }}
+                      </span>
+                    </td>
+                    <td class="text-xs">
+                      {{ entry.operation ?? MESSAGES.common.notAvailable }}
+                    </td>
+                    <td
+                      class="tabular-nums"
+                      :class="entry.delta < 0 ? 'text-rose-800' : 'text-emerald-800'"
+                    >
+                      {{ entry.delta > 0 ? '+' : '' }}{{ entry.delta }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!--
+                Regla 4: no se muestra una cifra que no podamos respaldar. El saldo acumulado
+                por asiento NO viene en `GET /billing/credits`, y calcularlo aquí daría un
+                número falso: la respuesta trae solo los últimos 100 movimientos, así que la
+                suma no arrancaría de cero. El saldo bueno es el del encabezado de esta sección.
+              -->
+              <p class="border-t border-slate-200 px-4 py-2 text-xs text-slate-600">
+                Esta tabla muestra los movimientos, no el saldo después de cada uno: la API
+                entrega los últimos 100 asientos sin el acumulado, y sumarlos aquí daría una
+                cifra equivocada. El saldo vigente es el de arriba: {{ billing.credits }}
+                créditos.
+              </p>
+            </template>
           </BaseCard>
         </div>
       </template>
@@ -290,7 +355,6 @@ const creditRows = computed(() =>
                 <th scope="col">Concepto</th>
                 <th scope="col">Valor</th>
                 <th scope="col">Estado</th>
-                <th scope="col">Factura</th>
               </tr>
             </thead>
             <tbody>
@@ -312,21 +376,20 @@ const creditRows = computed(() =>
                     {{ payment.status }}
                   </BaseBadge>
                 </td>
-                <td>
-                  <a
-                    v-if="payment.invoiceUrl"
-                    class="tc-link"
-                    :href="payment.invoiceUrl"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                  >
-                    Ver
-                  </a>
-                  <span v-else>{{ MESSAGES.common.notAvailable }}</span>
-                </td>
               </tr>
             </tbody>
           </table>
+
+          <!--
+            Regla 6: se dice qué falta y dónde conseguirlo, en vez de dejar una columna
+            «Factura» con un «no disponible» en cada fila. `GET /billing/payments` no
+            devuelve `invoiceUrl` ni `provider`.
+          -->
+          <p class="border-t border-slate-200 px-4 py-2 text-xs text-slate-600">
+            La factura electrónica no se descarga desde aquí: el proveedor de pagos la envía al
+            correo de tu cuenta al aprobar el cobro. Si necesitas una copia, escríbenos con la
+            fecha y el valor del pago.
+          </p>
         </BaseCard>
       </template>
 

@@ -84,9 +84,16 @@ export const useProjectsStore = defineStore('projects', () => {
     }
   }
 
+  /**
+   * Alertas del usuario.
+   *
+   * VERIFICADO: `GET /projects/alerts` no admite filtro por proyecto —las alertas cuelgan
+   * del USUARIO, no del proyecto—, así que no se le pasa `selectedProjectId`. Antes se le
+   * enviaba y la API lo ignoraba en silencio: la lista parecía filtrada y no lo estaba.
+   */
   async function loadAlerts(): Promise<void> {
     try {
-      const response = await projectsApi.listAlerts(selectedProjectId.value ?? undefined);
+      const response = await projectsApi.listAlerts();
       alerts.value = response.data.items;
     } catch {
       alerts.value = [];
