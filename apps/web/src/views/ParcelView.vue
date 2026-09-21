@@ -12,6 +12,7 @@
  * - el avalúo catastral siempre lleva su advertencia (regla 5);
  * - si el municipio no es del IGAC, lo primero que se ve es `CoverageNotice` (regla 6).
  */
+import type { ParcelChangeType } from '@/api/types';
 import { computed, onMounted, watch } from 'vue';
 import {
   DISCLAIMERS,
@@ -64,7 +65,14 @@ watch(
   },
 );
 
-const summary = computed(() => parcel.detail?.summary ?? null);
+/*
+ * `GET /parcels/:npn` devuelve el objeto PLANO, sin envoltorio `summary`. Leerlo como
+ * `detail.summary` lo dejaba en null y, como toda la ficha cuelga de un `v-else-if`, la
+ * pantalla se quedaba con el mapa y una columna derecha vacía: ni un error, ni un aviso.
+ * Se conserva el nombre `summary` en la vista porque la plantilla lo usa en decenas de
+ * sitios; lo que cambia es de dónde sale.
+ */
+const summary = computed(() => parcel.detail);
 const context = computed(() => parcel.context);
 const sources = computed(() => parcel.detailMeta.sources);
 const contextSources = computed(() => parcel.contextMeta.sources);
@@ -123,7 +131,30 @@ const hasRestrictions = computed(() => {
 });
 
 /** Datos crudos de R1/R2: se muestran tal cual llegan, sin renombrar campos. */
-const rawEntries = computed(() => Object.entries(parcel.detail?.attrs ?? {}));
+/**
+ * El historial llega como `{npn, cuts, changes, emptyReason}`, no como una lista. Tratarlo
+ * como arreglo dejaba `history.length` en `undefined` y la sección anunciaba "undefined
+ * cambios entre cortes".
+ */
+const changes = computed(() => parcel.history?.changes ?? []);
+const cuts = computed(() => parcel.history?.cuts ?? []);
+const historyHint = computed(() =>
+  changes.value.length > 0
+    ? `${changes.value.length} cambios en ${cuts.value.length} cortes`
+    : `${cuts.value.length} cortes cargados`,
+);
+
+/** Etiquetas en español de los tipos de cambio que publica la API. */
+const CHANGE_LABELS: Record<ParcelChangeType, string> = {
+  created: 'El predio aparece por primera vez',
+  removed: 'El predio deja de aparecer',
+  attrs_changed: 'Cambian los datos alfanuméricos',
+  geometry_changed: 'Cambia la geometría del terreno',
+  building_added: 'Se registra una construcción nueva',
+  building_removed: 'Deja de aparecer una construcción',
+};
+
+const rawEntries = computed(() => Object.entries(parcel.detail?.rawAttributes ?? {}));
 </script>
 
 <template>
@@ -150,7 +181,7 @@ const rawEntries = computed(() => Object.entries(parcel.detail?.attrs ?? {}));
 
       <template v-else-if="summary">
         <!-- ── 1. Resumen ───────────────────────────────────────────────────── -->
-        <BaseCard :title="`${summary.muniName}, ${summary.deptName}`" :heading-level="2">
+        <BaseCard :title="`${summary.municipality.name}, ${summary.municipality.deptName}`" :heading-level="2">
           <template #actions>
             <BaseBadge v-if="isAvailable(summary.zoneLabel)" tone="brand">
               {{ summary.zoneLabel }}
@@ -244,7 +275,7 @@ const rawEntries = computed(() => Object.entries(parcel.detail?.attrs ?? {}));
               />
               <DataValue
                 label="Municipio (DIVIPOLA)"
-                :value="summary.muniCode"
+                :value="summary.municipality.code"
                 :sources="sources"
                 layout="inline"
                 glossary-id="divipola"
@@ -344,7 +375,7 @@ const rawEntries = computed(() => Object.entries(parcel.detail?.attrs ?? {}));
                         </span>
                       </span>
                       <span class="shrink-0 tabular-nums text-slate-700">
-                        {{ formatDistance(item.distanceM) }}
+                        {{ formatDistance(item.distance_m) }}
                       </span>
                     </li>
                   </ul>
@@ -371,7 +402,7 @@ const rawEntries = computed(() => Object.entries(parcel.detail?.attrs ?? {}));
                     />
                   </p>
                   <p class="text-xs text-slate-600">
-                    Cubre el {{ Math.round(soil.overlapPct) }} % del predio ·
+                    Cubre el {{ Math.round(soil.overlap_pct) }} % del predio ·
                     {{ soil.code ?? MESSAGES.common.notAvailable }}
                   </p>
                 </li>
@@ -379,7 +410,7 @@ const rawEntries = computed(() => Object.entries(parcel.detail?.attrs ?? {}));
               <div class="mt-2 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
                 <DataValue
                   label="Altitud media"
-                  :value="context?.relief.elevationMeanM ?? null"
+                  :value="context?.relief?.elevationMeanM ?? null"
                   format="number"
                   unit="m s. n. m."
                   :sources="contextSources"
@@ -387,7 +418,7 @@ const rawEntries = computed(() => Object.entries(parcel.detail?.attrs ?? {}));
                 />
                 <DataValue
                   label="Pendiente media"
-                  :value="context?.relief.slopeMeanPct ?? null"
+                  :value="context?.relief?.slopeMeanPct ?? null"
                   format="percent"
                   :digits="1"
                   :sources="contextSources"
@@ -410,7 +441,7 @@ const rawEntries = computed(() => Object.entries(parcel.detail?.attrs ?? {}));
                     <li v-for="hazard in context.hazards" :key="`${hazard.kind}-${hazard.source}`">
                       {{ hazard.kind }}:
                       {{ isAvailable(hazard.level) ? hazard.level : MESSAGES.common.notAvailable }}
-                      ({{ Math.round(hazard.overlapPct) }} % del predio, fuente
+                      ({{ Math.round(hazard.overlap_pct) }} % del predio, fuente
                       {{ hazard.source }})
                     </li>
                   </ul>
@@ -422,7 +453,7 @@ const rawEntries = computed(() => Object.entries(parcel.detail?.attrs ?? {}));
                   </p>
                   <ul class="mt-1 space-y-1 text-sm">
                     <li v-for="area in context.protectedAreas" :key="area.name">
-                      {{ area.name }} ({{ Math.round(area.overlapPct) }} %)
+                      {{ area.name }} ({{ Math.round(area.overlap_pct) }} %)
                     </li>
                   </ul>
                 </div>
@@ -433,7 +464,7 @@ const rawEntries = computed(() => Object.entries(parcel.detail?.attrs ?? {}));
                   </p>
                   <ul class="mt-1 space-y-1 text-sm">
                     <li v-for="territory in context.ethnicTerritories" :key="territory.name">
-                      {{ territory.name }} ({{ Math.round(territory.overlapPct) }} %)
+                      {{ territory.name }} ({{ Math.round(territory.overlap_pct) }} %)
                     </li>
                   </ul>
                 </div>
@@ -457,7 +488,7 @@ const rawEntries = computed(() => Object.entries(parcel.detail?.attrs ?? {}));
                   </p>
                   <p class="text-xs text-slate-600">
                     Uso: {{ zone.use ?? MESSAGES.common.notAvailable }} ·
-                    {{ Math.round(zone.overlapPct) }} % del predio ·
+                    {{ Math.round(zone.overlap_pct) }} % del predio ·
                     {{ zone.sourceDoc ?? 'documento no declarado' }}
                   </p>
                 </li>
@@ -478,28 +509,21 @@ const rawEntries = computed(() => Object.entries(parcel.detail?.attrs ?? {}));
               <dl class="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
                 <DataValue
                   label="Personas"
-                  :value="context?.population.total ?? null"
+                  :value="context?.population?.total ?? null"
                   format="number"
                   :sources="contextSources"
                   layout="inline"
                 />
                 <DataValue
                   label="Hogares"
-                  :value="context?.population.households ?? null"
+                  :value="context?.population?.households ?? null"
                   format="number"
                   :sources="contextSources"
                   layout="inline"
                 />
                 <DataValue
                   label="Viviendas"
-                  :value="context?.population.dwellings ?? null"
-                  format="number"
-                  :sources="contextSources"
-                  layout="inline"
-                />
-                <DataValue
-                  label="Población en edad escolar"
-                  :value="context?.population.schoolAge ?? null"
+                  :value="context?.population?.dwellings ?? null"
                   format="number"
                   :sources="contextSources"
                   layout="inline"
@@ -516,21 +540,30 @@ const rawEntries = computed(() => Object.entries(parcel.detail?.attrs ?? {}));
           <!-- 9. Historial de cambios -->
           <CollapsibleSection
             :title="MESSAGES.parcel.history"
-            :hint="`${history.length} cambios entre cortes`"
-            :empty="history.length === 0"
+            :hint="historyHint"
+            :empty="changes.length === 0"
             empty-label="Sin cambios registrados"
           >
             <ProvenanceFooter :meta="parcel.historyMeta" compact>
-              <ol v-if="history.length > 0" class="space-y-2 text-sm">
-                <li v-for="(entry, index) in history" :key="index" class="border-l-2 border-slate-200 pl-3">
-                  <p class="font-medium">{{ entry.label }}</p>
+              <ol v-if="changes.length > 0" class="space-y-2 text-sm">
+                <li
+                  v-for="(entry, index) in changes"
+                  :key="index"
+                  class="border-l-2 border-slate-200 pl-3"
+                >
+                  <p class="font-medium">{{ CHANGE_LABELS[entry.changeType] }}</p>
                   <p class="text-xs text-slate-600">
                     Entre el corte {{ entry.fromCutDate }} y el {{ entry.toCutDate }}
                   </p>
                 </li>
               </ol>
+              <!--
+                La API dice POR QUÉ no hay nada que comparar (por ejemplo, un solo corte
+                cargado). Repetir "no cambió" cuando en realidad no hay con qué comparar
+                sería afirmar algo que no sabemos.
+              -->
               <p v-else class="text-sm text-slate-600">
-                Este predio no cambió entre los cortes que tenemos cargados.
+                {{ history?.emptyReason ?? 'Este predio no cambió entre los cortes que tenemos cargados.' }}
               </p>
             </ProvenanceFooter>
           </CollapsibleSection>

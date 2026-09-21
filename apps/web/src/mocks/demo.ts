@@ -14,7 +14,7 @@
  * pruebas manuales y arranques sin backend.
  */
 import { buildMeta, type ResponseMeta, type SourceRef } from '@terracolombia/shared';
-import type { MetricRow } from '@/api/types';
+import type { MetricRow } from '@/types/metric';
 
 /** Fuente ficticia, marcada como sintética para que la interfaz lo grite. */
 export const DEMO_SOURCE: SourceRef = {

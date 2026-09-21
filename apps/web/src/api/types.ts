@@ -148,6 +148,10 @@ export type SyncOrJob<T> = { kind: 'result'; result: T } | { kind: 'job'; job: J
 
 export type SearchResultKind =
   | 'parcel'
+  // `address` y `coordenadas` no salen del índice de búsqueda sino de interpretar la
+  // entrada, por eso es fácil olvidarlos al leer solo el SQL. La ruta los emite.
+  | 'address'
+  | 'coordinates'
   | 'municipality'
   | 'department'
   | 'neighborhood'

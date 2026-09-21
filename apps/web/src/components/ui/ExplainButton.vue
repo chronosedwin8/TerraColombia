@@ -7,25 +7,44 @@
  *  - la respuesta llega con el descargo de `MESSAGES.ai.disclaimer`;
  *  - lo que la herramienta no encontró se lista como "no disponible", sin estimaciones.
  */
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { AppError, MESSAGES } from '@terracolombia/shared';
 import { explainAi } from '@/api/ai';
-import type { AiAnswer } from '@/api/types';
+import type { AiExplainResponse } from '@/api/types';
 import BaseButton from './BaseButton.vue';
 import LoadingSkeleton from './LoadingSkeleton.vue';
 
 const props = defineProps<{
   /** Qué se explica: "avaluo_catastral", "factor:pendiente", "indicador:pob_edad_escolar"… */
   subject: string;
-  /** Datos en pantalla que el asistente debe usar como única base. */
+  /**
+   * Datos en pantalla que el asistente debe usar como única base. El campo de la API se
+   * llama `context`, no `payload`: enviarlo con el nombre viejo hacía que el asistente
+   * explicara el concepto en abstracto, sin la cifra que el usuario tenía delante.
+   */
   payload: Record<string, unknown>;
   size?: 'sm' | 'md';
 }>();
 
 const open = ref(false);
 const isLoading = ref(false);
-const answer = ref<AiAnswer | null>(null);
+const answer = ref<AiExplainResponse | null>(null);
 const error = ref<AppError | null>(null);
+
+/** La evidencia llega como mapa; se aplana para listarla sin inventar etiquetas. */
+const evidenceRows = computed(() =>
+  Object.entries(answer.value?.evidence ?? {}).map(([key, value]) => ({
+    key,
+    value: value === null || value === undefined ? MESSAGES.common.notAvailable : String(value),
+  })),
+);
+
+const MODE_NOTE: Record<AiExplainResponse['mode'], string> = {
+  llm: '',
+  template: 'Respuesta generada con una plantilla fija, sin modelo de lenguaje.',
+  glossary: 'Definición tomada del glosario del producto.',
+  unavailable: 'Este despliegue no tiene asistente con IA configurado.',
+};
 
 async function toggle(): Promise<void> {
   open.value = !open.value;
@@ -34,7 +53,7 @@ async function toggle(): Promise<void> {
   isLoading.value = true;
   error.value = null;
   try {
-    const response = await explainAi({ subject: props.subject, payload: props.payload });
+    const response = await explainAi({ subject: props.subject, context: props.payload });
     answer.value = response.data;
   } catch (e) {
     error.value = e instanceof AppError ? e : new AppError('INTERNAL', MESSAGES.common.error);
@@ -71,25 +90,25 @@ async function toggle(): Promise<void> {
       <p v-else-if="error" class="text-rose-800">{{ error.message }}</p>
 
       <template v-else-if="answer">
-        <p class="whitespace-pre-line leading-relaxed text-slate-800">{{ answer.answer }}</p>
+        <p class="whitespace-pre-line leading-relaxed text-slate-800">{{ answer.explanation }}</p>
 
-        <div v-if="answer.usedData.length > 0" class="mt-2">
+        <!--
+          `/ai/explain` devuelve la evidencia en `evidence`, un mapa suelto: no existen
+          `usedData` ni `missing`, que es lo que esta ficha leía y por eso salía vacía.
+        -->
+        <div v-if="evidenceRows.length > 0" class="mt-2">
           <p class="tc-label">Datos usados</p>
           <ul class="mt-1 space-y-0.5 text-xs text-slate-700">
-            <li v-for="row in answer.usedData" :key="row.key">
-              {{ row.label }}:
-              <strong>{{ row.value ?? MESSAGES.common.notAvailable }}</strong>
-              <span v-if="row.unit"> {{ row.unit }}</span>
+            <li v-for="row in evidenceRows" :key="row.key">
+              {{ row.key }}: <strong>{{ row.value }}</strong>
             </li>
           </ul>
         </div>
 
-        <div v-if="answer.missing.length > 0" class="mt-2">
-          <p class="tc-label">No disponible</p>
-          <ul class="mt-1 list-disc space-y-0.5 pl-4 text-xs text-slate-700">
-            <li v-for="item in answer.missing" :key="item">{{ item }}</li>
-          </ul>
-        </div>
+        <!-- Sin modelo configurado la respuesta es plantillada; decirlo es la regla 6. -->
+        <p v-if="answer.mode !== 'llm'" class="mt-2 text-xs text-slate-500">
+          {{ MODE_NOTE[answer.mode] }}
+        </p>
 
         <p class="mt-2 border-t border-brand-200 pt-2 text-xs text-slate-600">
           {{ answer.disclaimer || MESSAGES.ai.disclaimer }}

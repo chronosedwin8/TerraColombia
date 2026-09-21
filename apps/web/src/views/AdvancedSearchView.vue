@@ -17,6 +17,8 @@ import {
   ParcelQuerySchema,
   formatArea,
   formatCop,
+  isAvailable,
+  type Maybe,
   type NearbyLayer,
   type ParcelQuery,
   type ResponseMeta,
@@ -26,7 +28,7 @@ import { useEntitlements } from '@/composables/useEntitlements';
 import { jsonCodec, useUrlState } from '@/composables/useUrlState';
 import { queryParcels } from '@/api/parcels';
 import { emptyMeta } from '@/api/client';
-import type { Page, ParcelQueryRow } from '@/api/types';
+import type { ParcelQueryResponse } from '@/api/types';
 import MapView from '@/map/MapView.vue';
 import BaseCard from '@/components/ui/BaseCard.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
@@ -187,7 +189,13 @@ const dslResult = computed<
 
 // ─── Consulta ─────────────────────────────────────────────────────────────────
 
-const page = ref<Page<ParcelQueryRow> | null>(null);
+/*
+ * `POST /parcels/query` devuelve `{rows, nextCursor, limitApplied, cadastralValueWarning}`,
+ * no una página con `items` y `total`. Guardarlo como `Page` dejaba la tabla vacía aunque
+ * la consulta respondiera bien: con 528 predios en Soledad se veía "Todavía no hay
+ * resultados".
+ */
+const page = ref<ParcelQueryResponse | null>(null);
 const meta = ref<ResponseMeta>(emptyMeta());
 const isLoading = ref(false);
 const error = ref<AppError | null>(null);
@@ -213,12 +221,30 @@ async function run(): Promise<void> {
   }
 }
 
-const rows = computed(() => page.value?.items ?? []);
+const rows = computed(() => page.value?.rows ?? []);
 
-/** Título con el total solo cuando el backend lo pudo calcular sin costo extra. */
+/*
+ * Las cifras pueden llegar como el centinela `'NO_DISPONIBLE'`, no solo como null: la
+ * fuente declara el hueco en vez de omitirlo. Formatearlo sin comprobarlo imprimía
+ * "NaN m²".
+ */
+function areaLabel(value: Maybe<number>): string {
+  return isAvailable(value) ? formatArea(value) : MESSAGES.common.notAvailable;
+}
+
+function copLabel(value: Maybe<number>): string {
+  return isAvailable(value) ? formatCop(value) : MESSAGES.common.notAvailable;
+}
+
+/**
+ * La API no devuelve cuántas coincidencias hay en total: con `nextCursor` se sabe si queda
+ * más, pero no cuánto. Se dice lo que se sabe —cuántas se están mostrando y si hay más— en
+ * vez de prometer un número que nadie ha contado.
+ */
 const resultsTitle = computed(() => {
-  const total = page.value?.total;
-  return typeof total === 'number' ? `Resultados (${total})` : 'Resultados';
+  const n = rows.value.length;
+  if (n === 0) return 'Resultados';
+  return page.value?.nextCursor ? `Resultados (${n}, hay más)` : `Resultados (${n})`;
 });
 
 /** Centroides de los resultados, para pintarlos sobre el mapa y sincronizar lista y mapa. */
@@ -252,7 +278,7 @@ function toCsv(): string {
       row.muniName,
       row.address ?? MESSAGES.common.notAvailable,
       row.zoneLabel ?? MESSAGES.common.notAvailable,
-      row.areaM2 ?? '',
+      row.areaGeomM2 ?? '',
       row.builtAreaM2 ?? '',
       row.economicUse ?? MESSAGES.common.notAvailable,
       row.cadastralValue ?? '',
@@ -571,14 +597,12 @@ watch(() => mapStore.cutDate, () => {
                   <td>{{ row.address ?? MESSAGES.common.notAvailable }}</td>
                   <td>{{ row.zoneLabel ?? MESSAGES.common.notAvailable }}</td>
                   <td class="tabular-nums">
-                    {{ row.areaM2 === null ? MESSAGES.common.notAvailable : formatArea(row.areaM2) }}
+                    {{ areaLabel(row.areaGeomM2) }}
                   </td>
                   <td>{{ row.economicUse ?? MESSAGES.common.notAvailable }}</td>
                   <td class="tabular-nums">
                     {{
-                      row.cadastralValue === null
-                        ? MESSAGES.common.notAvailable
-                        : formatCop(row.cadastralValue)
+                      copLabel(row.cadastralValue)
                     }}
                   </td>
                 </tr>

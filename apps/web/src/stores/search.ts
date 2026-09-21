@@ -8,14 +8,20 @@ import { AppError } from '@terracolombia/shared';
 import { isNpnCandidate, looksLikeAddress, normalizeNpnInput } from '@terracolombia/geo';
 import { search as searchApi } from '@/api/search';
 import type { ResponseMeta } from '@terracolombia/shared';
-import type { SearchResult } from '@/api/types';
+import type { SearchResultItem } from '@/api/types';
 import { emptyMeta } from '@/api/client';
 
 const MAX_RECENT = 8;
 
 export const useSearchStore = defineStore('search', () => {
   const term = ref('');
-  const results = shallowRef<SearchResult[]>([]);
+  const results = shallowRef<SearchResultItem[]>([]);
+  /**
+   * Por qué la búsqueda no devolvió nada, en palabras. La API siempre lo explica —un código
+   * postal, un DIVIPOLA inexistente, una dirección en un municipio sin predios cargados— y
+   * mostrarlo es mejor que una lista vacía y muda (regla 6 de CLAUDE.md).
+   */
+  const emptyReason = ref<string | null>(null);
   const meta = shallowRef<ResponseMeta>(emptyMeta());
   const isLoading = ref(false);
   const error = shallowRef<AppError | null>(null);
@@ -52,18 +58,23 @@ export const useSearchStore = defineStore('search', () => {
         ...(muniCode ? { muniCode } : {}),
         signal: controller.signal,
       });
-      results.value = response.data;
+      // `GET /search` devuelve `{query, results, emptyReason}`, no un array. Asignar el
+      // sobre entero dejaba `results.length` en `undefined`, así que la comparación con 0
+      // era falsa y el buscador mostraba siempre el estado vacío.
+      results.value = response.data.results;
+      emptyReason.value = response.data.emptyReason;
       meta.value = response.meta;
     } catch (e) {
       if (e instanceof DOMException && e.name === 'AbortError') return;
       error.value = e instanceof AppError ? e : new AppError('INTERNAL', 'No pudimos buscar');
       results.value = [];
+      emptyReason.value = null;
     } finally {
       isLoading.value = false;
     }
   }
 
-  function remember(result: SearchResult): void {
+  function remember(result: SearchResultItem): void {
     const entry = { label: result.label, term: result.label };
     recent.value = [entry, ...recent.value.filter((r) => r.term !== entry.term)].slice(0, MAX_RECENT);
   }
@@ -75,5 +86,17 @@ export const useSearchStore = defineStore('search', () => {
     error.value = null;
   }
 
-  return { term, results, meta, isLoading, error, recent, guessedKind, run, remember, clear };
+  return {
+    term,
+    results,
+    emptyReason,
+    meta,
+    isLoading,
+    error,
+    recent,
+    guessedKind,
+    run,
+    remember,
+    clear,
+  };
 });

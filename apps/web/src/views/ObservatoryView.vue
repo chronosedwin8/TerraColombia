@@ -12,7 +12,7 @@ import { getIndicators } from '@/api/indicators';
 import { getMunicipality } from '@/api/municipalities';
 import { emptyMeta } from '@/api/client';
 import { stringCodec, useUrlState } from '@/composables/useUrlState';
-import type { MunicipalIndicators, MunicipalityDetail } from '@/api/types';
+import type { MunicipalIndicators, MunicipalityDetail, SearchResultItem } from '@/api/types';
 import SearchBox from '@/components/SearchBox.vue';
 import ChartCard from '@/components/ChartCard.vue';
 import BaseCard from '@/components/ui/BaseCard.vue';
@@ -76,9 +76,11 @@ watch(
   { immediate: true },
 );
 
-function onSelect(result: { kind: string; id: string }): void {
-  if (result.kind !== 'municipality') return;
-  state.municipio = result.id;
+// El resultado trae un `target` discriminado, no un campo `id`: leerlo como antes dejaba
+// el código en `undefined` y elegir un municipio en el buscador no hacía nada.
+function onSelect(result: SearchResultItem): void {
+  if (result.target.type !== 'municipality') return;
+  state.municipio = result.target.code;
 }
 
 /** Serie temporal de un indicador. Los huecos se dejan como huecos, no se interpolan. */
@@ -99,7 +101,15 @@ function seriesOption(indicator: MunicipalIndicators['indicators'][number]): ECh
   };
 }
 
-const coverage = computed(() => municipality.value?.coverage ?? indicators.value?.coverage ?? null);
+/*
+ * La cobertura viaja en `meta`, no en `data`: ni el municipio ni los indicadores la traen
+ * como campo. Leerla de `data` la dejaba siempre en null, así que el aviso de cobertura
+ * parcial —el que dice que el municipio no es jurisdicción del IGAC o que no tiene predios
+ * cargados— no aparecía nunca. Es justo lo que exige la regla 6.
+ */
+const coverage = computed(
+  () => indicatorsMeta.value.coverage ?? municipalityMeta.value.coverage ?? null,
+);
 const sources = computed(() => indicatorsMeta.value.sources);
 
 function sourcesFor(indicator: MunicipalIndicators['indicators'][number]) {
@@ -140,7 +150,7 @@ function sourcesFor(indicator: MunicipalIndicators['indicators'][number]) {
       <CoverageNotice :coverage="coverage" />
 
       <BaseCard
-        :title="`${indicators.muniName} (${indicators.muniCode})`"
+        :title="`${indicators.municipality.name} (${indicators.municipality.code})`"
         :heading-level="2"
         :subtitle="municipality ? `${municipality.deptName}` : undefined"
       >
@@ -162,9 +172,9 @@ function sourcesFor(indicator: MunicipalIndicators['indicators'][number]) {
             layout="inline"
           />
           <DataValue
-            label="Cortes catastrales disponibles"
-            :value="municipality?.availableCutDates.length ?? null"
-            format="number"
+            label="Último corte catastral cargado"
+            :value="indicators?.summary?.last_cut_date ?? null"
+            format="text"
             :sources="municipalityMeta.sources"
             layout="inline"
           />
@@ -245,7 +255,7 @@ function sourcesFor(indicator: MunicipalIndicators['indicators'][number]) {
 
       <ResultActionBar
         :share-url="shareUrl()"
-        :share-title="`Observatorio de ${indicators.muniName}`"
+        :share-title="`Observatorio de ${indicators.municipality.name}`"
         :formats="['pdf', 'xlsx', 'csv']"
         :can-compare="false"
         @save="$router.push('/proyectos')"

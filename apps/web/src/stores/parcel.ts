@@ -4,18 +4,23 @@
  */
 import { defineStore } from 'pinia';
 import { computed, ref, shallowRef } from 'vue';
-import { AppError, isAvailable, type ParcelContext, type ResponseMeta } from '@terracolombia/shared';
+import { AppError, isAvailable, type ResponseMeta } from '@terracolombia/shared';
 import { getParcel, getParcelContext, getParcelHistory } from '@/api/parcels';
 import { emptyMeta } from '@/api/client';
-import type { ParcelDetail, ParcelHistoryEntry } from '@/api/types';
+import type { ParcelContextResponse, ParcelDetail, ParcelHistoryResponse } from '@/api/types';
 
 export const useParcelStore = defineStore('parcel', () => {
   const npn = ref<string | null>(null);
   const detail = shallowRef<ParcelDetail | null>(null);
   const detailMeta = shallowRef<ResponseMeta>(emptyMeta());
-  const context = shallowRef<ParcelContext | null>(null);
+  const context = shallowRef<ParcelContextResponse | null>(null);
   const contextMeta = shallowRef<ResponseMeta>(emptyMeta());
-  const history = shallowRef<ParcelHistoryEntry[]>([]);
+  /**
+   * `GET /parcels/:npn/history` devuelve `{npn, cuts, changes, emptyReason}`, no un arreglo.
+   * Guardarlo como lista dejaba `history.length` en `undefined` y la sección anunciaba
+   * "undefined cambios entre cortes".
+   */
+  const history = shallowRef<ParcelHistoryResponse | null>(null);
   const historyMeta = shallowRef<ResponseMeta>(emptyMeta());
 
   const contextRadiusM = ref(1000);
@@ -29,8 +34,10 @@ export const useParcelStore = defineStore('parcel', () => {
     () => detailMeta.value.synthetic || contextMeta.value.synthetic || historyMeta.value.synthetic,
   );
   /** Solo se advierte del avalúo cuando realmente hay una cifra que advertir. */
+  // `GET /parcels/:npn` devuelve el objeto PLANO: no existe `summary`. Leerlo así dejaba
+  // toda la ficha sin renderizar, porque el bloque colgaba de un `v-else-if="summary"`.
   const hasCadastralValue = computed(() =>
-    detail.value ? isAvailable(detail.value.summary.cadastralValue) : false,
+    detail.value ? isAvailable(detail.value.cadastralValue) : false,
   );
 
   async function load(nextNpn: string, cutDate?: string): Promise<void> {
@@ -73,7 +80,7 @@ export const useParcelStore = defineStore('parcel', () => {
       history.value = response.data;
       historyMeta.value = response.meta;
     } catch {
-      history.value = [];
+      history.value = null;
     }
   }
 
@@ -81,7 +88,7 @@ export const useParcelStore = defineStore('parcel', () => {
     npn.value = null;
     detail.value = null;
     context.value = null;
-    history.value = [];
+    history.value = null;
     detailMeta.value = emptyMeta();
     contextMeta.value = emptyMeta();
     historyMeta.value = emptyMeta();

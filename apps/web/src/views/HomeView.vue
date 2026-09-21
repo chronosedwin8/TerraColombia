@@ -21,7 +21,8 @@ import {
 } from '@/composables/useUrlState';
 import { DEFAULT_VISIBLE_LAYERS, isTileLayer } from '@/map/layers';
 import { getNearby } from '@/api/nearby';
-import type { NearbyResponse } from '@/api/types';
+import type { NearbyResponse, SearchResultItem } from '@/api/types';
+import { useSearchNavigation } from '@/composables/useSearchNavigation';
 import MapView from '@/map/MapView.vue';
 import SearchBox from '@/components/SearchBox.vue';
 import BottomSheet from '@/components/BottomSheet.vue';
@@ -35,6 +36,7 @@ import type { ResponseMeta } from '@terracolombia/shared';
 import { emptyMeta } from '@/api/client';
 
 const router = useRouter();
+const { navigateTo, destinationOf } = useSearchNavigation();
 const mapStore = useMapStore();
 const ui = useUiStore();
 
@@ -167,20 +169,17 @@ function goTo(access: (typeof ACCESOS)[number]): void {
   void router.push(access.to);
 }
 
-function onSelectResult(result: { kind: string; id: string; bbox: BBox | null; centroid: [number, number] | null }): void {
-  if (result.kind === 'parcel') {
-    void router.push({ name: 'parcel', params: { npn: result.id } });
-    return;
-  }
-  if (result.kind === 'municipality') {
-    mapStore.selectedMuniCode = result.id;
-  }
-  if (result.bbox) {
-    state.bbox = result.bbox;
-    mapRef.value?.fitBBox(result.bbox);
-  } else if (result.centroid) {
-    mapRef.value?.flyTo(result.centroid, 15);
-  }
+/*
+ * El resultado trae un `target` discriminado, no `id`/`bbox`/`centroid`: esos campos
+ * llegaban `undefined`, así que elegir un predio navegaba a `/predio/undefined` y elegir un
+ * municipio no hacía absolutamente nada.
+ */
+function onSelectResult(result: SearchResultItem): void {
+  if (navigateTo(result)) return;
+
+  const destino = destinationOf(result.target);
+  if (destino.muniCode) mapStore.selectedMuniCode = destino.muniCode;
+  if (destino.center) mapRef.value?.flyTo(destino.center, destino.zoom ?? 15);
 }
 
 /** Referencia al mapa para poder encuadrarlo desde el buscador y desde la URL. */
@@ -252,7 +251,7 @@ const visibleLayerNames = computed<TileLayer[]>(() => mapStore.visibleLayers);
                     <p class="font-medium">{{ group.label }}: {{ group.count }}</p>
                     <p v-if="group.nearest" class="text-xs text-slate-600">
                       Más cercano: {{ group.nearest.name ?? 'sin nombre' }} a
-                      {{ Math.round(group.nearest.distanceM) }} m
+                      {{ Math.round(group.nearest.distance_m) }} m
                     </p>
                   </li>
                 </ul>

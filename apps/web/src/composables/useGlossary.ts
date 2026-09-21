@@ -18,16 +18,21 @@ export function useGlossary() {
     retry: 1,
   });
 
+  // `GET /glossary` devuelve `{ terms: [...] }`, no un array. Iterar el objeto lanzaba
+  // `TypeError: no es iterable` dentro del computed y tumbaba la pantalla del glosario en
+  // cuanto respondía la petición.
+  const remoteTerms = computed<GlossaryEntry[]>(() => remote.data.value?.terms ?? []);
+
   const entries = computed<GlossaryEntry[]>(() => {
     const merged = new Map<string, GlossaryEntry>();
     for (const entry of GLOSSARY) merged.set(entry.id, entry);
-    for (const entry of remote.data.value ?? []) merged.set(entry.id, entry);
+    for (const entry of remoteTerms.value) merged.set(entry.id, entry);
     return [...merged.values()].sort((a, b) => a.term.localeCompare(b.term, 'es-CO'));
   });
 
   const byId = computed<Record<string, GlossaryEntry>>(() => {
     const out: Record<string, GlossaryEntry> = { ...GLOSSARY_BY_ID };
-    for (const entry of remote.data.value ?? []) out[entry.id] = entry;
+    for (const entry of remoteTerms.value) out[entry.id] = entry;
     return out;
   });
 

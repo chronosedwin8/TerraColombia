@@ -1,12 +1,12 @@
 <script setup lang="ts">
 /**
- * Rejilla de métricas de un tablero. Traduce las `MetricRow` del API a `DataValue`,
+ * Rejilla de métricas de un tablero. Traduce las `MetricRow` que arma la vista a `DataValue`,
  * resolviendo qué fuentes respaldan cada fila: si una fila no declara datasets, `DataValue`
  * se encarga de no mostrar el número (regla 4).
  */
 import { computed } from 'vue';
 import type { Maybe, SourceRef } from '@terracolombia/shared';
-import type { MetricRow } from '@/api/types';
+import type { MetricRow } from '@/types/metric';
 import DataValue from '@/components/ui/DataValue.vue';
 import ExplainButton from '@/components/ui/ExplainButton.vue';
 

@@ -11,7 +11,7 @@ import { MESSAGES } from '@terracolombia/shared';
 import { formatNpnPretty } from '@terracolombia/geo';
 import { useSearchStore } from '@/stores/search';
 import { useDebounceFn } from '@/composables/useDebounce';
-import type { SearchResult } from '@/api/types';
+import type { SearchResultItem } from '@/api/types';
 
 const props = withDefaults(
   defineProps<{
@@ -29,7 +29,7 @@ const props = withDefaults(
   },
 );
 
-const emit = defineEmits<{ (e: 'select', result: SearchResult): void }>();
+const emit = defineEmits<{ (e: 'select', result: SearchResultItem): void }>();
 
 const store = useSearchStore();
 const input = ref('');
@@ -46,13 +46,19 @@ watch(input, (value) => {
   debouncedSearch.run(value);
 });
 
-const KIND_LABELS: Record<SearchResult['kind'], string> = {
+const KIND_LABELS: Record<SearchResultItem['kind'], string> = {
   parcel: 'Predio',
+  address: 'Dirección',
+  coordinates: 'Coordenadas',
   municipality: 'Municipio',
   department: 'Departamento',
-  address: 'Dirección',
-  place: 'Lugar',
-  coordinates: 'Coordenadas',
+  neighborhood: 'Barrio',
+  vereda: 'Vereda',
+  toponym: 'Topónimo',
+  populated_place: 'Centro poblado',
+  protected_area: 'Área protegida',
+  school: 'Colegio',
+  health_facility: 'Prestador de salud',
 };
 
 const HINT_BY_GUESS: Record<'npn' | 'address' | 'coordinates' | 'text', string> = {
@@ -64,17 +70,31 @@ const HINT_BY_GUESS: Record<'npn' | 'address' | 'coordinates' | 'text', string> 
 
 const hint = computed(() => HINT_BY_GUESS[store.guessedKind]);
 
-/** Los predios se muestran con el NPN agrupado: 30 dígitos seguidos no se leen. */
-function labelFor(result: SearchResult): string {
-  if (result.kind !== 'parcel') return result.label;
+/**
+ * Los predios se muestran con el NPN agrupado: 30 dígitos seguidos no se leen.
+ *
+ * El código sale de `target`, no de un campo `id`: la API no devuelve ninguno. Antes se
+ * leía `result.id`, que era `undefined`, así que `formatNpnPretty` lanzaba y el nombre
+ * caía siempre al `label` sin agrupar.
+ */
+function labelFor(result: SearchResultItem): string {
+  if (result.target.type !== 'parcel') return result.label;
   try {
-    return formatNpnPretty(result.id);
+    return formatNpnPretty(result.target.npn);
   } catch {
     return result.label;
   }
 }
 
-function choose(result: SearchResult): void {
+/** Clave estable para el `v-for`: el destino identifica el resultado, no hay campo `id`. */
+function keyFor(result: SearchResultItem, index: number): string {
+  const t = result.target;
+  if (t.type === 'parcel') return `parcel-${t.npn}`;
+  if (t.type === 'municipality' || t.type === 'department') return `${t.type}-${t.code}`;
+  return `${result.kind}-${index}`;
+}
+
+function choose(result: SearchResultItem): void {
   store.remember(result);
   input.value = result.label;
   open.value = false;
@@ -163,7 +183,7 @@ function onKeydown(event: KeyboardEvent): void {
       <li
         v-for="(result, index) in store.results"
         :id="`tc-search-option-${index}`"
-        :key="`${result.kind}-${result.id}`"
+        :key="keyFor(result, index)"
         role="option"
         :aria-selected="index === activeIndex"
         class="cursor-pointer px-3 py-2 text-sm"
@@ -177,8 +197,12 @@ function onKeydown(event: KeyboardEvent): void {
           </span>
           <span class="truncate font-medium">{{ labelFor(result) }}</span>
         </p>
-        <p v-if="result.sublabel" class="mt-0.5 truncate text-xs text-slate-500">
-          {{ result.sublabel }}
+        <p v-if="result.context" class="mt-0.5 truncate text-xs text-slate-500">
+          {{ result.context }}
+        </p>
+        <!-- Cómo se interpretó la entrada: distingue "no existe" de "lo leí de otra forma". -->
+        <p v-if="result.interpretation" class="mt-0.5 text-xs text-slate-400">
+          {{ result.interpretation }}
         </p>
       </li>
     </ul>
@@ -190,7 +214,15 @@ function onKeydown(event: KeyboardEvent): void {
         bg-white px-3 py-3 text-sm shadow-panel"
     >
       <p class="font-medium">{{ MESSAGES.errors.notFound }}</p>
-      <p class="mt-0.5 text-xs text-slate-600">
+      <!--
+        La API explica siempre POR QUÉ no encontró nada: un código postal, un DIVIPOLA que
+        no existe, una dirección en un municipio sin predios cargados. Mostrarlo evita que
+        el usuario crea que escribió mal (regla 6 de CLAUDE.md).
+      -->
+      <p v-if="store.emptyReason" class="mt-0.5 text-xs text-slate-600">
+        {{ store.emptyReason }}
+      </p>
+      <p v-else class="mt-0.5 text-xs text-slate-600">
         Revisa la escritura o prueba con el municipio y el barrio. Si buscas un predio por código,
         debe tener 30 dígitos (o 20 en el formato anterior).
       </p>
