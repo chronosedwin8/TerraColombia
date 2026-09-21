@@ -69,3 +69,24 @@ export type TileLayer = (typeof TILE_LAYERS)[number];
 
 /** Zoom mínimo al que se sirven predios individuales. */
 export const PARCEL_MIN_ZOOM = 14;
+
+/**
+ * Estados de un trabajo en cola.
+ *
+ * Viven aquí porque los leen los dos extremos: la API los escribe y la interfaz decide con
+ * ellos cuándo dejar de sondear. Estuvieron duplicados como literales en cada lado y
+ * divergieron —la interfaz esperaba `completed` y `cancelled`, la API escribía `done` y
+ * `canceled`—, así que ningún trabajo terminaba nunca en pantalla: la barra de progreso se
+ * quedaba girando y el resultado no se mostraba jamás. Un solo sitio para que no vuelva a
+ * pasar.
+ */
+export const JOB_STATUSES = ['queued', 'running', 'done', 'failed', 'canceled'] as const;
+
+export type JobStatus = (typeof JOB_STATUSES)[number];
+
+/** Estados en los que el trabajo ya no va a cambiar: el cliente deja de sondear. */
+export const JOB_TERMINAL_STATUSES = ['done', 'failed', 'canceled'] as const;
+
+export function isJobFinished(status: string): boolean {
+  return (JOB_TERMINAL_STATUSES as readonly string[]).includes(status);
+}

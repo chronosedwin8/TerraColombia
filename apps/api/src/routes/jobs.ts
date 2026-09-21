@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { AppError } from '@terracolombia/shared';
+import { AppError, JOB_STATUSES } from '@terracolombia/shared';
 import { getPrisma } from '@terracolombia/db';
 import { plainEnvelope } from '../lib/envelope.js';
 
@@ -22,7 +22,7 @@ export default async function jobRoutes(app: FastifyInstance): Promise<void> {
         querystring: {
           type: 'object',
           properties: {
-            status: { type: 'string', enum: ['queued', 'running', 'done', 'failed', 'canceled'] },
+            status: { type: 'string', enum: [...JOB_STATUSES] },
             limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           },
         },
@@ -33,7 +33,7 @@ export default async function jobRoutes(app: FastifyInstance): Promise<void> {
       if (!orgId) throw AppError.forbidden('Tu cuenta no tiene organización activa.');
       const { status, limit } = z
         .object({
-          status: z.enum(['queued', 'running', 'done', 'failed', 'canceled']).optional(),
+          status: z.enum(JOB_STATUSES).optional(),
           limit: z.coerce.number().int().min(1).max(100).default(20),
         })
         .parse(req.query);

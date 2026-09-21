@@ -25,3 +25,10 @@ apps/api/reports-out/
 
 # Generado por `pnpm --filter @terracolombia/docs-site glossary` desde packages/shared
 apps/docs-site/guia/glosario.md
+
+# Scripts de usar y tirar para inspeccionar la base o la API en desarrollo.
+# Se quedan fuera del repositorio: no son herramientas, y cuando alguien corre
+# `git add -A` con uno a medias acaban commiteados sin querer.
+packages/db/src/cli/tmp*/
+packages/db/src/cli/shape/
+shapes.json

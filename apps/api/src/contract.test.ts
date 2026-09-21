@@ -197,6 +197,184 @@ d('contrato entre la web y la API', () => {
     expect(res.json()?.error?.message ?? '').not.toMatch(/No existe la ruta/);
   });
 
+  // ─── Campos concretos que lee cada pantalla ─────────────────────────────────
+  //
+  // Comprobar que la ruta existe no basta. Los fallos que de verdad llegan a producción son
+  // de nombre: la pantalla lee `data.summary.address` y la API devuelve `data.address`, o
+  // lee `distanceM` y la API manda `distance_m`. Nada falla —ni el compilador, porque el
+  // cliente hace un cast, ni las pruebas unitarias— y el usuario ve una ficha en blanco o
+  // un "NaN m". Esta tabla fija los nombres que cada vista lee de verdad.
+  //
+  // Cómo mantenerla: si una pantalla empieza a leer un campo nuevo, añádelo aquí. Si la API
+  // renombra uno, esta prueba falla y dice exactamente cuál, antes de que lo vea nadie.
+
+  /**
+   * Comprueba que existan rutas de campo dentro de un objeto. `a.b` baja un nivel y `a[].b`
+   * baja al primer elemento de un array. Un `null` cuenta como presente: significa "no hay
+   * dato", que es una respuesta legítima; lo que se persigue es el `undefined`, que
+   * significa "ese campo no existe con ese nombre".
+   */
+  function faltantes(root: unknown, paths: string[]): string[] {
+    const ausentes: string[] = [];
+    for (const path of paths) {
+      let node: unknown = root;
+      let ok = true;
+      for (const step of path.split('.')) {
+        const esArray = step.endsWith('[]');
+        const key = esArray ? step.slice(0, -2) : step;
+        if (node === null || node === undefined || typeof node !== 'object') { ok = false; break; }
+        node = (node as Record<string, unknown>)[key];
+        if (node === undefined) { ok = false; break; }
+        if (esArray) {
+          if (!Array.isArray(node)) { ok = false; break; }
+          // Un array vacío no prueba nada sobre sus elementos, pero tampoco es un fallo:
+          // se deja pasar en vez de exigir que el entorno tenga datos de ese tipo.
+          if (node.length === 0) { ok = true; break; }
+          node = node[0];
+        }
+      }
+      if (!ok) ausentes.push(path);
+    }
+    return ausentes;
+  }
+
+  const CAMPOS_POR_RUTA: Array<{
+    nombre: string;
+    method: 'GET' | 'POST';
+    path: string;
+    auth: boolean;
+    body?: unknown;
+    /** Pantalla que los lee, para saber qué se rompe si esto falla. */
+    pantalla: string;
+    campos: string[];
+  }> = [
+    {
+      nombre: 'búsqueda universal',
+      method: 'GET',
+      path: '/api/v1/search?q=soledad',
+      auth: false,
+      pantalla: 'SearchBox / HomeView',
+      campos: ['query', 'emptyReason', 'results[].kind', 'results[].label', 'results[].context', 'results[].target', 'results[].score'],
+    },
+    {
+      nombre: 'glosario',
+      method: 'GET',
+      path: '/api/v1/glossary',
+      auth: false,
+      pantalla: 'GlossaryView / GlossaryPanel',
+      campos: ['terms[].id', 'terms[].term', 'terms[].plain'],
+    },
+    {
+      nombre: 'ficha de predio',
+      method: 'GET',
+      path: '/api/v1/parcels/087580101010200010001000000000',
+      auth: false,
+      pantalla: 'ParcelView',
+      campos: [
+        'npn', 'npnPretty', 'address', 'zoneLabel', 'areaGeomM2', 'builtAreaM2',
+        'economicUse', 'cadastralValue', 'cadastralValueWarning',
+        'municipality.code', 'municipality.name', 'municipality.deptName',
+        'buildings', 'homogeneousZones', 'rawAttributes', 'availableCutDates', 'currentCutDate',
+      ],
+    },
+    {
+      nombre: 'historial del predio',
+      method: 'GET',
+      path: '/api/v1/parcels/087580101010200010001000000000/history',
+      auth: false,
+      pantalla: 'ParcelView, sección de historial',
+      campos: ['npn', 'cuts', 'changes', 'emptyReason'],
+    },
+    {
+      nombre: 'qué hay cerca',
+      method: 'GET',
+      path: '/api/v1/nearby?lat=10.912&lng=-74.771&radius=500',
+      auth: false,
+      pantalla: 'HomeView',
+      campos: ['point.lng', 'radiusM', 'total', 'byLayer', 'items[].layer', 'items[].name', 'items[].distance_m'],
+    },
+    {
+      nombre: 'municipio',
+      method: 'GET',
+      path: '/api/v1/municipalities/08758',
+      auth: false,
+      pantalla: 'ObservatoryView',
+      campos: ['code', 'name', 'deptName', 'centroid', 'summary.manager_name', 'summary.coverage_status', 'summary.n_parcels'],
+    },
+    {
+      nombre: 'plantillas de localización',
+      method: 'GET',
+      path: '/api/v1/location-intel/templates',
+      auth: false,
+      pantalla: 'LocationIntelView',
+      campos: ['templates[].id', 'templates[].name', 'templates[].indicators', 'note'],
+    },
+    {
+      nombre: 'aptitud',
+      method: 'POST',
+      path: '/api/v1/suitability',
+      auth: true,
+      body: { target: { kind: 'parcel', npn: '087580101010200010001000000000' }, use: 'vivienda_unifamiliar' },
+      pantalla: 'SuitabilityView',
+      campos: ['useLabel', 'verdict', 'verdictLabel', 'score', 'factors[].indicator', 'factors[].label', 'factors[].score', 'blockers', 'cautions', 'missing', 'disclaimer'],
+    },
+    {
+      nombre: 'análisis de zona',
+      method: 'POST',
+      path: '/api/v1/areas/analyze',
+      auth: true,
+      body: { scope: { kind: 'radius', center: [-74.771, 10.912], radiusM: 400 } },
+      pantalla: 'AreaAnalysisView',
+      campos: ['label', 'areaKm2', 'areaHa', 'parcels', 'population', 'facilities', 'missingSections', 'warnings'],
+    },
+    {
+      nombre: 'comparación de cortes',
+      method: 'POST',
+      path: '/api/v1/changes/compare',
+      auth: true,
+      body: { scope: { kind: 'radius', center: [-74.771, 10.912], radiusM: 400 }, fromCutDate: '2026-08-01', toCutDate: '2026-09-01' },
+      pantalla: 'ChangeView',
+      campos: ['fromCutDate', 'toCutDate', 'areaKm2', 'summary', 'changes', 'truncated'],
+    },
+    {
+      nombre: 'cobertura para administración',
+      method: 'GET',
+      path: '/api/v1/admin/coverage',
+      auth: true,
+      pantalla: 'AdminView, pestaña de cobertura',
+      campos: ['items[].code', 'items[].name', 'items[].municipalities', 'items[].igac', 'items[].with_parcels', 'summary.total_municipalities', 'byDepartment'],
+    },
+  ];
+
+  for (const caso of CAMPOS_POR_RUTA) {
+    it(`${caso.nombre}: trae los campos que lee ${caso.pantalla}`, async () => {
+      const res = await app.inject({
+        method: caso.method,
+        url: caso.path,
+        headers: caso.auth ? { authorization: `Bearer ${token}` } : {},
+        ...(caso.body ? { payload: caso.body } : {}),
+      });
+      expect(res.statusCode, `${caso.path} respondió ${res.statusCode}: ${res.payload.slice(0, 200)}`)
+        .toBeLessThan(400);
+      const ausentes = faltantes(res.json().data, caso.campos);
+      expect(
+        ausentes,
+        `${caso.path} no trae ${ausentes.join(', ')}. ${caso.pantalla} los lee, así que se ` +
+          'renderizaría vacía o lanzaría. Si el cambio de nombre es intencionado, actualiza ' +
+          'la pantalla y esta tabla a la vez.',
+      ).toEqual([]);
+    });
+  }
+
+  it('los trabajos usan los estados que el cliente sabe interpretar', async () => {
+    // El cliente cierra el sondeo con estos valores. Si la API renombra uno, la barra de
+    // progreso se queda girando para siempre y el resultado no se muestra nunca.
+    const { JOB_STATUSES } = await import('@terracolombia/shared');
+    expect([...JOB_STATUSES].sort()).toEqual(
+      ['canceled', 'done', 'failed', 'queued', 'running'].sort(),
+    );
+  });
+
   // ─── Forma de la respuesta que el frontend da por supuesta ──────────────────
 
   it('login devuelve el plan, los permisos y los créditos', async () => {
