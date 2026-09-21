@@ -50,7 +50,7 @@ ENV VITE_API_URL=$VITE_API_URL \
 RUN pnpm --filter @terracolombia/web... run build
 
 # ─── 3. Servidor estático ───────────────────────────────────────────────────
-FROM nginx:1.27-alpine AS runtime
+FROM nginx:1.31-alpine AS runtime
 
 RUN apk add --no-cache tzdata curl \
  && cp /usr/share/zoneinfo/America/Bogota /etc/localtime \
