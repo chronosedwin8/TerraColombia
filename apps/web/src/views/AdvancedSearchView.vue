@@ -298,6 +298,9 @@ function toCsv(): string {
 }
 
 function downloadCsv(): void {
+  // El BOM (U+FEFF) al principio no es un descuido: sin él, Excel en Windows abre el CSV
+  // en la codificación del sistema y destroza las tildes y las eñes de todo el archivo.
+  // eslint-disable-next-line no-irregular-whitespace -- BOM deliberado para Excel
   const blob = new Blob([`﻿${toCsv()}`], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');

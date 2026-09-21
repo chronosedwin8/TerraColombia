@@ -10,7 +10,7 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint src"
+    "lint": "eslint src --ext .ts,.vue"
   },
   "dependencies": {
     "@tanstack/vue-query": "^5.62.7",

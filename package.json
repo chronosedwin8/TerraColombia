@@ -16,6 +16,7 @@
     "db:migrate": "pnpm --filter @terracolombia/db migrate",
     "db:seed": "pnpm --filter @terracolombia/db seed",
     "db:reset": "pnpm --filter @terracolombia/db reset",
+    "db:boundaries": "pnpm --filter @terracolombia/db load:boundaries",
     "catalog:crawl": "pnpm --filter @terracolombia/sources crawl",
     "catalog:report": "pnpm --filter @terracolombia/sources report",
     "etl": "pnpm --filter @terracolombia/worker etl",
@@ -25,11 +26,14 @@
     "@eslint/js": "^9.17.0",
     "@types/node": "^22.10.2",
     "eslint": "^9.17.0",
+    "eslint-plugin-vue": "^10.11.0",
+    "globals": "^17.12.0",
     "prettier": "^3.4.2",
     "tsx": "^4.19.2",
     "turbo": "^2.3.3",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.1",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "vue-eslint-parser": "^10.4.1"
   }
 }

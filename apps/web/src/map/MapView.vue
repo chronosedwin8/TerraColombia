@@ -276,6 +276,7 @@ defineExpose({ fitBBox, flyTo, map });
     -->
     <p class="tc-map-attribution">
       {{ igacAttribution(mapStore.cutDate) }} ·
+      <!-- eslint-disable-next-line vue/no-v-html -- constante del código, nunca dato de la API -->
       <span v-html="BASEMAP_ATTRIBUTION" />
     </p>
 
