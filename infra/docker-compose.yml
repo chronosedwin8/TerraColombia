@@ -269,7 +269,7 @@ services:
 
   # Exportadores que alimentan los objetivos declarados en prometheus/prometheus.yml.
   postgres-exporter:
-    image: prometheuscommunity/postgres-exporter:v0.17.1
+    image: prometheuscommunity/postgres-exporter:v0.20.1
     container_name: tc-postgres-exporter
     restart: unless-stopped
     profiles: [observability]
