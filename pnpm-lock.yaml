@@ -259,7 +259,15 @@ importers:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.20.4)(jsdom@25.0.1)
 
-  etl/config: {}
+  etl/config:
+    dependencies:
+      '@terracolombia/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+    devDependencies:
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
 
   packages/ai:
     dependencies:

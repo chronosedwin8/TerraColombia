@@ -1,311 +1,575 @@
 # Diccionario catastral — estructura real observada (Fase 0)
 
 > **Qué es este documento.** El diccionario de la estructura catastral del IGAC
-> **tal como la devuelven sus servicios**, no como la describe la norma. Todo lo
-> marcado ✔ se inspeccionó de verdad con `pnpm catalog:crawl`; todo lo marcado ✗
-> **no se ha verificado** y no puede usarse para programar nada (regla 2 de
-> `CLAUDE.md`).
+> **tal como la entregan sus fuentes**, no como la describe la norma. Lo marcado
+> ✔ se inspeccionó de verdad; lo marcado ✗ **no está verificado** y no puede
+> usarse para programar nada (regla 2 de `CLAUDE.md`).
 >
-> Evidencia: `data-catalog/igac/Dato_Fundamental_Catastro__MapServer.json`.
-> Fecha de inspección: 2026-09-21.
-> Fuente: IGAC — `https://mapas.igac.gov.co/server/rest/services/Dato_Fundamental_Catastro/MapServer`
-> (ArcGIS Server 11.3, `currentVersion` 11.3).
+> **Fecha de inspección:** 2026-09-21.
+>
+> **Dos fuentes, dos esquemas distintos de la misma información:**
+>
+> | | Base Catastral Pública (descarga) | Dato Fundamental Catastro (REST) |
+> |---|---|---|
+> | Acceso | GDB por departamento, ArcGIS Online | `mapas.igac.gov.co/server/rest/services` |
+> | Capas | **18** | 5 |
+> | CRS | **EPSG:9377** (métrico) | EPSG:4686 (grados) |
+> | Nombres de campo | completos (`TERRENO_CODIGO`) | truncados a 10 (`TERRENO_CO`) |
+> | Dominios | declarados (`domTipoConstruccion`) | ninguno |
+> | Áreas | en m², utilizables | en grados², inservibles |
+> | Licencia | **CC BY-SA 4.0 explícita** | no declarada |
+> | Papel en el producto | **fuente primaria** | respaldo y control de cobertura |
+>
+> **Evidencia:** `data-catalog/igac/Dato_Fundamental_Catastro__MapServer.json`
+> (servicio) y el paquete `08_ATLANTICO.zip` del departamento piloto
+> (SHA-256 `11647eeb3dbe5db92d514c87095ae1a665cd16f4b109fa55f893dcb20519eaeb`).
 
 ---
 
 ## 0. Resumen ejecutivo
 
-| Pregunta | Respuesta observada |
+| Pregunta | Respuesta verificada |
 |---|---|
-| ¿Qué capas catastrales publica el IGAC por REST? | 5: `R_CONSTRUCCION`, `R_TERRENO`, `U_CONSTRUCCION`, `U_MANZANA`, `U_TERRENO` ✔ |
-| ¿Traen atributos alfanuméricos (avalúo, destino económico, dirección, área)? | **No.** Solo códigos y geometría ✔ |
-| ¿Traen datos de propietario? | **No** en las capas de terreno y manzana. `R_CONSTRUCCION` expone `USUARIO_LO` (usuario que editó el registro), que la lista negra descarta ✔ |
-| CRS | EPSG:4686 (MAGNA-SIRGAS geográficas) ✔ |
-| ¿Se puede paginar? | **No.** `supportsPagination: false`; el servicio responde `400 Pagination is not supported.` ✔ |
-| ¿Sirve como backend en vivo? | **No.** Confirma la decisión de PLAN.md §5.1: ingerir a PostGIS propio ✔ |
-| ¿Estructura de la GDB descargable y de los Registros 1 y 2? | ✗ **Sin verificar** (ver §6) |
+| ¿Existe la base catastral descargable? | **Sí.** 31 departamentos publicados como *File Geodatabase* en ArcGIS Online, ítem por departamento ✔ |
+| ¿Con qué licencia? | **CC BY-SA 4.0**, declarada literalmente en el ítem, con la cláusula de compartir-igual explícita ✔ |
+| ¿Qué capas trae? | 18: la jerarquía urbana y rural completa, incluidas las que el servicio REST no publica ✔ |
+| ¿Trae avalúo catastral o destino económico? | **NO.** No hay Registro 1 ni Registro 2 en el paquete público ✔ |
+| ¿Trae datos de propietario? | **NO.** Ninguna de las 18 capas tiene columna de titularidad ✔ |
+| ¿Trae la dirección del predio? | Formalmente sí, en la práctica **no**: de 73 215 registros de nomenclatura en Atlántico, 18 contienen un tipo de vía ✔ |
+| ¿El NPN es clave única? | **No.** 706 duplicados sobre 67 925 predios urbanos de Atlántico (1,04 %) ✔ |
+| ¿El tramo de zona del NPN distingue urbano de rural? | **No** como booleano: rural = `00`, urbano = `01`…`06` (una por área urbana) ✔ |
+| ¿Se puede servir desde el REST en vivo? | **No.** Sin paginación, `maxRecordCount` 2 000, 6,7 millones de predios ✔ |
 
 ---
 
-## 1. El servicio
+## 1. La descarga: Base Catastral Pública por departamento ✔
+
+### 1.1 Cómo se localiza
+
+Los paquetes departamentales son ítems de ArcGIS Online del usuario `IGAC-Admin`
+(organización `RVvWzU3lgJISqdke`). Se listan con la API de búsqueda de ArcGIS:
 
 ```
-https://mapas.igac.gov.co/server/rest/services/Dato_Fundamental_Catastro/MapServer
+https://www.arcgis.com/sharing/rest/search?f=json&num=100
+  &q=owner:IGAC-Admin AND type:"File Geodatabase"
 ```
 
-| Propiedad | Valor observado |
+→ 34 ítems, de los cuales **31 son Bases Catastrales Públicas departamentales**
+(los otros tres son curvas de nivel, gestores catastrales y POT/usos/cultivos).
+
+La descarga de un ítem es:
+
+```
+https://www.arcgis.com/sharing/rest/content/items/{itemId}/data
+```
+
+### 1.2 El paquete del piloto (Atlántico) ✔
+
+| Propiedad | Valor verificado |
 |---|---|
-| `currentVersion` | 11.3 |
-| `spatialReference` | `wkid: 4686`, `latestWkid: 4686` — MAGNA-SIRGAS geográficas |
-| `capabilities` | `Query, Map, Data` |
-| `supportedQueryFormats` | `JSON, geoJSON, PBF` |
-| `maxRecordCount` | 2 000 |
-| `supportedExtensions` | `WFSServer, WMSServer` |
-| `fullExtent` | `-86.024, -4.385` → `-67.468, 13.394` (EPSG:4686) |
-| `documentInfo.Keywords` | `IGAC,CIAF,Fundamental,catastro` |
-| `copyrightText` | **vacío** — el servicio no declara licencia ni atribución |
-| `serviceItemId` | `f64fe3b8f6a04f368eee3deccc91b3ff` |
+| Ítem | `b4c2079287ee40bdb159a412fb5bdfad` |
+| Título | «Base Catastral Pública del Departamento Atlántico» |
+| Archivo | `08_ATLANTICO.zip` |
+| Tamaño | 56 609 544 bytes (54,0 MiB); 134,2 MiB descomprimido, 134 entradas |
+| `Accept-Ranges` | `bytes` → la descarga es reanudable |
+| SHA-256 | `11647eeb3dbe5db92d514c87095ae1a665cd16f4b109fa55f893dcb20519eaeb` |
+| Contenido | una única geodatabase `08.gdb` (driver GDAL `OpenFileGDB`) |
+| Corte declarado | «a corte de 31 de julio de 2026»; ítem publicado el 2026-09-03 |
+| Licencia | **CC BY-SA 4.0** (texto completo en §1.3) |
 
-Las cinco capas comparten `maxRecordCount: 2000`, `capabilities: Query,Map,Data`,
-`supportsStatistics: false`, `supportsAdvancedQueries: false` y
-`advancedQueryCapabilities.supportsPagination: false`. El campo OID es `FID` y
-empieza en **0**.
+### 1.3 Licencia, textual ✔
+
+> «Este producto adopta la licencia pública internacional de
+> Reconocimiento-CompartirIgual 4.0 de Creative Commons, *Creative Commons
+> attribution – ShareAlike 4.0 Internacional*. Por tal razón, nuevos productos y
+> servicios derivados de su reutilización deben ser también licenciados bajo las
+> mismas condiciones de uso y disponibilidad que habilitó la licencia antes
+> mencionada. Lo anterior, sin perjuicio de los derechos de autor y propiedad
+> intelectual del Instituto Geográfico Agustín Codazzi, con base en la Ley 23 de
+> 1982 y demás normas concordantes.»
+
+Esto **confirma** el supuesto de `PLAN.md` §2 y deja la cláusula *ShareAlike*
+fuera de discusión: se aplica a los productos derivados que se redistribuyan.
+Sigue pendiente el concepto de abogado sobre qué cuenta como «producto derivado
+redistribuido» frente a «servicio» (§9 de este documento).
+
+### 1.4 CRS ✔
+
+La geodatabase está en **MAGNA CTM12**, que es EPSG:9377
+(MAGNA-SIRGAS / Origen-Nacional). Parámetros leídos del WKT de la GDB:
+
+| Parámetro | Valor en la GDB | Valor en `packages/geo/src/crs.ts` |
+|---|---|---|
+| Método | Transverse Mercator | Transverse Mercator |
+| Latitud de origen | 4 | 4 |
+| Longitud de origen | −73 | −73 |
+| Factor de escala | 0,9992 | 0,9992 |
+| Falso Este | 5 000 000 m | 5 000 000 m |
+| Falso Norte | 2 000 000 m | 2 000 000 m |
+| Elipsoide / datum | GRS 1980 / MAGNA-SIRGAS (EPSG 6686) | GRS 1980 / MAGNA-SIRGAS |
+
+Coinciden exactamente. `CRS_9377` del paquete `geo` es correcto y sirve tal cual
+para insertar el SRID en `spatial_ref_sys`.
+
+Consecuencia práctica: **las áreas y los perímetros de la GDB están en metros y
+son utilizables** (`SHAPE_Area` de `U_TERRENO` en Atlántico: mín 5,1 m², media
+489,6 m², máx 1 030 087 m², ningún cero). Aun así se recalculan con `ST_Area` en
+9377 para no depender del dato de origen.
 
 ---
 
-## 2. Capas: conteo y extensión ✔
+## 2. Las 18 capas de la geodatabase ✔
 
-Conteos obtenidos con `returnCountOnly=true` el 2026-09-21. Son el universo
-nacional bajo jurisdicción del IGAC, no de un departamento.
+Conteos reales del departamento piloto (Atlántico, 15 municipios con datos).
 
-| Id | Capa | Geometría | Registros | CRS | OID | Extensión (EPSG:4686) |
-|---|---|---|---|---|---|---|
-| 0 | `R_CONSTRUCCION` | Polygon | **393 507** | 4686 | `FID` | `-86.024, -4.385` → `-67.538, 13.393` |
-| 1 | `R_TERRENO` | Polygon | **3 146 345** | 4686 | `FID` | `-81.841, -4.130` → `-67.468, 13.394` |
-| 2 | `U_CONSTRUCCION` | Polygon | **4 790 310** | 4686 | `FID` | `-81.722, -0.056` → `-67.921, 12.590` |
-| 3 | `U_MANZANA` | Polygon | **240 033** | 4686 | `FID` | `-81.723, -0.057` → `-67.916, 12.591` |
-| 4 | `U_TERRENO` | Polygon | **3 616 349** | 4686 | `FID` | `-81.723, -0.057` → `-67.916, 12.591` |
+### Grupo `URBANO`
 
-**Total de terrenos publicados: 6 762 694** (3 616 349 urbanos + 3 146 345 rurales).
-
-Observación de cobertura: la extensión de `R_CONSTRUCCION` llega a `-86.02` de
-longitud, muy al oeste de la Colombia continental; corresponde a las islas del
-Caribe occidental (Providencia / cayos). Las capas urbanas se quedan en `-81.72`.
-
----
-
-## 3. Campos por capa ✔
-
-Los nombres están **truncados a 10 caracteres** (`TERRENO_CO`, `MANZANA_CO`,
-`NUMERO_PIS`, `USUARIO_LO`, `SHAPE_Leng`). Es la firma inconfundible de una
-publicación que pasó por Shapefile: dBASE limita los nombres de campo a 10
-caracteres. Ninguna capa declara `domain` (dominios codificados) ni `alias`
-distinto del nombre: **no hay diccionario de valores en el servicio**; los
-dominios hay que deducirlos del contenido o leerlos de la GDB descargable.
-
-### 3.1 `U_TERRENO` (id 4) y `R_TERRENO` (id 1) — el predio
-
-| Campo | Tipo | Long. | En | Significado observado |
-|---|---|---|---|---|
-| `FID` | OID | — | ambas | Identificador interno del servicio. Empieza en 0. **No es estable entre cortes.** |
-| `Shape` | Geometry | — | ambas | Polígono del terreno |
-| `CODIGO` | String | 30 | ambas | **Número Predial Nacional de 30 dígitos** (ver §4) |
-| `CODIGO_ANT` | String | 20 | ambas | Código predial anterior, 20 dígitos |
-| `MANZANA_CO` | String | 17 | `U_TERRENO` | Código de la manzana que contiene el predio (17 dígitos) |
-| `VEREDA_COD` | String | 17 | `R_TERRENO` | Código de la vereda. **Ojo: en la muestra llega en ceros** (`08421000000000000`), ver §5 |
-| `NUMERO_SUB` | Integer | — | ambas | Número de subpredio. `0` en toda la muestra |
-| `GLOBALID_S` | String | 38 | ambas | Cadena vacía (`" "`) en toda la muestra |
-| `SHAPE_Leng` | Double | — | ambas | Perímetro **en grados decimales**, no en metros |
-| `SHAPE_Area` | Double | — | ambas | Área **en grados cuadrados**, no en m² (ver §5) |
-| `GlobalID` | String | 254 | ambas | GUID, p. ej. `{8893EF9E-214F-4753-9181-C6B18DB7F5F0}` |
-
-> **No hay** avalúo catastral, destino económico, dirección, área de terreno en m²,
-> área construida ni matrícula inmobiliaria. La capa REST es **solo geometría +
-> identificadores**.
-
-Muestra real de `U_TERRENO` (5 filas, sin columnas de PII):
-
-```json
-{ "FID": 0, "CODIGO": "084210100000000080013000000000", "MANZANA_CO": "08421010000000008",
-  "NUMERO_SUB": 0, "CODIGO_ANT": "08421010000080013000", "GLOBALID_S": " ",
-  "SHAPE_Leng": 0.000660920897569, "SHAPE_Area": 2.47467940194e-8,
-  "GlobalID": "{8893EF9E-214F-4753-9181-C6B18DB7F5F0}" }
-```
-
-### 3.2 `U_CONSTRUCCION` (id 2) y `R_CONSTRUCCION` (id 0) — la construcción
-
-| Campo | Tipo | Long. | En | Significado observado | Valores vistos |
-|---|---|---|---|---|---|
-| `FID` | OID | — | ambas | Identificador interno | 0,1,2… |
-| `Shape` | Geometry | — | ambas | Polígono de la construcción | |
-| `CODIGO` | String | 30 | ambas | NPN del predio al que pertenece | |
-| `TERRENO_CO` | String | 30 | ambas | NPN del terreno. En la muestra **igual a `CODIGO`** | |
-| `TIPO_CONST` | String | 20 | ambas | Tipo de construcción | `CONVENCIONAL` |
-| `TIPO_DOMIN` | String | 20 | ambas | Tipo de dominio | `PRIVADO` |
-| `NUMERO_PIS` | Integer | — | ambas | Número de pisos | `1` |
-| `NUMERO_SOT` | Integer | — | ambas | Número de sótanos | `0` |
-| `NUMERO_MEZ` | Integer | — | ambas | Número de mezanines | `0` |
-| `NUMERO_SEM` | Integer | — | ambas | Número de semisótanos | `0` |
-| `ETIQUETA` | String | 50 | ambas | Etiqueta de dibujo | `" "` (vacía) |
-| `IDENTIFICA` | String | 20 | ambas | Identificador de la unidad de construcción dentro del terreno | `A`, `B`, `D` |
-| `CODIGO_EDI` | Integer | — | ambas | Número de edificación dentro del terreno | `1`, `2` |
-| `CODIGO_ANT` | String | 20 / 30 | ambas | Código anterior. **Longitud declarada distinta: 20 en `R_CONSTRUCCION`, 30 en `U_CONSTRUCCION`** | |
-| `USUARIO_LO` | String | 100 | **solo `R_CONSTRUCCION`** | Usuario que editó el registro. ⛔ **Descartado por la lista negra de PII** (regla `operator_user`) | |
-| `FECHA_LOG` | Date | 8 | **solo `R_CONSTRUCCION`** | Fecha de la edición | `null` en toda la muestra |
-| `codigo_mun` | String | 5 | **solo `R_CONSTRUCCION`** | Código DIVIPOLA del municipio (minúsculas) | `" "` (vacío) en la muestra |
-| `GLOBALID_S` | String | 38 | ambas | Vacío | `" "` |
-| `SHAPE_Leng` / `SHAPE_Area` | Double | — | ambas | En grados / grados² | |
-| `GlobalID` | String | 254 | ambas | GUID | |
-
-> **No hay** área construida en m², ni año de construcción, ni uso, ni material.
-> `NUMERO_PIS` es el único indicador volumétrico.
-
-### 3.3 `U_MANZANA` (id 3) — la manzana urbana
-
-| Campo | Tipo | Long. | Significado observado |
+| Capa | Geometría | Registros | Papel |
 |---|---|---|---|
-| `FID` | OID | — | Identificador interno |
-| `Shape` | Geometry | — | Polígono de la manzana |
-| `CODIGO` | String | **17** | Código de manzana de 17 dígitos |
-| `BARRIO_COD` | String | **13** | Código de barrio de 13 dígitos |
-| `CODIGO_ANT` | String | 254 | Código anterior de manzana; en la muestra tiene **13** caracteres |
-| `GLOBALID_S` | String | 38 | Vacío |
-| `SHAPE_Leng` / `SHAPE_Area` | Double | — | En grados / grados² |
-| `GlobalID` | String | 254 | GUID |
+| `U_TERRENO` | MultiPolygon | **67 925** | el predio urbano |
+| `U_CONSTRUCCION` | MultiPolygon | **89 697** | huella de construcción |
+| `U_MANZANA` | MultiPolygon | **5 164** | manzana |
+| `U_BARRIO` | MultiPolygon | **33** | barrio, **con nombre** |
+| `U_SECTOR` | MultiPolygon | **38** | sector catastral |
+| `U_PERIMETRO` | MultiPolygon | **29** | perímetro urbano / centro poblado |
+| `U_NOMENCLATURA_DOMICILIARIA` | MultiLineString | **73 215** | rótulo de dirección |
+| `U_NOMENCLATURA_VIAL` | MultiLineString | **4 280** | rótulo de vía |
+| `U_TERRENO_INFORMAL` | MultiPolygon | **0** | ocupación informal |
+| `U_CONSTRUCCION_INFORMAL` | MultiPolygon | **0** | ídem |
 
-Jerarquía verificada en la muestra: predio `084210100000000080013000000000` →
-manzana `08421010000000008` → barrio `0842101000000`. El código de manzana es el
-prefijo de 17 dígitos del NPN y el de barrio su prefijo de 13.
+### Grupo `RURAL`
 
-### 3.4 Capas que el plan nombra y **no** están en este servicio ✗
+| Capa | Geometría | Registros | Papel |
+|---|---|---|---|
+| `R_TERRENO` | MultiPolygon | **18 951** | el predio rural |
+| `R_CONSTRUCCION` | MultiPolygon | **18 310** | huella de construcción |
+| `R_VEREDA` | MultiPolygon | **50** | vereda, **con nombre** |
+| `R_SECTOR` | MultiPolygon | **40** | sector rural |
+| `R_NOMENCLATURA_DOMICILIARIA` | MultiLineString | **11 856** | rótulo de dirección |
+| `R_NOMENCLATURA_VIAL` | MultiLineString | **14** | rótulo de vía |
+| `R_TERRENO_INFORMAL` | MultiPolygon | **0** | ocupación informal |
+| `R_CONSTRUCCION_INFORMAL` | MultiPolygon | **0** | ídem |
 
-`U_SECTOR`, `U_BARRIO`, `U_PERIMETRO`, `U_NOMENCLATURA_VIAL`,
-`U_NOMENCLATURA_DOMICILIARIA`, `R_SECTOR`, `R_VEREDA`, `R_NOMENCLATURA_*`
-(PLAN.md §5.1) **no se publican por REST**. Se esperan en la GDB/GeoPackage
-descargable, que todavía no se ha inspeccionado. Hasta entonces se marcan
-`NO_DISPONIBLE`.
+Además hay una relación declarada: `R_SECTOR_VEREDA` (asociación
+`R_SECTOR` ↔ `R_VEREDA`).
+
+**Total de predios en Atlántico: 86 876** (67 925 urbanos + 18 951 rurales).
+
+Las cuatro capas `*_INFORMAL` existen con esquema pero vacías en Atlántico. Hay
+que comprobarlas en otro departamento antes de decir que el IGAC no publica
+ocupación informal.
 
 ---
 
-## 4. Número Predial Nacional (NPN) — descomposición observada ✔
+## 3. Campos, capa por capa ✔
 
-Descomposición de los 30 dígitos aplicando la segmentación de PLAN.md §7 a las
-20 muestras reales (5 por capa, todas del municipio **08421 — Malambo, Atlántico**):
+Todos los campos llevan `GLOBALID` (NOT NULL), `SHAPE_Length`, `SHAPE_Area`
+(solo polígonos), `codigo_municipio` (String 5) y `CODIGO_DEPARTAMENTO`
+(String 2). En las tablas de abajo esos comunes se omiten salvo cuando hay algo
+que decir.
 
-| Tramo | Long. | `U_TERRENO` | `U_CONSTRUCCION` | `R_TERRENO` | `R_CONSTRUCCION` |
-|---|---|---|---|---|---|
-| Departamento | 2 | `08` | `08` | `08` | `08` |
-| Municipio | 3 | `421` | `421` | `421` | `421` |
-| **Zona** | 2 | **`01`** | **`01`** | **`00`** | **`00`** |
-| Sector | 2 | `00` | `00` | `02` | `01` |
-| Comuna | 2 | `00` | `00` | `00` | `00` |
-| Barrio | 2 | `00` | `00` | `00` | `00` |
-| Manzana / Vereda | 4 | `0008` | `0066` | `0001` | `0001` |
-| Terreno | 4 | `0013` | `0001` | `0127` | `0520` |
-| Condición | 1 | `0` | `0` | `0` | `0` |
-| Edificio | 2 | `00` | `00` | `00` | `00` |
-| Piso | 2 | `00` | `00` | `00` | `00` |
-| Unidad | 4 | `0000` | `0000` | `0000` | `0000` |
+### 3.1 `U_TERRENO` — el predio urbano
 
-### ⚠ Hallazgo crítico: el código de zona rural es `00`, no `02`
+| Campo | Tipo | Nulo | Notas |
+|---|---|---|---|
+| `CODIGO` | String(30) | NOT NULL | **NPN de 30 dígitos**. No es único (§4.3) |
+| `MANZANA_CODIGO` | String(17) | sí | llave a `U_MANZANA.CODIGO` |
+| `NUMERO_SUBTERRANEOS` | Integer | NOT NULL, def. 0 | |
+| `CODIGO_ANTERIOR` | String(20) | sí | código de 20 dígitos; **no** es el prefijo del NPN (§4.4) |
 
-En las 10 muestras de capas rurales (`R_TERRENO`, `R_CONSTRUCCION`) el tramo de
-zona vale **`00`**, y en las 10 urbanas vale **`01`**. Lo rural se distingue
-además por el sector (`01`/`02` frente a `00` en lo urbano).
+### 3.2 `R_TERRENO` — el predio rural
+
+| Campo | Tipo | Nulo | Notas |
+|---|---|---|---|
+| `CODIGO` | String(30) | NOT NULL | NPN |
+| `VEREDA_CODIGO` | String(17) | sí | llave a `R_VEREDA.CODIGO`. **En la GDB sí viene poblado**; en el servicio REST llega en ceros |
+| `NUMERO_SUBTERRANEOS` | Integer | NOT NULL, def. 0 | |
+| `CODIGO_ANTERIOR` | String(20) | sí | |
+
+### 3.3 `U_CONSTRUCCION` y `R_CONSTRUCCION` — la construcción
+
+| Campo | Tipo | Nulo | Notas |
+|---|---|---|---|
+| `CODIGO` | String(30) | NOT NULL | NPN del predio |
+| `TERRENO_CODIGO` | String(30) | sí | llave al terreno |
+| `TIPO_CONSTRUCCION` | String(20) | NOT NULL, def. `'CONVENCIONAL'` | dominio `domTipoConstruccion` |
+| `TIPO_DOMINIO` | String(20) | NOT NULL, def. `'PRIVADO'` | dominio `domTipoDominio` |
+| `NUMERO_PISOS` | Integer | NOT NULL, def. 0 | **único indicador volumétrico** |
+| `NUMERO_SOTANOS` | Integer | NOT NULL, def. 0 | |
+| `NUMERO_MEZANINES` | Integer | NOT NULL, def. 0 | |
+| `NUMERO_SEMISOTANOS` | Integer | NOT NULL | |
+| `ETIQUETA` | String(50) | sí | etiqueta de dibujo |
+| `IDENTIFICADOR` | String(20) | NOT NULL en R, def. `'A'` | distingue unidades dentro del terreno |
+| `CODIGO_EDIFICACION` | Integer | sí | número de edificación |
+| `CODIGO_ANTERIOR` | String(20) en R, **String(30) en U** | sí | longitud declarada distinta entre capas |
+
+**Clave natural de la construcción:** `(TERRENO_CODIGO, CODIGO_EDIFICACION, IDENTIFICADOR)`.
+Un mismo `CODIGO` aparece en varias filas.
+
+**Valores reales de los dominios (Atlántico, `U_CONSTRUCCION`, 89 697 filas):**
+
+| `TIPO_CONSTRUCCION` | `TIPO_DOMINIO` | Filas |
+|---|---|---|
+| `CONVENCIONAL` | `PRIVADO` | 72 126 |
+| `NO CONVENCIONAL` | `PRIVADO` | 13 561 |
+| `Convencional` | *(en blanco)* | 3 324 |
+| `Convencional` | `PRIVADO` | 627 |
+| `No Convencional` | *(en blanco)* | resto |
+| `NO CONVENCIONAL` | `COMUN` | 1 |
+
+⚠ **Los dominios están declarados pero no se respetan.** El mismo valor aparece
+en dos grafías (`CONVENCIONAL` / `Convencional`) y `TIPO_DOMINIO` llega en blanco
+en más de 3 300 filas. Hay que normalizar a mayúsculas y tratar el blanco como
+nulo en la ingesta, no en la consulta.
+
+### 3.4 `U_MANZANA`, `U_BARRIO`, `U_SECTOR` — jerarquía urbana
+
+| Capa | `CODIGO` | Llave al padre | Nombre |
+|---|---|---|---|
+| `U_MANZANA` | String(17) NOT NULL | `BARRIO_CODIGO` String(13) | — |
+| `U_BARRIO` | String(13) NOT NULL | `SECTOR_CODIGO` String(9) | **`NOMBRE` String(100) NOT NULL** |
+| `U_SECTOR` | String(9) NOT NULL | — | — |
+
+`U_MANZANA` trae además `CODIGO_ANTERIOR` String(255) (aunque el contenido
+observado son 13 caracteres). `U_BARRIO` no trae `CODIGO_DEPARTAMENTO`.
+
+Jerarquía verificada: predio `084210100000000080013000000000` → manzana
+`08421010000000008` → barrio `0842101000000`. Cada código es prefijo del
+anterior.
+
+### 3.5 `R_VEREDA`, `R_SECTOR` — jerarquía rural
+
+| Capa | `CODIGO` | Llave al padre | Nombre |
+|---|---|---|---|
+| `R_VEREDA` | String(17) NOT NULL | `SECTOR_CODIGO` String(9) | **`NOMBRE` String(100) NOT NULL** |
+| `R_SECTOR` | String(9) NOT NULL | — | — |
+
+`R_VEREDA` trae `CODIGO_ANTERIOR` String(13).
+
+### 3.6 `U_PERIMETRO` — perímetros urbanos
+
+| Campo | Tipo | Notas |
+|---|---|---|
+| `DEPARTAMENTO_CODIGO` | String(2) | |
+| `MUNICIPIO_CODIGO` | String(5) | ⚠ **inconsistente**: observados `08078` (5 dígitos) y `137` (3) en la misma capa |
+| `TIPO_AVALUO` | String(30) | ⚠ **campo mal usado**: mezcla `01`, `02` con `0814101` (7 dígitos) |
+| `NOMBRE_GEOGRAFICO` | String(50) | topónimo del área urbana; con nulos |
+| `CODIGO_NOMBRE` | String(255) | dominio `domAdministrativo`. ⚠ observados `Cabecera Municipal`, `Corregimiento` y también el propio nombre del municipio (`Baranoa`) |
+
+29 perímetros para 15 municipios ⇒ hay **más de un área urbana por municipio**
+(cabecera más centros poblados). Eso explica los códigos de zona `01`–`06` del
+NPN (§4.2).
+
+### 3.7 `*_NOMENCLATURA_DOMICILIARIA` y `*_NOMENCLATURA_VIAL`
+
+| Campo | Tipo | Notas |
+|---|---|---|
+| `TEXTO` | String(600) | NOT NULL en las urbanas. Debería ser la dirección |
+| `TERRENO_CODIGO` | String(30) | NOT NULL en `R_NOMENCLATURA_DOMICILIARIA`, nullable en la urbana. Ausente en las viales |
+
+⚠ **Hallazgo crítico: no son direcciones.** De los 73 215 registros de
+`U_NOMENCLATURA_DOMICILIARIA` de Atlántico:
+
+| Contenido de `TEXTO` | Registros |
+|---|---|
+| Literalmente `NS` (sin nomenclatura) | 14 125 |
+| Contiene «Carrera» | 15 |
+| Contiene «Calle» | 3 |
+| Contiene «Diagonal» o «Transversal» | 0 |
+| Cualquier otra cosa | 58 935 |
+
+Ese «cualquier otra cosa» son topónimos y nombres de lote:
+`ARROYO GRANDE`, `VILLA ARISMENDI`, `GUAYABAL LOTE1`, `MONTE ROJO`, `CUCAYAL`,
+`PARCELA L-1 DIVISION 1`, `ZONA DE CESION No.1`,
+`AREA DE PROTECCION CAUCE DEL ARROYO`, `LOTE URBANO` (138 veces).
+
+**Solo 18 de 73 215 registros (0,02 %) contienen un tipo de vía.** La geometría,
+además, es una línea de rotulación, no un punto de dirección.
+
+Consecuencia: **el buscador por dirección del MVP no se puede sostener con el
+catastro.** Es la decisión de alcance más importante que sale de la Fase 0 (§9).
+
+---
+
+## 4. Número Predial Nacional (NPN) ✔
+
+### 4.1 Descomposición verificada
+
+Aplicando la segmentación de `PLAN.md` §7 a los datos reales:
+
+| Tramo | Long. | Ejemplo urbano | Ejemplo rural |
+|---|---|---|---|
+| Departamento | 2 | `08` | `08` |
+| Municipio | 3 | `421` | `421` |
+| **Zona** | 2 | `01` | `00` |
+| Sector | 2 | `00` | `02` |
+| Comuna | 2 | `00` | `00` |
+| Barrio | 2 | `00` | `00` |
+| Manzana / Vereda | 4 | `0008` | `0001` |
+| Terreno | 4 | `0013` | `0127` |
+| Condición | 1 | `0` | `0` |
+| Edificio | 2 | `00` | `00` |
+| Piso | 2 | `00` | `00` |
+| Unidad | 4 | `0000` | `0000` |
+
+La segmentación de 12 tramos del plan cuadra: 2+3+2+2+2+2+4+4+1+2+2+4 = 30.
+
+### 4.2 ⚠ El tramo de zona NO es un booleano urbano/rural
+
+Distribución real del tramo de zona (dígitos 6–7) en Atlántico:
+
+| Zona | `U_TERRENO` | `R_TERRENO` |
+|---|---|---|
+| `00` | 2 *(anómalos)* | **18 951 (100 %)** |
+| `01` | **62 549** | 0 |
+| `02` | 2 699 | 0 |
+| `03` | 1 124 | 0 |
+| `04` | 867 | 0 |
+| `05` | 413 | 0 |
+| `06` | 271 | 0 |
+
+Interpretación, coherente con los 29 perímetros urbanos de §3.6:
+
+- **`00` = rural.**
+- **`01`…`NN` = cada área urbana del municipio** (cabecera = `01`, y los centros
+  poblados numerados a continuación).
 
 Esto **contradice** `packages/shared/src/constants.ts`, que declara
 `ZONE = { URBAN: '01', RURAL: '02' }`, y hace que `validateNpn()` de
-`packages/geo/src/npn.ts` **rechace todos los NPN rurales reales del IGAC**
-(exige `zone ∈ {01, 02}`).
+`packages/geo/src/npn.ts` **rechace el 100 % de los NPN rurales reales del IGAC**
+y también los urbanos de centros poblados (`02`–`06`), que en Atlántico son 5 374
+predios.
 
-- Alcance de la evidencia: 20 filas, un solo municipio, un solo servicio. Es
-  consistente al 100 % dentro de esa muestra pero **no es prueba nacional**.
-- Decisión pendiente: confirmar contra la base descargable de un departamento
-  completo antes de cambiar la constante. Registrado como riesgo de severidad
-  alta en `data-catalog/RIESGOS.md` (`npn-zone-rural-00`).
-- Ningún archivo de `packages/shared` ni `packages/geo` se modificó desde este
-  paquete: la decisión y el cambio corresponden a quien los mantiene.
+- **Evidencia:** 86 876 predios, un departamento completo, dos capas. Es sólido,
+  pero es un solo departamento.
+- **Qué hace falta:** repetir la comprobación en un segundo departamento antes de
+  cambiar la constante. Boyacá (`723e946e9ede418a95a6eefd28439626`) es buen
+  candidato por su número de municipios rurales.
+- **Ningún archivo de `packages/shared` ni `packages/geo` se modificó desde este
+  paquete:** la decisión y el cambio corresponden a quien los mantiene. Riesgo
+  `npn-zone-no-es-booleano` en `data-catalog/RIESGOS.md`.
 
-### Códigos derivados verificados
+### 4.3 ⚠ El NPN no es clave única
 
-| Código | Longitud | Composición verificada | Ejemplo |
+| Capa | Filas | `CODIGO` distintos | Duplicados |
+|---|---|---|---|
+| `U_TERRENO` (Atlántico) | 67 925 | 67 219 | **706 (1,04 %)** |
+
+`core.parcel` **no puede declarar `npn` como PRIMARY KEY ni UNIQUE**. El modelo de
+`PLAN.md` §7 ya usa un `id BIGSERIAL`, lo cual es correcto; pero cualquier
+consulta que asuma «un NPN, un predio» dará resultados incompletos, y la ficha de
+predio tiene que poder mostrar varios polígonos para un mismo código.
+
+### 4.4 ⚠ El código de 20 dígitos no es el prefijo del de 30
+
+| NPN (30) | `CODIGO_ANTERIOR` (20) |
+|---|---|
+| `084210100000000080013000000000` | `08421010000080013000` |
+| `084210002000000010127000000000` | `08421000200010127000` |
+
+El de 20 omite los cuatro dígitos de **comuna + barrio**. Por tanto
+`npn30to20()` de `packages/geo/src/npn.ts`, que hace `slice(0, 20)`, **no
+reproduce el `CODIGO_ANTERIOR` real del IGAC**, y `npn20to30()`, que concatena
+ceros al final, tampoco es la inversa correcta.
+
+Riesgo `npn-20-digitos-no-es-prefijo` en `data-catalog/RIESGOS.md`.
+
+### 4.5 Códigos derivados verificados
+
+| Código | Long. | Composición | Ejemplo |
 |---|---|---|---|
 | NPN | 30 | completo | `084210100000000080013000000000` |
-| Código anterior | 20 | los 20 primeros dígitos del NPN, **pero sin comuna ni barrio** | `08421010000080013000` |
-| Manzana (`MANZANA_CO`) | 17 | dept+muni+zona+sector+comuna+barrio+manzana | `08421010000000008` |
-| Barrio (`BARRIO_COD`) | 13 | dept+muni+zona+sector+comuna+barrio | `0842101000000` |
-| Vereda (`VEREDA_COD`) | 17 | dept+muni+zona+sector+comuna+barrio+vereda | `08421000000000000` (en ceros, ver §5) |
-
-**Ojo con el código anterior.** No es el prefijo de 20 del NPN. Comparando
-`084210100000000080013000000000` (30) con `08421010000080013000` (20), el de 20
-omite los cuatro dígitos de comuna+barrio. Es decir, `npn30to20()` de
-`packages/geo/src/npn.ts`, que hace `slice(0, 20)`, **no reproduce el
-`CODIGO_ANT` real del IGAC**. Registrado como riesgo `npn-20-digitos-no-es-prefijo`.
+| Código anterior | 20 | sin comuna ni barrio | `08421010000080013000` |
+| Manzana | 17 | dept+muni+zona+sector+comuna+barrio+manzana | `08421010000000008` |
+| Vereda | 17 | ídem con vereda | *(poblado en la GDB)* |
+| Barrio | 13 | dept+muni+zona+sector+comuna+barrio | `0842101000000` |
+| Sector | 9 | dept+muni+zona+sector | *(de `U_SECTOR.CODIGO`)* |
 
 ---
 
-## 5. Calidad de los datos observada ✔
+## 5. Cobertura real ⚠ ✔
+
+Atlántico tiene **23 municipios**. La base pública trae datos de **15**, los
+mismos en urbano y en rural:
+
+| Municipio (DIVIPOLA) | Predios urbanos | Predios rurales |
+|---|---|---|
+| 08078 Baranoa | 13 145 | 3 763 |
+| 08137 Campo de la Cruz | 7 375 | 832 |
+| 08141 Candelaria | 2 964 | 688 |
+| 08421 Malambo | 4 835 | 1 352 |
+| 08436 Manatí | 3 481 | 1 568 |
+| 08520 Palmar de Varela | 4 970 | 736 |
+| 08558 Piojó | 2 491 | 1 947 |
+| 08560 Polonuevo | 4 214 | 731 |
+| 08606 Repelón | 3 501 | 1 858 |
+| 08634 Sabanagrande | 6 668 | 1 191 |
+| 08675 Santa Lucía | 2 778 | 572 |
+| 08685 Santo Tomás | 6 090 | 658 |
+| 08770 Suan | 2 158 | 338 |
+| 08832 Tubará | 956 | 2 183 |
+| 08849 Usiacurí | 2 299 | 534 |
+
+**Faltan 8 municipios**, entre ellos Barranquilla (gestor catastral propio, como
+anticipa `PLAN.md` §2) pero también Soledad, Sabanalarga, Puerto Colombia,
+Galapa, Ponedera y Juan de Acosta.
+
+Esto es más grave de lo que el plan supone: la cobertura no se pierde solo en los
+catastros descentralizados de las grandes ciudades, **se pierde municipio a
+municipio dentro de un departamento que sí es jurisdicción del IGAC**. La regla 6
+(«cobertura honesta») no es un caso de borde: es el comportamiento normal del
+producto y hay que diseñarlo desde el principio, con `core.cadastral_manager`
+poblado antes de mostrar el primer mapa.
+
+---
+
+## 6. Calidad de los datos observada ✔
 
 | Hallazgo | Evidencia | Consecuencia |
 |---|---|---|
-| `SHAPE_Area` y `SHAPE_Leng` vienen en **grados** | `SHAPE_Area: 2.47e-8` para un lote urbano | Inservibles como área. El área se calcula en PostGIS con `ST_Area(geom::geography)` o reproyectando a EPSG:9377 |
-| `VEREDA_COD` llega en ceros | `08421000000000000` en las 5 filas de `R_TERRENO` | No se puede armar la jerarquía rural desde REST. Validación obligatoria en la ingesta |
-| `GLOBALID_S` siempre vacío | `" "` en las 20 filas | Campo muerto; no usar como identificador |
-| `codigo_mun` vacío en `R_CONSTRUCCION` | `" "` en las 5 filas | El municipio hay que derivarlo del NPN, no del campo |
-| `ETIQUETA` siempre vacía | `" "` | Campo de dibujo, sin valor analítico |
-| `FECHA_LOG` siempre `null` | 5 filas | No sirve para fechar el corte |
-| `CODIGO_ANT` con longitudes declaradas distintas entre capas | 20 en `R_CONSTRUCCION`, 30 en `U_CONSTRUCCION`, 254 en `U_MANZANA` | La columna destino debe ser `VARCHAR` holgada y validarse por contenido, no por la longitud declarada |
-| El servicio no declara licencia | `copyrightText: ""` | La atribución CC BY-SA 4.0 que exige PLAN.md §2 **no sale del servicio**: hay que sostenerla con el portal de datos abiertos |
-| Sin dominios codificados | `domain: null` en los 68 campos | El diccionario de valores (`TIPO_CONST`, `TIPO_DOMIN`, destino económico…) debe salir de la GDB o de la norma |
+| Dominios declarados pero no respetados | `CONVENCIONAL` vs `Convencional`; `TIPO_DOMINIO` en blanco en 3 324 filas | Normalizar en el `transform`, nunca en la consulta |
+| `MUNICIPIO_CODIGO` de `U_PERIMETRO` con longitud variable | `08078` y `137` en la misma capa | Usar `codigo_municipio` como fuente autoritativa |
+| `TIPO_AVALUO` con dos semánticas distintas | `01`, `02`, `0814101` | No interpretarlo; guardarlo crudo en `attrs` |
+| `CODIGO_NOMBRE` con valores fuera de su dominio | `Cabecera Municipal`, `Corregimiento`, `Baranoa` | Ídem |
+| Nomenclatura domiciliaria sin direcciones | 18 de 73 215 con tipo de vía | El geocodificador no puede depender del catastro (§3.7) |
+| NPN duplicado | 706 de 67 925 | `npn` no es clave única (§4.3) |
+| Capas `*_INFORMAL` vacías | 0 filas en las cuatro | Verificar en otro departamento antes de concluir |
+| Solo 33 barrios y 50 veredas para 15 municipios | `U_BARRIO`, `R_VEREDA` | La UI debe tolerar barrio y vereda nulos |
+| `CODIGO_ANTERIOR` con longitudes declaradas distintas entre capas | 20 / 30 / 255 | Columna destino `VARCHAR` holgada, validada por contenido |
+
+### Diferencias entre la GDB y el servicio REST ✔
+
+Además de los nombres truncados, el servicio REST degrada los datos:
+
+| Campo | En la GDB | En el REST |
+|---|---|---|
+| `VEREDA_CODIGO` / `VEREDA_COD` | poblado | **en ceros** (`08421000000000000`) |
+| `codigo_municipio` | poblado | **vacío** (`" "`) en `R_CONSTRUCCION` |
+| `GLOBALID_S` | *(no existe)* | vacío (`" "`), campo muerto |
+| `SHAPE_Area` | m² (CRS 9377) | grados² (CRS 4686), inservible |
+| `FECHA_LOG` | *(no existe)* | siempre `null` |
+| `USUARIO_LO` | *(no existe)* | **presente**: única columna de PII de toda la oferta catastral |
+
+El servicio REST **sí** aporta una cosa que la GDB no: el conteo nacional, que es
+lo que permite saber cuánto falta por cargar.
 
 ---
 
-## 6. Lo que **NO** se ha verificado ✗
+## 7. Conteos nacionales del servicio REST ✔
 
-Nada de esta sección puede usarse para declarar campos ni programar consultas.
+Obtenidos con `returnCountOnly=true` el 2026-09-21 sobre
+`Dato_Fundamental_Catastro/MapServer`:
 
-| Elemento | Estado | Qué falta |
-|---|---|---|
-| **Base Catastral Pública descargable (GDB / GeoPackage) por departamento** | ✗ No descargada | El portal ArcGIS Hub del IGAC no expone una URL de descarga directa y estable localizable por API. Hay que obtenerla a mano y fijarla en `etl/config/datasets` |
-| **Registro 1 (predial) y Registro 2 (propietarios)** | ✗ No inspeccionados | Son los que traen avalúo, destino económico, área de terreno y área construida — es decir, **todo lo que la ficha de predio necesita** — y también los datos de titularidad que hay que descartar |
-| Capas `U_SECTOR`, `U_BARRIO`, `U_PERIMETRO`, `U_NOMENCLATURA_*`, `R_SECTOR`, `R_VEREDA` | ✗ No vistas | Solo se esperan en la GDB |
-| Zonas homogéneas físicas y geoeconómicas | ✗ No localizadas como servicio nacional | PLAN.md §5.1 las pide para M3 y M9 |
-| Avalúo catastral y destino económico | ✗ **No existen en ninguna fuente abierta inspeccionada** | Sin ellos, M3 (buscador por destino económico) y M9 (observatorio) quedan sin insumo |
-| Dominios de `TIPO_CONST`, `TIPO_DOMIN`, `IDENTIFICA` | ✗ Solo se vio un valor de cada uno | `CONVENCIONAL`, `PRIVADO`, `A/B/D`. El catálogo completo no está publicado |
-| Estructura de los cortes mensuales / históricos (M8) | ✗ No verificada | Sin conocer el empaquetado, no se puede diseñar el `diff` |
+| Capa | Registros |
+|---|---|
+| `U_TERRENO` | 3 616 349 |
+| `R_TERRENO` | 3 146 345 |
+| `U_CONSTRUCCION` | 4 790 310 |
+| `R_CONSTRUCCION` | 393 507 |
+| `U_MANZANA` | 240 033 |
 
-### Por qué `FID` no sirve como identificador estable
+**Total nacional de predios publicados: 6 762 694.** Atlántico aporta 86 876,
+un 1,28 % del total: el piloto es manejable y representativo en tamaño.
 
-`FID` es el OID que ArcGIS Server asigna al publicar. Cambia con cada
-republicación del servicio. La clave del producto es el **NPN (`CODIGO`)**, y
-para las construcciones la pareja `CODIGO` + `CODIGO_EDI` + `IDENTIFICA`
-(en la muestra hay varias construcciones con el mismo `CODIGO` y distinto
-`IDENTIFICA`, p. ej. `084210100000000660001000000000` con `IDENTIFICA` `B` y `D`).
+Limitaciones del servicio, verificadas: `capabilities: Query,Map,Data`,
+`supportedQueryFormats: JSON, geoJSON, PBF`, `maxRecordCount: 2000`,
+`supportsStatistics: false`, `supportsAdvancedQueries: false`,
+`advancedQueryCapabilities.supportsPagination: false` — y responde
+`400 Pagination is not supported.` al simple hecho de recibir
+`resultRecordCount`. Descargar `U_TERRENO` entero serían ~1 808 peticiones
+paginando por rangos de OID. Inviable como carga primaria, tal como anticipaba
+`PLAN.md` §5.1.
 
 ---
 
-## 7. Consecuencias para el modelo de datos (PLAN.md §7)
+## 8. Consecuencias para el modelo de datos (`PLAN.md` §7)
 
-| Columna de `core.parcel` | ¿Se puede llenar desde REST? | Origen real |
+### `core.parcel`
+
+| Columna | ¿Se puede llenar? | Origen real |
 |---|---|---|
-| `npn` | ✔ | `CODIGO` |
-| `npn_old` | ✔ | `CODIGO_ANT` (⚠ no es el prefijo de 20 del NPN) |
-| `muni_code` | ✔ derivado | primeros 5 dígitos de `CODIGO` (no de `codigo_mun`, que viene vacío) |
-| `zone` | ✔ derivado, **con la salvedad de §4** | dígitos 6–7 de `CODIGO` |
-| `manzana_vereda` | ✔ | `MANZANA_CO` / `VEREDA_COD` (esta última, en ceros) |
-| `geom`, `centroid` | ✔ | `Shape`, reproyectado 4686 → 4326 |
-| `area_geom_m2` | ✔ calculado | `ST_Area` en EPSG:9377. **No** desde `SHAPE_Area` |
-| `area_reported_m2` | ✗ | Registro 1 (sin inspeccionar) |
+| `npn` | ✔ | `CODIGO` — pero **no es único** |
+| `npn_old` | ✔ | `CODIGO_ANTERIOR` (⚠ no es el prefijo de 20) |
+| `muni_code` | ✔ | `codigo_municipio` de la GDB |
+| `zone` | ✔ **con la salvedad de §4.2** | dígitos 6–7 de `CODIGO` |
+| `sector`, `comuna`, `barrio`, `manzana_vereda`, `terreno`, `condicion`, `edificio`, `piso`, `unidad` | ✔ | tramos del NPN |
+| `area_geom_m2` | ✔ | `ST_Area` en 9377 |
+| `area_reported_m2` | ✗ | Registro 1, **no publicado** |
 | `built_area_m2` | ✗ | Registro 1 |
 | `economic_use` | ✗ | Registro 1 |
-| `address` | ✗ | Registro 1 / `U_NOMENCLATURA_DOMICILIARIA` |
+| `address` | ✗ *(de facto)* | `TEXTO` existe pero no es una dirección (§3.7) |
 | `cadastral_value`, `valuation_year` | ✗ | Registro 1 |
+| `geom`, `centroid`, `h3_r9` | ✔ | `Shape` reproyectado 9377 → 4326 |
 
-| Columna de `core.building` | ¿Desde REST? | Origen |
+### `core.building`
+
+| Columna | ¿Se puede llenar? | Origen |
 |---|---|---|
-| `parcel_npn` | ✔ | `TERRENO_CO` (o `CODIGO`) |
-| `floors` | ✔ | `NUMERO_PIS` |
+| `parcel_npn` | ✔ | `TERRENO_CODIGO` |
+| `floors` | ✔ | `NUMERO_PISOS` |
 | `geom` | ✔ | `Shape` |
-| `attrs` | ✔ parcial | `TIPO_CONST`, `TIPO_DOMIN`, `NUMERO_SOT`, `NUMERO_MEZ`, `NUMERO_SEM`, `IDENTIFICA`, `CODIGO_EDI` |
-| `built_area_m2` | ✗ | Registro 1 (el área del polígono no es el área construida: hay que multiplicar por pisos y eso es una estimación, no un dato) |
+| `attrs` | ✔ | `TIPO_CONSTRUCCION`, `TIPO_DOMINIO`, `NUMERO_SOTANOS`, `NUMERO_MEZANINES`, `NUMERO_SEMISOTANOS`, `IDENTIFICADOR`, `CODIGO_EDIFICACION` |
+| `built_area_m2` | ✗ | Registro 1. El área del polígono por pisos es una **estimación**, no un dato: no se rellena (regla 2) |
 | `use` | ✗ | Registro 1 |
 
-**Conclusión de diseño.** Con la fuente REST sola se puede construir el mapa y la
-identificación del predio (M1 y la mitad de M2), pero **no** la ficha económica ni
-el buscador por destino económico (M3) ni el observatorio (M9). Descargar la base
-departamental completa con sus Registros 1 y 2 es el bloqueante número uno para el
-MVP.
+### Capas que el modelo no preveía y conviene añadir
+
+`U_BARRIO` y `R_VEREDA` traen **nombre**, que es lo que el usuario busca.
+`U_PERIMETRO` permite decidir urbano/rural por geometría en vez de confiar en el
+NPN. `core.populated_center` (de la DIVIPOLA del DANE) cierra el buscador.
 
 ---
 
-## 8. Cómo reproducir esta inspección
+## 9. Lo que NO se ha verificado, y por qué importa ✗
+
+| Elemento | Estado | Impacto |
+|---|---|---|
+| **Registro 1 (predial) y Registro 2 (propietarios)** | ✗ **No existen en el paquete público** | Sin ellos no hay avalúo, destino económico, área reportada ni área construida. **M3 (buscador por destino económico) y buena parte de M2 y M9 quedan sin insumo.** Hay que averiguar si se entregan por solicitud formal al IGAC o si simplemente no son públicos |
+| Dominios completos (`domTipoConstruccion`, `domTipoDominio`, `domAdministrativo`) | ✗ parcial | Solo se observaron los valores presentes en Atlántico. La GDB declara los dominios; falta extraerlos con `ogrinfo -listmdlayers` o leer la tabla de dominios |
+| Zonas homogéneas físicas y geoeconómicas | ✗ no localizadas como capa nacional | `PLAN.md` §5.1 las pide para M3 y M9 |
+| Capas `*_INFORMAL` | ✗ vacías en el piloto | Verificar en otro departamento |
+| Estructura de los cortes históricos | ✗ | Sin conocer cómo se versionan los ítems de ArcGIS Online no se puede diseñar el `diff` de M8. Lo que sí se sabe: el ítem se **reemplaza** (modificado 2026-09-03), no se archiva ⇒ **hay que guardar cada descarga mensual o se pierde la serie** |
+| El otro 30 % de departamentos | ✗ | Solo se verificó Atlántico. 31 ítems publicados frente a 32 departamentos + Bogotá |
+
+### Por qué `OBJECTID`/`FID` no sirve como identificador
+
+Es el OID que asigna la geodatabase o el servidor al publicar, y cambia en cada
+republicación. La clave del producto es el NPN (con la advertencia de §4.3) y,
+para las construcciones, `(TERRENO_CODIGO, CODIGO_EDIFICACION, IDENTIFICADOR)`.
+
+---
+
+## 10. Cómo reproducir esta inspección
+
+```bash
+# 1. Localizar los ítems departamentales
+curl -s 'https://www.arcgis.com/sharing/rest/search?f=json&num=100&q=owner:IGAC-Admin%20AND%20type:%22File%20Geodatabase%22'
+
+# 2. Descargar el piloto (56 MB, reanudable)
+#    ítem b4c2079287ee40bdb159a412fb5bdfad = Atlántico
+curl -L -o 08_ATLANTICO.zip \
+  'https://www.arcgis.com/sharing/rest/content/items/b4c2079287ee40bdb159a412fb5bdfad/data'
+
+# 3. Inspeccionar el esquema (GDAL 3.9.2, driver OpenFileGDB)
+ogrinfo -so -al 08_ATLANTICO/08.gdb
+
+# 4. Consultas de calidad, con el dialecto SQLITE de OGR
+ogrinfo -q -dialect SQLITE -sql \
+  "SELECT substr(CODIGO,6,2) zona, COUNT(*) n FROM U_TERRENO GROUP BY 1" \
+  08_ATLANTICO/08.gdb
+```
+
+El detector de GDAL de `packages/sources/src/connectors/gdal.ts` resuelve el
+binario y fija `GDAL_DATA` y `PROJ_DATA` automáticamente; en este equipo
+encuentra `C:\Program Files\PostgreSQL\17\bin\ogr2ogr.exe` (GDAL 3.9.2) con
+`gdal-data` en `C:\Program Files\PostgreSQL\17\gdal-data` y `proj.db` en
+`C:\Program Files\PostgreSQL\17\share\contrib\postgis-3.6\proj`.
+
+El servicio REST se reinspecciona con:
 
 ```bash
 pnpm catalog:crawl -- --source igac-arcgis --max-services 1
-# o, contra un solo servicio:
-npx tsx packages/sources/src/cli/crawl.ts --source igac-arcgis --max-per-folder 1
 ```
 
-La evidencia cruda queda en
-`data-catalog/igac/Dato_Fundamental_Catastro__MapServer.json`, con los campos,
-los conteos, la extensión y las muestras ya filtradas de PII.
+y la evidencia queda en
+`data-catalog/igac/Dato_Fundamental_Catastro__MapServer.json`.

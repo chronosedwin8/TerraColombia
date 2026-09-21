@@ -4,7 +4,7 @@
  * con `useJob`; aquí solo se guarda el resultado final y su procedencia.
  */
 import { defineStore } from 'pinia';
-import { computed, ref, shallowRef } from 'vue';
+import { computed, ref } from 'vue';
 import {
   AREA_ANALYSIS_HARD_LIMIT_KM2,
   AppError,

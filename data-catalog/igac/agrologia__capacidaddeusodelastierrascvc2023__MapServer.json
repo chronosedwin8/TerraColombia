@@ -1,0 +1,257 @@
+{
+  "schemaVersion": 1,
+  "source": "igac",
+  "connector": "arcgis-rest",
+  "name": "capacidaddeusodelastierrascvc2023",
+  "folder": "agrologia",
+  "serviceType": "MapServer",
+  "url": "https://mapas.igac.gov.co/server/rest/services/agrologia/capacidaddeusodelastierrascvc2023/MapServer",
+  "description": "<DIV STYLE=\"text-align:Left;font-size:12pt\"><P><SPAN>Realizar el estudio de capacidad de uso de las tierras a escala 1:25.000 para los suelos de la zona de estudio priorizada por la Corporación Autónoma Regional del Valle del Cauca - CVC, con el fin de contribuir a su ordenamiento territorial, integrando en una base de datos espacial la información temática.</SPAN></P></DIV>",
+  "copyrightText": "El presente proyecto se desarrolló mediante el Convenio interadministrativo celebrado entre la Corporación Autónoma Regional del Valle del Cauca - CVC - y el Instituto Geográfico Agustín Codazzi - IGAC.",
+  "currentVersion": 11.3,
+  "capabilities": [
+    "map",
+    "query",
+    "data"
+  ],
+  "supportedQueryFormats": [
+    "json",
+    "geojson",
+    "pbf"
+  ],
+  "maxRecordCount": 2000,
+  "supportedExtensions": [
+    "WFSServer",
+    "WMSServer"
+  ],
+  "spatialReferenceWkid": 9377,
+  "fullExtent": {
+    "xmin": 4494193.552,
+    "ymin": 1900252.4385000002,
+    "xmax": 4699749.5336,
+    "ymax": 2116535.8850999996,
+    "wkid": 9377
+  },
+  "layers": [
+    {
+      "id": 0,
+      "name": "CUT_CVC_2023_25K",
+      "type": "Feature Layer",
+      "description": "<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN><SPAN>Realizar el estudio de capacidad de uso de las tierras a escala 1:25.000 para los suelos de la zona de estudio priorizada por la Corporación Autónoma Regional del Valle del Cauca - CVC, con el fin de contribuir a su ordenamiento territorial, integrando en una base de datos espacial la información temática.</SPAN></SPAN></P><P><SPAN /></P></DIV></DIV></DIV>",
+      "geometryType": "esriGeometryPolygon",
+      "url": "https://mapas.igac.gov.co/server/rest/services/agrologia/capacidaddeusodelastierrascvc2023/MapServer/0",
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "crsLabel": "MAGNA-SIRGAS / Origen-Nacional",
+      "maxRecordCount": 2000,
+      "capabilities": [
+        "map",
+        "query",
+        "data"
+      ],
+      "supportedQueryFormats": [
+        "json",
+        "geojson",
+        "pbf"
+      ],
+      "supportsPagination": true,
+      "supportsStatistics": true,
+      "supportsOrderBy": true,
+      "objectIdField": "OBJECTID",
+      "displayField": "UCP",
+      "count": null,
+      "extent": {
+        "xmin": 4494193.552,
+        "ymin": 1900252.4385000002,
+        "xmax": 4699749.5336,
+        "ymax": 2116535.8850999996,
+        "wkid": 9377
+      },
+      "fields": [
+        {
+          "name": "OBJECTID",
+          "alias": "OBJECTID",
+          "type": "esriFieldTypeOID",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SHAPE",
+          "alias": "SHAPE",
+          "type": "esriFieldTypeGeometry",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "UCP",
+          "alias": "UCP",
+          "type": "esriFieldTypeString",
+          "length": 20,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "CLASE",
+          "alias": "CLASE",
+          "type": "esriFieldTypeString",
+          "length": 20,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SUBCLASE",
+          "alias": "SUBCLASE",
+          "type": "esriFieldTypeString",
+          "length": 20,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "GRUPO_MANEJO",
+          "alias": "GRUPO_MANEJO",
+          "type": "esriFieldTypeString",
+          "length": 20,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "UCS",
+          "alias": "UCS",
+          "type": "esriFieldTypeString",
+          "length": 1200,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "CARACTERISTICAS",
+          "alias": "CARACTERISTICAS",
+          "type": "esriFieldTypeString",
+          "length": 500,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "LIMITANTES_USO",
+          "alias": "LIMITANTES_USO",
+          "type": "esriFieldTypeString",
+          "length": 500,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "USOS_RECOMENDADOS",
+          "alias": "USOS_RECOMENDADOS",
+          "type": "esriFieldTypeString",
+          "length": 1000,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "PRACTICAS_MANEJO",
+          "alias": "PRACTICAS_MANEJO",
+          "type": "esriFieldTypeString",
+          "length": 2000,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "AREA_ha",
+          "alias": "AREA_ha",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SHAPE_Length",
+          "alias": "SHAPE_Length",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SHAPE_Area",
+          "alias": "SHAPE_Area",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        }
+      ],
+      "sample": [],
+      "sampleRequested": 5,
+      "sampleReturned": 0,
+      "piiDroppedColumns": [],
+      "piiRedactedColumns": [],
+      "notes": [
+        "El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.",
+        "No se pudo traer la muestra: Se agotaron los 2 intentos contra https://mapas.igac.gov.co/server/rest/services/agrologia/capacidaddeusodelastierrascvc2023/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=false&f=geojson&resultOffset=0&resultRecordCount=5&orderByFields=OBJECTID: This operation was aborted"
+      ],
+      "error": null
+    }
+  ],
+  "tables": [],
+  "inspectedAt": "2026-09-21T15:46:12.471Z",
+  "durationMs": 106403,
+  "notes": [],
+  "error": null
+}
