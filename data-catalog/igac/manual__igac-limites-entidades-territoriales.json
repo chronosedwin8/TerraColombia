@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "source": "igac",
+  "connector": "arcgis-rest",
+  "id": "igac-limites-entidades-territoriales",
+  "name": "IGAC — Límites de entidades territoriales (departamentos y municipios)",
+  "description": "Base de Datos Geográfica de Entidades Territoriales del IGAC, expuesta como capas 1 (departamento) y 2 (municipio) del MapServer `catastro/direccionesterritorialesigac`. La descripción de la capa 2, leída del propio servicio, dice: «La Base de Datos Geográfica ET contiene los límites de las entidades territoriales, producto del proceso de deslinde aprobado por el competente, fijados o modificados por estos (Asamblea departamental, Congreso de la República de Colombia) y elevado a normatividad: Ordenanza, Ley o Decreto. Se representan sobre cartografía del Instituto Geográfico Agustín Codazzi - IGAC acorde con la Ley 1447 de 2011 y su Decreto Reglamentario 1170 de 2015.»",
+  "url": "https://mapas.igac.gov.co/server/rest/services/catastro/direccionesterritorialesigac/MapServer",
+  "httpStatus": 200,
+  "format": "ArcGIS REST (f=json | f=geojson)",
+  "license": "NO_DECLARADA por el servicio: `licenseInfo` viene vacío en `/info/iteminfo`. `accessInformation` dice literalmente «Instituto Geográfico Agustín Codazzi - IGAC».",
+  "attribution": "Fuente: IGAC, Límites de entidades territoriales",
+  "frequency": "No declarada. El servicio no expone `editingInfo`, así que no hay fecha de última edición ni de corte.",
+  "currentVersion": 11.3,
+  "spatialReferenceWkid": 9377,
+  "maxRecordCount": 2000,
+  "copyrightText": "Instituto Geográfico Agustín Codazzi - IGAC",
+  "layers": [
+    {
+      "id": 1,
+      "name": "departamento",
+      "geometryType": "esriGeometryPolygon",
+      "count": 33,
+      "supportsPagination": true,
+      "fields": [
+        { "name": "OBJECTID", "type": "esriFieldTypeOID" },
+        { "name": "SHAPE", "type": "esriFieldTypeGeometry" },
+        { "name": "DeCodigo", "type": "esriFieldTypeString", "note": "Código DIVIPOLA de 2 dígitos con cero a la izquierda." },
+        { "name": "DeNombre", "type": "esriFieldTypeString" },
+        { "name": "DeArea", "type": "esriFieldTypeDouble", "note": "Área declarada por la fuente, en km²." },
+        { "name": "DeNorma", "type": "esriFieldTypeString", "note": "Norma que fija el límite (Ley, Ordenanza, Decreto)." },
+        { "name": "SHAPE_Length", "type": "esriFieldTypeDouble" },
+        { "name": "SHAPE_Area", "type": "esriFieldTypeDouble" }
+      ],
+      "observedCodes": [
+        "00", "05", "08", "13", "15", "17", "18", "19", "20", "23", "25", "27", "41", "44", "47",
+        "50", "52", "54", "63", "66", "68", "70", "73", "76", "81", "85", "86", "88", "91", "94",
+        "95", "97", "99"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "municipio",
+      "geometryType": "esriGeometryPolygon",
+      "count": 1122,
+      "supportsPagination": true,
+      "fields": [
+        { "name": "OBJECTID", "type": "esriFieldTypeOID" },
+        { "name": "SHAPE", "type": "esriFieldTypeGeometry" },
+        { "name": "MpCodigo", "type": "esriFieldTypeString", "note": "Código DIVIPOLA de 5 dígitos. Es la llave de core.municipality." },
+        { "name": "MpNombre", "type": "esriFieldTypeString" },
+        { "name": "MpArea", "type": "esriFieldTypeDouble", "note": "Área declarada por la fuente, en km²." },
+        { "name": "Depto", "type": "esriFieldTypeString", "note": "NOMBRE del departamento, no su código. El código se toma de los dos primeros dígitos de MpCodigo." },
+        { "name": "DTerritorial", "type": "esriFieldTypeString" },
+        { "name": "Gestor", "type": "esriFieldTypeString" }
+      ],
+      "sampleRecord": {
+        "MpCodigo": "05001",
+        "MpNombre": "Medellín",
+        "MpArea": 373.44041578054873,
+        "Depto": "Antioquia",
+        "DTerritorial": "Gestor Catastral",
+        "Gestor": "Catastro Medellín"
+      }
+    }
+  ],
+  "pending": [
+    "Confirmar con el IGAC la licencia de este servicio: `licenseInfo` está vacío y sin licencia clara no se puede redistribuir el dato derivado.",
+    "Conseguir una fecha de corte publicada por la fuente. Hoy se registra la fecha de consulta, no una fecha de la fuente."
+  ],
+  "notes": [
+    "Verificado con peticiones reales: `?f=json` del MapServer y de cada capa, `returnCountOnly` y consultas de muestra con `resultRecordCount`.",
+    "La capa de departamentos trae `DeCodigo = '00'` (Área en Litigio Cauca - Huila), que no es entidad DIVIPOLA, y NO trae el código `11` (Bogotá, D.C.).",
+    "La capa de municipios trae `MpCodigo = '00000'` (la misma área en litigio) y NO trae `27493` (Nuevo Belén de Bajirá), cuya pertenencia está en disputa.",
+    "El servidor responde 502/503 con frecuencia; hay que paginar en lotes pequeños (25) y reintentar con espera creciente.",
+    "Un WAF delante del servicio devuelve HTML con estado 200 ante cláusulas `where` con `LIKE`. Se consulta con `where=1=1` y se pagina con `resultOffset`.",
+    "El geoportal del DANE (Marco Geoestadístico Nacional) sigue sin índice recorrible: por eso la fuente de límites es el IGAC y no el DANE."
+  ],
+  "inspectedAt": "2026-09-21"
+}

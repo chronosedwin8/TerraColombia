@@ -32,3 +32,6 @@ apps/docs-site/guia/glosario.md
 packages/db/src/cli/tmp*/
 packages/db/src/cli/shape/
 shapes.json
+
+# Registros de ejecución que dejan las herramientas al vuelo; no son del proyecto.
+*.log
