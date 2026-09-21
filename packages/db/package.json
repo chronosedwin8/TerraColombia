@@ -15,6 +15,7 @@
     "migrate:status": "tsx src/cli/migrate.ts status",
     "migrate:down": "tsx src/cli/migrate.ts down",
     "seed": "tsx src/cli/seed.ts",
+    "aggregate": "tsx src/cli/aggregate.ts",
     "reset": "tsx src/cli/migrate.ts reset",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",

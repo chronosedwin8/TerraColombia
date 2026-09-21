@@ -39,6 +39,8 @@ export interface IndicatorInputs {
   hazard_flood: string | null;
   protected_area_pct: number | null;
   protected_area_restrictive: boolean | null;
+  /** Categoría de manejo del RUNAP que más solapa. El motor la puntúa por categoría. */
+  protected_area_category: string | null;
   ethnic_territory_pct: number | null;
   has_mining_title: boolean | null;
   // Ordenamiento
@@ -52,11 +54,14 @@ export interface IndicatorInputs {
   dist_muni_seat_m: number | null;
   dist_school_m: number | null;
   dist_health_m: number | null;
+  /** Índice agregado 0–100 de accesibilidad vial. Es `analytics.h3_cell.road_access_score`. */
+  road_access_score: number | null;
   // Entorno socioeconómico
   population_density_per_km2: number | null;
   population_total: number | null;
   population_school_age: number | null;
   poi_commerce_count: number | null;
+  poi_tourism_count: number | null;
   poi_total_count: number | null;
   school_count: number | null;
   school_enrollment: number | null;
@@ -138,7 +143,7 @@ export async function collectIndicatorInputs(
   const topProtected = protectedAreas.sort((a, b) => b.overlap_pct - a.overlap_pct)[0];
   const topEthnic = ethnic.sort((a, b) => b.overlap_pct - a.overlap_pct)[0];
   const topPot = pot.sort((a, b) => b.overlap_pct - a.overlap_pct)[0];
-  const frontierInside = frontier.length > 0 ? frontier[0]!.overlap_pct > 50 : null;
+  const frontierInside = insideAgriculturalFrontier(frontier);
 
   const poiCounts = (facilities?.poi_counts ?? {}) as Record<string, number>;
   const commerce =
@@ -160,6 +165,9 @@ export async function collectIndicatorInputs(
     hazard_flood: topHazard(hazards, 'flood'),
     protected_area_pct: topProtected?.overlap_pct ?? (protectedAreas.length === 0 ? 0 : null),
     protected_area_restrictive: topProtected ? topProtected.is_restrictive : null,
+    // Sin ninguna área protegida encima, la categoría es "ninguna": es un dato, no un hueco.
+    protected_area_category:
+      topProtected?.category ?? (protectedAreas.length === 0 ? 'ninguna' : null),
     ethnic_territory_pct: topEthnic?.overlap_pct ?? (ethnic.length === 0 ? 0 : null),
     has_mining_title: mining.length > 0,
 
@@ -175,6 +183,7 @@ export async function collectIndicatorInputs(
     // búsqueda: un "muy lejos" inventado sería peor que declarar el hueco.
     dist_school_m: null,
     dist_health_m: null,
+    road_access_score: roadAccessScore(access?.dist_paved_m ?? null),
 
     population_density_per_km2:
       population?.pop_total != null && areaKm2 > 0
@@ -184,6 +193,7 @@ export async function collectIndicatorInputs(
     population_school_age: schoolAgeFrom(population?.age_bands ?? null),
 
     poi_commerce_count: facilities ? commerce : null,
+    poi_tourism_count: facilities ? (poiCounts.turismo ?? 0) + (poiCounts.alojamiento ?? 0) : null,
     poi_total_count: facilities ? poiTotal : null,
     school_count: facilities?.n_schools ?? null,
     school_enrollment: facilities?.school_enrollment ?? null,
@@ -201,6 +211,43 @@ export async function collectIndicatorInputs(
 
     area_km2: areaKm2,
   };
+}
+
+/**
+ * ¿Está dentro de la frontera agrícola nacional?
+ *
+ * La capa de la UPRA no marca solo lo que está dentro: cubre todo el país repartido en
+ * categorías, y dos de las tres son de **exclusión** ("Bosques naturales y áreas no
+ * agropecuarias" y "Exclusiones legales"). Mirar solo si hay un polígono encima daría
+ * "dentro de la frontera" precisamente para el suelo que la UPRA excluye de ella, que es lo
+ * contrario de lo que dice el dato. Por eso se exige que la categoría dominante sea la de
+ * inclusión.
+ */
+function insideAgriculturalFrontier(
+  rows: Array<{ category: string | null; overlap_pct: number }>,
+): boolean | null {
+  const dominant = [...rows].sort((a, b) => b.overlap_pct - a.overlap_pct)[0];
+  if (!dominant || dominant.overlap_pct <= 50) return rows.length > 0 ? false : null;
+  if (dominant.category === null) return null;
+  const key = dominant.category
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase();
+  // La UPRA rotula la categoría de inclusión como "Frontera agrícola nacional".
+  return key.includes('frontera agricola');
+}
+
+/**
+ * Índice 0–100 de accesibilidad vial a partir de la distancia a la vía pavimentada más
+ * cercana: 100 a 100 m o menos, 0 a partir de 5 km.
+ *
+ * Es la misma fórmula que aplica el paso `aggregate` sobre `analytics.h3_cell`
+ * (`packages/db/src/repositories/analytics.ts`). Está en dos sitios porque el análisis de
+ * un predio no pasa por la malla H3; si se cambia una, hay que cambiar la otra.
+ */
+function roadAccessScore(distPavedM: number | null): number | null {
+  if (distPavedM === null) return null;
+  return Math.round(Math.max(0, Math.min(100, 100 - (distPavedM - 100) / 49)));
 }
 
 /** Población en edad escolar (5 a 16 años) a partir de las bandas del censo. */

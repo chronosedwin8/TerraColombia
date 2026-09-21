@@ -64,6 +64,17 @@ export const DEMO_CONTEXT_DATASETS: DemoDatasetDeclaration[] = [
     targetTable: 'ctx.hazard',
   },
   {
+    id: 'demo-agricultural-frontier',
+    source: 'DEMO',
+    name: 'Frontera agrícola de demostración (datos sintéticos)',
+    license: 'NO_DISPONIBLE',
+    attribution: 'DATOS DE DEMOSTRACIÓN generados por TerraColombia. No provienen de la UPRA.',
+    frequency: 'eventual',
+    connector: 'manual',
+    format: 'synthetic',
+    targetTable: 'ctx.agricultural_frontier',
+  },
+  {
     id: 'demo-census',
     source: 'DEMO',
     name: 'Manzanas censales de demostración (datos sintéticos)',
@@ -223,25 +234,54 @@ export interface DemoHazard {
 }
 
 /**
- * Una franja de amenaza alta por movimiento en masa en el borde norte (la zona de mayor
- * pendiente) y una de inundación media en el sur. Cubren parte del área, no toda, para que
- * se vea la diferencia entre predios.
+ * Amenazas por franjas, de sur a norte, siguiendo la pendiente que genera `generateDemoRelief`.
+ *
+ * La de movimientos en masa cubre **todo** el ámbito repartida en niveles, no solo la franja
+ * empinada. Así es como publica el SGC su mapa nacional: no hay huecos, hay un nivel en cada
+ * sitio. Cuando solo se dibujaba la franja alta, el resto del municipio quedaba sin dato y el
+ * motor devolvía "sin datos suficientes" para vivienda, que exige ese factor — correcto según
+ * la regla 6, pero por un artefacto de la demostración y no por la realidad del dato.
  */
 export function generateDemoHazards(opts: DemoOptions = DEFAULT_DEMO): DemoHazard[] {
   const spanLng = opts.cols * opts.cellSize;
   const spanLat = opts.rows * opts.cellSize;
+  const west = opts.originLng - opts.cellSize;
+  const east = opts.originLng + spanLng + opts.cellSize;
+  /**
+   * Franja horizontal entre dos fracciones de la altura del ámbito. El margen solo se añade
+   * en los extremos: las franjas intermedias se tocan pero no se solapan, para que un predio
+   * tenga un único nivel y no dos.
+   */
+  const band = (fromPct: number, toPct: number): Ring =>
+    rect(
+      west,
+      opts.originLat + spanLat * fromPct - (fromPct === 0 ? opts.cellSize : 0),
+      east,
+      opts.originLat + spanLat * toPct + (toPct === 1 ? opts.cellSize * 2 : 0),
+    );
+
   return [
+    // Sur plano → norte empinado. Los niveles siguen la pendiente del relieve sintético.
+    {
+      kind: 'mass_movement',
+      level: 'Baja',
+      levelRank: 2,
+      scale: '1:25.000 (demostración)',
+      ring: band(0, 0.4),
+    },
+    {
+      kind: 'mass_movement',
+      level: 'Media',
+      levelRank: 3,
+      scale: '1:25.000 (demostración)',
+      ring: band(0.4, 0.78),
+    },
     {
       kind: 'mass_movement',
       level: 'Alta',
       levelRank: 4,
       scale: '1:25.000 (demostración)',
-      ring: rect(
-        opts.originLng - opts.cellSize,
-        opts.originLat + spanLat * 0.78,
-        opts.originLng + spanLng + opts.cellSize,
-        opts.originLat + spanLat + opts.cellSize * 2,
-      ),
+      ring: band(0.78, 1),
     },
     {
       kind: 'flood',
@@ -249,9 +289,9 @@ export function generateDemoHazards(opts: DemoOptions = DEFAULT_DEMO): DemoHazar
       levelRank: 3,
       scale: '1:25.000 (demostración)',
       ring: rect(
-        opts.originLng - opts.cellSize,
+        west,
         opts.originLat - opts.cellSize,
-        opts.originLng + spanLng + opts.cellSize,
+        east,
         opts.originLat + spanLat * 0.22,
       ),
     },
@@ -267,6 +307,30 @@ export function generateDemoHazards(opts: DemoOptions = DEFAULT_DEMO): DemoHazar
         opts.originLat + spanLat + opts.cellSize * 3,
       ),
     },
+  ];
+}
+
+/**
+ * Frontera agrícola de demostración, a imagen de como la publica la UPRA: dos categorías
+ * que juntas cubren todo el ámbito, sin huecos. La mitad sur, plana y de mejor suelo, queda
+ * dentro de la frontera; la norte, empinada y de vocación forestal, queda excluida.
+ *
+ * Es obligatoria para los usos agropecuarios: sin ella, el motor responde "sin datos
+ * suficientes" a cualquier consulta de agricultura o ganadería.
+ */
+export function generateDemoAgriculturalFrontier(
+  opts: DemoOptions = DEFAULT_DEMO,
+): Array<{ category: string; ring: Ring }> {
+  const spanLng = opts.cols * opts.cellSize;
+  const spanLat = opts.rows * opts.cellSize;
+  const west = opts.originLng - opts.cellSize;
+  const east = opts.originLng + spanLng + opts.cellSize;
+  const south = opts.originLat - opts.cellSize;
+  const north = opts.originLat + spanLat + opts.cellSize * 2;
+  const split = opts.originLat + spanLat * 0.6;
+  return [
+    { category: 'Frontera agrícola nacional', ring: rect(west, south, east, split) },
+    { category: 'Bosques naturales y áreas no agropecuarias', ring: rect(west, split, east, north) },
   ];
 }
 

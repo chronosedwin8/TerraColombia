@@ -17,6 +17,7 @@ import { loadEnv } from '../env.js';
 import { DEPARTMENTS, NON_IGAC_MANAGERS } from '../seed/departments.js';
 import { DIVIPOLA_DATASET, fetchDivipola } from '../seed/divipola.js';
 import { LAYERS } from '../seed/layers.js';
+import { loadDemoContext } from '../seed/load-demo-context.js';
 import {
   DEFAULT_DEMO,
   buildingRing,
@@ -371,7 +372,7 @@ async function seedDemo(): Promise<void> {
     }
   });
 
-  await seedDemoContext(cutDate);
+  const contextSummary = await loadDemoContext(cutDate, ensureSnapshot);
 
   await execute(sql`SELECT meta.publish_snapshot(${cadastreSnapshot})`);
   await execute(sql`SELECT meta.publish_snapshot(${facilitiesSnapshot})`);
@@ -391,6 +392,7 @@ async function seedDemo(): Promise<void> {
     `  · demostración: ${parcels.length} predios sintéticos en ${muni.name} (${DEFAULT_DEMO.muniCode}), ` +
       `${facilities.schools.length} colegios, ${facilities.health.length} IPS, ${facilities.pois.length} POIs`,
   );
+  console.log(`  · demostración: contexto con ${contextSummary}`);
   console.log('    AVISO: estos datos son sintéticos. La API los marca con meta.synthetic = true.');
 }
 

@@ -276,6 +276,45 @@ export async function rebuildCellsForMunicipality(muniCode: string, res: number)
     WHERE c.h3 = cl.h3 AND c.res = ${res}
   `);
 
+  // 6b. Suelos: reparto de clase agrológica y de vocación dentro de la celda.
+  //     Se guarda el reparto completo, no solo la clase dominante: una celda mitad clase 3
+  //     y mitad clase 7 no es una celda de clase 5, y la ficha debe poder decirlo.
+  //     `cell-inputs.ts` toma de aquí la clave dominante para puntuar.
+  await execute(sql`
+    WITH cells AS (
+      SELECT h3, geom FROM analytics.h3_cell WHERE muni_code = ${muniCode} AND res = ${res}
+    ),
+    cap AS (
+      SELECT cl.h3, jsonb_object_agg(k.class_code::text, k.pct) AS mix FROM (
+        SELECT cl2.h3, lc.class_code, round(sum(core.overlap_pct(cl2.geom, lc.geom))::numeric, 2) AS pct
+        FROM cells cl2
+        JOIN ctx.land_capability lc ON lc.geom && cl2.geom AND ST_Intersects(lc.geom, cl2.geom)
+        JOIN meta.snapshot sn ON sn.id = lc.snapshot_id AND sn.is_active
+        WHERE lc.class_code IS NOT NULL
+        GROUP BY cl2.h3, lc.class_code
+      ) k JOIN cells cl ON cl.h3 = k.h3
+      GROUP BY cl.h3
+    ),
+    voc AS (
+      SELECT cl.h3, jsonb_object_agg(k.vocation, k.pct) AS mix FROM (
+        SELECT cl2.h3, lv.vocation, round(sum(core.overlap_pct(cl2.geom, lv.geom))::numeric, 2) AS pct
+        FROM cells cl2
+        JOIN ctx.land_vocation lv ON lv.geom && cl2.geom AND ST_Intersects(lv.geom, cl2.geom)
+        JOIN meta.snapshot sn ON sn.id = lv.snapshot_id AND sn.is_active
+        WHERE lv.vocation IS NOT NULL
+        GROUP BY cl2.h3, lv.vocation
+      ) k JOIN cells cl ON cl.h3 = k.h3
+      GROUP BY cl.h3
+    )
+    UPDATE analytics.h3_cell c SET
+      capability_mix = COALESCE(cap.mix, '{}'::jsonb),
+      vocation_mix = COALESCE(voc.mix, '{}'::jsonb)
+    FROM cells cl
+    LEFT JOIN cap ON cap.h3 = cl.h3
+    LEFT JOIN voc ON voc.h3 = cl.h3
+    WHERE c.h3 = cl.h3 AND c.res = ${res}
+  `);
+
   // 7. Accesibilidad vial desde el centro de cada celda.
   await execute(sql`
     WITH cells AS (

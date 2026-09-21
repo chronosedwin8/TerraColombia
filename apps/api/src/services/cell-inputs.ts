@@ -44,6 +44,9 @@ export function cellRowToInputs(row: H3CellRow, resolution: number): IndicatorIn
     hazard_flood: hazards.flood ?? null,
     protected_area_pct: row.protected_pct,
     protected_area_restrictive: row.protected_pct !== null ? row.protected_pct > 0 : null,
+    // La celda guarda el porcentaje, no la categoría de manejo. Un 0 sí permite afirmar
+    // "ninguna"; por encima de 0 no sabemos cuál es y el motor lo reporta como faltante.
+    protected_area_category: row.protected_pct === 0 ? 'ninguna' : null,
     ethnic_territory_pct: row.ethnic_pct,
     has_mining_title: null,
 
@@ -58,12 +61,17 @@ export function cellRowToInputs(row: H3CellRow, resolution: number): IndicatorIn
     dist_muni_seat_m: row.dist_muni_seat_m,
     dist_school_m: null,
     dist_health_m: null,
+    road_access_score: row.road_access_score,
 
     population_density_per_km2: row.pop !== null ? Number((row.pop / areaKm2).toFixed(1)) : null,
     population_total: row.pop,
     population_school_age: row.pop_school_age,
 
     poi_commerce_count: commerce,
+    poi_tourism_count:
+      poi.turismo === undefined && poi.alojamiento === undefined
+        ? null
+        : (poi.turismo ?? 0) + (poi.alojamiento ?? 0),
     poi_total_count: poiTotal,
     school_count: row.n_schools,
     school_enrollment: row.school_enrollment,

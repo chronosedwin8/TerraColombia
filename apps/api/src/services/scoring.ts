@@ -1,9 +1,9 @@
 import { AppError, getLogger } from '@terracolombia/shared';
 import type { IndicatorInputs as ApiIndicatorInputs } from './indicator-inputs.js';
+import { toEngineInputs } from './engine-inputs.js';
 import type {
   BusinessTemplate,
   IndicatorDefinition,
-  IndicatorInputs,
   LocationIntelResult,
   ScoredCell,
   UseProfile,
@@ -40,15 +40,6 @@ async function loadScoring(): Promise<ScoringModule> {
     getLogger({ mod: 'scoring' }).error({ err: loadError }, 'No se pudo cargar @terracolombia/scoring');
     throw new AppError('UPSTREAM_UNAVAILABLE', loadError, {});
   }
-}
-
-/**
- * Los nombres de indicador que recolecta la API son los mismos que declara el motor, así
- * que la conversión es directa. El `as` está aislado aquí para que, si un nombre cambia en
- * el motor, el error salga en un solo sitio y no en cada ruta.
- */
-function toEngineInputs(inputs: ApiIndicatorInputs): IndicatorInputs {
-  return inputs as unknown as IndicatorInputs;
 }
 
 export async function evaluateSuitability(
