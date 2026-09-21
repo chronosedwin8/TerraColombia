@@ -19,11 +19,11 @@ import {
   type GeoJsonGeometry,
   type ResponseMeta,
   type SuitabilityRequest,
-  type SuitabilityResult,
   type TargetUse,
 } from '@terracolombia/shared';
 import { isNpnCandidate, normalizeNpnInput } from '@terracolombia/geo';
 import { evaluateSuitability } from '@/api/suitability';
+import type { SuitabilityResponse } from '@/api/types';
 import { emptyMeta } from '@/api/client';
 import { enumCodec, jsonCodec, stringCodec, useUrlState } from '@/composables/useUrlState';
 import MapView from '@/map/MapView.vue';
@@ -60,7 +60,12 @@ const { state, shareUrl } = useUrlState({
 });
 
 const stepIndex = ref(0);
-const result = ref<SuitabilityResult | null>(null);
+/**
+ * La respuesta de `POST /suitability` NO es el `SuitabilityResult` de shared: la API manda
+ * `use`/`useLabel` (no `targetUse`/`targetUseLabel`) y añade `target`, `areaKm2`,
+ * `verdictHelp`, `rawInputs` y `legalNotes`.
+ */
+const result = ref<SuitabilityResponse | null>(null);
 const meta = ref<ResponseMeta>(emptyMeta());
 const isLoading = ref(false);
 const error = ref<AppError | null>(null);
@@ -123,8 +128,13 @@ async function evaluate(): Promise<void> {
   }
 }
 
-/** Texto de ayuda del veredicto, tomado de MESSAGES para no duplicar redacciones. */
+/**
+ * Texto de ayuda del veredicto. Manda el que redacta la API (`verdictHelp`); si viniera
+ * vacío se cae a la redacción de MESSAGES para no dejar el veredicto sin explicar.
+ */
 const verdictHelp = computed(() => {
+  const fromApi = result.value?.verdictHelp;
+  if (fromApi !== undefined && fromApi.length > 0) return fromApi;
   switch (result.value?.verdict) {
     case 'favorable':
       return MESSAGES.suitability.favorableHelp;
@@ -244,13 +254,13 @@ const overlay = computed<GeoJsonFeatureCollection | null>(() =>
         />
 
         <template v-else>
-          <BaseCard :title="`Aptitud para ${result.targetUseLabel}`" :heading-level="3">
+          <BaseCard
+            :title="`Aptitud para ${result.useLabel}`"
+            :subtitle="`${result.target} · ${result.areaKm2.toFixed(2)} km²`"
+            :heading-level="3"
+          >
             <div class="flex flex-wrap items-center gap-3">
-              <SemaphoreBadge
-                :status="result.verdict"
-                :label="result.verdictLabel"
-                size="lg"
-              />
+              <SemaphoreBadge :status="result.verdict" :label="result.verdictLabel" size="lg" />
               <p v-if="result.score !== null" class="text-sm text-slate-700">
                 Puntaje compuesto:
                 <strong class="tabular-nums">{{ result.score }}/100</strong>
@@ -296,6 +306,14 @@ const overlay = computed<GeoJsonFeatureCollection | null>(() =>
             </div>
           </BaseCard>
 
+          <!-- Advertencias legales que calcula el backend para este uso y este ámbito. -->
+          <div v-if="result.legalNotes.length > 0" class="mt-3">
+            <p class="tc-label">Advertencias legales</p>
+            <ul class="mt-1 list-disc space-y-0.5 pl-4 text-sm text-slate-700">
+              <li v-for="(note, index) in result.legalNotes" :key="index">{{ note }}</li>
+            </ul>
+          </div>
+
           <div class="mt-3 space-y-1 text-xs text-slate-600">
             <p>{{ result.disclaimer }}</p>
             <p>{{ DISCLAIMERS.notUrbanNorm }}</p>
@@ -308,7 +326,7 @@ const overlay = computed<GeoJsonFeatureCollection | null>(() =>
     <ResultActionBar
       v-if="result"
       :share-url="shareUrl()"
-      :share-title="`Aptitud para ${result.targetUseLabel}`"
+      :share-title="`Aptitud para ${result.useLabel}`"
       :formats="['pdf', 'xlsx']"
       :can-compare="false"
       @save="$router.push('/proyectos')"

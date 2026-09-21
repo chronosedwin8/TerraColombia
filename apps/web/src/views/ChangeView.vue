@@ -2,17 +2,17 @@
 /**
  * Cambio territorial (pantalla 7 de §10.2, módulo M8).
  *
- * Dos cortes de la base catastral, un deslizador antes/después y la lista de cambios:
- * predios nuevos, bajas, englobes y desenglobes, cambios de geometría y construcciones nuevas.
+ * Dos cortes de la base catastral y la lista de cambios: predios nuevos, bajas, cambios de
+ * atributos y de geometría, y construcciones añadidas o retiradas.
  *
- * El deslizador no mezcla datos: muestra la geometría del corte A o la del corte B según la
- * posición, con la fecha siempre visible para que nadie confunda un corte con otro.
+ * NO hay deslizador antes/después. `POST /changes/compare` devuelve el resumen por tipo y la
+ * lista de cambios por NPN, pero **no** las geometrías de cada corte: pintar un antes/después
+ * exigiría inventar los polígonos. Se dice en pantalla en vez de simularlo (regla 6).
  */
 import { computed, ref, watch } from 'vue';
 import {
   AppError,
   MESSAGES,
-  formatArea,
   type AreaScope,
   type ChangeCompare,
   type GeoJsonFeatureCollection,
@@ -22,7 +22,7 @@ import {
 import { compareChanges } from '@/api/changes';
 import { emptyMeta } from '@/api/client';
 import { useJob } from '@/composables/useJob';
-import { intCodec, jsonCodec, listCodec, stringCodec, useUrlState } from '@/composables/useUrlState';
+import { jsonCodec, listCodec, stringCodec, useUrlState } from '@/composables/useUrlState';
 import { useMapStore } from '@/stores/map';
 import type { ChangeCompareResult, ParcelChangeType } from '@/api/types';
 import MapView from '@/map/MapView.vue';
@@ -35,27 +35,35 @@ import EmptyState from '@/components/ui/EmptyState.vue';
 import GlossaryTerm from '@/components/ui/GlossaryTerm.vue';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton.vue';
 import ProvenanceFooter from '@/components/ui/ProvenanceFooter.vue';
-import RangeSlider from '@/components/ui/RangeSlider.vue';
 import ResultActionBar from '@/components/ui/ResultActionBar.vue';
 import SyntheticDataBanner from '@/components/ui/SyntheticDataBanner.vue';
 
 const mapStore = useMapStore();
 const job = useJob<ChangeCompareResult>();
 
+type BadgeTone = 'success' | 'danger' | 'info' | 'warning' | 'brand';
+
+/**
+ * Los seis tipos que detecta el backend (`ParcelChangeType`); faltaba `building_removed`.
+ * Las redacciones son las mismas que devuelve la API en `label`/`changeLabel`, para que el
+ * filtro y el resumen no se contradigan; cuando la respuesta trae su etiqueta, manda la suya.
+ */
 const CHANGE_LABELS: Record<ParcelChangeType, string> = {
   created: 'Predios nuevos',
-  removed: 'Predios dados de baja',
-  attrs_changed: 'Cambios de atributos',
-  geometry_changed: 'Cambios de geometría',
+  removed: 'Predios que desaparecieron',
+  attrs_changed: 'Cambios en los datos del predio',
+  geometry_changed: 'Cambios en la forma o el tamaño del predio',
   building_added: 'Construcciones nuevas',
+  building_removed: 'Construcciones que desaparecieron',
 };
 
-const CHANGE_TONES: Record<ParcelChangeType, 'success' | 'danger' | 'info' | 'warning' | 'brand'> = {
+const CHANGE_TONES: Record<ParcelChangeType, BadgeTone> = {
   created: 'success',
   removed: 'danger',
   attrs_changed: 'info',
   geometry_changed: 'warning',
   building_added: 'brand',
+  building_removed: 'warning',
 };
 
 const ALL_TYPES: ParcelChangeType[] = [
@@ -64,15 +72,45 @@ const ALL_TYPES: ParcelChangeType[] = [
   'attrs_changed',
   'geometry_changed',
   'building_added',
+  'building_removed',
 ];
+
+/**
+ * Tipos que el **cuerpo de la petición** admite. Ojo al desajuste: la respuesta puede traer
+ * `building_removed`, pero `ChangeCompareSchema.changeTypes` solo acepta estos cinco, así que
+ * ese tipo no se puede usar como filtro del servidor (sí como filtro de la tabla ya cargada).
+ */
+type RequestableChangeType = ChangeCompare['changeTypes'][number];
+
+const REQUESTABLE_TYPES: RequestableChangeType[] = [
+  'created',
+  'removed',
+  'attrs_changed',
+  'geometry_changed',
+  'building_added',
+];
+
+function isRequestableType(type: string): type is RequestableChangeType {
+  return (REQUESTABLE_TYPES as string[]).includes(type);
+}
+
+function isKnownType(type: string): type is ParcelChangeType {
+  return (ALL_TYPES as string[]).includes(type);
+}
+
+/**
+ * El `changeType` de cada fila llega como texto libre: si el backend añadiera un tipo nuevo,
+ * se pinta en tono neutro en vez de romper la tabla.
+ */
+function toneFor(type: string): BadgeTone {
+  return isKnownType(type) ? CHANGE_TONES[type] : 'info';
+}
 
 const { state, shareUrl } = useUrlState({
   desde: { default: '', codec: stringCodec },
   hasta: { default: '', codec: stringCodec },
   tipos: { default: [] as string[], codec: listCodec },
   ambito: { default: null as AreaScope | null, codec: jsonCodec<AreaScope>() },
-  /** Posición del deslizador antes/después, 0–100. No afecta a los datos. */
-  corte: { default: 50, codec: intCodec },
 });
 
 const drawnGeometry = ref<GeoJsonGeometry | null>(null);
@@ -105,9 +143,7 @@ async function compare(): Promise<void> {
       scope: state.ambito,
       fromCutDate: state.desde,
       toCutDate: state.hasta,
-      changeTypes: state.tipos.filter((type): type is ParcelChangeType =>
-        (ALL_TYPES as string[]).includes(type),
-      ),
+      changeTypes: state.tipos.filter(isRequestableType),
       limit: 500,
     };
     const response = await compareChanges(body);
@@ -130,32 +166,40 @@ watch(job.result, (value) => {
 });
 
 /**
- * Qué geometría se pinta: por debajo del 50 % el corte A ("antes"), por encima el corte B
- * ("después"). Nunca se superponen para no dar la impresión de un dato intermedio inventado.
+ * El mapa solo pinta el ámbito dibujado. La comparación no devuelve geometrías por corte,
+ * así que no hay nada fiel que superponer: cualquier "antes/después" sería inventado.
  */
-const showsAfter = computed(() => state.corte >= 50);
+const overlay = computed<GeoJsonFeatureCollection | null>(() =>
+  drawnGeometry.value
+    ? {
+        type: 'FeatureCollection',
+        features: [{ type: 'Feature', geometry: drawnGeometry.value, properties: {} }],
+      }
+    : null,
+);
 
-const overlay = computed<GeoJsonFeatureCollection | null>(() => {
-  if (result.value) {
-    const side = showsAfter.value ? result.value.after : result.value.before;
-    if (side) return side;
-  }
-  if (drawnGeometry.value) {
-    return {
-      type: 'FeatureCollection',
-      features: [{ type: 'Feature', geometry: drawnGeometry.value, properties: {} }],
-    };
-  }
-  return null;
+/** La lista de cambios se llama `changes`, no `items`. */
+const changes = computed(() => {
+  const all = result.value?.changes ?? [];
+  return activeType.value === 'all'
+    ? all
+    : all.filter((item) => item.changeType === activeType.value);
 });
 
-const items = computed(() => {
-  const all = result.value?.items ?? [];
-  return activeType.value === 'all' ? all : all.filter((item) => item.changeType === activeType.value);
-});
-
-const counts = computed(() => result.value?.counts ?? null);
+/**
+ * El resumen es un arreglo de filas por tipo, con su propia etiqueta y explicación.
+ * Verificado en vivo: incluye los cinco tipos aunque su conteo sea 0.
+ */
+const summaryRows = computed(() => result.value?.summary ?? []);
+const totalChanges = computed(() =>
+  summaryRows.value.reduce((total, row) => total + row.count, 0),
+);
 const cutDates = computed(() => mapStore.availableCutDates);
+
+/** Solape de geometrías (IoU) en porcentaje, cuando el cambio es geométrico. */
+function overlapPct(overlap: number | null): string | null {
+  return overlap === null ? null : `${Math.round(overlap * 100)} %`;
+}
 </script>
 
 <template>
@@ -207,7 +251,7 @@ const cutDates = computed(() => mapStore.availableCutDates);
             <fieldset>
               <legend class="tc-label mb-1.5">Tipos de cambio (ninguno = todos)</legend>
               <label
-                v-for="type in ALL_TYPES"
+                v-for="type in REQUESTABLE_TYPES"
                 :key="type"
                 class="flex items-center gap-2 py-0.5 text-sm"
               >
@@ -219,6 +263,10 @@ const cutDates = computed(() => mapStore.availableCutDates);
                 />
                 {{ CHANGE_LABELS[type] }}
               </label>
+              <p class="mt-1 text-[11px] leading-snug text-slate-500">
+                «{{ CHANGE_LABELS.building_removed }}» no se puede pedir al servidor: la consulta
+                solo admite los tipos de arriba. Si aparecen, podrás filtrarlos en la tabla.
+              </p>
             </fieldset>
 
             <p class="text-xs text-slate-600">
@@ -242,22 +290,39 @@ const cutDates = computed(() => mapStore.availableCutDates);
         <JobProgress
           :status="job.status.value"
           :progress="job.progress.value"
-          :stage="job.stage.value"
+          :progress-message="job.progressMessage.value"
           :error-message="job.error.value?.message ?? null"
           @cancel="job.stop()"
         />
 
-        <BaseCard v-if="counts" title="Resumen de cambios" :heading-level="2">
-          <ul class="space-y-1.5">
-            <li
-              v-for="type in ALL_TYPES"
-              :key="type"
-              class="flex items-center justify-between gap-2 text-sm"
-            >
-              <span>{{ CHANGE_LABELS[type] }}</span>
-              <BaseBadge :tone="CHANGE_TONES[type]">{{ counts[type] ?? 0 }}</BaseBadge>
+        <BaseCard v-if="result" title="Resumen de cambios" :heading-level="2">
+          <p class="text-xs text-slate-600">
+            {{ result.fromCutDate }} → {{ result.toCutDate }} · {{ result.areaKm2.toFixed(2) }} km²
+            comparados
+          </p>
+
+          <!-- Un total de 0 se dice con palabras: una lista de ceros no se explica sola. -->
+          <p v-if="summaryRows.length > 0 && totalChanges === 0" class="mt-2 text-sm text-slate-700">
+            Entre esos dos cortes no encontramos ningún cambio en el área comparada. Comprueba que
+            los dos cortes existan y que la comparación ya se haya procesado para ese par.
+          </p>
+
+          <ul v-if="summaryRows.length > 0" class="mt-2 space-y-1.5">
+            <li v-for="row in summaryRows" :key="row.changeType">
+              <div class="flex items-center justify-between gap-2 text-sm">
+                <span>{{ row.label }}</span>
+                <BaseBadge :tone="toneFor(row.changeType)">{{ row.count }}</BaseBadge>
+              </div>
+              <p v-if="row.explanation" class="text-xs leading-snug text-slate-600">
+                {{ row.explanation }}
+              </p>
             </li>
           </ul>
+
+          <p v-else class="mt-2 text-sm text-slate-600">
+            La comparación no devolvió resumen por tipo para esta zona.
+          </p>
+
           <template #footer>
             <ProvenanceFooter :meta="meta" compact />
           </template>
@@ -275,28 +340,24 @@ const cutDates = computed(() => mapStore.availableCutDates);
           />
         </div>
 
-        <!-- Deslizador antes/después: la fecha mostrada es siempre explícita. -->
-        <BaseCard v-if="result" title="Antes y después" :heading-level="2">
-          <RangeSlider
-            :model-value="state.corte"
-            label="Mover para pasar de un corte al otro"
-            :min="0"
-            :max="100"
-            :step="1"
-            :display-value="
-              showsAfter ? `Después · ${result.toCutDate}` : `Antes · ${result.fromCutDate}`
-            "
-            hint="Cada posición muestra un corte completo. No mezclamos datos de dos fechas."
-            @update:model-value="(value) => (state.corte = value)"
-          />
+        <!--
+          Regla 6: se explica qué no se puede pintar y por qué, en lugar de dejar un mapa
+          que parezca mostrar el antes/después sin serlo.
+        -->
+        <p
+          v-if="result"
+          class="rounded-md border border-slate-200 bg-surface-muted p-3 text-xs text-slate-700"
+        >
+          El mapa muestra el área comparada, no un antes/después: la comparación devuelve los
+          cambios por código predial, sin las geometrías de cada corte. Para ver cómo quedó un
+          predio en cada fecha, abre su ficha y consulta su línea de tiempo.
+        </p>
 
-          <div class="mt-2 flex items-center justify-between text-xs text-slate-600">
-            <span>{{ result.fromCutDate }}</span>
-            <span>{{ result.toCutDate }}</span>
-          </div>
-        </BaseCard>
-
-        <BaseCard :title="`Cambios detectados (${items.length})`" :heading-level="2" :padded="false">
+        <BaseCard
+          :title="`Cambios detectados (${changes.length})`"
+          :heading-level="2"
+          :padded="false"
+        >
           <template #actions>
             <select
               v-model="activeType"
@@ -320,59 +381,66 @@ const cutDates = computed(() => mapStore.availableCutDates);
           />
 
           <EmptyState
-            v-else-if="items.length === 0"
+            v-else-if="changes.length === 0"
             title="No hubo cambios de este tipo"
             body="En el área y las fechas elegidas no encontramos cambios. Prueba con un periodo más largo o con otro tipo de cambio."
             icon="data"
           />
 
-          <div v-else class="max-h-[26rem] overflow-auto">
-            <table class="tc-table">
-              <caption class="sr-only">
-                Cambios entre {{ result.fromCutDate }} y {{ result.toCutDate }}.
-              </caption>
-              <thead>
-                <tr>
-                  <th scope="col">Código predial</th>
-                  <th scope="col">Cambio</th>
-                  <th scope="col">Área antes</th>
-                  <th scope="col">Área después</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="item in items"
-                  :key="`${item.npn}-${item.changeType}`"
-                  class="cursor-pointer hover:bg-surface-muted"
-                  @click="$router.push({ name: 'parcel', params: { npn: item.npn } })"
-                >
-                  <th scope="row" class="whitespace-nowrap font-mono text-xs font-normal">
-                    {{ item.npn }}
-                  </th>
-                  <td>
-                    <BaseBadge :tone="CHANGE_TONES[item.changeType]" size="sm">
-                      {{ CHANGE_LABELS[item.changeType] }}
-                    </BaseBadge>
-                    <p class="mt-0.5 text-xs text-slate-600">{{ item.label }}</p>
-                  </td>
-                  <td class="tabular-nums">
-                    {{
-                      item.areaBeforeM2 === null
-                        ? MESSAGES.common.notAvailable
-                        : formatArea(item.areaBeforeM2)
-                    }}
-                  </td>
-                  <td class="tabular-nums">
-                    {{
-                      item.areaAfterM2 === null
-                        ? MESSAGES.common.notAvailable
-                        : formatArea(item.areaAfterM2)
-                    }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <template v-else>
+            <p v-if="result.truncated" class="px-4 pt-3 text-xs text-amber-800" role="status">
+              La lista llegó al límite de la consulta: hay más cambios de los que se muestran.
+              Reduce el área o filtra por un tipo para verlos todos.
+            </p>
+
+            <div class="max-h-[26rem] overflow-auto">
+              <table class="tc-table">
+                <caption class="sr-only">
+                  Cambios entre
+                  {{
+                    result.fromCutDate
+                  }}
+                  y
+                  {{
+                    result.toCutDate
+                  }}.
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Código predial</th>
+                    <th scope="col">Cambio</th>
+                    <th scope="col">Continuidad de la geometría</th>
+                    <th scope="col">Detectado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="item in changes"
+                    :key="`${item.npn}-${item.changeType}`"
+                    class="cursor-pointer hover:bg-surface-muted"
+                    @click="$router.push({ name: 'parcel', params: { npn: item.npn } })"
+                  >
+                    <th scope="row" class="whitespace-nowrap font-mono text-xs font-normal">
+                      {{ item.npn }}
+                    </th>
+                    <td>
+                      <!-- La etiqueta en español la redacta el backend (`changeLabel`). -->
+                      <BaseBadge :tone="toneFor(item.changeType)" size="sm">
+                        {{ item.changeLabel }}
+                      </BaseBadge>
+                    </td>
+                    <td class="tabular-nums">
+                      <!-- Las áreas por corte no vienen en esta respuesta; el solape sí. -->
+                      {{ overlapPct(item.geometryOverlap) ?? MESSAGES.common.notAvailable }}
+                    </td>
+                    <td class="whitespace-nowrap text-xs text-slate-600">
+                      {{ item.detectedAt.slice(0, 10) }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </template>
 
           <template #footer>
             <ProvenanceFooter :meta="meta" compact />

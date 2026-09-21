@@ -10,8 +10,6 @@
  */
 import { computed, onMounted, ref, watch } from 'vue';
 import {
-  MESSAGES,
-  formatArea,
   type AreaScope,
   type GeoJsonFeatureCollection,
   type GeoJsonGeometry,
@@ -29,13 +27,13 @@ import {
 import type { LocationIntelResult, ScoredCell } from '@/api/types';
 import MapView from '@/map/MapView.vue';
 import JobProgress from '@/components/JobProgress.vue';
+import FactorList from '@/components/FactorList.vue';
 import BaseCard from '@/components/ui/BaseCard.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseBadge from '@/components/ui/BaseBadge.vue';
 import CollapsibleSection from '@/components/ui/CollapsibleSection.vue';
 import EmptyState from '@/components/ui/EmptyState.vue';
 import GlossaryTerm from '@/components/ui/GlossaryTerm.vue';
-import HowCalculated from '@/components/ui/HowCalculated.vue';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton.vue';
 import ProvenanceFooter from '@/components/ui/ProvenanceFooter.vue';
 import RangeSlider from '@/components/ui/RangeSlider.vue';
@@ -116,10 +114,6 @@ const template = computed(() => intel.template);
 const result = computed(() => intel.result);
 const cells = computed<ScoredCell[]>(() => result.value?.cells ?? []);
 const topZones = computed(() => result.value?.topZones ?? []);
-const selectedZone = computed(
-  () => topZones.value.find((zone) => zone.id === selectedZoneId.value) ?? null,
-);
-
 /** Suma de pesos antes de normalizar: ayuda a entender que lo que importa es la proporción. */
 const weightSum = computed(() =>
   Object.values(intel.weights).reduce((sum, value) => sum + value, 0),
@@ -134,17 +128,21 @@ const overlay = computed<GeoJsonFeatureCollection | null>(() =>
     : null,
 );
 
-/** Aporte de cada indicador al puntaje de una celda, para el desglose explicable. */
-function breakdownOf(cell: ScoredCell): Array<{ label: string; raw: number | null; weighted: number | null }> {
-  const indicators = result.value?.indicators ?? [];
-  return cell.breakdown.map((item) => ({
-    label: indicators.find((indicator) => indicator.key === item.key)?.label ?? item.key,
-    raw: item.raw,
-    weighted: item.weighted,
-  }));
-}
+/**
+ * Celda de mayor puntaje. Se busca por `rank === 1` en vez de tomar la primera del arreglo:
+ * `cells` viene en el orden en que se calculó, no ordenado por puntaje.
+ */
+const bestCell = computed<ScoredCell | null>(
+  () => cells.value.find((cell) => cell.rank === 1) ?? null,
+);
 
-const bestCell = computed(() => cells.value[0] ?? null);
+/**
+ * Pesos que el backend aplicó de verdad, renormalizados a 1 (`weightsApplied`).
+ * Mientras no haya resultado se muestran los del formulario, también normalizados.
+ */
+const appliedWeights = computed<Record<string, number>>(
+  () => result.value?.weightsApplied ?? intel.normalizedWeights,
+);
 </script>
 
 <template>
@@ -191,10 +189,14 @@ const bestCell = computed(() => cells.value[0] ?? null);
           <p class="text-xs text-slate-600">{{ item.audience }}</p>
           <p class="mt-1 text-xs leading-snug text-slate-700">{{ item.description }}</p>
           <p class="mt-1 text-[11px] text-slate-500">
-            {{ item.indicators.length }} indicadores
+            {{ item.indicators.length }} indicadores · {{ item.hardFilters.length }} filtros duros
           </p>
         </button>
       </div>
+
+      <template v-if="intel.templatesNote" #footer>
+        <p class="text-xs text-slate-600">{{ intel.templatesNote }}</p>
+      </template>
     </BaseCard>
 
     <div v-if="template" class="grid gap-3 lg:grid-cols-[24rem_1fr]">
@@ -206,27 +208,30 @@ const bestCell = computed(() => cells.value[0] ?? null);
             calcular. Suma actual: <strong class="tabular-nums">{{ weightSum.toFixed(2) }}</strong>
           </p>
 
-          <div class="mt-2 space-y-1">
-            <div v-for="indicator in template.indicators" :key="indicator.key">
-              <RangeSlider
-                :model-value="intel.weights[indicator.key] ?? 0"
-                :label="indicator.label"
-                :min="0"
-                :max="1"
-                :step="0.05"
-                :display-value="`${Math.round((intel.normalizedWeights[indicator.key] ?? 0) * 100)} % del puntaje`"
-                @update:model-value="(value) => onWeightChange(indicator.key, value)"
-              />
-              <HowCalculated
-                class="mb-2"
-                :formula="indicator.formula"
-                :direction="indicator.direction"
-                :unit="indicator.unit"
-                :glossary-id="indicator.glossaryId"
-                :sources="intel.meta.sources"
-              />
-            </div>
+          <div class="mt-2 space-y-2">
+            <RangeSlider
+              v-for="indicator in template.indicators"
+              :key="indicator.indicator"
+              :model-value="intel.weights[indicator.indicator] ?? 0"
+              :label="intel.labelForIndicator(indicator.indicator)"
+              :min="0"
+              :max="1"
+              :step="0.05"
+              :display-value="`${Math.round((appliedWeights[indicator.indicator] ?? 0) * 100)} % del puntaje`"
+              :hint="indicator.rationale"
+              @update:model-value="(value) => onWeightChange(indicator.indicator, value)"
+            />
           </div>
+
+          <!--
+            Regla 6 (cobertura honesta): la plantilla solo trae identificador, peso y
+            justificación. La fórmula, la unidad, la dirección y las fuentes de cada
+            indicador llegan por celda al calcular, no antes: no las inventamos aquí.
+          -->
+          <p class="mt-2 text-xs text-slate-500">
+            La fórmula, la unidad y las fuentes de cada indicador se muestran en el desglose de la
+            celda, una vez calculado el mapa: la plantilla no las trae.
+          </p>
 
           <div class="mt-3 flex flex-wrap gap-2">
             <BaseButton variant="ghost" size="sm" @click="intel.resetWeights()">
@@ -272,7 +277,7 @@ const bestCell = computed(() => cells.value[0] ?? null);
         <JobProgress
           :status="job.status.value"
           :progress="job.progress.value"
-          :stage="job.stage.value"
+          :progress-message="job.progressMessage.value"
           :error-message="job.error.value?.message ?? null"
           @cancel="job.stop()"
         />
@@ -296,69 +301,96 @@ const bestCell = computed(() => cells.value[0] ?? null);
           :heading-level="2"
           :padded="false"
         >
+          <!-- Cobertura honesta: el recuento se muestra siempre que haya cálculo, y el vacío
+               distingue «no has calculado» de «calculé y no salió ninguna zona». -->
+          <p v-if="result" class="px-4 pt-3 text-xs text-slate-500">
+            {{ result.cellsEvaluated }} celdas evaluadas ·
+            {{ result.cellsExcluded }} descartadas por los filtros duros de la plantilla.
+          </p>
+
           <EmptyState
             v-if="topZones.length === 0"
-            title="Aún no hay zonas calculadas"
-            body="Dibuja el ámbito, ajusta los pesos y pulsa «Calcular el mapa de calor»."
+            :title="result ? 'El cálculo no agrupó ninguna zona' : 'Aún no hay zonas calculadas'"
+            :body="
+              result
+                ? (result.emptyReason ??
+                  'Las zonas se forman con celdas contiguas bien puntuadas. Con tan pocas celdas con dato no hay ninguna que destacar: prueba un ámbito más grande o un tamaño de celda más fino.')
+                : 'Dibuja el ámbito, ajusta los pesos y pulsa «Calcular el mapa de calor».'
+            "
             icon="map"
           />
 
-          <ul v-else class="divide-y divide-slate-100">
-            <li v-for="zone in topZones" :key="zone.id">
-              <button
-                type="button"
-                class="flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left hover:bg-surface-muted"
-                :aria-expanded="selectedZoneId === zone.id"
-                @click="selectedZoneId = selectedZoneId === zone.id ? null : zone.id"
-              >
-                <span class="min-w-0">
-                  <span class="block truncate text-sm font-medium">{{ zone.label }}</span>
-                  <span class="block text-xs text-slate-500">
-                    {{ zone.cellCount }} celdas ·
-                    {{ zone.candidateParcels.length }} predios candidatos
+          <template v-else>
+            <ul class="divide-y divide-slate-100">
+              <li v-for="zone in topZones" :key="zone.id">
+                <button
+                  type="button"
+                  class="flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left hover:bg-surface-muted"
+                  :aria-expanded="selectedZoneId === zone.id"
+                  @click="selectedZoneId = selectedZoneId === zone.id ? null : zone.id"
+                >
+                  <span class="min-w-0">
+                    <!-- La zona no trae nombre: se identifica por su posición en el ranking. -->
+                    <span class="block text-sm font-medium">Zona {{ zone.rank }}</span>
+                    <span class="block truncate text-xs text-slate-500">
+                      {{ zone.cellCount }} celdas
+                      <template v-if="zone.areaKm2 !== null">
+                        · {{ zone.areaKm2.toFixed(2) }} km²
+                      </template>
+                      · confianza {{ Math.round(zone.confidenceMean * 100) }} %
+                    </span>
                   </span>
-                </span>
-                <BaseBadge tone="brand">{{ Math.round(zone.score) }}/100</BaseBadge>
-              </button>
+                  <BaseBadge tone="brand">{{ Math.round(zone.scoreMean) }}/100</BaseBadge>
+                </button>
 
-              <!-- Paso 5: predios candidatos dentro de la zona. -->
-              <div v-if="selectedZoneId === zone.id" class="border-t border-slate-100 bg-surface-muted px-4 py-3">
-                <p v-if="zone.candidateParcels.length === 0" class="text-sm text-slate-600">
-                  Esta zona no tiene predios candidatos. Puede que el municipio no tenga catastro
-                  abierto: revisa el aviso de cobertura.
-                </p>
+                <div
+                  v-if="selectedZoneId === zone.id"
+                  class="border-t border-slate-100 bg-surface-muted px-4 py-3"
+                >
+                  <p class="text-sm text-slate-700">{{ zone.summary }}</p>
 
-                <table v-else class="tc-table">
-                  <caption class="sr-only">Predios candidatos en {{ zone.label }}</caption>
-                  <thead>
-                    <tr>
-                      <th scope="col">Código predial</th>
-                      <th scope="col">Área</th>
-                      <th scope="col">Destino</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="parcelRow in zone.candidateParcels.slice(0, 20)"
-                      :key="parcelRow.npn"
-                      class="cursor-pointer hover:bg-white"
-                      @click="$router.push({ name: 'parcel', params: { npn: parcelRow.npn } })"
-                    >
-                      <th scope="row" class="font-mono text-xs font-normal">{{ parcelRow.npn }}</th>
-                      <td class="tabular-nums">
-                        {{
-                          parcelRow.areaM2 === null
-                            ? MESSAGES.common.notAvailable
-                            : formatArea(parcelRow.areaM2)
-                        }}
-                      </td>
-                      <td>{{ parcelRow.economicUse ?? MESSAGES.common.notAvailable }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </li>
-          </ul>
+                  <p class="mt-2 text-xs text-slate-600">
+                    Puntaje de las celdas: mínimo {{ Math.round(zone.scoreMin) }}, medio
+                    {{ Math.round(zone.scoreMean) }}, máximo {{ Math.round(zone.scoreMax) }} de 100.
+                  </p>
+
+                  <table v-if="zone.factors.length > 0" class="tc-table mt-3">
+                    <caption class="sr-only">
+                      Indicadores que explican el puntaje de la zona
+                      {{
+                        zone.rank
+                      }}
+                    </caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Indicador</th>
+                        <th scope="col">Puntaje medio</th>
+                        <th scope="col">Peso aplicado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="factor in zone.factors" :key="factor.indicator">
+                        <th scope="row" class="font-normal">{{ factor.label }}</th>
+                        <td class="tabular-nums">{{ Math.round(factor.scoreMean) }}/100</td>
+                        <td class="tabular-nums">{{ Math.round(factor.weight * 100) }} %</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <!--
+                  Regla 6: se dice qué no podemos mostrar y por qué, en vez de dejar una
+                  tabla vacía. La zona no trae predios: el API no devuelve predios por zona.
+                -->
+                  <p class="mt-3 text-xs text-slate-600">
+                    El listado de predios candidatos de la zona no viene en esta respuesta. Para
+                    verlos, usa la
+                    <RouterLink class="underline" to="/buscar">búsqueda avanzada</RouterLink>
+                    acotando la consulta a este ámbito.
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </template>
 
           <template #footer>
             <ProvenanceFooter :meta="intel.meta" compact />
@@ -368,34 +400,27 @@ const bestCell = computed(() => cells.value[0] ?? null);
         <!-- Explicabilidad: de dónde sale el puntaje de la mejor celda. -->
         <BaseCard v-if="bestCell" title="Cómo se formó el puntaje" :heading-level="2">
           <CollapsibleSection
-            :title="`Celda con mayor puntaje (${Math.round(bestCell.score)}/100)`"
+            :title="`Celda con mayor puntaje (${bestCell.score === null ? 'sin puntaje' : `${Math.round(bestCell.score)}/100`})`"
             open
           >
-            <table class="tc-table">
-              <thead>
-                <tr>
-                  <th scope="col">Indicador</th>
-                  <th scope="col">Valor</th>
-                  <th scope="col">Aporte al puntaje</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="row in breakdownOf(bestCell)" :key="row.label">
-                  <th scope="row" class="font-normal">{{ row.label }}</th>
-                  <td class="tabular-nums">
-                    {{ row.raw === null ? MESSAGES.common.notAvailable : row.raw.toFixed(2) }}
-                  </td>
-                  <td class="tabular-nums">
-                    {{ row.weighted === null ? MESSAGES.common.notAvailable : row.weighted.toFixed(1) }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <!-- El desglose por celda se llama `factors` y es un FactorScore completo:
+                 trae etiqueta, valor crudo, fórmula, fuentes y explicación. -->
+            <FactorList :factors="bestCell.factors" :sources="intel.meta.sources" />
+
+            <p v-if="bestCell.missing.length > 0" class="mt-3 text-xs text-slate-600">
+              Sin dato en esta celda: {{ bestCell.missing.join(', ') }}. El puntaje se calculó solo
+              con los indicadores que sí tenían dato (confianza
+              {{ Math.round(bestCell.confidence * 100) }} %).
+            </p>
           </CollapsibleSection>
 
+          <p v-if="result?.explanation" class="mt-3 text-sm leading-relaxed text-slate-700">
+            {{ result.explanation }}
+          </p>
+
           <p class="mt-3 text-xs text-slate-600">
-            El puntaje no es una recomendación: es la suma de los indicadores que tú ponderaste.
-            Cambia los pesos y cambiará el orden de las zonas.
+            El puntaje no es una recomendación: es la suma ponderada de los indicadores que tú
+            elegiste. Cambia los pesos y cambiará el orden de las zonas.
           </p>
         </BaseCard>
 

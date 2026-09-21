@@ -5,7 +5,12 @@
  */
 import { defineStore } from 'pinia';
 import { computed, ref, shallowRef } from 'vue';
-import { AppError, type AreaScope, type LocationIntel, type ResponseMeta } from '@terracolombia/shared';
+import {
+  AppError,
+  type AreaScope,
+  type LocationIntel,
+  type ResponseMeta,
+} from '@terracolombia/shared';
 import { getIntelTemplates, runLocationIntel } from '@/api/intel';
 import { isJobHandle } from '@/api/jobs';
 import { emptyMeta } from '@/api/client';
@@ -14,6 +19,8 @@ import type { JobHandle, LocationIntelResult, LocationIntelTemplate } from '@/ap
 export const useIntelStore = defineStore('intel', () => {
   const templates = shallowRef<LocationIntelTemplate[]>([]);
   const templatesMeta = shallowRef<ResponseMeta>(emptyMeta());
+  /** Nota que acompaña al catálogo de plantillas (`{ templates, note }`). La vista la muestra. */
+  const templatesNote = ref<string | null>(null);
   const isLoadingTemplates = ref(false);
 
   const templateId = ref<string | null>(null);
@@ -26,9 +33,7 @@ export const useIntelStore = defineStore('intel', () => {
   const isRunning = ref(false);
   const error = shallowRef<AppError | null>(null);
 
-  const template = computed(
-    () => templates.value.find((t) => t.id === templateId.value) ?? null,
-  );
+  const template = computed(() => templates.value.find((t) => t.id === templateId.value) ?? null);
 
   /** Pesos normalizados 0–1 que suman 1. Es lo que se envía y lo que se muestra en los sliders. */
   const normalizedWeights = computed<Record<string, number>>(() => {
@@ -43,10 +48,13 @@ export const useIntelStore = defineStore('intel', () => {
     isLoadingTemplates.value = true;
     try {
       const response = await getIntelTemplates();
-      templates.value = response.data;
+      // La ruta devuelve `{ templates, note }`, no un arreglo pelado.
+      templates.value = response.data.templates;
+      templatesNote.value = response.data.note;
       templatesMeta.value = response.meta;
     } catch (e) {
-      error.value = e instanceof AppError ? e : new AppError('INTERNAL', 'No pudimos cargar las plantillas');
+      error.value =
+        e instanceof AppError ? e : new AppError('INTERNAL', 'No pudimos cargar las plantillas');
     } finally {
       isLoadingTemplates.value = false;
     }
@@ -57,8 +65,23 @@ export const useIntelStore = defineStore('intel', () => {
     templateId.value = id;
     const found = templates.value.find((t) => t.id === id);
     if (!found) return;
-    weights.value = Object.fromEntries(found.indicators.map((i) => [i.key, i.defaultWeight]));
+    // El indicador se identifica por `indicator` y su peso por omisión es `weight`:
+    // la plantilla NO trae `key` ni `defaultWeight` (verificado contra la API).
+    weights.value = Object.fromEntries(found.indicators.map((i) => [i.indicator, i.weight]));
     result.value = null;
+  }
+
+  /**
+   * Etiqueta legible de un indicador. La plantilla solo trae el identificador técnico:
+   * el nombre en español llega por celda, dentro de `factors`, una vez ejecutado el análisis.
+   * Hasta entonces se muestra el identificador tal cual, sin inventar una traducción.
+   */
+  function labelForIndicator(indicator: string): string {
+    for (const cell of result.value?.cells ?? []) {
+      const factor = cell.factors.find((f) => f.indicator === indicator);
+      if (factor) return factor.label;
+    }
+    return indicator;
   }
 
   function setWeight(key: string, value: number): void {
@@ -87,7 +110,10 @@ export const useIntelStore = defineStore('intel', () => {
       meta.value = response.meta;
       return null;
     } catch (e) {
-      error.value = e instanceof AppError ? e : new AppError('INTERNAL', 'No pudimos calcular el mapa de calor');
+      error.value =
+        e instanceof AppError
+          ? e
+          : new AppError('INTERNAL', 'No pudimos calcular el mapa de calor');
       return null;
     } finally {
       isRunning.value = false;
@@ -103,6 +129,7 @@ export const useIntelStore = defineStore('intel', () => {
   return {
     templates,
     templatesMeta,
+    templatesNote,
     isLoadingTemplates,
     templateId,
     template,
@@ -116,6 +143,7 @@ export const useIntelStore = defineStore('intel', () => {
     error,
     loadTemplates,
     selectTemplate,
+    labelForIndicator,
     setWeight,
     resetWeights,
     run,
