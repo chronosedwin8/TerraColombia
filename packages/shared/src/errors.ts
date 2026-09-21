@@ -30,7 +30,17 @@ const STATUS: Record<ErrorCode, number> = {
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   PLAN_REQUIRED: 403,
-  COVERAGE_MISSING: 200,
+  /*
+   * 422 y no 200. La intención de devolver 200 era buena —no tener datos en una zona no es
+   * un fallo del cliente ni del servidor, es una respuesta honesta— pero el cuerpo que se
+   * emite es un sobre de error, así que el cliente veía `res.ok` en true, no entraba en su
+   * rama de error y acababa tratando el objeto `{error}` como si fuera el dato: pantalla en
+   * blanco, sin un solo fallo registrado en ninguna parte.
+   *
+   * 422 dice exactamente lo que pasa: la petición está bien formada y no se puede atender.
+   * No es 404, que se confundiría con "esa ruta no existe".
+   */
+  COVERAGE_MISSING: 422,
   UPSTREAM_UNAVAILABLE: 503,
   INTERNAL: 500,
 };

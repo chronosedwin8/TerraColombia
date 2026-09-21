@@ -1,20 +1,28 @@
 /**
- * Seguimiento de una operación asíncrona (§9: análisis grandes e informes).
+ * Seguimiento de una operación asíncrona (análisis grandes e informes).
  *
  * Estrategia: SSE por `GET /jobs/:id/stream` como canal principal y un sondeo de respaldo
  * a `GET /jobs/:id` cada 4 s, porque un proxy intermedio puede cortar el stream sin avisar.
+ *
+ * VERIFICADO CONTRA LA API VIVA (`apps/api/src/routes/jobs.ts`). La versión anterior no
+ * terminaba NUNCA un trabajo en la UI por tres motivos, todos corregidos aquí:
+ *  1. Esperaba los estados `completed`/`cancelled`; la API usa `done`/`canceled`.
+ *  2. Leía `data.stage` y `data.error.message`; los campos son `progressMessage` y
+ *     `errorMessage` (plano).
+ *  3. Guardaba el sobre entero del evento SSE `done` como si fuera el resultado; el
+ *     resultado viene ANIDADO en `payload.result`.
  */
 import { onScopeDispose, ref, shallowRef, type Ref, type ShallowRef } from 'vue';
-import { AppError, MESSAGES } from '@terracolombia/shared';
+import { AppError, MESSAGES, type JobStatus } from '@terracolombia/shared';
 import { subscribeToJob } from '@/api/client';
 import { getJob } from '@/api/jobs';
-import type { JobStatus } from '@/api/types';
 
 export interface UseJobReturn<T> {
   jobId: Ref<string | null>;
   status: Ref<JobStatus | null>;
   progress: Ref<number | null>;
-  stage: Ref<string | null>;
+  /** Etapa legible en español que reporta el worker (`progressMessage` en el API). */
+  progressMessage: Ref<string | null>;
   result: ShallowRef<T | null>;
   error: ShallowRef<AppError | null>;
   isActive: Ref<boolean>;
@@ -25,11 +33,16 @@ export interface UseJobReturn<T> {
 
 const POLL_INTERVAL_MS = 4000;
 
+/** Estados terminales del worker: en ellos se deja de sondear y de escuchar el stream. */
+function isTerminal(status: JobStatus): boolean {
+  return status === 'done' || status === 'failed' || status === 'canceled';
+}
+
 export function useJob<T>(): UseJobReturn<T> {
   const jobId = ref<string | null>(null);
   const status = ref<JobStatus | null>(null);
   const progress = ref<number | null>(null);
-  const stage = ref<string | null>(null);
+  const progressMessage = ref<string | null>(null);
   const result = shallowRef<T | null>(null);
   const error = shallowRef<AppError | null>(null);
   const isActive = ref(false);
@@ -55,15 +68,18 @@ export function useJob<T>(): UseJobReturn<T> {
       const { data } = await getJob<T>(id);
       status.value = data.status;
       progress.value = data.progress;
-      stage.value = data.stage;
-      if (data.status === 'completed') {
-        result.value = data.result;
-        finish('completed');
+      progressMessage.value = data.progressMessage;
+
+      if (data.status === 'done') {
+        // `result` solo viaja cuando el trabajo terminó bien; si el worker no dejó
+        // resultado se conserva el que ya hubiera llegado por SSE.
+        if (data.result !== null) result.value = data.result;
+        finish('done');
       } else if (data.status === 'failed') {
-        error.value = new AppError('INTERNAL', data.error?.message ?? MESSAGES.common.error);
+        error.value = new AppError('INTERNAL', data.errorMessage ?? MESSAGES.common.error);
         finish('failed');
-      } else if (data.status === 'cancelled') {
-        finish('cancelled');
+      } else if (data.status === 'canceled') {
+        finish('canceled');
       }
     } catch (e) {
       // Un fallo de sondeo no cancela el trabajo: solo se reporta si es del dominio.
@@ -79,24 +95,31 @@ export function useJob<T>(): UseJobReturn<T> {
     jobId.value = id;
     status.value = 'queued';
     progress.value = null;
-    stage.value = null;
+    progressMessage.value = null;
     result.value = null;
     error.value = null;
     isActive.value = true;
 
-    unsubscribe = subscribeToJob(id, {
+    unsubscribe = subscribeToJob<T>(id, {
       onProgress: (payload) => {
-        status.value = 'running';
+        // El evento trae su propio estado: puede seguir en cola aunque ya emita progreso.
+        status.value = payload.status;
         progress.value = payload.progress;
-        stage.value = payload.stage;
+        progressMessage.value = payload.message;
       },
       onDone: (payload) => {
-        result.value = payload as T;
+        // El resultado va ANIDADO: `payload` es el sobre `{id, status, result, errorMessage}`.
+        result.value = payload.result;
         progress.value = 100;
-        finish('completed');
+        finish(isTerminal(payload.status) ? payload.status : 'done');
+      },
+      onFailed: (payload) => {
+        error.value = new AppError('INTERNAL', payload.errorMessage ?? MESSAGES.common.error);
+        finish(isTerminal(payload.status) ? payload.status : 'failed');
       },
       onError: (err) => {
-        // El stream falló: el sondeo decide si el trabajo realmente falló.
+        // El stream falló (red o trabajo inexistente): el sondeo decide si el trabajo
+        // realmente falló. No se marca `failed` aquí para no mentir ante un corte de red.
         error.value = err;
         void pollOnce(id);
       },
@@ -110,5 +133,5 @@ export function useJob<T>(): UseJobReturn<T> {
 
   onScopeDispose(stop);
 
-  return { jobId, status, progress, stage, result, error, isActive, track, stop };
+  return { jobId, status, progress, progressMessage, result, error, isActive, track, stop };
 }

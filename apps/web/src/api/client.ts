@@ -14,7 +14,16 @@
  *   nuevo. Así el token de larga vida nunca queda accesible a JavaScript.
  * - Los errores llegan como `{ error: { code, message, details } }` (formato de `AppError.toJSON`).
  */
-import { AppError, MESSAGES, type ErrorCode, type Envelope, type ResponseMeta } from '@terracolombia/shared';
+import {
+  AppError,
+  JOB_STATUSES,
+  MESSAGES,
+  type ErrorCode,
+  type Envelope,
+  type JobStatus,
+  type ResponseMeta,
+} from '@terracolombia/shared';
+import type { JobDoneEvent, JobProgressEvent } from './types';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api/v1';
 
@@ -321,12 +330,56 @@ export function emptyMeta(): ResponseMeta {
   };
 }
 
+/**
+ * Desempaqueta el sobre `{ data, meta }`.
+ *
+ * Verificado contra la API viva; hay dos casos que el cast ciego anterior ocultaba:
+ *
+ * 1. Las rutas de `/auth/*` devuelven `{ data }` SIN `meta`. La comprobación anterior
+ *    exigía ambas claves, así que envolvía `{data:…}` OTRA VEZ y la sesión llegaba a la
+ *    UI como `envelope.data.data`. Ahora basta con que exista `data`.
+ * 2. Algunos errores de dominio (COVERAGE_MISSING en `/areas/analyze`, `/changes/compare`
+ *    y `/location-intel`) viajan con **HTTP 200** y cuerpo `{ error: {...} }`. Como
+ *    `res.ok` es true, nunca pasaban por `parseErrorBody` y la vista recibía un objeto
+ *    `{error}` casteado a `T`: pantalla vacía sin un solo fallo visible. Se detecta aquí
+ *    y se lanza el `AppError` que corresponde.
+ */
 function normalizeEnvelope<T>(body: unknown): Envelope<T> {
-  if (body && typeof body === 'object' && 'data' in body && 'meta' in body) {
-    return body as Envelope<T>;
+  if (body && typeof body === 'object') {
+    // Error de dominio servido con estado 2xx.
+    if ('error' in body && !('data' in body)) {
+      throw errorFromBody((body as { error: unknown }).error);
+    }
+    if ('data' in body) {
+      const withData = body as { data: T; meta?: unknown };
+      const meta = withData.meta;
+      return {
+        data: withData.data,
+        meta: isResponseMeta(meta) ? meta : emptyMeta(),
+      };
+    }
   }
   // Endpoint que no envuelve (no debería ocurrir): se marca sin procedencia.
   return { data: body as T, meta: emptyMeta() };
+}
+
+/** Mínimo para considerar que el objeto es un `ResponseMeta` y no basura. */
+function isResponseMeta(value: unknown): value is ResponseMeta {
+  return Boolean(value) && typeof value === 'object' && 'sources' in (value as object);
+}
+
+/** Construye el `AppError` a partir del bloque `error` del cuerpo. */
+function errorFromBody(err: unknown): AppError {
+  if (err && typeof err === 'object') {
+    const e = err as { code?: unknown; message?: unknown; details?: unknown };
+    const code: ErrorCode = isErrorCode(e.code) ? e.code : 'INTERNAL';
+    const message =
+      typeof e.message === 'string' && e.message.length > 0 ? e.message : defaultMessageFor(code);
+    const details =
+      e.details && typeof e.details === 'object' ? (e.details as Record<string, unknown>) : {};
+    return new AppError(code, message, details);
+  }
+  return new AppError('INTERNAL', MESSAGES.common.error);
 }
 
 /** Atajo cuando solo interesa `data`. Úsalo solo para datos sin cifras que citar. */
@@ -379,13 +432,20 @@ function filenameFromDisposition(value: string | null): string | null {
 /**
  * Suscribe a `GET /jobs/:id/stream`. Devuelve una función para cerrar la conexión.
  * `EventSource` no acepta cabeceras, así que el backend autentica por cookie de sesión
- * (supuesto del contrato) — el access token no puede viajar en la URL.
+ * — el access token no puede viajar en la URL.
+ *
+ * Eventos reales (verificado en `apps/api/src/routes/jobs.ts`):
+ * - `progress`: `{ id, status, progress, message }`  ← el texto es `message`, no `stage`.
+ * - `done`:     `{ id, status, result, errorMessage }` ← el resultado va ANIDADO en `result`.
+ * - `failed`:   `{ id, status, result: null, errorMessage }` ← el texto es `errorMessage`.
+ * - `error`:    `{ message }` cuando el trabajo ya no existe.
  */
-export function subscribeToJob(
+export function subscribeToJob<TResult = unknown>(
   jobId: string,
   handlers: {
-    onProgress?: (payload: { progress: number | null; stage: string | null }) => void;
-    onDone?: (payload: unknown) => void;
+    onProgress?: (payload: JobProgressEvent) => void;
+    onDone?: (payload: JobDoneEvent<TResult>) => void;
+    onFailed?: (payload: JobDoneEvent<TResult>) => void;
     onError?: (error: AppError) => void;
   },
 ): () => void {
@@ -395,25 +455,44 @@ export function subscribeToJob(
   source.addEventListener('progress', (event) => {
     const parsed = safeParse((event as MessageEvent<string>).data);
     if (!parsed || typeof parsed !== 'object') return;
-    const p = parsed as { progress?: unknown; stage?: unknown };
+    const p = parsed as { id?: unknown; status?: unknown; progress?: unknown; message?: unknown };
     handlers.onProgress?.({
+      id: typeof p.id === 'string' ? p.id : jobId,
+      status: isJobStatus(p.status) ? p.status : 'running',
       progress: typeof p.progress === 'number' ? p.progress : null,
-      stage: typeof p.stage === 'string' ? p.stage : null,
+      message: typeof p.message === 'string' ? p.message : null,
     });
   });
 
   source.addEventListener('done', (event) => {
-    handlers.onDone?.(safeParse((event as MessageEvent<string>).data));
+    handlers.onDone?.(parseJobDone<TResult>((event as MessageEvent<string>).data, jobId, 'done'));
     source.close();
   });
 
   source.addEventListener('failed', (event) => {
-    const parsed = safeParse((event as MessageEvent<string>).data);
+    const payload = parseJobDone<TResult>((event as MessageEvent<string>).data, jobId, 'failed');
+    // `onError` queda para los fallos de TRANSPORTE. Si quien llama distingue el fallo
+    // del trabajo con `onFailed`, no se le notifica dos veces la misma cosa.
+    if (handlers.onFailed) {
+      handlers.onFailed(payload);
+    } else {
+      handlers.onError?.(new AppError('INTERNAL', payload.errorMessage ?? MESSAGES.common.error));
+    }
+    source.close();
+  });
+
+  // El worker emite `error` cuando el trabajo desapareció de la base.
+  source.addEventListener('error', (event) => {
+    const data = (event as MessageEvent<string>).data;
+    // `EventSource` también dispara `error` sin datos ante un corte de red: ese caso lo
+    // trata `onerror`, así que aquí solo interesa el evento con nombre que manda el API.
+    if (typeof data !== 'string' || data.length === 0) return;
+    const parsed = safeParse(data);
     const message =
       parsed && typeof parsed === 'object' && typeof (parsed as { message?: unknown }).message === 'string'
         ? (parsed as { message: string }).message
         : MESSAGES.common.error;
-    handlers.onError?.(new AppError('INTERNAL', message));
+    handlers.onError?.(new AppError('NOT_FOUND', message));
     source.close();
   });
 
@@ -425,6 +504,24 @@ export function subscribeToJob(
   };
 
   return () => source.close();
+}
+
+function isJobStatus(value: unknown): value is JobStatus {
+  return typeof value === 'string' && (JOB_STATUSES as readonly string[]).includes(value);
+}
+
+function parseJobDone<TResult>(raw: string, fallbackId: string, fallback: JobStatus): JobDoneEvent<TResult> {
+  const parsed = safeParse(raw);
+  if (!parsed || typeof parsed !== 'object') {
+    return { id: fallbackId, status: fallback, result: null, errorMessage: null };
+  }
+  const p = parsed as { id?: unknown; status?: unknown; result?: unknown; errorMessage?: unknown };
+  return {
+    id: typeof p.id === 'string' ? p.id : fallbackId,
+    status: isJobStatus(p.status) ? p.status : fallback,
+    result: (p.result ?? null) as TResult | null,
+    errorMessage: typeof p.errorMessage === 'string' ? p.errorMessage : null,
+  };
 }
 
 function safeParse(raw: string): unknown {

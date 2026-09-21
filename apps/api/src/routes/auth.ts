@@ -11,6 +11,10 @@ import {
   hashToken,
   verifyPassword,
 } from '../plugins/auth.js';
+// Las rutas de sesión devolvían `{ data: … }` a mano, sin `meta`. El cliente exige las dos
+// claves para reconocer un sobre, así que volvía a envolver la carga y la sesión le llegaba
+// en `envelope.data.data`: el inicio de sesión estaba roto por construcción.
+import { plainEnvelope } from '../lib/envelope.js';
 
 const REFRESH_COOKIE = 'tc_refresh';
 
@@ -170,7 +174,7 @@ export default async function authRoutes(app: FastifyInstance): Promise<void> {
       // La ficha de sesión la arma un solo sitio, para que register, login, refresh y
       // switch-organization devuelvan exactamente lo mismo.
       const sessionUser = await buildSessionUser(result.user.id, result.org.id);
-      return reply.status(201).send({ data: { user: sessionUser, ...session } });
+      return reply.status(201).send(plainEnvelope({ user: sessionUser, ...session }));
     },
   );
 
@@ -215,7 +219,7 @@ export default async function authRoutes(app: FastifyInstance): Promise<void> {
 
       const session = await issueSession(user.id, orgId, user.role, req as never, reply as never);
       const sessionUser = await buildSessionUser(user.id, orgId);
-      return { data: { user: sessionUser, ...session } };
+      return plainEnvelope({ user: sessionUser, ...session });
     },
   );
 
@@ -281,7 +285,7 @@ export default async function authRoutes(app: FastifyInstance): Promise<void> {
       // El refresco devuelve también la ficha completa: al recargar la página el frontend
       // solo llama aquí, y sin el plan la interfaz mostraría "Gratis" a quien ya pagó.
       const sessionUser = await buildSessionUser(stored.userId, orgId);
-      return { data: { user: sessionUser, ...session } };
+      return plainEnvelope({ user: sessionUser, ...session });
     },
   );
 
@@ -307,7 +311,7 @@ export default async function authRoutes(app: FastifyInstance): Promise<void> {
           data: { userId: req.auth.userId, action: 'logout', ipHash: hashIp(req.ip) },
         });
       }
-      return { data: { ok: true } };
+      return plainEnvelope({ ok: true });
     },
   );
 

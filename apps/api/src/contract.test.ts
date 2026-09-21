@@ -366,6 +366,64 @@ d('contrato entre la web y la API', () => {
     });
   }
 
+  /**
+   * El cliente reconoce un sobre por llevar `data` Y `meta`. Cuando una ruta devolvía solo
+   * `data`, lo volvía a envolver y la carga llegaba en `envelope.data.data`. Le pasaba a
+   * todo `/auth/*`, así que el inicio de sesión estaba roto por construcción.
+   */
+  it('toda ruta envuelve la respuesta en data + meta', async () => {
+    const email = `sobre-${Date.now()}@terracolombia.test`;
+    const rutas: Array<{ method: 'GET' | 'POST'; url: string; payload?: unknown }> = [
+      { method: 'POST', url: '/api/v1/auth/register', payload: { email, password: 'contrasena-de-prueba-larga' } },
+      { method: 'POST', url: '/api/v1/auth/login', payload: { email, password: 'contrasena-de-prueba-larga' } },
+      { method: 'GET', url: '/api/v1/search?q=soledad' },
+      { method: 'GET', url: '/api/v1/glossary' },
+      { method: 'GET', url: '/api/v1/layers' },
+    ];
+    const malos: string[] = [];
+    for (const r of rutas) {
+      const res = await app.inject({
+        method: r.method,
+        url: r.url,
+        ...(r.payload ? { payload: r.payload } : {}),
+      });
+      const body = res.json();
+      if (!('data' in body) || !('meta' in body)) malos.push(`${r.url} → ${Object.keys(body).join(',')}`);
+      // El doble envoltorio deja la carga real un nivel más abajo.
+      if (body?.data && typeof body.data === 'object' && 'data' in body.data && 'meta' in body.data) {
+        malos.push(`${r.url} viene envuelta dos veces`);
+      }
+    }
+    expect(malos, `Rutas que rompen el contrato del sobre: ${malos.join('; ')}`).toEqual([]);
+  });
+
+  /**
+   * Un cuerpo de error nunca puede viajar con un estado de éxito: el cliente mira `res.ok`
+   * para decidir si va por la rama de error, y con 200 trataba el objeto `{error}` como si
+   * fuera el dato. Pantalla en blanco y ni un fallo registrado.
+   */
+  it('ningún error de dominio se devuelve con estado de éxito', async () => {
+    const { AppError } = await import('@terracolombia/shared');
+    const conExito = (
+      [
+        'NOT_FOUND',
+        'PARCEL_NOT_FOUND',
+        'VALIDATION',
+        'COVERAGE_MISSING',
+        'PLAN_REQUIRED',
+        'QUOTA_EXCEEDED',
+        'INSUFFICIENT_CREDITS',
+        'AREA_TOO_LARGE',
+        'RATE_LIMITED',
+        'UPSTREAM_UNAVAILABLE',
+      ] as const
+    ).filter((code) => new AppError(code, 'prueba').statusCode < 400);
+    expect(
+      conExito,
+      `Estos códigos responden con estado de éxito: ${conExito.join(', ')}`,
+    ).toEqual([]);
+  });
+
   it('los trabajos usan los estados que el cliente sabe interpretar', async () => {
     // El cliente cierra el sondeo con estos valores. Si la API renombra uno, la barra de
     // progreso se queda girando para siempre y el resultado no se muestra nunca.
