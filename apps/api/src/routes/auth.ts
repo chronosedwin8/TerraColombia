@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { AppError, PLANS } from '@terracolombia/shared';
 import { getPrisma } from '@terracolombia/db';
+import { buildSessionUser } from '../services/session.js';
 import { loadConfig } from '../config.js';
 import {
   generateRefreshToken,
@@ -13,15 +14,20 @@ import {
 
 const REFRESH_COOKIE = 'tc_refresh';
 
-const RegisterSchema = z.object({
-  email: z.string().email('Escribe un correo válido').max(200),
-  password: z
-    .string()
-    .min(10, 'La contraseña debe tener al menos 10 caracteres')
-    .max(200),
-  displayName: z.string().min(2).max(120).optional(),
-  organizationName: z.string().min(2).max(160).optional(),
-});
+const RegisterSchema = z
+  .object({
+    email: z.string().email('Escribe un correo válido').max(200),
+    password: z
+      .string()
+      .min(10, 'La contraseña debe tener al menos 10 caracteres')
+      .max(200),
+    /** El formulario web envía `name`; la GeoAPI y los scripts usan `displayName`. */
+    name: z.string().min(2).max(120).optional(),
+    displayName: z.string().min(2).max(120).optional(),
+    organizationName: z.string().min(2).max(160).optional(),
+    acceptedTerms: z.boolean().optional(),
+  })
+  .transform((v) => ({ ...v, displayName: v.displayName ?? v.name ?? undefined }));
 
 const LoginSchema = z.object({
   email: z.string().email().max(200),
@@ -82,8 +88,10 @@ export default async function authRoutes(app: FastifyInstance): Promise<void> {
           properties: {
             email: { type: 'string', format: 'email' },
             password: { type: 'string', minLength: 10 },
+            name: { type: 'string' },
             displayName: { type: 'string' },
             organizationName: { type: 'string' },
+            acceptedTerms: { type: 'boolean' },
           },
         },
       },
@@ -159,14 +167,10 @@ export default async function authRoutes(app: FastifyInstance): Promise<void> {
         reply as never,
       );
 
-      return reply.status(201).send({
-        data: {
-          user: { id: result.user.id, email: result.user.email, displayName: result.user.displayName },
-          organization: { id: result.org.id, name: result.org.name },
-          plan: 'free',
-          ...session,
-        },
-      });
+      // La ficha de sesión la arma un solo sitio, para que register, login, refresh y
+      // switch-organization devuelvan exactamente lo mismo.
+      const sessionUser = await buildSessionUser(result.user.id, result.org.id);
+      return reply.status(201).send({ data: { user: sessionUser, ...session } });
     },
   );
 
@@ -210,13 +214,8 @@ export default async function authRoutes(app: FastifyInstance): Promise<void> {
       });
 
       const session = await issueSession(user.id, orgId, user.role, req as never, reply as never);
-      return {
-        data: {
-          user: { id: user.id, email: user.email, displayName: user.displayName, role: user.role },
-          organizationId: orgId,
-          ...session,
-        },
-      };
+      const sessionUser = await buildSessionUser(user.id, orgId);
+      return { data: { user: sessionUser, ...session } };
     },
   );
 
@@ -279,7 +278,10 @@ export default async function authRoutes(app: FastifyInstance): Promise<void> {
         reply as never,
         familyId,
       );
-      return { data: session };
+      // El refresco devuelve también la ficha completa: al recargar la página el frontend
+      // solo llama aquí, y sin el plan la interfaz mostraría "Gratis" a quien ya pagó.
+      const sessionUser = await buildSessionUser(stored.userId, orgId);
+      return { data: { user: sessionUser, ...session } };
     },
   );
 

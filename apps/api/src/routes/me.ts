@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import { AppError, PLANS } from '@terracolombia/shared';
 import type { PlanCode } from '@terracolombia/shared';
 import { getPrisma } from '@terracolombia/db';
+import { buildSessionUser } from '../services/session.js';
 import { plainEnvelope } from '../lib/envelope.js';
 
 export default async function meRoutes(app: FastifyInstance): Promise<void> {
@@ -19,55 +20,49 @@ export default async function meRoutes(app: FastifyInstance): Promise<void> {
     async (req) => {
       if (!req.auth.userId) throw AppError.unauthorized();
 
+      // La ficha va en el primer nivel y es la misma que devuelven login y refresh: el
+      // frontend lee `data.plan` y `data.entitlements` sin importar por dónde llegó.
+      const sessionUser = await buildSessionUser(req.auth.userId, req.auth.organizationId);
+
       const user = await prisma.user.findUnique({
         where: { id: req.auth.userId },
-        include: {
-          memberships: { include: { organization: true } },
-        },
+        include: { memberships: { include: { organization: true } } },
       });
       if (!user) throw AppError.unauthorized();
 
-      const orgId = req.auth.organizationId;
-      const credits = orgId ? await app.quota.balance(orgId) : 0;
-
       const period = `${new Date().getUTCFullYear()}-${String(new Date().getUTCMonth() + 1).padStart(2, '0')}`;
-      const counters = orgId
-        ? await prisma.quotaCounter.findMany({ where: { organizationId: orgId, period } })
+      const counters = sessionUser.organizationId
+        ? await prisma.quotaCounter.findMany({
+            where: { organizationId: sessionUser.organizationId, period },
+          })
         : [];
 
-      const plan = PLANS[req.auth.plan];
+      const plan = PLANS[sessionUser.plan];
 
       return plainEnvelope({
-        user: {
-          id: user.id,
-          email: user.email,
-          displayName: user.displayName,
-          role: user.role,
-          locale: user.locale,
-          emailVerified: user.emailVerified,
-        },
+        ...sessionUser,
+        emailVerified: user.emailVerified,
+        locale: user.locale,
         organizations: user.memberships.map((m) => ({
           id: m.organization.id,
           name: m.organization.name,
           slug: m.organization.slug,
           role: m.role,
-          isCurrent: m.organizationId === orgId,
+          isCurrent: m.organizationId === sessionUser.organizationId,
         })),
-        plan: {
+        planDetail: {
           code: plan.code,
           name: plan.name,
           highlights: plan.highlights,
           monthlyPriceCop: plan.monthlyPriceCop,
         },
-        entitlements: req.auth.entitlements,
-        credits,
         usage: {
           period,
           counters: counters.map((c) => ({ metric: c.metric, used: c.used })),
           limits: {
-            detailedQueriesPerMonth: req.auth.entitlements.detailedQueriesPerMonth,
-            reportsPerMonth: req.auth.entitlements.reportsPerMonth,
-            tilesPerDay: req.auth.entitlements.tilesPerDay,
+            detailedQueriesPerMonth: sessionUser.entitlements.detailedQueriesPerMonth,
+            reportsPerMonth: sessionUser.entitlements.reportsPerMonth,
+            tilesPerDay: sessionUser.entitlements.tilesPerDay,
           },
         },
       });
@@ -162,7 +157,9 @@ export default async function meRoutes(app: FastifyInstance): Promise<void> {
         org: organizationId,
         role: user.role,
       });
-      return plainEnvelope({ accessToken, organizationId });
+      // Se devuelve la ficha de la organización nueva: el plan y los permisos cambian con ella.
+      const sessionUser = await buildSessionUser(user.id, organizationId);
+      return plainEnvelope({ accessToken, user: sessionUser });
     },
   );
 

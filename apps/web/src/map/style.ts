@@ -1,26 +1,39 @@
 /**
  * Estilo del mapa base.
  *
- * REGLA DURA (PLAN.md §3): **prohibido usar teselas de Google**. El producto sirve teselas
- * vectoriales propias construidas con Protomaps/PMTiles a partir de OpenStreetMap, y puede
- * añadir ortoimágenes o WMS del IGAC cuando estén disponibles.
+ * REGLA DURA (PLAN.md §3): **prohibido usar teselas de Google**. Además de lo que dice el
+ * plan, los Términos de Google Maps Platform prohíben mostrar contenido de Google sobre un
+ * mapa que no sea de Google, así que tampoco sirve para geocodificar sobre este mapa.
  *
  * Resolución del estilo, en este orden:
  *  1. `VITE_BASEMAP_STYLE_URL` apunta a un `style.json` propio → se usa tal cual.
  *  2. `VITE_BASEMAP_TILES_URL` apunta a nuestras teselas vectoriales → se construye el estilo
  *     mínimo `buildProtomapsStyle()` definido aquí abajo, con el esquema de capas de Protomaps.
- *  3. Respaldo de desarrollo: `https://demotiles.maplibre.org/style.json`, el estilo público de
- *     demostración de MapLibre. Sirve para trabajar sin infraestructura y **no debe llegar a
- *     producción**: no tiene detalle de Colombia y su disponibilidad no está garantizada.
+ *  3. Por omisión, OpenFreeMap: teselas vectoriales de OpenStreetMap, gratuitas, sin clave y
+ *     sin registro, con detalle real de Colombia. Es el camino que funciona sin montar
+ *     infraestructura propia.
+ *
+ * Para producción conviene servir teselas propias (Protomaps/PMTiles) y no depender de un
+ * tercero para el mapa base; el paso 1 o el 2 lo permiten cambiando una variable de entorno.
  */
 import type { LayerSpecification, StyleSpecification } from 'maplibre-gl';
 
-/** Respaldo declarado: estilo público de demostración de MapLibre (solo desarrollo). */
+/**
+ * Mapa base por omisión: OpenFreeMap, teselas vectoriales de OpenStreetMap servidas sin
+ * clave ni registro. Cumple la regla del plan (OSM, no Google) y tiene detalle de Colombia.
+ */
+export const OPENFREEMAP_STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty';
+
+/**
+ * Estilo de demostración de MapLibre. **No tiene detalle de Colombia**: solo dibuja los
+ * contornos de países. Se conserva porque sirve de último recurso si OpenFreeMap no
+ * responde, y cuando se usa, la interfaz lo dice en pantalla.
+ */
 export const MAPLIBRE_DEMO_STYLE_URL = 'https://demotiles.maplibre.org/style.json';
 
 /** Atribución mínima obligatoria del mapa base. */
 export const BASEMAP_ATTRIBUTION =
-  '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> · teselas propias (Protomaps)';
+  '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>';
 
 /** Atribución obligatoria de la capa catastral (CLAUDE.md, atribución obligatoria). */
 export function igacAttribution(cutDate: string | null): string {
@@ -179,17 +192,28 @@ export function buildProtomapsStyle(tilesUrl: string): StyleSpecification {
 }
 
 /**
- * Estilo a entregar a MapLibre. Devuelve una URL (estilo propio o el de demostración)
- * o un objeto de estilo construido aquí.
+ * Estilo a entregar a MapLibre: un estilo propio, uno construido sobre nuestras teselas,
+ * o el de OpenFreeMap por omisión.
  */
 export function resolveBasemapStyle(): string | StyleSpecification {
   if (OWN_STYLE_URL.length > 0) return OWN_STYLE_URL;
   if (OWN_TILES_URL.length > 0) return buildProtomapsStyle(OWN_TILES_URL);
-  return MAPLIBRE_DEMO_STYLE_URL;
+  return OPENFREEMAP_STYLE_URL;
 }
 
-/** true cuando se está usando el respaldo de demostración: la UI lo advierte. */
+/**
+ * true solo cuando el mapa base no tiene detalle de Colombia (el estilo de demostración de
+ * MapLibre). Con OpenFreeMap el mapa es correcto, así que no hay nada que advertir.
+ */
 export function isUsingDemoBasemap(): boolean {
+  return resolveBasemapStyle() === MAPLIBRE_DEMO_STYLE_URL;
+}
+
+/**
+ * true cuando el mapa base lo sirve un tercero gratuito y no infraestructura propia.
+ * No es un error, pero conviene saberlo antes de depender de ello en producción.
+ */
+export function isUsingThirdPartyBasemap(): boolean {
   return OWN_STYLE_URL.length === 0 && OWN_TILES_URL.length === 0;
 }
 

@@ -44,6 +44,14 @@ export interface CrawlRunOptions {
   maxDepth?: number;
   /** Tamaño de la muestra por capa. 0 = sin muestras. */
   sampleSize?: number;
+  /**
+   * Pedir `returnCountOnly` y `returnExtentOnly` por capa. Desactivarlos deja una
+   * pasada "solo esquema": una petición por capa en vez de tres o cuatro. Es la
+   * forma de recorrer un servidor lento sin renunciar a los nombres de campo, que
+   * es lo que de verdad necesita la declaración de datasets (regla 2).
+   */
+  fetchCounts?: boolean;
+  fetchExtents?: boolean;
   concurrency?: number;
   /** Saltar lo ya catalogado. */
   resume?: boolean;
@@ -129,8 +137,8 @@ export async function runCrawl(opts: CrawlRunOptions): Promise<CrawlRunSummary> 
     const effective = opts.maxDepth === undefined ? spec : { ...spec, maxDepth: opts.maxDepth };
     const result = await crawlArcgisSource(http, effective, {
       sampleSize: opts.sampleSize ?? 5,
-      fetchCounts: true,
-      fetchExtents: true,
+      fetchCounts: opts.fetchCounts ?? true,
+      fetchExtents: opts.fetchExtents ?? true,
       ...(opts.maxLayersPerService !== undefined
         ? { maxLayersPerService: opts.maxLayersPerService }
         : {}),
@@ -180,7 +188,7 @@ export async function runCrawl(opts: CrawlRunOptions): Promise<CrawlRunSummary> 
     if (!opts.sourceKeys.includes(spec.key)) continue;
     const result = await crawlSocrataSource(http, spec, {
       sampleSize: opts.sampleSize ?? 5,
-      fetchCounts: true,
+      fetchCounts: opts.fetchCounts ?? true,
       log: piiLog,
       risks,
       onProgress: progress,

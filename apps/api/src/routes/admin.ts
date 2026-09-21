@@ -15,6 +15,7 @@ import {
 import { sql } from '@terracolombia/db/sql';
 import { hashIp } from '../plugins/auth.js';
 import { plainEnvelope } from '../lib/envelope.js';
+import { page } from '../lib/page.js';
 
 export default async function adminRoutes(app: FastifyInstance): Promise<void> {
   const prisma = getPrisma();
@@ -88,7 +89,7 @@ export default async function adminRoutes(app: FastifyInstance): Promise<void> {
     {
       schema: {
         tags: ['admin'],
-        summary: 'Últimas corridas del ETL',
+        summary: 'Ultimas corridas del ETL',
         querystring: {
           type: 'object',
           properties: {
@@ -105,16 +106,145 @@ export default async function adminRoutes(app: FastifyInstance): Promise<void> {
           limit: z.coerce.number().int().min(1).max(200).default(50),
         })
         .parse(req.query);
-      const rows = await query(sql`
-        SELECT r.id, r.dataset_id, r.snapshot_id, r.step, r.status,
+
+      const rows = await query<{
+        id: number;
+        dataset_id: string;
+        dataset_name: string;
+        step: string;
+        status: string;
+        started_at: string;
+        finished_at: string | null;
+        row_count: number | null;
+        cut_date: string | null;
+        snapshot_id: number | null;
+      }>(sql`
+        SELECT r.id, r.dataset_id, d.name AS dataset_name, r.step, r.status,
                r.started_at::text AS started_at, r.finished_at::text AS finished_at,
-               r.duration_ms, r.rows_in, r.rows_out, r.message
+               COALESCE(r.rows_out, r.rows_in) AS row_count,
+               s.cut_date::text AS cut_date, r.snapshot_id
         FROM meta.etl_run r
+        JOIN meta.dataset d ON d.id = r.dataset_id
+        LEFT JOIN meta.snapshot s ON s.id = r.snapshot_id
         ${datasetId ? sql`WHERE r.dataset_id = ${datasetId}` : sql``}
         ORDER BY r.started_at DESC
         LIMIT ${limit}
       `);
-      return plainEnvelope(rows);
+
+      // Las validaciones del corte acompanan a cada corrida: el panel las muestra en linea.
+      const snapshotIds = [
+        ...new Set(rows.map((r) => r.snapshot_id).filter((x): x is number => x !== null)),
+      ];
+      const validations = snapshotIds.length
+        ? await query<{ snapshot_id: number; severity: string; message: string; passed: boolean }>(sql`
+            SELECT snapshot_id, severity, message, passed
+            FROM meta.validation
+            WHERE snapshot_id = ANY (${snapshotIds})
+            ORDER BY snapshot_id, severity
+          `)
+        : [];
+
+      const bySnapshot = new Map<number, Array<{ level: string; message: string }>>();
+      for (const v of validations) {
+        const level = v.passed ? 'info' : v.severity === 'error' ? 'error' : 'warn';
+        const list = bySnapshot.get(v.snapshot_id) ?? [];
+        list.push({ level, message: v.message });
+        bySnapshot.set(v.snapshot_id, list);
+      }
+
+      const statusMap: Record<string, 'queued' | 'running' | 'ok' | 'failed'> = {
+        running: 'running',
+        ok: 'ok',
+        failed: 'failed',
+        skipped: 'ok',
+      };
+
+      return plainEnvelope(
+        page(
+          rows.map((r) => ({
+            id: String(r.id),
+            datasetId: r.dataset_id,
+            datasetName: r.dataset_name,
+            step: r.step,
+            status: statusMap[r.status] ?? 'queued',
+            startedAt: r.started_at,
+            finishedAt: r.finished_at,
+            rowCount: r.row_count,
+            cutDate: r.cut_date,
+            validations: r.snapshot_id !== null ? (bySnapshot.get(r.snapshot_id) ?? []) : [],
+          })),
+        ),
+      );
+    },
+  );
+
+  app.post(
+    '/etl/run',
+    {
+      schema: {
+        tags: ['admin'],
+        summary: 'Lanzar la ingesta de un dataset',
+        description:
+          'Encola el pipeline completo. El worker lo recoge y el avance se sigue por GET /jobs/:id.',
+        body: {
+          type: 'object',
+          required: ['datasetId'],
+          properties: {
+            datasetId: { type: 'string' },
+            cutDate: { type: 'string' },
+            dryRun: { type: 'boolean' },
+          },
+        },
+      },
+    },
+    async (req) => {
+      const body = z
+        .object({
+          datasetId: z.string().min(1).max(80),
+          cutDate: z
+            .string()
+            .regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)
+            .optional(),
+          dryRun: z.boolean().default(false),
+        })
+        .parse(req.body);
+
+      const dataset = await query<{ id: string }>(sql`
+        SELECT id FROM meta.dataset WHERE id = ${body.datasetId}
+      `);
+      if (dataset.length === 0) {
+        throw AppError.notFound(
+          `No hay un dataset declarado con el identificador "${body.datasetId}". ` +
+            'Consulta GET /api/v1/admin/etl/status para ver los disponibles.',
+        );
+      }
+
+      const job = await prisma.job.create({
+        data: {
+          organizationId: req.auth.organizationId,
+          userId: req.auth.userId,
+          kind: 'etl',
+          status: 'queued',
+          progressMessage: 'En cola',
+          input: {
+            datasetId: body.datasetId,
+            options: { cutDate: body.cutDate, dryRun: body.dryRun },
+          } as never,
+        },
+      });
+
+      await prisma.auditLog.create({
+        data: {
+          userId: req.auth.userId,
+          action: 'etl_run_triggered',
+          targetType: 'dataset',
+          targetId: body.datasetId,
+          ipHash: hashIp(req.ip),
+          detail: { dryRun: body.dryRun } as never,
+        },
+      });
+
+      return plainEnvelope({ jobId: job.id });
     },
   );
 
@@ -225,7 +355,7 @@ export default async function adminRoutes(app: FastifyInstance): Promise<void> {
           ORDER BY d.name
         `),
       ]);
-      return plainEnvelope({ summary, byDepartment: byDept });
+      return plainEnvelope({ ...page(byDept as never[]), summary, byDepartment: byDept });
     },
   );
 
@@ -353,8 +483,31 @@ export default async function adminRoutes(app: FastifyInstance): Promise<void> {
         WHERE s.status IN ('active', 'trialing') AND p.monthly_price_cop IS NOT NULL
       `;
 
+      const [parcelsIndexed, municipalitiesWithCadastre, apiCalls, reportsLast30d] =
+        await Promise.all([
+          query<{ n: number }>(sql`
+            SELECT count(*)::int AS n FROM core.parcel p
+            JOIN meta.snapshot s ON s.id = p.snapshot_id AND s.is_active
+          `),
+          query<{ n: number }>(sql`
+            SELECT count(DISTINCT p.muni_code)::int AS n FROM core.parcel p
+            JOIN meta.snapshot s ON s.id = p.snapshot_id AND s.is_active
+          `),
+          prisma.usageEvent.count({ where: { createdAt: { gte: thirtyDaysAgo } } }),
+          prisma.report.count({ where: { createdAt: { gte: thirtyDaysAgo }, status: 'done' } }),
+        ]);
+
       return plainEnvelope({
+        // Nombres que consume el panel de administracion de la web.
         users,
+        activeSubscriptions: paidSubs,
+        mrrCop: Number(mrr[0]?.mrr ?? 0),
+        reportsLast30d,
+        apiCallsLast30d: apiCalls,
+        parcelsIndexed: parcelsIndexed[0]?.n ?? 0,
+        municipalitiesWithCadastre: municipalitiesWithCadastre[0]?.n ?? 0,
+
+        // Metricas de negocio adicionales, para el mismo tablero.
         organizations: orgs,
         paidSubscriptions: paidSubs,
         conversionToPaidPct: orgs > 0 ? Number(((paidSubs / orgs) * 100).toFixed(2)) : 0,
@@ -367,7 +520,6 @@ export default async function adminRoutes(app: FastifyInstance): Promise<void> {
             : 0,
         revenueThisMonthCop: payments._sum.amountCop ?? 0,
         paymentsThisMonth: payments._count._all,
-        mrrCop: Number(mrr[0]?.mrr ?? 0),
         churn30d: canceled,
         note: 'Cifras del despliegue actual. No incluyen impuestos ni comisiones de la pasarela.',
       });

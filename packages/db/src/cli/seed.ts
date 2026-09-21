@@ -371,6 +371,8 @@ async function seedDemo(): Promise<void> {
     }
   });
 
+  await seedDemoContext(cutDate);
+
   await execute(sql`SELECT meta.publish_snapshot(${cadastreSnapshot})`);
   await execute(sql`SELECT meta.publish_snapshot(${facilitiesSnapshot})`);
 

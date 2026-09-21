@@ -2,13 +2,10 @@ import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { AppError, ParcelQuerySchema } from '@terracolombia/shared';
 import { getPrisma } from '@terracolombia/db';
-import { approxAreaKm2 } from '@terracolombia/geo';
 import { plainEnvelope } from '../lib/envelope.js';
+import { page } from '../lib/page.js';
 
-const GeometrySchema = z.object({
-  type: z.string(),
-  coordinates: z.unknown(),
-});
+const SAVED_ITEM_KINDS = ['area', 'search', 'parcel', 'intel'] as const;
 
 export default async function projectRoutes(app: FastifyInstance): Promise<void> {
   const prisma = getPrisma();
@@ -25,30 +22,40 @@ export default async function projectRoutes(app: FastifyInstance): Promise<void>
 
   app.addHook('preHandler', app.requireAuth);
 
+  // ─── Proyectos ──────────────────────────────────────────────────────────────
   app.get('/', { schema: { tags: ['cuenta'], summary: 'Mis proyectos' } }, async (req) => {
     const orgId = req.auth.organizationId;
     if (!orgId) throw AppError.forbidden('Tu cuenta no tiene organización activa.');
     const projects = await prisma.project.findMany({
       where: { organizationId: orgId },
       include: {
-        _count: { select: { savedAreas: true, savedParcels: true, reports: true } },
+        _count: { select: { savedItems: true, reports: true } },
       },
       orderBy: { updatedAt: 'desc' },
     });
+
+    // Las alertas no cuelgan del proyecto sino del usuario, así que se cuentan aparte.
+    const alertCount = req.auth.userId
+      ? await prisma.alert.count({ where: { userId: req.auth.userId } })
+      : 0;
+
     return plainEnvelope(
-      projects.map((p) => ({
-        id: p.id,
-        name: p.name,
-        description: p.description,
-        color: p.color,
-        createdAt: p.createdAt,
-        updatedAt: p.updatedAt,
-        counts: {
-          areas: p._count.savedAreas,
-          parcels: p._count.savedParcels,
-          reports: p._count.reports,
-        },
-      })),
+      page(
+        projects.map((p) => ({
+          id: p.id,
+          name: p.name,
+          description: p.description,
+          color: p.color,
+          createdAt: p.createdAt,
+          updatedAt: p.updatedAt,
+          counts: {
+            savedAreas: p._count.savedItems,
+            savedSearches: p._count.savedItems,
+            reports: p._count.reports,
+            alerts: alertCount,
+          },
+        })),
+      ),
     );
   });
 
@@ -88,7 +95,17 @@ export default async function projectRoutes(app: FastifyInstance): Promise<void>
           color: body.color ?? null,
         },
       });
-      return reply.status(201).send(plainEnvelope(project));
+      return reply.status(201).send(
+        plainEnvelope({
+          id: project.id,
+          name: project.name,
+          description: project.description,
+          color: project.color,
+          createdAt: project.createdAt,
+          updatedAt: project.updatedAt,
+          counts: { savedAreas: 0, savedSearches: 0, reports: 0, alerts: 0 },
+        }),
+      );
     },
   );
 
@@ -98,8 +115,7 @@ export default async function projectRoutes(app: FastifyInstance): Promise<void>
     const project = await prisma.project.findUniqueOrThrow({
       where: { id },
       include: {
-        savedAreas: { orderBy: { createdAt: 'desc' } },
-        savedParcels: { orderBy: { createdAt: 'desc' } },
+        savedItems: { orderBy: { createdAt: 'desc' } },
         reports: {
           orderBy: { createdAt: 'desc' },
           select: { id: true, kind: true, title: true, status: true, createdAt: true },
@@ -130,21 +146,41 @@ export default async function projectRoutes(app: FastifyInstance): Promise<void>
     return plainEnvelope({ ok: true });
   });
 
-  // ─── Áreas guardadas ────────────────────────────────────────────────────────
+  // ─── Vistas guardadas ───────────────────────────────────────────────────────
+  // Se guarda el ESTADO de la pantalla, no el resultado: al reabrirla se recalcula contra
+  // el corte vigente. Guardar el resultado mostraría cifras viejas sin fecha de corte.
+
+  app.get(
+    '/:id/items',
+    { schema: { tags: ['cuenta'], summary: 'Vistas guardadas del proyecto' } },
+    async (req) => {
+      const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
+      await assertOwned(id, req.auth.organizationId);
+      const items = await prisma.savedItem.findMany({
+        where: { projectId: id },
+        orderBy: { createdAt: 'desc' },
+      });
+      return plainEnvelope(page(items));
+    },
+  );
+
   app.post(
-    '/:id/areas',
+    '/:id/items',
     {
       schema: {
         tags: ['cuenta'],
-        summary: 'Guardar un área en el proyecto',
+        summary: 'Guardar una vista en el proyecto',
+        description:
+          'Guarda el estado serializado de la pantalla (`urlState`), de modo que al reabrirla se ' +
+          'restaure exactamente y se recalcule contra el corte vigente.',
         body: {
           type: 'object',
-          required: ['name', 'geometry', 'kind'],
+          required: ['kind', 'name', 'urlState'],
           properties: {
-            name: { type: 'string' },
-            geometry: { type: 'object' },
-            kind: { type: 'string', enum: ['polygon', 'radius', 'municipality', 'isochrone'] },
-            notes: { type: 'string' },
+            kind: { type: 'string', enum: [...SAVED_ITEM_KINDS] },
+            name: { type: 'string', minLength: 1, maxLength: 160 },
+            urlState: { type: 'string', maxLength: 4000 },
+            notes: { type: 'string', maxLength: 2000 },
           },
         },
       },
@@ -154,105 +190,47 @@ export default async function projectRoutes(app: FastifyInstance): Promise<void>
       await assertOwned(id, req.auth.organizationId);
       const body = z
         .object({
+          kind: z.enum(SAVED_ITEM_KINDS),
           name: z.string().min(1).max(160),
-          geometry: GeometrySchema,
-          kind: z.enum(['polygon', 'radius', 'municipality', 'isochrone']),
+          urlState: z.string().max(4000),
           notes: z.string().max(2000).optional(),
         })
         .parse(req.body);
 
-      // Se calcula el área al guardar para poder mostrarla sin recalcular.
-      let areaKm2: number | null = null;
-      try {
-        areaKm2 = approxAreaKm2(body.geometry as never);
-      } catch {
-        areaKm2 = null;
-      }
-
-      const area = await prisma.savedArea.create({
+      const item = await prisma.savedItem.create({
         data: {
           projectId: id,
-          name: body.name,
-          geometry: body.geometry as never,
           kind: body.kind,
-          areaKm2: areaKm2 !== null ? areaKm2.toFixed(4) : null,
+          name: body.name,
+          urlState: body.urlState,
           notes: body.notes ?? null,
         },
       });
-      return reply.status(201).send(plainEnvelope(area));
+      return reply.status(201).send(plainEnvelope(item));
     },
   );
 
-  app.delete('/:id/areas/:areaId', { schema: { tags: ['cuenta'], summary: 'Quitar área guardada' } }, async (req) => {
-    const { id, areaId } = z
-      .object({ id: z.string().uuid(), areaId: z.string().uuid() })
-      .parse(req.params);
-    await assertOwned(id, req.auth.organizationId);
-    await prisma.savedArea.deleteMany({ where: { id: areaId, projectId: id } });
-    return plainEnvelope({ ok: true });
-  });
-
-  // ─── Predios guardados ──────────────────────────────────────────────────────
-  app.post(
-    '/:id/parcels',
-    {
-      schema: {
-        tags: ['cuenta'],
-        summary: 'Guardar un predio en el proyecto',
-        body: {
-          type: 'object',
-          required: ['npn'],
-          properties: {
-            npn: { type: 'string', minLength: 30, maxLength: 30 },
-            label: { type: 'string' },
-            notes: { type: 'string' },
-          },
-        },
-      },
-    },
-    async (req, reply) => {
-      const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
+  app.delete(
+    '/:id/items/:itemId',
+    { schema: { tags: ['cuenta'], summary: 'Quitar una vista guardada' } },
+    async (req) => {
+      const { id, itemId } = z
+        .object({ id: z.string().uuid(), itemId: z.string().uuid() })
+        .parse(req.params);
       await assertOwned(id, req.auth.organizationId);
-      const body = z
-        .object({
-          npn: z.string().regex(/^\d{30}$/, 'El código predial debe tener 30 dígitos'),
-          label: z.string().max(200).optional(),
-          notes: z.string().max(2000).optional(),
-        })
-        .parse(req.body);
-
-      const saved = await prisma.savedParcel.upsert({
-        where: { projectId_npn: { projectId: id, npn: body.npn } },
-        create: {
-          projectId: id,
-          npn: body.npn,
-          muniCode: body.npn.slice(0, 5),
-          label: body.label ?? null,
-          notes: body.notes ?? null,
-        },
-        update: { label: body.label ?? null, notes: body.notes ?? null },
-      });
-      return reply.status(201).send(plainEnvelope(saved));
+      await prisma.savedItem.deleteMany({ where: { id: itemId, projectId: id } });
+      return plainEnvelope({ ok: true });
     },
   );
 
-  app.delete('/:id/parcels/:npn', { schema: { tags: ['cuenta'], summary: 'Quitar predio guardado' } }, async (req) => {
-    const { id, npn } = z
-      .object({ id: z.string().uuid(), npn: z.string().regex(/^\d{30}$/) })
-      .parse(req.params);
-    await assertOwned(id, req.auth.organizationId);
-    await prisma.savedParcel.deleteMany({ where: { projectId: id, npn } });
-    return plainEnvelope({ ok: true });
-  });
-
-  // ─── Búsquedas guardadas ────────────────────────────────────────────────────
+  // ─── Búsquedas guardadas (DSL ejecutable) ───────────────────────────────────
   app.get('/searches/saved', { schema: { tags: ['cuenta'], summary: 'Mis búsquedas guardadas' } }, async (req) => {
     if (!req.auth.userId) throw AppError.unauthorized();
     const rows = await prisma.savedSearch.findMany({
       where: { userId: req.auth.userId },
       orderBy: { createdAt: 'desc' },
     });
-    return plainEnvelope(rows);
+    return plainEnvelope(page(rows));
   });
 
   app.post(
@@ -269,7 +247,6 @@ export default async function projectRoutes(app: FastifyInstance): Promise<void>
       const body = z
         .object({ name: z.string().min(1).max(160), query: z.unknown() })
         .parse(req.body);
-      // Validación estricta: no se guarda un DSL que después falle al ejecutarse.
       const query = ParcelQuerySchema.parse(body.query);
       const row = await prisma.savedSearch.create({
         data: { userId: req.auth.userId, name: body.name, query: query as never },
@@ -286,15 +263,25 @@ export default async function projectRoutes(app: FastifyInstance): Promise<void>
   });
 
   // ─── Alertas ────────────────────────────────────────────────────────────────
-  app.get('/alerts/list', { schema: { tags: ['cuenta'], summary: 'Mis alertas' } }, async (req) => {
-    if (!req.auth.userId) throw AppError.unauthorized();
-    const rows = await prisma.alert.findMany({
-      where: { userId: req.auth.userId },
-      include: { deliveries: { take: 5, orderBy: { createdAt: 'desc' } } },
-      orderBy: { createdAt: 'desc' },
-    });
-    return plainEnvelope(rows);
-  });
+  app.get(
+    '/alerts',
+    {
+      schema: {
+        tags: ['cuenta'],
+        summary: 'Mis alertas',
+        querystring: { type: 'object', properties: { projectId: { type: 'string' } } },
+      },
+    },
+    async (req) => {
+      if (!req.auth.userId) throw AppError.unauthorized();
+      const rows = await prisma.alert.findMany({
+        where: { userId: req.auth.userId },
+        include: { deliveries: { take: 5, orderBy: { createdAt: 'desc' } } },
+        orderBy: { createdAt: 'desc' },
+      });
+      return plainEnvelope(page(rows));
+    },
+  );
 
   app.post(
     '/alerts',
@@ -350,7 +337,8 @@ export default async function projectRoutes(app: FastifyInstance): Promise<void>
       data: { isActive: body.isActive },
     });
     if (updated.count === 0) throw AppError.notFound('No encontramos esa alerta.');
-    return plainEnvelope({ ok: true, isActive: body.isActive });
+    const alert = await prisma.alert.findUniqueOrThrow({ where: { id } });
+    return plainEnvelope(alert);
   });
 
   app.delete('/alerts/:id', { schema: { tags: ['cuenta'], summary: 'Borrar alerta' } }, async (req) => {

@@ -216,7 +216,15 @@ export default fp(
 
     app.decorate('requireAdmin', async (req: FastifyRequest) => {
       if (req.auth.channel === 'anonymous') throw AppError.unauthorized();
-      if (req.auth.role !== 'admin') throw AppError.forbidden('admin');
+      if (req.auth.role !== 'admin') {
+        // No es un asunto de plan: ningún plan da acceso a la operación interna. Decir
+        // "tu plan no lo incluye" mandaría al usuario a pagar por algo que no se vende.
+        throw new AppError(
+          'FORBIDDEN',
+          'Esta sección es de operación interna de TerraColombia y tu cuenta no tiene ese rol.',
+          { requires: 'rol de administrador de plataforma' },
+        );
+      }
     });
 
     void config;

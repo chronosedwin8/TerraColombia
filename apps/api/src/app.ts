@@ -41,6 +41,8 @@ import apiKeyRoutes from './routes/api-keys.js';
 import aiRoutes from './routes/ai.js';
 import adminRoutes from './routes/admin.js';
 import fileRoutes from './routes/files.js';
+import billingViewRoutes from './routes/billing-views.js';
+import passwordResetRoutes from './routes/password-reset.js';
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -307,11 +309,13 @@ export async function buildApp(): Promise<FastifyInstance> {
 
   // Rutas de sesión y negocio: solo en la API interna.
   await app.register(authRoutes, { prefix: '/api/v1/auth' });
+  await app.register(passwordResetRoutes, { prefix: '/api/v1/auth' });
   await app.register(meRoutes, { prefix: '/api/v1' });
   await app.register(projectRoutes, { prefix: '/api/v1/projects' });
   await app.register(reportRoutes, { prefix: '/api/v1/reports' });
   await app.register(jobRoutes, { prefix: '/api/v1/jobs' });
   await app.register(billingRoutes, { prefix: '/api/v1/billing' });
+  await app.register(billingViewRoutes, { prefix: '/api/v1/billing' });
   await app.register(apiKeyRoutes, { prefix: '/api/v1/api-keys' });
   await app.register(aiRoutes, { prefix: '/api/v1/ai' });
   await app.register(adminRoutes, { prefix: '/api/v1/admin' });

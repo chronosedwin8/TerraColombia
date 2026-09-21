@@ -40,6 +40,7 @@ model User {
   auditLogs     AuditLog[]
   savedSearches SavedSearch[]
   alerts        Alert[]
+  passwordResets PasswordReset[]
 
   @@map("user")
   @@schema("app")
@@ -99,6 +100,7 @@ model Organization {
   projects      Project[]
   reports       Report[]
   invoices      Invoice[]
+  invitations   Invitation[]
 
   @@map("organization")
   @@schema("app")
@@ -304,6 +306,7 @@ model Project {
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   savedAreas   SavedArea[]
   savedParcels SavedParcel[]
+  savedItems   SavedItem[]
   reports      Report[]
 
   @@index([organizationId])
@@ -343,6 +346,69 @@ model SavedParcel {
 
   @@unique([projectId, npn])
   @@map("saved_parcel")
+  @@schema("app")
+}
+
+/// Vista guardada dentro de un proyecto.
+///
+/// Guarda el estado serializado de la pantalla (`urlState`), no el resultado: al reabrirla
+/// se recalcula contra el corte vigente. Si se guardara el resultado, el usuario vería
+/// cifras viejas sin saberlo, y eso choca con la regla de que todo dato lleva fecha de corte.
+model SavedItem {
+  id        String   @id @default(uuid()) @db.Uuid
+  projectId String   @map("project_id") @db.Uuid
+  /// area | search | parcel | intel
+  kind      String
+  name      String
+  /// Query serializada por `useUrlState` del frontend.
+  urlState  String   @map("url_state")
+  notes     String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, createdAt])
+  @@map("saved_item")
+  @@schema("app")
+}
+
+/// Invitación a una organización que todavía no se ha aceptado.
+model Invitation {
+  id             String    @id @default(uuid()) @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  email          String
+  /// owner | admin | member | viewer
+  role           String    @default("member")
+  /// Hash del token de invitación; el token en claro solo viaja en el correo.
+  tokenHash      String    @unique @map("token_hash")
+  invitedBy      String?   @map("invited_by") @db.Uuid
+  expiresAt      DateTime  @map("expires_at")
+  acceptedAt     DateTime? @map("accepted_at")
+  revokedAt      DateTime? @map("revoked_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, email])
+  @@map("invitation")
+  @@schema("app")
+}
+
+/// Solicitud de restablecimiento de contraseña.
+model PasswordReset {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  /// Hash SHA-256 del token. El token en claro solo viaja en el correo.
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  ipHash    String?   @map("ip_hash")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("password_reset")
   @@schema("app")
 }
 

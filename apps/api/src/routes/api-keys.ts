@@ -1,9 +1,10 @@
-import type { FastifyInstance } from 'fastify';
+import type { FastifyInstance, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 import { AppError } from '@terracolombia/shared';
 import { getPrisma } from '@terracolombia/db';
 import { generateApiKey, hashIp, hashPassword } from '../plugins/auth.js';
 import { plainEnvelope } from '../lib/envelope.js';
+import { page } from '../lib/page.js';
 
 export default async function apiKeyRoutes(app: FastifyInstance): Promise<void> {
   const prisma = getPrisma();
@@ -19,6 +20,7 @@ export default async function apiKeyRoutes(app: FastifyInstance): Promise<void> 
     });
     return plainEnvelope(
       // El secreto nunca vuelve a mostrarse: solo el prefijo.
+      page(
       keys.map((k) => ({
         id: k.id,
         name: k.name,
@@ -32,6 +34,7 @@ export default async function apiKeyRoutes(app: FastifyInstance): Promise<void> 
         createdAt: k.createdAt,
         isActive: !k.revokedAt && (!k.expiresAt || k.expiresAt > new Date()),
       })),
+      ),
     );
   });
 
@@ -125,28 +128,49 @@ export default async function apiKeyRoutes(app: FastifyInstance): Promise<void> 
     },
   );
 
+  /** Revoca una llave. Es la misma operación por dos verbos: el frontend usa POST. */
+  const revoke = async (req: FastifyRequest) => {
+    const orgId = req.auth.organizationId;
+    const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
+    const updated = await prisma.apiKey.updateMany({
+      where: { id, organizationId: orgId ?? '', revokedAt: null },
+      data: { revokedAt: new Date() },
+    });
+    if (updated.count === 0) throw AppError.notFound('No encontramos esa llave activa.');
+    await prisma.auditLog.create({
+      data: {
+        userId: req.auth.userId,
+        action: 'api_key_revoked',
+        targetType: 'api_key',
+        targetId: id,
+        ipHash: hashIp(req.ip),
+      },
+    });
+    const key = await prisma.apiKey.findUniqueOrThrow({ where: { id } });
+    return plainEnvelope({
+      id: key.id,
+      name: key.name,
+      prefix: key.prefix,
+      environment: key.environment,
+      allowedOrigins: key.allowedOrigins,
+      scopes: key.scopes,
+      lastUsedAt: key.lastUsedAt,
+      expiresAt: key.expiresAt,
+      revokedAt: key.revokedAt,
+      createdAt: key.createdAt,
+      isActive: false,
+    });
+  };
+
+  app.post(
+    '/:id/revoke',
+    { schema: { tags: ['cuenta'], summary: 'Revocar llave de API' } },
+    revoke,
+  );
   app.delete(
     '/:id',
-    { schema: { tags: ['cuenta'], summary: 'Revocar llave de API' } },
-    async (req) => {
-      const orgId = req.auth.organizationId;
-      const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
-      const updated = await prisma.apiKey.updateMany({
-        where: { id, organizationId: orgId ?? '', revokedAt: null },
-        data: { revokedAt: new Date() },
-      });
-      if (updated.count === 0) throw AppError.notFound('No encontramos esa llave activa.');
-      await prisma.auditLog.create({
-        data: {
-          userId: req.auth.userId,
-          action: 'api_key_revoked',
-          targetType: 'api_key',
-          targetId: id,
-          ipHash: hashIp(req.ip),
-        },
-      });
-      return plainEnvelope({ ok: true, revoked: true });
-    },
+    { schema: { tags: ['cuenta'], summary: 'Revocar llave de API (alias)' } },
+    revoke,
   );
 
   app.get(
@@ -154,8 +178,9 @@ export default async function apiKeyRoutes(app: FastifyInstance): Promise<void> 
     {
       schema: {
         tags: ['cuenta'],
-        summary: 'Consumo de la API',
-        description: 'Eventos de uso agrupados por operación y día, para el panel de consumo.',
+        summary: 'Consumo de la API por día',
+        description:
+          'Serie diaria de llamadas, errores y créditos gastados. Alimenta la gráfica de consumo.',
         querystring: {
           type: 'object',
           properties: { days: { type: 'integer', minimum: 1, maximum: 90, default: 30 } },
@@ -170,26 +195,32 @@ export default async function apiKeyRoutes(app: FastifyInstance): Promise<void> 
         .parse(req.query);
 
       const since = new Date(Date.now() - days * 86_400_000);
-      const events = await prisma.usageEvent.groupBy({
-        by: ['operation', 'channel'],
+      const events = await prisma.usageEvent.findMany({
         where: { organizationId: orgId, createdAt: { gte: since } },
-        _count: { _all: true },
-        _sum: { credits: true },
+        select: { createdAt: true, credits: true, statusCode: true },
       });
 
-      return plainEnvelope({
-        since: since.toISOString(),
-        days,
-        byOperation: events.map((e) => ({
-          operation: e.operation,
-          channel: e.channel,
-          calls: e._count._all,
-          credits: e._sum.credits ?? 0,
-        })),
-        totalCalls: events.reduce((a, e) => a + e._count._all, 0),
-        totalCredits: events.reduce((a, e) => a + (e._sum.credits ?? 0), 0),
-        rateLimitPerMinute: req.auth.entitlements.rateLimitPerMinute,
-      });
+      // Se siembra la serie con todos los días del rango: una gráfica con huecos se lee
+      // como "ese día no hubo datos", que no es lo mismo que "ese día no hubo llamadas".
+      const byDate = new Map<string, { calls: number; errors: number; creditsSpent: number }>();
+      for (let i = 0; i < days; i++) {
+        const d = new Date(Date.now() - i * 86_400_000).toISOString().slice(0, 10);
+        byDate.set(d, { calls: 0, errors: 0, creditsSpent: 0 });
+      }
+      for (const e of events) {
+        const key = e.createdAt.toISOString().slice(0, 10);
+        const bucket = byDate.get(key);
+        if (!bucket) continue;
+        bucket.calls += 1;
+        if ((e.statusCode ?? 200) >= 400) bucket.errors += 1;
+        bucket.creditsSpent += e.credits;
+      }
+
+      const serie = [...byDate.entries()]
+        .map(([date, v]) => ({ date, ...v }))
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+      return plainEnvelope(serie);
     },
   );
 }

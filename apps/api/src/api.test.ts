@@ -287,7 +287,9 @@ d('API', () => {
       expect(res.statusCode).toBe(201);
       token = res.json().data.accessToken;
       expect(token).toBeTruthy();
-      expect(res.json().data.plan).toBe('free');
+      // El plan va dentro de la ficha del usuario, que es la misma que devuelven login,
+      // refresh y /me. Ver src/contract.test.ts.
+      expect(res.json().data.user.plan).toBe('free');
     });
 
     it('no revela si un correo ya existe', async () => {
@@ -318,9 +320,10 @@ d('API', () => {
       });
       expect(res.statusCode).toBe(200);
       const d0 = res.json().data;
-      expect(d0.plan.code).toBe('free');
+      expect(d0.plan).toBe('free');
       expect(d0.entitlements.canExport).toBe(false);
       expect(d0.credits).toBe(0);
+      expect(d0.planDetail.name).toBe('Gratis');
     });
 
     it('/me sin sesión da 401', async () => {

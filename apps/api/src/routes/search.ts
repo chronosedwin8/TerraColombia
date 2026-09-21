@@ -2,11 +2,12 @@ import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { AppError, MESSAGES } from '@terracolombia/shared';
 import {
+  coverageSummary,
+  findParcelByLegacyNpn,
   getCoverage,
   getParcel,
   municipalityAt,
   parcelAt,
-  findParcelByLegacyNpn,
   searchAddress,
   searchText,
 } from '@terracolombia/db';
@@ -14,8 +15,8 @@ import {
   isLegacyNpn,
   isNpnCandidate,
   looksLikeAddress,
-  normalizeAddress,
   normalizeNpnInput,
+  parseAddress,
   parseNpn,
   validateNpn,
 } from '@terracolombia/geo';
@@ -221,25 +222,48 @@ export default async function searchRoutes(app: FastifyInstance): Promise<void> 
 
       // 3. Dirección.
       if (looksLikeAddress(trimmed)) {
-        const normalized = normalizeAddress(trimmed);
-        const hits = await searchAddress(normalized, { muniCode, limit });
+        const parsed = parseAddress(trimmed);
+        const hits = await searchAddress(parsed.canonical, {
+          muniCode,
+          limit,
+          // Sin esto, la similitud por trigramas confunde calles distintas que comparten
+          // las palabras comunes de toda dirección.
+          wayNumber: parsed.wayNumber,
+        });
         usedGroups.push('cadastre');
         for (const h of hits) {
+          const contexto = [
+            h.muni_name,
+            h.npn ? null : 'sin predio asociado',
+            h.is_synthetic ? 'DATOS DE DEMOSTRACIÓN' : null,
+          ]
+            .filter(Boolean)
+            .join(' · ');
           results.push({
             kind: 'address',
             label: h.label,
-            context: `${h.muni_name}${h.npn ? '' : ' · sin predio asociado'}`,
+            context: contexto,
             target: h.npn
               ? { type: 'parcel', npn: h.npn }
               : { type: 'point', lng: h.lng, lat: h.lat, zoom: 18 },
             score: 0.6 + Math.min(0.35, h.similarity * 0.35),
-            interpretation: `Interpretamos la entrada como dirección y la normalizamos a "${normalized}".`,
+            interpretation:
+              `Interpretamos la entrada como dirección y la normalizamos a "${parsed.canonical}". ` +
+              (parsed.wayNumber
+                ? `Solo mostramos resultados en la ${parsed.wayType ?? 'vía'} ${parsed.wayNumber}.`
+                : 'No pudimos leer el número de la vía, así que la coincidencia es aproximada.'),
           });
         }
       }
 
       // 4. Topónimos, municipios, barrios, veredas y equipamientos.
-      const textHits = await searchText(trimmed, { limit, muniCode });
+      //
+      // Si la entrada es inequívocamente una dirección (tipo de vía + número), no se busca
+      // por texto: la similitud por trigramas devolvería municipios que se parecen de lejos
+      // ("Carrera 7A" contra "Cabrera"), y eso es ruido que confunde más de lo que ayuda.
+      const esDireccionInequivoca =
+        looksLikeAddress(trimmed) && parseAddress(trimmed).wayNumber !== null;
+      const textHits = esDireccionInequivoca ? [] : await searchText(trimmed, { limit, muniCode });
       for (const h of textHits) {
         const kind = h.kind as SearchResultKind;
         const target: SearchResult['target'] =
@@ -266,16 +290,39 @@ export default async function searchRoutes(app: FastifyInstance): Promise<void> 
       recordUsage(req, 'search', started, { units: top.length, detail: { hasResults: top.length > 0 } });
 
       const datasets = await presentDatasets([...new Set(usedGroups)]);
+
+      // Estado vacío honesto: en vez de "no encontramos nada", se dice qué SÍ hay cargado.
+      // Buscar una dirección sin predios en la base no falla por escribirla mal.
+      let emptyReason: string | null = null;
+      if (top.length === 0) {
+        const coverage = await coverageSummary();
+        const conPredios = coverage?.with_parcels ?? 0;
+        const total = coverage?.total_municipalities ?? 0;
+
+        if (looksLikeAddress(trimmed)) {
+          const p = parseAddress(trimmed);
+          const via = p.wayType && p.wayNumber ? `${p.wayType} ${p.wayNumber}` : null;
+          emptyReason =
+            (via
+              ? `No encontramos ninguna dirección en la ${via}. `
+              : 'No encontramos esa dirección. ') +
+            `Las direcciones solo se pueden buscar donde tenemos predios cargados, y por ahora ` +
+            `son ${conPredios} de ${total} municipios. Busca primero el municipio por su nombre ` +
+            `y navega el mapa, o usa el código predial de 30 dígitos.`;
+        } else {
+          emptyReason =
+            'No encontramos nada con ese texto. Puedes buscar por nombre de municipio o ' +
+            'departamento, por código predial de 30 dígitos, o por coordenadas como "4.65, -74.1". ' +
+            `Tenemos los ${total} municipios del país; los predios están cargados en ${conPredios}.`;
+        }
+      }
+
       return envelope(
         {
           query: trimmed,
           results: top,
           /** Cuando no hay nada, se explica qué se intentó, no se devuelve una lista vacía muda. */
-          emptyReason:
-            top.length === 0
-              ? 'No encontramos nada con ese texto. Prueba con el nombre del municipio, una dirección completa, ' +
-                'el código predial de 30 dígitos o unas coordenadas como "4.65, -74.1".'
-              : null,
+          emptyReason,
         },
         datasets,
       );
