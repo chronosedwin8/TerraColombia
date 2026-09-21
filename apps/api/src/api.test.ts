@@ -153,6 +153,40 @@ d('API', () => {
       expect(res.statusCode).toBe(400);
       expect(res.json().error.code).toBe('VALIDATION');
     });
+
+    // La búsqueda por texto compara por trigramas contra el nombre, así que "08758" no se
+    // parece a "Soledad" y el código no encontraba nada. Escribir el código DIVIPOLA es de
+    // lo más natural para quien trabaja con estos datos.
+    it('encuentra un municipio por su código DIVIPOLA', async () => {
+      const res = await app.inject({ method: 'GET', url: `/api/v1/search?q=${DEMO_MUNI}` });
+      const first = res.json().data.results[0];
+      expect(first.kind).toBe('municipality');
+      expect(first.target.code).toBe(DEMO_MUNI);
+      expect(first.interpretation).toContain('DIVIPOLA');
+    });
+
+    it('encuentra un departamento por su código DIVIPOLA', async () => {
+      const res = await app.inject({ method: 'GET', url: '/api/v1/search?q=08' });
+      const first = res.json().data.results[0];
+      expect(first.kind).toBe('department');
+      expect(first.target.code).toBe('08');
+      expect(first.label).toBe('Atlántico');
+    });
+
+    it('un código DIVIPOLA inexistente lo dice en vez de callar', async () => {
+      const res = await app.inject({ method: 'GET', url: '/api/v1/search?q=99999' });
+      expect(res.json().data.results).toHaveLength(0);
+      expect(res.json().data.emptyReason).toContain('DIVIPOLA');
+    });
+
+    // No ingerimos ninguna fuente con códigos postales. Devolver una lista vacía y muda
+    // parece un fallo de la búsqueda; decirlo es lo honesto (regla 6).
+    it('explica que no manejamos códigos postales', async () => {
+      const res = await app.inject({ method: 'GET', url: '/api/v1/search?q=083001' });
+      const reason = res.json().data.emptyReason ?? '';
+      expect(reason).toContain('código postal');
+      expect(reason).toContain('DIVIPOLA');
+    });
   });
 
   // ─── Ficha de predio ───────────────────────────────────────────────────────

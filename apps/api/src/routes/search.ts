@@ -5,6 +5,8 @@ import {
   coverageSummary,
   findParcelByLegacyNpn,
   getCoverage,
+  getDepartmentByCode,
+  getMunicipality,
   getParcel,
   municipalityAt,
   parcelAt,
@@ -220,6 +222,41 @@ export default async function searchRoutes(app: FastifyInstance): Promise<void> 
         });
       }
 
+      // 2b. Código DIVIPOLA: dos dígitos son un departamento, cinco un municipio.
+      //
+      // La búsqueda por texto no los encontraba: compara por trigramas contra el nombre, y
+      // "08758" no se parece a "Soledad". Escribir el código del municipio es de lo más
+      // natural para quien trabaja con estos datos, y hasta ahora devolvía cero resultados
+      // sin decir por qué.
+      const soloDigitos = /^\d+$/.test(trimmed);
+      if (soloDigitos && (trimmed.length === 2 || trimmed.length === 5)) {
+        if (trimmed.length === 5) {
+          const muni = await getMunicipality(trimmed);
+          if (muni) {
+            results.push({
+              kind: 'municipality',
+              label: muni.name,
+              context: `${muni.dept_name} · código DIVIPOLA ${muni.code}`,
+              target: { type: 'municipality', code: muni.code },
+              score: 0.99,
+              interpretation: 'Interpretamos la entrada como código DIVIPOLA de municipio.',
+            });
+          }
+        } else {
+          const dept = await getDepartmentByCode(trimmed);
+          if (dept) {
+            results.push({
+              kind: 'department',
+              label: dept.name,
+              context: `Departamento · ${dept.n_municipalities} municipios · código DIVIPOLA ${dept.code}`,
+              target: { type: 'department', code: dept.code },
+              score: 0.99,
+              interpretation: 'Interpretamos la entrada como código DIVIPOLA de departamento.',
+            });
+          }
+        }
+      }
+
       // 3. Dirección.
       if (looksLikeAddress(trimmed)) {
         const parsed = parseAddress(trimmed);
@@ -299,7 +336,22 @@ export default async function searchRoutes(app: FastifyInstance): Promise<void> 
         const conPredios = coverage?.with_parcels ?? 0;
         const total = coverage?.total_municipalities ?? 0;
 
-        if (looksLikeAddress(trimmed)) {
+        if (soloDigitos && trimmed.length === 6) {
+          // Los códigos postales del 4-72 no están en ninguna de las fuentes que ingerimos,
+          // y no hay forma de deducirlos del catastro ni del DIVIPOLA. Decirlo es mejor que
+          // devolver una lista vacía que parece un fallo de la búsqueda.
+          emptyReason =
+            `"${trimmed}" parece un código postal. No manejamos códigos postales: ninguna de ` +
+            'las fuentes oficiales que usamos los publica junto con la geometría, así que no ' +
+            'podemos ubicarlos sin inventarlos. Busca por nombre de municipio, por código ' +
+            'DIVIPOLA (dos dígitos para departamento, cinco para municipio), por dirección o ' +
+            'por código predial de 30 dígitos.';
+        } else if (soloDigitos && (trimmed.length === 2 || trimmed.length === 5)) {
+          emptyReason =
+            `No existe ningún ${trimmed.length === 2 ? 'departamento' : 'municipio'} con el ` +
+            `código DIVIPOLA ${trimmed}. Tenemos los ${total} municipios del país, así que si ` +
+            'el código fuera válido aparecería. Revisa los dígitos o busca por nombre.';
+        } else if (looksLikeAddress(trimmed)) {
           const p = parseAddress(trimmed);
           const via = p.wayType && p.wayNumber ? `${p.wayType} ${p.wayNumber}` : null;
           emptyReason =

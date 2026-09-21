@@ -101,6 +101,23 @@ export async function municipalityAt(
   return { ...byCentroid, match: 'nearest_centroid' };
 }
 
+/** Un departamento por su código DIVIPOLA de dos dígitos. */
+export async function getDepartmentByCode(code: string) {
+  return queryOne<{
+    code: string;
+    name: string;
+    region: string | null;
+    area_km2: number | null;
+    n_municipalities: number;
+  }>(sql`
+    SELECT d.code, d.name, d.region, d.area_km2,
+           (SELECT count(*)::int FROM core.municipality m WHERE m.dept_code = d.code)
+             AS n_municipalities
+    FROM core.department d
+    WHERE d.code = ${code}
+  `);
+}
+
 export async function listDepartments() {
   return query<{ code: string; name: string; region: string | null; area_km2: number | null }>(sql`
     SELECT code, name, region, area_km2 FROM core.department ORDER BY name

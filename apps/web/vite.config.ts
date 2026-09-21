@@ -33,7 +33,11 @@ export default defineConfig({
     strictPort: false,
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        // 127.0.0.1 y no `localhost`: en Windows, Node resuelve `localhost` primero a ::1 y
+        // el proxy no reintenta con IPv4, así que si la API escucha solo en IPv4 —que es lo
+        // que hace con el 0.0.0.0 por omisión— todas las llamadas fallan con ECONNREFUSED
+        // sin que nada en la interfaz explique por qué.
+        target: 'http://127.0.0.1:3001',
         changeOrigin: true,
         // Los streams SSE de /jobs/:id/stream requieren no bufferizar.
         ws: false,
