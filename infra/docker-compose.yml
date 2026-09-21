@@ -287,7 +287,7 @@ services:
     networks: [terracolombia]
 
   redis-exporter:
-    image: oliver006/redis_exporter:v1.70.0
+    image: oliver006/redis_exporter:v1.91.1
     container_name: tc-redis-exporter
     restart: unless-stopped
     profiles: [observability]
