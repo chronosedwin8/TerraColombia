@@ -18,6 +18,7 @@ import { DEPARTMENTS, NON_IGAC_MANAGERS } from '../seed/departments.js';
 import { DIVIPOLA_DATASET, fetchDivipola } from '../seed/divipola.js';
 import { LAYERS } from '../seed/layers.js';
 import { loadDemoContext } from '../seed/load-demo-context.js';
+import { rebuildCellsForMunicipality } from '../repositories/analytics.js';
 import {
   DEFAULT_DEMO,
   buildingRing,
@@ -393,6 +394,14 @@ async function seedDemo(): Promise<void> {
       `${facilities.schools.length} colegios, ${facilities.health.length} IPS, ${facilities.pois.length} POIs`,
   );
   console.log(`  · demostración: contexto con ${contextSummary}`);
+
+  // Los agregados por celda son lo que consume el motor de aptitud. Sin este paso la base
+  // queda sembrada pero el semáforo responde "sin datos suficientes", que parece un fallo
+  // del producto y es solo una siembra a medias. Se recalculan las dos resoluciones en uso.
+  for (const res of [8, 9]) {
+    const cells = await rebuildCellsForMunicipality(DEFAULT_DEMO.muniCode, res);
+    console.log(`  · demostración: ${cells} celdas H3 agregadas en resolución ${res}`);
+  }
   console.log('    AVISO: estos datos son sintéticos. La API los marca con meta.synthetic = true.');
 }
 

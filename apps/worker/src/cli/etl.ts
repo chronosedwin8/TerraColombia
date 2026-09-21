@@ -55,7 +55,11 @@ function parseFlags(args: string[]): Record<string, string | boolean> {
 }
 
 async function main(): Promise<void> {
-  const [command, ...rest] = process.argv.slice(2);
+  // `pnpm etl -- list` no siempre se come el `--`: según la versión de pnpm y el sistema,
+  // llega como primer argumento y la orden se leería como "--", que no existe. Se descarta
+  // aquí para que la forma documentada funcione en todas partes.
+  const argv = process.argv.slice(2).filter((a, i) => !(i === 0 && a === '--'));
+  const [command, ...rest] = argv;
   const flags = parseFlags(rest);
   const positional = rest.filter((a) => !a.startsWith('--'));
 
@@ -171,17 +175,48 @@ async function main(): Promise<void> {
     }
 
     case 'aggregate': {
-      const muniCode = positional[0];
-      const res = Number(positional[1] ?? 8);
-      if (!muniCode || !/^\d{5}$/.test(muniCode)) {
-        console.error('Uso: pnpm etl -- aggregate <muniCode de 5 dígitos> [resolución H3]');
-        process.exitCode = 1;
-        return;
+      // Sin resolución explícita se recalculan las dos que usa el producto: la 8 alimenta la
+      // vista de conjunto y la 9 el detalle. Recalcular solo una deja la otra desfasada, que
+      // es difícil de notar porque nada falla: los mapas simplemente muestran datos viejos.
+      const resolutions = positional[1] ? [Number(positional[1])] : [8, 9];
+      let munis: string[];
+
+      if (flags.loaded) {
+        munis = (
+          await query<{ muni_code: string }>(sql`
+            SELECT DISTINCT p.muni_code
+            FROM core.parcel p
+            JOIN meta.snapshot s ON s.id = p.snapshot_id AND s.is_active
+            ORDER BY 1
+          `)
+        ).map((r) => r.muni_code);
+        if (munis.length === 0) {
+          console.log('No hay municipios con predios cargados. Nada que recalcular.');
+          return;
+        }
+        console.log(`Municipios con datos cargados: ${munis.length}`);
+      } else {
+        const muniCode = positional[0];
+        if (!muniCode || !/^\d{5}$/.test(muniCode)) {
+          console.error(
+            'Uso: pnpm etl -- aggregate <muniCode de 5 dígitos> [resolución H3]\n' +
+              '     pnpm etl -- aggregate --loaded    (todo lo que tenga predios cargados)',
+          );
+          process.exitCode = 1;
+          return;
+        }
+        munis = [muniCode];
       }
-      console.log(`Recalculando agregados de ${muniCode} en resolución ${res}…`);
-      const cells = await rebuildCellsForMunicipality(muniCode, res);
+
+      for (const muni of munis) {
+        for (const res of resolutions) {
+          const started = Date.now();
+          const cells = await rebuildCellsForMunicipality(muni, res);
+          console.log(`  · ${muni} res ${res}: ${cells} celdas en ${Date.now() - started} ms`);
+        }
+      }
       await refreshMuniSummary();
-      console.log(`${cells} celdas calculadas. Vista municipal refrescada.`);
+      console.log('Vista municipal refrescada.');
       return;
     }
 
@@ -250,6 +285,7 @@ async function main(): Promise<void> {
           '  pnpm etl -- run <datasetId> [opciones]    Ejecuta el pipeline completo de un dataset',
           '  pnpm etl -- status [datasetId]            Cortes, estado y validaciones',
           '  pnpm etl -- aggregate <muniCode> [res]    Recalcula los agregados por celda H3',
+          '  pnpm etl -- aggregate --loaded            …en todo municipio con predios cargados',
           '  pnpm etl -- diff <dept> <from> <to>       Compara dos cortes del catastro',
           '',
           'Opciones de run:',
