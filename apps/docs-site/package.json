@@ -1,0 +1,22 @@
+{
+  "name": "@terracolombia/docs-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm run glossary && vitepress dev",
+    "build": "pnpm run glossary && vitepress build",
+    "preview": "vitepress preview",
+    "glossary": "tsx .vitepress/generate-glossary.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .vitepress"
+  },
+  "dependencies": {
+    "@terracolombia/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitepress": "^1.5.0"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "5686-m6za",
+  "name": "ESTABLECIMIENTOS NACIONALES DE MEDICAMENTOS CERTIFICADOS CON BUENAS PRÁCTICAS DE LABORATORIO (BPL)",
+  "description": "En este listado se consolidan los establecimientos nacionales que cuentan con certificación en Buenas Practicas de Laboratorio vigente, para la realización de análisis físicos, físicoquímicos y/o microbiológicos de medicamentos, incluyendo el analisis de ingredientes farmacéuticos activos; excipientes; materiales de envase y/o productos semielaborados y terminados; así como, ensayos de estabilidad y validación de metodologías analíticas.",
+  "publisher": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "medicamentos"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/5686-m6za",
+  "webUri": "https://www.datos.gov.co/d/5686-m6za",
+  "homepage": null,
+  "createdAt": "2020-07-24T23:23:21+0000",
+  "dataUpdatedAt": "2026-09-09T20:33:16+0000",
+  "cutDate": "2026-09-09",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "expediente",
+      "jsType": "EXPEDIENTE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "concepto",
+      "jsType": "CONCEPTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciudad",
+      "jsType": "CIUDAD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "concepto_corto",
+      "jsType": "CONCEPTO CORTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_vencimiento",
+      "jsType": "FECHA VENCIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_establecimiento",
+      "jsType": "NOMBRE ESTABLECIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion",
+      "jsType": "DIRECCION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_notificacion",
+      "jsType": "FECHA NOTIFICACION",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:47.591Z"
+}

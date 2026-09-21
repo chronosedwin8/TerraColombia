@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "72xa-encm",
+  "name": "Centros Digitales – Departamento del Caquetá",
+  "description": "Base de datos que contiene la información de los Centros Digitales instalados en instituciones educativas rurales del departamento del Caquetá, en el marco del Programa Centros Digitales del Ministerio TIC. Estos",
+  "publisher": "Gobernación de Caquetá, Caquetá",
+  "category": "Ciencia, Tecnología e Innovación",
+  "theme": null,
+  "tags": [
+    "conectividad",
+    "internet"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Caquetá, Caquetá",
+  "dataUri": "https://www.datos.gov.co/resource/72xa-encm",
+  "webUri": "https://www.datos.gov.co/d/72xa-encm",
+  "homepage": null,
+  "createdAt": "2025-11-20T21:43:37+0000",
+  "dataUpdatedAt": "2025-11-20T22:08:20+0000",
+  "cutDate": "2025-11-20",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "id_beneficiario",
+      "jsType": "ID_Beneficiario",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "velocidad_de_conexion_bajada",
+      "jsType": "Velocidad_De_Conexion_Bajada_Mbps",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_instalaci_n",
+      "jsType": "Fecha_Instalación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_inicio_de_operaci_n",
+      "jsType": "Fecha_Inicio_De_Operación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pdet",
+      "jsType": "Pdet",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fin_de_operaci_n_inicial",
+      "jsType": "Fin_De_Operación_Inicial",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_de_conectividad",
+      "jsType": "Tipo_De_Conectividad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_de_energia",
+      "jsType": "Tipo_De_Energia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "contratista",
+      "jsType": "Contratista",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "velocidad_de_conexion_subida",
+      "jsType": "Velocidad_De_Conexion_Subida_Mbps",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_sede_educativa",
+      "jsType": "Nombre_Sede_Educativa",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_de_los_cdr",
+      "jsType": "Estado_De_Los_Cdr",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "instituci_n_educativa",
+      "jsType": "Institución_Educativa",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_de_sitio",
+      "jsType": "Tipo_De_Sitio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dane_sede_educativa",
+      "jsType": "Dane_Sede_Educativa",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "centro_poblado",
+      "jsType": "Centro_Poblado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_instituci_n_educativa",
+      "jsType": "Código_Institución_Educativa",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_municipio",
+      "jsType": "Codigo_Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "longitud",
+      "jsType": "Longitud",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "latitud",
+      "jsType": "Latitud",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:36.808Z"
+}

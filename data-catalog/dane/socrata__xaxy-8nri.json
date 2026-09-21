@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "source": "dane",
+  "connector": "socrata",
+  "id": "xaxy-8nri",
+  "name": "DIVIPOLA - Códigos cabeceras - Centros poblados",
+  "description": "Código de la división Político Administrativa del país, Actualización a corte 30 diciembre 2024.",
+  "publisher": "Departamento Administrativo Nacional de Estadísticas - DANE, Bogotá D.C.",
+  "category": "Mapas Nacionales",
+  "theme": null,
+  "tags": [
+    "municipios",
+    "centro poblado",
+    "departamento",
+    "divipola",
+    "codigo",
+    "areas no municipalizadas",
+    "cabeceras municipales"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Departamento Administrativo Nacional de Estadísticas - DANE, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/xaxy-8nri",
+  "webUri": "https://www.datos.gov.co/d/xaxy-8nri",
+  "homepage": null,
+  "createdAt": "2020-06-11T15:39:41+0000",
+  "dataUpdatedAt": "2025-01-24T21:14:58+0000",
+  "cutDate": "2025-01-24",
+  "geographicCoverage": null,
+  "rowCount": 8161,
+  "columns": [
+    {
+      "name": "nombre_municipio",
+      "jsType": "Nombre Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_centro_poblado",
+      "jsType": "Tipo*",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "latitud",
+      "jsType": "Latitud",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "longitud",
+      "jsType": "longitud",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_centro_poblado",
+      "jsType": "Código Centro Poblado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_departamento",
+      "jsType": "Nombre_departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_centro_poblado",
+      "jsType": "Nombre Centro Poblado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_municipio",
+      "jsType": "Codigo Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_departamento",
+      "jsType": "Código Departamento",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "codigo_departamento": "17",
+      "nombre_departamento": "CALDAS",
+      "codigo_municipio": "17050",
+      "nombre_municipio": "ARANZAZU",
+      "codigo_centro_poblado": "17050006",
+      "nombre_centro_poblado": "SAN RAFAEL",
+      "tipo_centro_poblado": "CP",
+      "longitud": "-75,523505",
+      "latitud": "5,261945"
+    },
+    {
+      "codigo_departamento": "17",
+      "nombre_departamento": "CALDAS",
+      "codigo_municipio": "17050",
+      "nombre_municipio": "ARANZAZU",
+      "codigo_centro_poblado": "17050012",
+      "nombre_centro_poblado": "LA HONDA",
+      "tipo_centro_poblado": "CP",
+      "longitud": "-75,512562",
+      "latitud": "5,253714"
+    },
+    {
+      "codigo_departamento": "05",
+      "nombre_departamento": "ANTIOQUIA",
+      "codigo_municipio": "05001",
+      "nombre_municipio": "MEDELLÍN",
+      "codigo_centro_poblado": "05001000",
+      "nombre_centro_poblado": "MEDELLÍN, DISTRITO ESPECIAL DE CIENCIA, TECNOLOGÍA E INNOVACIÓN",
+      "tipo_centro_poblado": "CM",
+      "longitud": "-75,581,775",
+      "latitud": "6,246,631"
+    },
+    {
+      "codigo_departamento": "05",
+      "nombre_departamento": "ANTIOQUIA",
+      "codigo_municipio": "05001",
+      "nombre_municipio": "MEDELLÍN",
+      "codigo_centro_poblado": "05001001",
+      "nombre_centro_poblado": "PALMITAS",
+      "tipo_centro_poblado": "CP",
+      "longitud": "-75,690573",
+      "latitud": "6,343919"
+    },
+    {
+      "codigo_departamento": "05",
+      "nombre_departamento": "ANTIOQUIA",
+      "codigo_municipio": "05001",
+      "nombre_municipio": "MEDELLÍN",
+      "codigo_centro_poblado": "05001004",
+      "nombre_centro_poblado": "SANTA ELENA",
+      "tipo_centro_poblado": "CP",
+      "longitud": "-75,501293",
+      "latitud": "6,210599"
+    }
+  ],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:12.454Z"
+}

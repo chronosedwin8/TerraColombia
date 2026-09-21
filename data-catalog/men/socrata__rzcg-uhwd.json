@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "rzcg-uhwd",
+  "name": "Programa conexión total del Departamento de Caldas",
+  "description": "Instituciones educativas del Departamento de Caldas, beneficiadas con el programa de conexión total.",
+  "publisher": "Gobernación de Caldas, Caldas",
+  "category": "Ciencia, Tecnología e Innovación",
+  "theme": null,
+  "tags": [
+    "instituciones educativas",
+    "conexión",
+    "conexión total",
+    "programa conexión",
+    "conectividad"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Caldas, Caldas",
+  "dataUri": "https://www.datos.gov.co/resource/rzcg-uhwd",
+  "webUri": "https://www.datos.gov.co/d/rzcg-uhwd",
+  "homepage": null,
+  "createdAt": "2024-06-04T21:48:05+0000",
+  "dataUpdatedAt": "2024-06-12T21:43:04+0000",
+  "cutDate": "2024-06-12",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "a_o",
+      "jsType": "AÑO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "meses_de_servicio",
+      "jsType": "MESES DE SERVICIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ancho_de_banda_mb",
+      "jsType": "ANCHO DE BANDA /MB",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_d_as_contratados",
+      "jsType": "TOTAL DÍAS CONTRATADOS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_inicio_servicio",
+      "jsType": "FECHA INICIO SERVICIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_instituci_n_educativa",
+      "jsType": "NOMBRE INSTITUCIÓN EDUCATIVA",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "direcci_n",
+      "jsType": "DIRECCIÓN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_sede",
+      "jsType": "CODIGO DANE SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_total",
+      "jsType": "VALOR TOTAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "costo_de_instalaci_n_sin",
+      "jsType": "COSTO DE INSTALACIÓN (SIN IVA)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_fin_servicio",
+      "jsType": "FECHA FIN SERVICIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "costo_de_servicio_sin_iva",
+      "jsType": "COSTO DE SERVICIO (SIN IVA)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "reuso",
+      "jsType": "REUSO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matricula",
+      "jsType": "MATRICULA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_alumnos_aula_de_clase",
+      "jsType": "TOTAL ALUMNOS AULA DE CLASE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tecnolog_a_ltima_milla",
+      "jsType": "TECNOLOGÍA ÚLTIMA MILLA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_dane_institucion",
+      "jsType": "COD DANE INSTITUCION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codmunicipio",
+      "jsType": "CODMUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_sede_educativa",
+      "jsType": "NOMBRE SEDE EDUCATIVA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_alumnos_adultos",
+      "jsType": "TOTAL ALUMNOS ADULTOS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "costo_de_servicio_con_iva",
+      "jsType": "COSTO DE SERVICIO (CON IVA)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "costo_de_instalaci_n_con",
+      "jsType": "COSTO DE INSTALACIÓN (CON IVA)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_mero_del_contrato",
+      "jsType": "NÚMERO DEL CONTRATO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_instalaci_n_programada",
+      "jsType": "FECHA INSTALACIÓN PROGRAMADA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_servicio",
+      "jsType": "ESTADO SERVICIO",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nombre_instituci_n_educativa"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:34.494Z"
+}

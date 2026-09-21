@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "gra4-pcp2",
+  "name": "SECOP II - Ubicaciones ejecucion contratos",
+  "description": "Información de las ubicaciones en donde se ejecutaron los contratos",
+  "publisher": "Agencia Nacional de Contratación Pública Colombia Compra Eficiente CCE, Bogotá, D.C",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "procesos de contratación",
+    "compra pública",
+    "contratos",
+    "secop"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública Colombia Compra Eficiente CCE, Bogotá, D.C",
+  "dataUri": "https://www.datos.gov.co/resource/gra4-pcp2",
+  "webUri": "https://www.datos.gov.co/d/gra4-pcp2",
+  "homepage": null,
+  "createdAt": "2025-02-28T06:23:16+0000",
+  "dataUpdatedAt": "2026-09-21T06:59:04+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": 6333733,
+  "columns": [
+    {
+      "name": "referencia_del_contrato",
+      "jsType": "Referencia del Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_entidad",
+      "jsType": "Codigo Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipodocproveedor",
+      "jsType": "TipoDocProveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_entidad",
+      "jsType": "Nit Entidad",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "proceso_de_compra",
+      "jsType": "Proceso de Compra",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "urlproceso",
+      "jsType": "URLProceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "documento_proveedor",
+      "jsType": "Documento Proveedor",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "ubicacion",
+      "jsType": "Ubicacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_proveedor",
+      "jsType": "Codigo Proveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_entidad",
+      "jsType": "Nombre Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_contrato",
+      "jsType": "ID Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "proveedor_adjudicado",
+      "jsType": "Proveedor Adjudicado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "localizaci_n",
+      "jsType": "Localización",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "nombre_entidad": "SANTIAGO DE CALI DISTRITO ESPECIAL- UNIDAD ADMINISTRATIVA ESPECIAL DE GESTION DE BIENES Y SERVICIOS - CALI",
+      "codigo_entidad": "702825183",
+      "localizaci_n": "Colombia;  Valle del Cauca ;  Cali",
+      "codigo_proveedor": "709399174",
+      "tipodocproveedor": "Cédula de Ciudadanía",
+      "proveedor_adjudicado": "YEISON ALEXANDER GOMEZ ALIPIO",
+      "id_contrato": "CO1.PCCNTR.3795896",
+      "proceso_de_compra": "CO1.BDOS.3022818",
+      "referencia_del_contrato": "4181.010.26.1.434-2022",
+      "urlproceso": {
+        "url": "https://community.secop.gov.co/Public/Tendering/OpportunityDetail/Index?noticeUID=CO1.NTC.3024993&isFromPublicArea=True&isModal=true&asPopupView=true"
+      },
+      "ubicacion": "COLOMBIA»Valle del Cauca»Cali"
+    },
+    {
+      "nombre_entidad": "INSTITUTO DISTRITAL PARA LA PROTECCIÓN DE LA NIÑEZ Y LA JUVENTUD - IDIPRON*",
+      "codigo_entidad": "700367014",
+      "localizaci_n": "Colombia; Bogotá",
+      "codigo_proveedor": "716254057",
+      "tipodocproveedor": "Cédula de Ciudadanía",
+      "proveedor_adjudicado": "ZULY DANIELA ALAPE ZABALA",
+      "id_contrato": "CO1.PCCNTR.3430516",
+      "proceso_de_compra": "CO1.BDOS.2685414",
+      "referencia_del_contrato": "2022-1156",
+      "urlproceso": {
+        "url": "https://community.secop.gov.co/Public/Tendering/OpportunityDetail/Index?noticeUID=CO1.NTC.2718642&isFromPublicArea=True&isModal=true&asPopupView=true"
+      },
+      "ubicacion": "COLOMBIA»Distrito Capital de Bogotá»Bogotá"
+    },
+    {
+      "nombre_entidad": "ALEJANDRO PROSPERO REVEREND E.S.E.",
+      "codigo_entidad": "704290097",
+      "localizaci_n": "Colombia;  Magdalena ;  Santa Marta",
+      "codigo_proveedor": "727073348",
+      "tipodocproveedor": "Cédula de Ciudadanía",
+      "proveedor_adjudicado": "IVONNE LEONIDA POMBO GUTIERREZ",
+      "id_contrato": "CO1.PCCNTR.7196148",
+      "proceso_de_compra": "CO1.BDOS.7257430",
+      "referencia_del_contrato": "PS-386-2025",
+      "urlproceso": {
+        "url": "https://community.secop.gov.co/Public/Tendering/OpportunityDetail/Index?noticeUID=CO1.NTC.7274694&isFromPublicArea=True&isModal=true&asPopupView=true"
+      },
+      "ubicacion": "COLOMBIA»Magdalena»Santa Marta"
+    },
+    {
+      "nombre_entidad": "INSTITUCIÓN UNIVERSITARIA COLEGIO MAYOR DE ANTIOQUIA",
+      "codigo_entidad": "704629146",
+      "localizaci_n": "Colombia;  Antioquia ;  Medellín",
+      "codigo_proveedor": "713234557",
+      "tipodocproveedor": "Cédula de Ciudadanía",
+      "proveedor_adjudicado": "CATALINA HENAO RIOS",
+      "id_contrato": "CO1.PCCNTR.2445002",
+      "proceso_de_compra": "CO1.BDOS.1925312",
+      "referencia_del_contrato": "CMA-CD-47-90157-22-2021",
+      "urlproceso": {
+        "url": "https://community.secop.gov.co/Public/Tendering/OpportunityDetail/Index?noticeUID=CO1.NTC.1921931&isFromPublicArea=True&isModal=true&asPopupView=true"
+      },
+      "ubicacion": "COLOMBIA»Antioquia»Medellín"
+    },
+    {
+      "nombre_entidad": "SECRETARIA DISTRITAL DE GOBIERNO 1",
+      "codigo_entidad": "701427445",
+      "localizaci_n": "Colombia; Bogotá;  Bogotá",
+      "codigo_proveedor": "712531722",
+      "tipodocproveedor": "Cédula de Ciudadanía",
+      "proveedor_adjudicado": "SANDRARIVERA",
+      "id_contrato": "CO1.PCCNTR.5560228",
+      "proceso_de_compra": "CO1.BDOS.5176546",
+      "referencia_del_contrato": "1043-2023",
+      "urlproceso": {
+        "url": "https://community.secop.gov.co/Public/Tendering/OpportunityDetail/Index?noticeUID=CO1.NTC.5192016&isFromPublicArea=True&isModal=true&asPopupView=true"
+      },
+      "ubicacion": "COLOMBIA»Distrito Capital de Bogotá»Bogotá"
+    }
+  ],
+  "piiDroppedColumns": [
+    "documento_proveedor",
+    "nit_entidad"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:40:55.967Z"
+}

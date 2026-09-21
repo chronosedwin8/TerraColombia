@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "spzp-dfuc",
+  "name": "CÓDIGO ÚNICO DE MEDICAMENTOS OTROS ESTADOS",
+  "description": "INFORMACIÓN DE LOS CÓDIGOS ÚNICOS DE MEDICAMENTOS PARA LOS REGISTROS SANITARIOS OTROS ESTADOS.",
+  "publisher": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "cum otros estados"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/spzp-dfuc",
+  "webUri": "https://www.datos.gov.co/d/spzp-dfuc",
+  "homepage": null,
+  "createdAt": "2016-07-15T00:28:31+0000",
+  "dataUpdatedAt": "2026-09-16T12:13:58+0000",
+  "cutDate": "2026-09-16",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "nombrerol",
+      "jsType": "nombrerol",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "descripcionatc",
+      "jsType": "descripcionatc",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "registrosanitario",
+      "jsType": "registrosanitario",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "viaadministracion",
+      "jsType": "viaadministracion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "unidad",
+      "jsType": "unidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "modalidad",
+      "jsType": "modalidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "concentracion",
+      "jsType": "concentracion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "muestramedica",
+      "jsType": "muestramedica",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fechainactivo",
+      "jsType": "fechainactivo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "formafarmaceutica",
+      "jsType": "formafarmaceutica",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estadocum",
+      "jsType": "estadocum",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cantidadcum",
+      "jsType": "cantidadcum",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "titular",
+      "jsType": "titular",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (titular)."
+    },
+    {
+      "name": "atc",
+      "jsType": "atc",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "expedientecum",
+      "jsType": "expedientecum",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tiporol",
+      "jsType": "tiporol",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "principioactivo",
+      "jsType": "principioactivo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fechavencimiento",
+      "jsType": "fechavencimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fechaactivo",
+      "jsType": "fechaactivo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "unidadmedida",
+      "jsType": "unidadmedida",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estadoregistro",
+      "jsType": "estadoregistro",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "producto",
+      "jsType": "producto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ium",
+      "jsType": "IUM",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "expediente",
+      "jsType": "expediente",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cantidad",
+      "jsType": "cantidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fechaexpedicion",
+      "jsType": "fechaexpedicion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "unidadreferencia",
+      "jsType": "unidadreferencia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "consecutivocum",
+      "jsType": "consecutivocum",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "descripcioncomercial",
+      "jsType": "descripcioncomercial",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "titular"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:48.619Z"
+}

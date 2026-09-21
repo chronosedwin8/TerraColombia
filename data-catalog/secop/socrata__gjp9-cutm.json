@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "gjp9-cutm",
+  "name": "SECOP II - Garantias",
+  "description": "Información de las garantías publicadas en la plataforma SECOP II",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "garantía",
+    "póliza",
+    "secop ii"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/gjp9-cutm",
+  "webUri": "https://www.datos.gov.co/d/gjp9-cutm",
+  "homepage": null,
+  "createdAt": "2021-08-27T07:19:41+0000",
+  "dataUpdatedAt": "2026-09-21T07:39:00+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "asegurado",
+      "jsType": "Asegurado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fechaenviopoliza",
+      "jsType": "FechaEnvioPoliza",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "subtipopoliza",
+      "jsType": "SubTipoPoliza",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado",
+      "jsType": "Estado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fechafinpoliza",
+      "jsType": "FechaFinPoliza",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipopoliza",
+      "jsType": "TipoPoliza",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ladopoliza",
+      "jsType": "LadoPoliza",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_creacion",
+      "jsType": "Fecha de Creacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "beneficiario",
+      "jsType": "Beneficiario",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numeropoliza",
+      "jsType": "NumeroPoliza",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor",
+      "jsType": "Valor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "aseguradora",
+      "jsType": "Aseguradora",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fechadecreacionpoliza",
+      "jsType": "FechaDeCreacionPoliza",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_contrato",
+      "jsType": "ID Contrato",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:00.606Z"
+}

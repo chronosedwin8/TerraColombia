@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "x6yb-a8cg",
+  "name": "ESTABLECIMIENTOS NACIONALES CERTIFICADOS CON BUENAS PRÁCTICAS DE ELABORACIÓN",
+  "description": "En este listado se consolidan los establecimientos nacionales que cuentan con certificación en buenas Practicas de Elaboración vigente, para la elaboración de preparaciones magistrales y que realizan operaciones de elaboración, trasformación, preparaciones, mezclas nutricionales parenterales, adecuación y ajuste de concentraciones de dosis y medicamentos estériles, oncológicos y/o antibiótico, reenvase y reempaque de medicamentos, dentro del Sistema de Distribución de Medicamentos en Dosis Unitaria.",
+  "publisher": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "magistrales",
+    "preparaciones farmacéuticas",
+    "reenvase",
+    "reempaque"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/x6yb-a8cg",
+  "webUri": "https://www.datos.gov.co/d/x6yb-a8cg",
+  "homepage": null,
+  "createdAt": "2020-07-27T19:36:30+0000",
+  "dataUpdatedAt": "2026-09-09T20:31:33+0000",
+  "cutDate": "2026-09-09",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "concepto",
+      "jsType": "CONCEPTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciudad",
+      "jsType": "CIUDAD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_vencimiento",
+      "jsType": "FECHA VENCIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "expediente",
+      "jsType": "EXPEDIENTE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "concepto_corto",
+      "jsType": "CONCEPTO CORTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_establecimiento",
+      "jsType": "NOMBRE ESTABLECIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_notificacion",
+      "jsType": "FECHA NOTIFICACION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion",
+      "jsType": "DIRECCION",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:49.386Z"
+}

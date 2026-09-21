@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "c56g-ubd2",
+  "name": "INSTITUCIONES Y SEDES EDUCATIVAS, PUBLICAS Y PRIVADAS EN EL DEPARTAMENTO DEL MAGDALENA",
+  "description": "Listado de las instituciones educativas oficiales y los colegios privados en el Departamento del Magdalena",
+  "publisher": "Gobernación de Magdalena, Magdalena",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "instituciones educativas",
+    "colegios"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Magdalena, Magdalena",
+  "dataUri": "https://www.datos.gov.co/resource/c56g-ubd2",
+  "webUri": "https://www.datos.gov.co/d/c56g-ubd2",
+  "homepage": null,
+  "createdAt": "2021-06-02T18:03:41+0000",
+  "dataUpdatedAt": "2025-05-30T15:48:21+0000",
+  "cutDate": "2025-05-30",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sector",
+      "jsType": "SECTOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_sede",
+      "jsType": "NOMBRE SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion_sede",
+      "jsType": "DIRECCION SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "SUBREGION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_institucion_educativa",
+      "jsType": "NOMBRE  INSTITUCION EDUCATIVA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:36.529Z"
+}

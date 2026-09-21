@@ -1,0 +1,503 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — reglas de alerta
+#
+# Los umbrales de rendimiento son literalmente los objetivos del PLAN §13:
+#   · ficha de predio        < 800 ms p95
+#   · tesela                 < 200 ms p95 (con caché)
+#   · análisis de zona ≤5km² < 5 s
+#   · informe PDF            < 60 s
+#
+# Convención de severidad:
+#   critica  → despierta a alguien: el producto no funciona o hay riesgo legal.
+#   alta     → hay que mirarlo en horario laboral del mismo día.
+#   media    → entra a la lista de tareas de la semana.
+#
+# Toda anotación va en español porque la lee el equipo de operación.
+# El campo `runbook` apunta a la sección de docs/OPERACION.md que explica qué hacer.
+# ═════════════════════════════════════════════════════════════════════════════
+
+groups:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 1. Disponibilidad
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: terracolombia-disponibilidad
+    interval: 30s
+    rules:
+      - alert: TerraColombiaServicioCaido
+        expr: up{job=~"api|worker|postgres_exporter|redis_exporter"} == 0
+        for: 2m
+        labels:
+          severity: critica
+        annotations:
+          summary: 'El objetivo {{ $labels.job }} ({{ $labels.instance }}) no responde'
+          description: >-
+            Prometheus no logra raspar {{ $labels.job }} desde hace 2 minutos.
+            Si es `api`, el producto está caído para todos los usuarios.
+          runbook: 'docs/OPERACION.md#servicio-caido'
+
+      - alert: TerraColombiaApiErrores5xx
+        expr: |
+          (
+            sum(rate(http_requests_total{job="api",status_code=~"5.."}[5m]))
+            /
+            sum(rate(http_requests_total{job="api"}[5m]))
+          ) > 0.02
+        for: 5m
+        labels:
+          severity: critica
+        annotations:
+          summary: 'Más del 2 % de las peticiones a la API devuelven 5xx'
+          description: 'Tasa de error actual: {{ $value | humanizePercentage }}.'
+          runbook: 'docs/OPERACION.md#errores-5xx'
+
+      - alert: TerraColombiaWorkerSinLatido
+        # El worker no tiene HTTP de negocio: su señal de vida es el latido.
+        expr: (time() - tc_worker_heartbeat_timestamp_seconds) > 300
+        for: 1m
+        labels:
+          severity: alta
+        annotations:
+          summary: 'El worker {{ $labels.worker }} lleva más de 5 minutos sin latido'
+          description: >-
+            El proceso puede estar bloqueado en un trabajo largo o muerto sin
+            que el contenedor haya salido. Los informes y los ETL no avanzan.
+          runbook: 'docs/OPERACION.md#worker-bloqueado'
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 2. Rendimiento (objetivos del PLAN §13)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: terracolombia-rendimiento
+    interval: 30s
+    rules:
+      # ── Ficha de predio: < 800 ms p95 ───────────────────────────────────
+      - alert: TerraColombiaFichaPredioLenta
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum by (le) (rate(tc_parcel_card_duration_seconds_bucket{job="api"}[10m]))
+          ) > 0.8
+        for: 10m
+        labels:
+          severity: alta
+          objetivo: 'p95 < 800 ms (PLAN §13)'
+        annotations:
+          summary: 'La ficha de predio supera los 800 ms en p95'
+          description: >-
+            p95 actual: {{ $value | humanizeDuration }}. Es la pantalla central
+            del producto. Causas habituales: falta de `VACUUM ANALYZE` tras una
+            carga, plan de consulta degradado en las particiones de
+            `core.parcel`, o una vista materializada de contexto sin refrescar.
+          runbook: 'docs/OPERACION.md#ficha-de-predio-lenta'
+
+      # ── Tesela: < 200 ms p95 con caché ──────────────────────────────────
+      - alert: TerraColombiaTeselaLenta
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum by (le) (rate(tc_tile_duration_seconds_bucket{job="api"}[10m]))
+          ) > 0.2
+        for: 10m
+        labels:
+          severity: alta
+          objetivo: 'p95 < 200 ms (PLAN §13)'
+        annotations:
+          summary: 'Las teselas superan los 200 ms en p95'
+          description: >-
+            p95 actual: {{ $value | humanizeDuration }}. Con caché caliente esto
+            no debería pasar: revisar primero la tasa de acierto de caché
+            (alerta TerraColombiaCacheTeselasFria) y después las funciones
+            `analytics.tile_*`.
+          runbook: 'docs/OPERACION.md#teselas-lentas'
+
+      - alert: TerraColombiaTeselaLentaSinCache
+        # Desglose útil: si solo los fallos de caché son lentos, el problema
+        # está en PostGIS; si también los aciertos, está en Redis o en la red.
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum by (le) (rate(tc_tile_duration_seconds_bucket{job="api",cache="miss"}[10m]))
+          ) > 1.0
+        for: 15m
+        labels:
+          severity: media
+        annotations:
+          summary: 'Generar una tesela desde PostGIS tarda más de 1 s en p95'
+          description: >-
+            p95 sin caché: {{ $value | humanizeDuration }}. Revisar los índices
+            GiST, si `ST_Subdivide` se aplicó a los polígonos grandes y el
+            `minzoom` de `core.parcel` (debe ser 14).
+          runbook: 'docs/OPERACION.md#teselas-lentas'
+
+      - alert: TerraColombiaCacheTeselasFria
+        expr: |
+          (
+            sum(rate(tc_tile_duration_seconds_count{job="api",cache="hit"}[15m]))
+            /
+            clamp_min(sum(rate(tc_tile_duration_seconds_count{job="api"}[15m])), 0.001)
+          ) < 0.7
+        for: 20m
+        labels:
+          severity: media
+        annotations:
+          summary: 'La caché de teselas acierta menos del 70 %'
+          description: >-
+            Acierto actual: {{ $value | humanizePercentage }}. Puede ser normal
+            justo después de publicar un corte nuevo (se invalida la caché) o de
+            reiniciar Redis. Si persiste, puede indicar raspado sistemático:
+            cruzar con `tc_tile_quota_exceeded_total` y docs/SEGURIDAD.md.
+          runbook: 'docs/OPERACION.md#teselas-lentas'
+
+      # ── Análisis de zona ≤ 5 km²: < 5 s ─────────────────────────────────
+      - alert: TerraColombiaAnalisisZonaLento
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum by (le) (rate(tc_area_analysis_duration_seconds_bucket{job="api",area_bucket="le5km2"}[15m]))
+          ) > 5
+        for: 15m
+        labels:
+          severity: alta
+          objetivo: 'p95 < 5 s para ≤ 5 km² (PLAN §13)'
+        annotations:
+          summary: 'El análisis de zona de hasta 5 km² supera los 5 s en p95'
+          description: >-
+            p95 actual: {{ $value | humanizeDuration }}. Solo se vigila el tramo
+            ≤ 5 km²: por encima el análisis es asíncrono por diseño y no tiene
+            objetivo de latencia interactiva.
+          runbook: 'docs/OPERACION.md#analisis-de-zona-lento'
+
+      # ── Informe PDF: < 60 s ─────────────────────────────────────────────
+      - alert: TerraColombiaInformePdfLento
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum by (le) (rate(tc_report_duration_seconds_bucket{job="worker"}[30m]))
+          ) > 60
+        for: 15m
+        labels:
+          severity: alta
+          objetivo: 'p95 < 60 s (PLAN §13)'
+        annotations:
+          summary: 'Generar un informe PDF supera los 60 s en p95'
+          description: >-
+            p95 actual: {{ $value | humanizeDuration }}. El usuario ya pagó por
+            este informe. Revisar Chromium en el worker (memoria), los mapas
+            estáticos y si el ETL está saturando la base al mismo tiempo.
+          runbook: 'docs/OPERACION.md#informes-lentos'
+
+      - alert: TerraColombiaInformesFallando
+        expr: |
+          sum(rate(tc_queue_jobs_failed_total{queue="reports"}[30m])) > 0
+        for: 10m
+        labels:
+          severity: critica
+        annotations:
+          summary: 'Hay informes que terminan en error'
+          description: >-
+            Un informe fallido es un cobro sin entrega. Revisar la cola
+            `reports` en el panel de administración y devolver los créditos si
+            no se puede reintentar.
+          runbook: 'docs/OPERACION.md#informes-fallidos'
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 3. Base de datos
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: terracolombia-base-de-datos
+    interval: 1m
+    rules:
+      - alert: TerraColombiaConexionesAgotandose
+        expr: |
+          (
+            sum(pg_stat_activity_count{datname="terracolombia"})
+            /
+            max(pg_settings_max_connections)
+          ) > 0.85
+        for: 5m
+        labels:
+          severity: alta
+        annotations:
+          summary: 'Más del 85 % de las conexiones de Postgres están en uso'
+          description: >-
+            {{ $value | humanizePercentage }} del máximo. Revisar el
+            `pool_size` de Martin y de la API; en producción esto lo debería
+            absorber pgbouncer (PLAN §13).
+          runbook: 'docs/OPERACION.md#conexiones-agotadas'
+
+      - alert: TerraColombiaDiscoBaseDeDatos
+        expr: |
+          (
+            pg_database_size_bytes{datname="terracolombia"}
+            /
+            clamp_min(tc_pg_volume_total_bytes, 1)
+          ) > 0.85
+        for: 10m
+        labels:
+          severity: alta
+        annotations:
+          summary: 'La base de datos ocupa más del 85 % del volumen'
+          description: >-
+            Cada corte mensual del catastro añade volumen. Revisar la política de
+            retención de `raw.*` (solo los 3 últimos cortes en línea) y el
+            `DROP` de snapshots caducados.
+          runbook: 'docs/OPERACION.md#espacio-en-disco'
+
+      - alert: TerraColombiaReplicacionRetrasada
+        expr: pg_replication_lag_seconds > 300
+        for: 5m
+        labels:
+          severity: alta
+        annotations:
+          summary: 'La réplica de lectura va más de 5 minutos por detrás'
+          description: >-
+            `DATABASE_URL_RO` sirve la GeoAPI pública: con este retraso podría
+            devolver un snapshot que ya no es el activo.
+          runbook: 'docs/OPERACION.md#replicacion'
+
+      - alert: TerraColombiaTransaccionLarga
+        expr: pg_stat_activity_max_tx_duration{datname="terracolombia",state="active"} > 3600
+        for: 10m
+        labels:
+          severity: media
+        annotations:
+          summary: 'Hay una transacción activa de más de 1 hora'
+          description: >-
+            Normal durante una carga catastral mensual. Fuera de la ventana de
+            ETL, bloquea el `VACUUM` y hace crecer el bloat.
+          runbook: 'docs/OPERACION.md#transacciones-largas'
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 4. ETL, linaje y calidad de datos
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: terracolombia-etl
+    interval: 1m
+    rules:
+      - alert: TerraColombiaEtlFallido
+        expr: increase(tc_etl_runs_total{status="failed"}[1h]) > 0
+        for: 5m
+        labels:
+          severity: alta
+        annotations:
+          summary: 'La corrida de ETL del dataset {{ $labels.dataset }} falló'
+          description: >-
+            El pipeline es idempotente y reanudable: reintentar desde el panel
+            de administración. Si falla en `stage`, probablemente falte GDAL o
+            la fuente cambió de estructura (no inventar campos: reinspeccionar).
+          runbook: 'docs/OPERACION.md#etl-fallido'
+
+      - alert: TerraColombiaCatastroDesactualizado
+        # La base catastral del IGAC es mensual. A los 45 días ya se perdió un corte.
+        expr: tc_snapshot_age_days{dataset=~"igac-catastro.*"} > 45
+        for: 1h
+        labels:
+          severity: alta
+        annotations:
+          summary: 'El snapshot activo de {{ $labels.dataset }} tiene {{ $value | printf "%.0f" }} días'
+          description: >-
+            El producto está mostrando datos de un corte vencido. La atribución
+            obligatoria dice la fecha de corte, así que el usuario lo ve: no es
+            un fallo silencioso, pero sí una pérdida de valor. Revisar el cron
+            mensual del catastro.
+          runbook: 'docs/OPERACION.md#cron-mensual-del-catastro'
+
+      - alert: TerraColombiaContextoDesactualizado
+        expr: tc_snapshot_age_days{dataset!~"igac-catastro.*"} > 400
+        for: 6h
+        labels:
+          severity: media
+        annotations:
+          summary: 'El dataset de contexto {{ $labels.dataset }} lleva más de 400 días sin actualizarse'
+          description: >-
+            Puede ser correcto (el MGN del DANE no cambia cada año) o señal de
+            que la fuente dejó de publicar. Verificar y, si la fuente murió,
+            marcarla `NO_DISPONIBLE` en `meta.dataset` en vez de dejarla
+            envejecer en silencio (regla 2 y 4 de CLAUDE.md).
+          runbook: 'docs/OPERACION.md#datasets-envejecidos'
+
+      - alert: TerraColombiaVariacionAnomalaDeFilas
+        # PLAN §8: alertar si el conteo varía más de un 10 % frente al corte anterior.
+        expr: abs(tc_etl_row_count_delta_ratio) > 0.10
+        for: 5m
+        labels:
+          severity: alta
+        annotations:
+          summary: 'El corte nuevo de {{ $labels.dataset }} varía {{ $value | humanizePercentage }} en número de filas'
+          description: >-
+            Umbral del PLAN §8. Puede ser real (un municipio que entra a la base
+            abierta) o una descarga truncada. NO publicar el snapshot como
+            activo hasta revisarlo a mano.
+          runbook: 'docs/OPERACION.md#validaciones-de-carga'
+
+      - alert: TerraColombiaGeometriasInvalidas
+        expr: increase(tc_geometry_invalid_total[1h]) > 1000
+        for: 10m
+        labels:
+          severity: media
+        annotations:
+          summary: '{{ $labels.dataset }}: más de 1000 geometrías inválidas en la última hora'
+          description: >-
+            `ST_MakeValid` se aplica en ingesta, así que esto cuenta las que ni
+            así se pudieron arreglar. Se registran como huérfanas y no se
+            publican.
+          runbook: 'docs/OPERACION.md#validaciones-de-carga'
+
+      - alert: TerraColombiaNpnMalFormado
+        expr: increase(tc_npn_malformed_total[1h]) > 500
+        for: 10m
+        labels:
+          severity: media
+        annotations:
+          summary: '{{ $labels.dataset }}: muchos NPN mal formados'
+          description: >-
+            El NPN de 30 dígitos es la llave del producto. Si un corte trae
+            NPN que `packages/geo/npn.ts` no puede descomponer, la ficha y el
+            buscador fallarán para esos predios.
+          runbook: 'docs/OPERACION.md#npn-mal-formados'
+
+      # ── Alerta de cumplimiento, no de rendimiento ───────────────────────
+      - alert: TerraColombiaPiiDetectada
+        expr: increase(tc_pii_detected_total[1h]) > 0
+        for: 0m
+        labels:
+          severity: critica
+          tipo: cumplimiento
+        annotations:
+          summary: 'PII detectada en {{ $labels.dataset }}, columna {{ $labels.column }}'
+          description: >-
+            La regla 3 de CLAUDE.md es absoluta: cero datos personales. El
+            filtro de `etl/config/pii-blocklist.ts` descartó la columna, así que
+            NO llegó a `core`/`ctx`, pero significa que la fuente cambió y trae
+            campos nuevos. Hay que inspeccionarla antes de la siguiente carga y
+            revisar si algún corte anterior pasó sin el filtro.
+            Esta alerta no espera: dispara al primer caso.
+          runbook: 'docs/SEGURIDAD.md#respuesta-ante-incidentes'
+
+      - alert: TerraColombiaSnapshotSinteticoActivo
+        expr: tc_active_snapshot_synthetic > 0
+        for: 5m
+        labels:
+          severity: critica
+          tipo: cumplimiento
+        annotations:
+          summary: 'Hay un snapshot SINTÉTICO publicado como activo en {{ $labels.dataset }}'
+          description: >-
+            Los datos de demostración nunca deben servirse como reales
+            (docs/DECISIONES.md ADR-006). En producción esto es un incidente:
+            despublicar de inmediato.
+          runbook: 'docs/SEGURIDAD.md#respuesta-ante-incidentes'
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 5. Cola de trabajos
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: terracolombia-cola
+    interval: 1m
+    rules:
+      - alert: TerraColombiaColaAtascada
+        expr: tc_queue_jobs{state="waiting"} > 200
+        for: 15m
+        labels:
+          severity: alta
+        annotations:
+          summary: 'La cola {{ $labels.queue }} acumula {{ $value }} trabajos en espera'
+          description: >-
+            Si es `reports`, hay usuarios esperando algo que pagaron. Escalar
+            réplicas del worker o separar la cola de informes de la de ETL
+            (ver infra/caprover/README.md, decisión 2).
+          runbook: 'docs/OPERACION.md#cola-atascada'
+
+      - alert: TerraColombiaTrabajosFallidosAcumulados
+        expr: tc_queue_jobs{state="failed"} > 50
+        for: 30m
+        labels:
+          severity: media
+        annotations:
+          summary: '{{ $value }} trabajos fallidos acumulados en la cola {{ $labels.queue }}'
+          runbook: 'docs/OPERACION.md#cola-atascada'
+
+      - alert: TerraColombiaRedisMemoriaAlta
+        expr: |
+          (
+            redis_memory_used_bytes / clamp_min(redis_memory_max_bytes, 1)
+          ) > 0.90
+        for: 10m
+        labels:
+          severity: alta
+        annotations:
+          summary: 'Redis usa más del 90 % de su memoria máxima'
+          description: >-
+            La política es `noeviction` a propósito (si desaloja, se pierden
+            trabajos de BullMQ). Al llegar al límite, Redis RECHAZA escrituras y
+            el ETL falla. Subir `REDIS_MAXMEMORY` o purgar la caché de teselas.
+          runbook: 'docs/OPERACION.md#redis-lleno'
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 6. Negocio y abuso
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: terracolombia-negocio
+    interval: 5m
+    rules:
+      - alert: TerraColombiaPagosFallando
+        expr: |
+          (
+            sum(rate(tc_payment_attempts_total{status="failed"}[1h]))
+            /
+            clamp_min(sum(rate(tc_payment_attempts_total[1h])), 0.001)
+          ) > 0.3
+        for: 15m
+        labels:
+          severity: alta
+        annotations:
+          summary: 'Más del 30 % de los intentos de pago fallan'
+          description: >-
+            {{ $value | humanizePercentage }}. Revisar el estado de Wompi y las
+            credenciales. Un fallo del proveedor se ve igual que un fallo
+            nuestro desde esta métrica: confirmar en su panel de estado.
+          runbook: 'docs/OPERACION.md#pagos'
+
+      - alert: TerraColombiaSinInformesGenerados
+        # Detector de "algo se rompió y nadie se dio cuenta": en un producto con
+        # tráfico, 24 h sin un solo informe es anómalo.
+        expr: |
+          sum(increase(tc_reports_generated_total[24h])) == 0
+          and on() sum(tc_active_subscriptions) > 5
+        for: 2h
+        labels:
+          severity: media
+        annotations:
+          summary: 'Ningún informe generado en 24 h habiendo suscripciones activas'
+          description: >-
+            Probablemente el flujo de informes está roto en algún punto que no
+            produce error visible (botón, cuota mal calculada, créditos).
+          runbook: 'docs/OPERACION.md#informes-fallidos'
+
+      - alert: TerraColombiaCuotaTeselasDesbordada
+        expr: sum(increase(tc_tile_quota_exceeded_total[1h])) > 1000
+        for: 10m
+        labels:
+          severity: media
+          tipo: abuso
+        annotations:
+          summary: 'Muchas peticiones de teselas rechazadas por cuota en la última hora'
+          description: >-
+            Señal de raspado masivo (docs/SEGURIDAD.md §Anti-scraping) o de un
+            plan mal dimensionado para un cliente legítimo. Identificar la llave
+            de API o la cuenta en `app.usage_event` antes de bloquear.
+          runbook: 'docs/SEGURIDAD.md#anti-scraping'
+
+      - alert: TerraColombiaLimitePeticionesDesbordado
+        expr: |
+          (
+            sum(rate(http_requests_total{job="api",status_code="429"}[15m]))
+            /
+            clamp_min(sum(rate(http_requests_total{job="api"}[15m])), 0.001)
+          ) > 0.1
+        for: 15m
+        labels:
+          severity: media
+          tipo: abuso
+        annotations:
+          summary: 'Más del 10 % de las peticiones reciben 429'
+          description: >-
+            O hay abuso, o el límite por plan está mal calibrado y estamos
+            castigando a clientes que pagan. Revisar por llave de API antes de
+            tocar los umbrales.
+          runbook: 'docs/SEGURIDAD.md#limite-de-peticiones'

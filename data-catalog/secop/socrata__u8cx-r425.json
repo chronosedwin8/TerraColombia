@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "u8cx-r425",
+  "name": "SECOP II - Modificaciones a contratos",
+  "description": "Registro de las modificaciones a los contratos efectuados en la plataforma SECOPII.",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "procesos de contratación",
+    "compra pública",
+    "contratos",
+    "secop"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/u8cx-r425",
+  "webUri": "https://www.datos.gov.co/d/u8cx-r425",
+  "homepage": null,
+  "createdAt": "2025-01-16T21:57:12+0000",
+  "dataUpdatedAt": "2026-09-20T16:26:24+0000",
+  "cutDate": "2026-09-20",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "marca_de_tiempo_cdc",
+      "jsType": "Marca de tiempo CDC",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_aprobacion",
+      "jsType": "Fecha de aprobacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion_de_la_operacion",
+      "jsType": "Direccion de la operacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_fin_contrato",
+      "jsType": "Fecha fin contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "identificador",
+      "jsType": "Identificador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_inicio_contrato",
+      "jsType": "Fecha inicio contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_version",
+      "jsType": "Fecha version",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_bpin",
+      "jsType": "Codigo BPIN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_empresa_de_version",
+      "jsType": "Codigo empresa de version",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dias_extendidos",
+      "jsType": "Dias extendidos",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "identificador_requerimiento",
+      "jsType": "Identificador Requerimiento Compra",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "acta_de_liquidacion",
+      "jsType": "Acta de liquidacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_fin_entrega",
+      "jsType": "Fecha fin entrega",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_inicio_entrega",
+      "jsType": "Fecha inicio entrega",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_fin_liquidacion",
+      "jsType": "Fecha fin liquidacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_contrato",
+      "jsType": "ID Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_carga",
+      "jsType": "Fecha de carga",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "descripcion",
+      "jsType": "Descripcion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_aplicacion_creacion",
+      "jsType": "Nombre aplicacion creacion",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "archivo_version_anterior",
+      "jsType": "Archivo version anterior del contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_creacion",
+      "jsType": "Fecha creacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "metodo_pago",
+      "jsType": "Metodo pago",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "version_anterior_del_contrato",
+      "jsType": "Version anterior del contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_empresa_creadora",
+      "jsType": "Codigo empresa creadora",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "proposito_modificacion",
+      "jsType": "Proposito modificacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_modificacion",
+      "jsType": "Valor Modificacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_inicio_liquidacion",
+      "jsType": "Fecha inicio liquidacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sustituto_version",
+      "jsType": "Sustituto version",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "liquidacion",
+      "jsType": "Liquidacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_version",
+      "jsType": "Numero version",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_modificacion",
+      "jsType": "Estado modificacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o_bpin",
+      "jsType": "Año BPIN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "autor_version",
+      "jsType": "Autor version",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "identificador_modificacion",
+      "jsType": "Identificador modificacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fuente_del_registro",
+      "jsType": "Fuente del registro",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nombre_aplicacion_creacion"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:01.097Z"
+}

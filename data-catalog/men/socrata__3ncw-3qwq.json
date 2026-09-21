@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "3ncw-3qwq",
+  "name": "MEN_INDICADORES_INFRAESTRUCTURA",
+  "description": "Contiene información estadística de los niveles preescolar, básica y media relacionada con indicadores de Infraestructura, hasta 2020 datos oficiales definitivos.",
+  "publisher": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "indicadores",
+    "infraestructura",
+    "aulas",
+    "establecimientos educativos",
+    "ministerio educación básica establecimientos sedes",
+    "sedes educativas"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/3ncw-3qwq",
+  "webUri": "https://www.datos.gov.co/d/3ncw-3qwq",
+  "homepage": null,
+  "createdAt": "2021-07-23T19:04:15+0000",
+  "dataUpdatedAt": "2021-12-22T16:02:23+0000",
+  "cutDate": "2021-12-22",
+  "geographicCoverage": null,
+  "rowCount": 3354,
+  "columns": [
+    {
+      "name": "cod_etc",
+      "jsType": "CODIGO_ETC",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dane_sede",
+      "jsType": "CODIGO_DANE_SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fuente_de_financiaci_n",
+      "jsType": "FUENTE FINACIAMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "NOMBRE_MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "aulas_nuevas",
+      "jsType": "AULAS_NUEVAS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etc",
+      "jsType": "NOMBRE_ETC",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha",
+      "jsType": "FECHA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dane_depto",
+      "jsType": "CODIGO_DANE_DEPTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_corte",
+      "jsType": "FECHA_CORTE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_sede",
+      "jsType": "NOMBRE_SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dane_mpio",
+      "jsType": "CODIGO_DANE_MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "depto",
+      "jsType": "NOMBRE_DEPTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_fin_obra",
+      "jsType": "FECHA_FIN_OBRA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "aulas_mejoradas",
+      "jsType": "AULAS_MEJORADAS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_general",
+      "jsType": "ESTADO_GENERAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_aulas_nue_espec_interv",
+      "jsType": "TOTAL_AULAS_NUE_ESPEC_INTERV",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_aulas_espec_mej_interv",
+      "jsType": "TOTAL_AULAS_ESPEC_MEJ_INTERV",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "fecha": "2021-12-22T00:00:00.000",
+      "fecha_corte": "2021-11-30T00:00:00.000",
+      "dane_depto": "68",
+      "depto": "Santander",
+      "dane_mpio": "68307",
+      "municipio": "Girón",
+      "cod_etc": "3812",
+      "etc": "Girón",
+      "dane_sede": "168307000251",
+      "nombre_sede": "SEDE C - SANTA CRUZ",
+      "fuente_de_financiaci_n": "Ley 21 - FFIE",
+      "aulas_nuevas": "25",
+      "total_aulas_nue_espec_interv": "5",
+      "aulas_mejoradas": "0",
+      "total_aulas_espec_mej_interv": "0",
+      "fecha_fin_obra": "2018-12-28T00:00:00.000",
+      "estado_general": "Terminado"
+    },
+    {
+      "fecha": "2021-12-22T00:00:00.000",
+      "fecha_corte": "2021-11-30T00:00:00.000",
+      "dane_depto": "08",
+      "depto": "Atlántico",
+      "dane_mpio": "08372",
+      "municipio": "Juan de Acosta",
+      "cod_etc": "3764",
+      "etc": "Atlántico",
+      "dane_sede": "108372000169",
+      "nombre_sede": "CE SANTA VERONICA",
+      "fuente_de_financiaci_n": "Ley 21 - FFIE",
+      "aulas_nuevas": "12",
+      "total_aulas_nue_espec_interv": "5",
+      "aulas_mejoradas": "0",
+      "total_aulas_espec_mej_interv": "0",
+      "fecha_fin_obra": "2020-02-07T00:00:00.000",
+      "estado_general": "Terminado"
+    },
+    {
+      "fecha": "2021-12-22T00:00:00.000",
+      "fecha_corte": "2021-11-30T00:00:00.000",
+      "dane_depto": "44",
+      "depto": "La Guajira",
+      "dane_mpio": "08001",
+      "municipio": "Manaure",
+      "cod_etc": "3792",
+      "etc": "La Guajira",
+      "dane_sede": "0",
+      "nombre_sede": "CENTRO ETNOEDUCATIVO RURAL No 3 NAZARETH",
+      "fuente_de_financiaci_n": "Ley 21 - FFIE",
+      "aulas_nuevas": "14",
+      "total_aulas_nue_espec_interv": "0",
+      "aulas_mejoradas": "4",
+      "total_aulas_espec_mej_interv": "1",
+      "fecha_fin_obra": "2018-08-01T00:00:00.000",
+      "estado_general": "Terminado"
+    },
+    {
+      "fecha": "2021-12-22T00:00:00.000",
+      "fecha_corte": "2021-11-30T00:00:00.000",
+      "dane_depto": "25",
+      "depto": "Cundinamarca",
+      "dane_mpio": "08001",
+      "municipio": "Villeta",
+      "cod_etc": "3785",
+      "etc": "Cundinamarca",
+      "dane_sede": "125875000265",
+      "nombre_sede": "COLEGIO DEPARTAMENTAL PROMOCION SOCIAL",
+      "fuente_de_financiaci_n": "Ley 21 - FFIE",
+      "aulas_nuevas": "24",
+      "total_aulas_nue_espec_interv": "6",
+      "aulas_mejoradas": "0",
+      "total_aulas_espec_mej_interv": "0",
+      "fecha_fin_obra": "2019-02-08T00:00:00.000",
+      "estado_general": "Terminado"
+    },
+    {
+      "fecha": "2021-12-22T00:00:00.000",
+      "fecha_corte": "2021-11-30T00:00:00.000",
+      "dane_depto": "15",
+      "depto": "Boyacá",
+      "dane_mpio": "08001",
+      "municipio": "Chiquinquirá",
+      "cod_etc": "3769",
+      "etc": "Boyacá",
+      "dane_sede": "115176000041",
+      "nombre_sede": "COLEGIO LICEO NACIONAL JOSE JOAQUIN CASAS",
+      "fuente_de_financiaci_n": "Ley 21 - FFIE",
+      "aulas_nuevas": "0",
+      "total_aulas_nue_espec_interv": "0",
+      "aulas_mejoradas": "0",
+      "total_aulas_espec_mej_interv": "0",
+      "fecha_fin_obra": "2020-09-24T00:00:00.000",
+      "estado_general": "Terminado"
+    }
+  ],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:27.306Z"
+}

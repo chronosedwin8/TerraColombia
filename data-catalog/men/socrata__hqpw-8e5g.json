@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "hqpw-8e5g",
+  "name": "Entidades sin ánimo de lucro en Departamento de Casanare.",
+  "description": "Entidades sin ánimo de lucro inscritas y activas en la cámara de comercio de Casanare.\nPara reportar hallazgos, comentarios o sugerencias, puede escribirnos por medio de los siguientes mecanismos:\nhttps://apps.casanare.gov.co/correspondencia/pqrs\nsistemas@casanare.gov.co",
+  "publisher": "Gobernación de Casanare, Casanare",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "casanare",
+    "gobernación de casanare",
+    "entidades",
+    "ánimo de lucro",
+    "ánimo",
+    "lucro"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Casanare, Casanare",
+  "dataUri": "https://www.datos.gov.co/resource/hqpw-8e5g",
+  "webUri": "https://www.datos.gov.co/d/hqpw-8e5g",
+  "homepage": null,
+  "createdAt": "2019-10-05T21:20:51+0000",
+  "dataUpdatedAt": "2022-05-05T20:41:56+0000",
+  "cutDate": "2022-05-05",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "categoria",
+      "jsType": "CATEGORIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "organizaci_n_jur_dica",
+      "jsType": "organización Jurídica",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "_ltimo_a_o_renovado",
+      "jsType": "ÚLTIMO AÑO RENOVADO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciiu_actividad_2",
+      "jsType": "CIIU ACTIVIDAD-2",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "est_matricula",
+      "jsType": "EST-MATRICULA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tel_fono_2",
+      "jsType": "TELÉFONO 2",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "fec_constitucion",
+      "jsType": "FEC-CONSTITUCION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fec_renovacion",
+      "jsType": "FEC-RENOVACION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fec_matricula",
+      "jsType": "FEC-MATRICULA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit",
+      "jsType": "NIT",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (nit)."
+    },
+    {
+      "name": "fec_disolucion",
+      "jsType": "FEC-DISOLUCION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciiu_actividad_4",
+      "jsType": "CIIU ACTIVIDAD-4",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "activo_total",
+      "jsType": "ACTIVO-TOTAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "raz_n_social",
+      "jsType": "Razón Social",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciiu_actividad_1",
+      "jsType": "CIIU ACTIVIDAD-1",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciiu_actividad_3",
+      "jsType": "CIIU ACTIVIDAD-3",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "vigilancia",
+      "jsType": "Vigilancia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tel_fono_3",
+      "jsType": "TELÉFONO 3",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "tel_fono_1",
+      "jsType": "TELÉFONO 1",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "matr_cula",
+      "jsType": "Matrícula",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "representante_legal",
+      "jsType": "Representante Legal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direcci_n",
+      "jsType": "Dirección",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "email",
+      "jsType": "EMAIL",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (email)."
+    },
+    {
+      "name": "fec_vigencia",
+      "jsType": "FEC-VIGENCIA",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "tel_fono_2",
+    "nit",
+    "tel_fono_3",
+    "tel_fono_1",
+    "email"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:44.532Z"
+}

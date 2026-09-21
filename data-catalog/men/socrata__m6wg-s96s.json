@@ -1,0 +1,357 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "m6wg-s96s",
+  "name": "Listado de los Establecimientos Educativos No Oficiales del Departamento del Atlántico (municipios no certificados)",
+  "description": "Listado de los Establecimientos Educativos No Oficiales del Departamento del Atlántico por municipio (municipios no certificados)",
+  "publisher": "Gobernación del Atlántico, Atlántico",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "atlantico",
+    "atlántico",
+    "gobernacion del atlantico",
+    "gobernación del atlántico",
+    "gobernación del atlantico",
+    "educación",
+    "instituciones educativas",
+    "no oficiales"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación del Atlántico, Atlántico",
+  "dataUri": "https://www.datos.gov.co/resource/m6wg-s96s",
+  "webUri": "https://www.datos.gov.co/d/m6wg-s96s",
+  "homepage": null,
+  "createdAt": "2020-10-30T22:11:20+0000",
+  "dataUpdatedAt": "2020-10-30T22:18:36+0000",
+  "cutDate": "2020-10-30",
+  "geographicCoverage": null,
+  "rowCount": 126,
+  "columns": [
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "correo_electr_nico",
+      "jsType": "Correo Electrónico",
+      "pii": true,
+      "piiReason": "Correo electrónico."
+    },
+    {
+      "name": "c_digo_municipio",
+      "jsType": "Código Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo",
+      "jsType": "Código",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre",
+      "jsType": "Nombre",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (nombre)."
+    },
+    {
+      "name": "direcci_n",
+      "jsType": "Dirección",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "discapacidades",
+      "jsType": "Discapacidades",
+      "pii": true,
+      "piiReason": "Dato sensible de la persona (Ley 1581/2012, art. 5)."
+    },
+    {
+      "name": "licencia",
+      "jsType": "Licencia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_rector",
+      "jsType": "Nombre Rector",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "estrato_socio_economico",
+      "jsType": "Estrato socio-economico",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "prestador_de_servicio",
+      "jsType": "Prestador de servicio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "Zona",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "propiedad_de_la_planta_fis",
+      "jsType": "Propiedad de la planta fisíca",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "idiomas",
+      "jsType": "Idiomas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "especialidad",
+      "jsType": "Especialidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "niveles",
+      "jsType": "Niveles",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados",
+      "jsType": "Grados",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "modelos_educativos",
+      "jsType": "Modelos Educativos",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "calendario",
+      "jsType": "Calendario",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tel_fono",
+      "jsType": "Teléfono",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "estado",
+      "jsType": "Estado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "jornadas",
+      "jsType": "Jornadas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "capacidades_excepcionales",
+      "jsType": "Capacidades Excepcionales",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matricula_contratada",
+      "jsType": "Matricula contratada",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "caracter",
+      "jsType": "Caracter",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "genero",
+      "jsType": "Genero",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (genero)."
+    },
+    {
+      "name": "sector",
+      "jsType": "Sector",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "resguardo",
+      "jsType": "Resguardo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_mero_de_sedes",
+      "jsType": "Número de Sedes",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_establecimiento",
+      "jsType": "Tipo Establecimiento",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "c_digo_municipio": "8078",
+      "municipio": "BARANOA",
+      "c_digo": "308078000001",
+      "direcci_n": "KR 18 21 124",
+      "tipo_establecimiento": "CENTRO EDUCATIVO",
+      "sector": "NO OFICIAL",
+      "zona": "URBANA",
+      "niveles": "PREESCOLAR,BÁSICA SECUNDARIA,BÁSICA PRIMARIA",
+      "jornadas": "MAÑANA,TARDE",
+      "caracter": "NO APLICA",
+      "especialidad": "SIN DATO",
+      "licencia": "CONDICIONAL",
+      "grados": "-2,-1,0,1,2,3,4,5,6,7",
+      "modelos_educativos": "EDUCACIÓN TRADICIONAL",
+      "capacidades_excepcionales": "SIN DATO",
+      "idiomas": "SIN DATO",
+      "n_mero_de_sedes": "1",
+      "estado": "ANTIGUO-ACTIVO",
+      "prestador_de_servicio": "PERSONA NATURAL",
+      "propiedad_de_la_planta_fis": "PERSONA NATURAL",
+      "resguardo": "NO APLICA",
+      "matricula_contratada": "NO",
+      "calendario": "A",
+      "estrato_socio_economico": "ESTRATO 2"
+    },
+    {
+      "c_digo_municipio": "8078",
+      "municipio": "BARANOA",
+      "c_digo": "308078000508",
+      "direcci_n": "CARRERA 19   23 - 12",
+      "tipo_establecimiento": "CENTRO EDUCATIVO",
+      "sector": "NO OFICIAL",
+      "zona": "URBANA",
+      "niveles": "PREESCOLAR,BÁSICA PRIMARIA",
+      "jornadas": "MAÑANA,TARDE",
+      "caracter": "NO APLICA",
+      "especialidad": "SIN DATO",
+      "licencia": "SIN REVISAR",
+      "grados": "-2,-1,0,1,2,3,4,5",
+      "modelos_educativos": "EDUCACIÓN TRADICIONAL",
+      "capacidades_excepcionales": "SIN DATO",
+      "idiomas": "SIN DATO",
+      "n_mero_de_sedes": "1",
+      "estado": "ANTIGUO-ACTIVO",
+      "prestador_de_servicio": "PERSONA NATURAL",
+      "propiedad_de_la_planta_fis": "PERSONA NATURAL",
+      "resguardo": "NO APLICA",
+      "matricula_contratada": "NO",
+      "calendario": "A",
+      "estrato_socio_economico": "SIN DATO"
+    },
+    {
+      "c_digo_municipio": "8078",
+      "municipio": "BARANOA",
+      "c_digo": "308078000613",
+      "direcci_n": "CALLE. 15   21A - 14",
+      "tipo_establecimiento": "CENTRO EDUCATIVO",
+      "sector": "NO OFICIAL",
+      "zona": "URBANA",
+      "niveles": "PREESCOLAR",
+      "jornadas": "MAÑANA,TARDE",
+      "caracter": "NO APLICA",
+      "especialidad": "SIN DATO",
+      "licencia": "SIN REVISAR",
+      "grados": "-3",
+      "modelos_educativos": "EDUCACIÓN TRADICIONAL",
+      "capacidades_excepcionales": "SIN DATO",
+      "idiomas": "SIN DATO",
+      "n_mero_de_sedes": "1",
+      "estado": "ANTIGUO-ACTIVO",
+      "prestador_de_servicio": "PERSONA NATURAL",
+      "propiedad_de_la_planta_fis": "PERSONA NATURAL",
+      "resguardo": "NO APLICA",
+      "matricula_contratada": "NO",
+      "calendario": "A",
+      "estrato_socio_economico": "SIN DATO"
+    },
+    {
+      "c_digo_municipio": "8078",
+      "municipio": "BARANOA",
+      "c_digo": "308078000249",
+      "direcci_n": "KR 22 D 22 A 113",
+      "tipo_establecimiento": "CENTRO EDUCATIVO",
+      "sector": "NO OFICIAL",
+      "zona": "URBANA",
+      "niveles": "PREESCOLAR,BÁSICA PRIMARIA",
+      "jornadas": "MAÑANA,TARDE",
+      "caracter": "NO APLICA",
+      "especialidad": "SIN DATO",
+      "licencia": "CONDICIONAL",
+      "grados": "-2,-1,0,1,2,3,4,5",
+      "modelos_educativos": "EDUCACIÓN TRADICIONAL",
+      "capacidades_excepcionales": "SIN DATO",
+      "idiomas": "SIN DATO",
+      "n_mero_de_sedes": "1",
+      "estado": "ANTIGUO-ACTIVO",
+      "prestador_de_servicio": "PERSONA NATURAL",
+      "propiedad_de_la_planta_fis": "PERSONA NATURAL",
+      "resguardo": "NO APLICA",
+      "matricula_contratada": "NO",
+      "calendario": "A",
+      "estrato_socio_economico": "SIN DATO"
+    },
+    {
+      "c_digo_municipio": "8078",
+      "municipio": "BARANOA",
+      "c_digo": "308078000630",
+      "direcci_n": "CALLE 15  17 - 07",
+      "tipo_establecimiento": "CENTRO EDUCATIVO",
+      "sector": "NO OFICIAL",
+      "zona": "URBANA",
+      "niveles": "BÁSICA PRIMARIA",
+      "jornadas": "MAÑANA,COMPLETA,TARDE",
+      "caracter": "NO APLICA",
+      "especialidad": "SIN DATO",
+      "licencia": "SIN REVISAR",
+      "grados": "1,2,3,4,5",
+      "modelos_educativos": "EDUCACIÓN TRADICIONAL",
+      "capacidades_excepcionales": "SIN DATO",
+      "idiomas": "SIN DATO",
+      "n_mero_de_sedes": "1",
+      "estado": "ANTIGUO-ACTIVO",
+      "prestador_de_servicio": "PERSONA NATURAL",
+      "propiedad_de_la_planta_fis": "PERSONA NATURAL",
+      "resguardo": "NO APLICA",
+      "matricula_contratada": "NO",
+      "calendario": "A",
+      "estrato_socio_economico": "SIN DATO"
+    }
+  ],
+  "piiDroppedColumns": [
+    "correo_electr_nico",
+    "discapacidades",
+    "genero",
+    "nombre",
+    "nombre_rector",
+    "tel_fono"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:22.241Z"
+}

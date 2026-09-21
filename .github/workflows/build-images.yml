@@ -1,0 +1,290 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — construcción y publicación de imágenes en GHCR
+#
+# Publica cuatro imágenes en `ghcr.io/<propietario>/terracolombia-<app>`:
+#   api · web · worker · docs-site
+#
+# Etiquetado:
+#   main      → :latest, :main, :main-<sha corto>, :vX.Y.Z (si hay etiqueta git)
+#   develop   → :develop, :develop-<sha corto>
+#   otra rama → :<rama saneada>-<sha corto>
+#
+# El caché de capas usa el backend `gha` de buildx, con ámbito por aplicación
+# para que el caché de `worker` (que trae GDAL y Chromium) no desplace el de
+# `api`. Sin `scope`, las cuatro construcciones comparten un caché de 10 GB y se
+# van expulsando entre sí.
+#
+# `deploy.yml` consume estas imágenes; no vuelve a construir nada.
+# ═════════════════════════════════════════════════════════════════════════════
+
+name: Construir imágenes
+
+on:
+  push:
+    branches: [main, develop]
+    tags: ['v*']
+    # No reconstruir por cambios que no afectan a ninguna imagen.
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - 'data-catalog/**'
+  workflow_dispatch:
+    inputs:
+      apps:
+        description: 'Aplicaciones a construir, separadas por comas (vacío = todas)'
+        required: false
+        type: string
+  # Permite que `deploy.yml` la invoque y espere las imágenes.
+  workflow_call:
+    outputs:
+      etiqueta:
+        description: 'Etiqueta inmutable con la que se publicaron las imágenes'
+        value: ${{ jobs.preparar.outputs.etiqueta }}
+
+concurrency:
+  group: imagenes-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write # publicar en GHCR
+  attestations: write # procedencia de las imágenes
+  id-token: write
+
+env:
+  REGISTRO: ghcr.io
+
+jobs:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Calcula una sola vez las etiquetas, para que las cuatro imágenes de una
+  # misma corrida lleven exactamente la misma y un despliegue no pueda mezclar
+  # una `api` de un commit con un `web` de otro.
+  # ═══════════════════════════════════════════════════════════════════════════
+  preparar:
+    name: Preparar etiquetas
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      etiqueta: ${{ steps.calcular.outputs.etiqueta }}
+      apps: ${{ steps.calcular.outputs.apps }}
+      version: ${{ steps.calcular.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Calcular etiquetas y lista de aplicaciones
+        id: calcular
+        run: |
+          set -euo pipefail
+          sha_corto="$(git rev-parse --short HEAD)"
+          rama="${GITHUB_REF_NAME//\//-}"
+
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            etiqueta="${GITHUB_REF_NAME}"
+            version="${GITHUB_REF_NAME#v}"
+          else
+            etiqueta="${rama}-${sha_corto}"
+            version="0.0.0-${rama}.${sha_corto}"
+          fi
+
+          entrada='${{ github.event.inputs.apps }}'
+          if [ -n "$entrada" ]; then
+            # "api, worker" → ["api","worker"]
+            apps="$(echo "$entrada" | tr -d ' ' | tr ',' '\n' | grep -v '^$' \
+                    | python3 -c 'import sys,json; print(json.dumps([l.strip() for l in sys.stdin if l.strip()]))')"
+          else
+            apps='["api","web","worker","docs-site"]'
+          fi
+
+          {
+            echo "etiqueta=$etiqueta"
+            echo "version=$version"
+            echo "apps=$apps"
+          } >> "$GITHUB_OUTPUT"
+
+          {
+            echo "## Imágenes de esta corrida"
+            echo ""
+            echo "- Etiqueta inmutable: \`$etiqueta\`"
+            echo "- Versión: \`$version\`"
+            echo "- Aplicaciones: \`$apps\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Una construcción por aplicación, en paralelo.
+  # ═══════════════════════════════════════════════════════════════════════════
+  construir:
+    name: ${{ matrix.app }}
+    runs-on: ubuntu-latest
+    needs: [preparar]
+    # El worker construye GDAL + Chromium: es la que puede tardar.
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJSON(needs.preparar.outputs.apps) }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurar Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Autenticarse en GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRO }}
+          username: ${{ github.actor }}
+          # GITHUB_TOKEN basta para publicar en el GHCR del propio repositorio:
+          # no hace falta un PAT.
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Metadatos y etiquetas
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRO }}/${{ github.repository_owner }}/terracolombia-${{ matrix.app }}
+          tags: |
+            type=raw,value=${{ needs.preparar.outputs.etiqueta }}
+            type=ref,event=branch
+            type=ref,event=tag
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+          labels: |
+            org.opencontainers.image.title=TerraColombia ${{ matrix.app }}
+            org.opencontainers.image.description=Motor de inteligencia territorial de Colombia — ${{ matrix.app }}
+            org.opencontainers.image.vendor=TerraColombia
+            org.opencontainers.image.licenses=see-LICENSE
+            org.opencontainers.image.version=${{ needs.preparar.outputs.version }}
+
+      - name: Construir y publicar
+        id: construir
+        uses: docker/build-push-action@v6
+        with:
+          # Contexto: la raíz del repositorio (los Dockerfile necesitan ver
+          # pnpm-lock.yaml, packages/ y apps/).
+          context: .
+          file: infra/caprover/${{ matrix.app }}/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Caché con ámbito propio por aplicación: ver la nota de la cabecera.
+          cache-from: type=gha,scope=${{ matrix.app }}
+          cache-to: type=gha,scope=${{ matrix.app }},mode=max
+          provenance: true
+          sbom: true
+          build-args: |
+            APP_VERSION=${{ needs.preparar.outputs.version }}
+            GIT_SHA=${{ github.sha }}
+            ${{ matrix.app == 'web' && format('VITE_API_URL={0}', vars.VITE_API_URL || 'https://api.terracolombia.co') || '' }}
+            ${{ matrix.app == 'web' && format('CSP_CONNECT_SRC={0}', vars.CSP_CONNECT_SRC || 'https://api.terracolombia.co') || '' }}
+            ${{ matrix.app == 'web' && format('CSP_IMG_SRC={0}', vars.CSP_IMG_SRC || 'https://api.terracolombia.co https://mapas.igac.gov.co') || '' }}
+            ${{ matrix.app == 'docs-site' && format('VITE_API_URL={0}', vars.VITE_API_URL || 'https://api.terracolombia.co') || '' }}
+          # Solo amd64: CapRover corre sobre EC2 x86_64. Añadir arm64
+          # duplicaría el tiempo de construcción sin que nada lo consuma.
+          platforms: linux/amd64
+
+      - name: Atestación de procedencia
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ${{ env.REGISTRO }}/${{ github.repository_owner }}/terracolombia-${{ matrix.app }}
+          subject-digest: ${{ steps.construir.outputs.digest }}
+          push-to-registry: true
+
+      # Comprobación mínima de que la imagen arranca. No prueba la aplicación
+      # (eso es `e2e.yml`), solo que la imagen no está rota: un `CMD` mal
+      # escrito o una dependencia nativa que falta se ven aquí, no en producción.
+      - name: Comprobación de humo de la imagen
+        run: |
+          set -euo pipefail
+          imagen="${{ env.REGISTRO }}/${{ github.repository_owner }}/terracolombia-${{ matrix.app }}:${{ needs.preparar.outputs.etiqueta }}"
+          echo "── Comprobando $imagen"
+          docker pull -q "$imagen"
+
+          case "${{ matrix.app }}" in
+            web|docs-site)
+              # nginx tiene que aceptar su configuración.
+              docker run --rm --entrypoint nginx "$imagen" -t
+              ;;
+            api)
+              # Node tiene que poder cargar el punto de entrada.
+              docker run --rm --entrypoint node "$imagen" --version
+              docker run --rm --entrypoint sh "$imagen" -c 'test -f dist/server.js || (echo "falta dist/server.js" && exit 1)'
+              ;;
+            worker)
+              docker run --rm --entrypoint node "$imagen" --version
+              # GDAL y Chromium: las dos herramientas externas sin las que el
+              # worker no sirve para nada.
+              docker run --rm --entrypoint ogr2ogr "$imagen" --version
+              docker run --rm --entrypoint sh "$imagen" -c \
+                'ls /ms-playwright/chromium-*/chrome-linux/chrome >/dev/null || (echo "falta el Chromium de Playwright" && exit 1)'
+              ;;
+          esac
+          echo "OK: la imagen de ${{ matrix.app }} arranca."
+
+      - name: Verificar que la imagen no corre como root
+        run: |
+          set -euo pipefail
+          imagen="${{ env.REGISTRO }}/${{ github.repository_owner }}/terracolombia-${{ matrix.app }}:${{ needs.preparar.outputs.etiqueta }}"
+          usuario="$(docker run --rm --entrypoint id "$imagen" -u 2>/dev/null || echo desconocido)"
+          if [ "$usuario" = "0" ]; then
+            echo "::error::La imagen de ${{ matrix.app }} corre como root. Todas deben usar un usuario sin privilegios."
+            exit 1
+          fi
+          echo "OK: la imagen corre con uid $usuario."
+
+      - name: Resumen
+        if: always()
+        run: |
+          {
+            echo "### ${{ matrix.app }}"
+            echo ""
+            echo "\`\`\`"
+            echo "${{ steps.meta.outputs.tags }}"
+            echo "\`\`\`"
+            echo ""
+            echo "Digest: \`${{ steps.construir.outputs.digest }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Análisis de vulnerabilidades de las imágenes publicadas.
+  # No bloquea la publicación (el hallazgo llega después), pero sí deja el
+  # informe en la pestaña Security.
+  # ═══════════════════════════════════════════════════════════════════════════
+  analizar:
+    name: Vulnerabilidades (${{ matrix.app }})
+    runs-on: ubuntu-latest
+    needs: [preparar, construir]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    permissions:
+      contents: read
+      packages: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJSON(needs.preparar.outputs.apps) }}
+    steps:
+      - name: Autenticarse en GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRO }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Analizar con Trivy
+        uses: aquasecurity/trivy-action@0.30.0
+        with:
+          image-ref: ${{ env.REGISTRO }}/${{ github.repository_owner }}/terracolombia-${{ matrix.app }}:${{ needs.preparar.outputs.etiqueta }}
+          format: sarif
+          output: trivy-${{ matrix.app }}.sarif
+          severity: 'CRITICAL,HIGH'
+          # Solo lo que tiene arreglo: una vulnerabilidad sin parche disponible
+          # no es una tarea, es una nota.
+          ignore-unfixed: true
+
+      - name: Publicar el resultado en la pestaña Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-${{ matrix.app }}.sarif
+          category: trivy-${{ matrix.app }}

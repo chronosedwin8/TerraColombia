@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "5c2k-ahfc",
+  "name": "MEN_NÚMERO_BACHILLERES_POR_ETC",
+  "description": "Contiene los datos de los graduados por año, con un histórico desde 2019 hasta el  2025",
+  "publisher": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "educación",
+    "bachiller",
+    "graduados"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/5c2k-ahfc",
+  "webUri": "https://www.datos.gov.co/d/5c2k-ahfc",
+  "homepage": null,
+  "createdAt": "2020-09-29T23:13:04+0000",
+  "dataUpdatedAt": "2026-09-11T14:37:39+0000",
+  "cutDate": "2026-09-11",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "a_o",
+      "jsType": "AÑO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "aprobados_26_oficial",
+      "jsType": "APROBADOS_26_OFICIAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matricula_26_no_oficial",
+      "jsType": "MATRICULA_26_NO_OFICIAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "aprobados_11_no_oficial",
+      "jsType": "APROBADOS_11_NO_OFICIAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matricula_11_no_oficial",
+      "jsType": "MATRICULA_11_NO_OFICIAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matricula_11_total",
+      "jsType": "MATRICULA_11_TOTAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "secretaria",
+      "jsType": "SECRETARIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_municipio",
+      "jsType": "CODIGO_MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_departamento",
+      "jsType": "CODIGO_DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "aprobados_11_total",
+      "jsType": "APROBADOS_11_TOTAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "aprobados_26_total",
+      "jsType": "APROBADOS_26_TOTAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matricula_11_oficial",
+      "jsType": "MATRICULA_11_OFICIAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "aprobados_26_no_oficial",
+      "jsType": "APROBADOS_26_NO_OFICIAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matricula_26_oficial",
+      "jsType": "MATRICULA_26_OFICIAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matricula_26_total",
+      "jsType": "MATRICULA_26_TOTAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "aprobados_11_oficial",
+      "jsType": "APROBADOS_11_OFICIAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_etc",
+      "jsType": "CODIGO_ETC",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:39.669Z"
+}

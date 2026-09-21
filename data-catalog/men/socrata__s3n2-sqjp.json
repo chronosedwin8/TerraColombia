@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "s3n2-sqjp",
+  "name": "ESTABLECIMIENTOS IMPORTADORES CERTIFICADOS EN CCAA DE DISPOSITIVOS MÉDICOS Y EQUIPOS BIOMÉDICOS",
+  "description": "Son los establecimientos certificados en Capacidad de Almacenamiento y/o Acondicionamiento (CCAA) para importar dispositivos médicos equipos biomédicos.",
+  "publisher": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "almacenamiento y acondicionamiento"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/s3n2-sqjp",
+  "webUri": "https://www.datos.gov.co/d/s3n2-sqjp",
+  "homepage": null,
+  "createdAt": "2016-07-15T00:16:54+0000",
+  "dataUpdatedAt": "2026-06-24T15:20:04+0000",
+  "cutDate": "2026-06-24",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "concepto",
+      "jsType": "concepto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit",
+      "jsType": "nit",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (nit)."
+    },
+    {
+      "name": "fechaconcepto",
+      "jsType": "fechaconcepto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "establecimiento",
+      "jsType": "establecimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciudadmunicipio",
+      "jsType": "ciudadmunicipio",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nit"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:49.924Z"
+}

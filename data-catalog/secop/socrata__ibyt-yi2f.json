@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "ibyt-yi2f",
+  "name": "SECOP II - Facturas",
+  "description": "Facturas pagas en la plataforma SECOP II",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "facturas",
+    "secop"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/ibyt-yi2f",
+  "webUri": "https://www.datos.gov.co/d/ibyt-yi2f",
+  "homepage": null,
+  "createdAt": "2020-10-16T03:32:32+0000",
+  "dataUpdatedAt": "2026-09-21T12:45:32+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "id_contrato",
+      "jsType": "ID Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_pago",
+      "jsType": "ID Pago",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_factura",
+      "jsType": "Fecha Factura",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_entidad",
+      "jsType": "Codigo Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_de_factura",
+      "jsType": "Numero de Factura",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_neto",
+      "jsType": "Valor Neto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_total",
+      "jsType": "Valor Total",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "notas",
+      "jsType": "Notas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_entrega",
+      "jsType": "Fecha de entrega",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "radicado",
+      "jsType": "Radicado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_estiamda_de_pago",
+      "jsType": "Fecha estiamda de pago",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_a_pagar",
+      "jsType": "Valor a Pagar",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado",
+      "jsType": "Estado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pago_confirmado",
+      "jsType": "Pago confirmado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "usuario_pago",
+      "jsType": "Usuario Pago",
+      "pii": true,
+      "piiReason": "Identifica al funcionario u operario que editó el registro."
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "usuario_pago"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:01.360Z"
+}

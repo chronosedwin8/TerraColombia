@@ -1,0 +1,141 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — plantilla: solicitud de función
+# ═════════════════════════════════════════════════════════════════════════════
+
+name: Solicitud de función
+description: Propuesta de algo nuevo o de una mejora de lo existente.
+title: '[función] '
+labels: ['función', 'triaje']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Antes de escribir: la propuesta más útil es la que empieza por el
+        **problema del usuario**, no por la solución. «Necesito saber si puedo
+        construir bodegas en este lote» es una propuesta; «añadir un filtro de
+        uso del suelo al buscador» es una solución posible entre varias.
+
+        Tenga en cuenta dos límites del producto que no van a cambiar:
+
+        - **No entregamos avalúos ni conceptos jurídicos.** El sistema da
+          indicadores explicados, con su fuente. No dice cuánto vale un predio
+          ni si se puede construir: dice qué dicen los datos oficiales.
+        - **No existe la ruta predio → persona.** Ninguna función que requiera
+          datos del propietario es viable, en ningún plan, por ningún precio.
+
+  - type: textarea
+    id: problema
+    attributes:
+      label: Qué problema resuelve
+      description: Quién lo tiene, cuándo le pasa y qué hace hoy para salir del paso.
+      placeholder: |
+        Soy avaluador. Cuando me encargan un lote rural necesito saber si está
+        dentro de la frontera agrícola y qué vocación tiene el suelo. Hoy entro
+        al SIPRA de la UPRA en otra pestaña y comparo a ojo con el mapa del IGAC.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: segmento
+    attributes:
+      label: A quién le sirve
+      description: Segmentos de PLAN §1.2.
+      multiple: true
+      options:
+        - Persona natural (compra un lote o una casa, herencia, finca)
+        - Inmobiliaria, constructora, urbanizador, avaluador
+        - Retail, colegios, clínicas, franquicias, logística
+        - Banco, aseguradora, fondo (due diligence masivo)
+        - Desarrollador o proptech (consume la API)
+        - Alcaldía, gestor catastral, academia
+        - Equipo interno (operación, soporte, administración)
+    validations:
+      required: true
+
+  - type: textarea
+    id: propuesta
+    attributes:
+      label: Qué propone
+      description: 'Si tiene una idea de cómo debería funcionar, descríbala. Si no, déjelo en blanco: el problema ya es suficiente.'
+
+  - type: dropdown
+    id: modulo
+    attributes:
+      label: Módulo del plan al que corresponde
+      multiple: true
+      options:
+        - M1 Explorador
+        - M2 Ficha de predio
+        - M3 Buscador avanzado de predios
+        - M4 Analizador de zona
+        - M5 Aptitud de terreno
+        - M6 Localización de negocio
+        - M7 Due diligence territorial (informes)
+        - M8 Cambio territorial
+        - M9 Observatorio
+        - M10 GeoAPI
+        - M11 Asistente
+        - M12 Cuenta y negocio
+        - Módulo nuevo
+        - No lo sé
+
+  - type: textarea
+    id: datos
+    attributes:
+      label: Qué datos haría falta
+      description: >-
+        Si sabe qué fuente oficial tiene el dato, dígalo con su URL. Si no existe
+        fuente pública, es información importante: probablemente la función no se
+        pueda hacer de forma honesta, y eso hay que saberlo antes de diseñarla.
+      placeholder: |
+        Frontera agrícola nacional (UPRA / SIPRA). Vocación del suelo: Agrología
+        del IGAC, que ya se usa en M5.
+
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: Alternativas que ya consideró
+      description: 'Incluida «no hacer nada»: a veces es la correcta.'
+
+  - type: dropdown
+    id: plan
+    attributes:
+      label: En qué plan debería estar
+      options:
+        - Gratis
+        - Pago por informe
+        - Pro
+        - Business
+        - API
+        - Enterprise / Institucional
+        - No lo sé
+
+  - type: dropdown
+    id: urgencia
+    attributes:
+      label: Qué pasa si no se hace
+      options:
+        - Hay clientes que no compran por esto
+        - Hay clientes que se van a ir por esto
+        - Molesta, pero se puede trabajar sin ello
+        - Es una mejora agradable, sin urgencia
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Contexto adicional
+      description: Bocetos, capturas de otros productos, ejemplos concretos, enlaces.
+
+  - type: checkboxes
+    id: confirmaciones
+    attributes:
+      label: Confirmaciones
+      options:
+        - label: Busqué entre las incidencias y discusiones existentes.
+          required: true
+        - label: La propuesta no requiere datos del propietario ni ningún dato personal.
+          required: true
+        - label: Entiendo que el sistema entrega indicadores con su fuente, no avalúos ni conceptos jurídicos.
+          required: true

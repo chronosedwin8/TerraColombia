@@ -1,0 +1,396 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "p6dx-8zbt",
+  "name": "SECOP II - Procesos de Contratación",
+  "description": "Registro de los procesos de compra, sean o no adjudicados, hechos en la plataforma SECOP II desde su lanzamiento",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "secop",
+    "procesos de compra"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/p6dx-8zbt",
+  "webUri": "https://www.datos.gov.co/d/p6dx-8zbt",
+  "homepage": null,
+  "createdAt": "2019-10-01T04:42:01+0000",
+  "dataUpdatedAt": "2026-09-20T18:38:12+0000",
+  "cutDate": "2026-09-20",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "codigoproveedor",
+      "jsType": "CodigoProveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento_entidad",
+      "jsType": "Departamento Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_apertura_efectiva",
+      "jsType": "Fecha de Apertura Efectiva",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_total_adjudicacion",
+      "jsType": "Valor Total Adjudicacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciudad_entidad",
+      "jsType": "Ciudad Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "proveedores_con_invitacion",
+      "jsType": "Proveedores con Invitacion Directa",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_ultima_publicaci",
+      "jsType": "Fecha de Ultima Publicación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_del_proveedor",
+      "jsType": "Nombre del Proveedor Adjudicado",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "conteo_de_respuestas_a_ofertas",
+      "jsType": "Conteo de Respuestas a Ofertas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "proveedores_invitados",
+      "jsType": "Proveedores Invitados",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_adjudicacion",
+      "jsType": "ID Adjudicacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento_proveedor",
+      "jsType": "Departamento Proveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_publicacion_del",
+      "jsType": "Fecha de Publicacion del Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_recepcion_de",
+      "jsType": "Fecha de Recepcion de Respuestas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_publicacion_fase_1",
+      "jsType": "Fecha de Publicacion (Fase Seleccion Precalificacion)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_publicacion_fase_2",
+      "jsType": "Fecha de Publicacion (Fase Borrador)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "proveedores_que_manifestaron",
+      "jsType": "Proveedores que Manifestaron Interes",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_de_apertura_del_proceso",
+      "jsType": "Estado de Apertura del Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "respuestas_al_procedimiento",
+      "jsType": "Respuestas al Procedimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_del_proceso",
+      "jsType": "ID del Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "categorias_adicionales",
+      "jsType": "Categorias Adicionales",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "unidad_de_duracion",
+      "jsType": "Unidad de Duracion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "descripci_n_del_procedimiento",
+      "jsType": "Descripción del Procedimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "respuestas_externas",
+      "jsType": "Respuestas Externas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ordenentidad",
+      "jsType": "OrdenEntidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_pci",
+      "jsType": "Entidad Centralizada",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_del_procedimiento",
+      "jsType": "Estado del Procedimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciudad_proveedor",
+      "jsType": "Ciudad Proveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_publicacion_fase",
+      "jsType": "Fecha de Publicacion (Fase Planeacion Precalificacion)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_publicacion_fase_3",
+      "jsType": "Fecha de Publicacion (Fase Seleccion)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "duracion",
+      "jsType": "Duracion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_resumen",
+      "jsType": "Estado Resumen",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ppi",
+      "jsType": "PCI",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_entidad",
+      "jsType": "Nit Entidad",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "tipo_de_contrato",
+      "jsType": "Tipo de Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "referencia_del_proceso",
+      "jsType": "Referencia del Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "proveedores_unicos_con",
+      "jsType": "Proveedores Unicos con Respuestas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_entidad",
+      "jsType": "Codigo Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_adjudicacion",
+      "jsType": "Fecha Adjudicacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fase",
+      "jsType": "Fase",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_estado_del_procedimiento",
+      "jsType": "ID Estado del Procedimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "entidad",
+      "jsType": "Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "modalidad_de_contratacion",
+      "jsType": "Modalidad de Contratacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_de_la_unidad_de",
+      "jsType": "Nombre de la Unidad de Contratación",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "fecha_de_apertura_de_respuesta",
+      "jsType": "Fecha de Apertura de Respuesta",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "adjudicado",
+      "jsType": "Adjudicado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "precio_base",
+      "jsType": "Precio Base",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_del_procedimiento",
+      "jsType": "Nombre del Procedimiento",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "ciudad_de_la_unidad_de",
+      "jsType": "Ciudad de la Unidad de Contratación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "justificaci_n_modalidad_de",
+      "jsType": "Justificación Modalidad de Contratación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_del_portafolio",
+      "jsType": "ID del Portafolio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_principal_de_categoria",
+      "jsType": "Codigo Principal de Categoria",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_del_proveedor_adjudicado",
+      "jsType": "NIT del Proveedor Adjudicado",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "urlproceso",
+      "jsType": "URLProceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "visualizaciones_del",
+      "jsType": "Visualizaciones del Procedimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_de_lotes",
+      "jsType": "Numero de Lotes",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "subtipo_de_contrato",
+      "jsType": "Subtipo de Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_publicacion",
+      "jsType": "Fecha de Publicacion (Manifestacion de Interes)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_del_adjudicador",
+      "jsType": "Nombre del Adjudicador",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nombre_del_proveedor",
+    "nit_entidad",
+    "nombre_de_la_unidad_de",
+    "nombre_del_procedimiento",
+    "nit_del_proveedor_adjudicado",
+    "nombre_del_adjudicador"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:03.004Z"
+}

@@ -1,0 +1,252 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — configuración de Martin (teselas vectoriales desde PostGIS)
+#
+# Martin NO se expone a Internet. La puerta de entrada es siempre la API
+# (`GET /tiles/:layer/:z/:x/:y.mvt`), que aplica control de plan, cuotas
+# anti-scraping y marca de agua antes de hacer proxy aquí
+# (docs/DECISIONES.md ADR-003, docs/SEGURIDAD.md §Anti-scraping).
+#
+# ─── DECISIÓN: todas las fuentes son FUNCIONES de tesela, no tablas ──────────
+# La publicación del ETL es atómica por `snapshot_id` (PLAN §8): mientras se
+# carga un corte nuevo, las filas del corte en curso ya están en la tabla pero
+# NO deben verse. Una fuente de tipo `table` haría `SELECT … FROM core.parcel`
+# sin ese filtro y filtraría datos a medio cargar. Las funciones de tesela
+# resuelven el snapshot activo dentro del SQL, así que el usuario nunca ve una
+# carga incompleta. Además permiten:
+#   · elegir la resolución H3 según el zoom,
+#   · recortar por `snapshot_id` histórico con `?snapshot=` (M8, comparación
+#     entre cortes),
+#   · limitar explícitamente las columnas publicadas.
+#
+# ─── CONTRATO de las funciones ──────────────────────────────────────────────
+# Las implementa `packages/db/migrations` (esquema `analytics`). Firma que
+# Martin espera:
+#
+#   CREATE FUNCTION analytics.tile_<capa>(z integer, x integer, y integer, query json)
+#     RETURNS bytea
+#     LANGUAGE plpgsql STABLE PARALLEL SAFE SECURITY DEFINER AS $$ … $$;
+#
+# Dentro de cada función:
+#   · `snapshot_id` = el snapshot ACTIVO del dataset, salvo que `query->>'snapshot'`
+#     traiga uno explícito y publicado.
+#   · geometría vía `ST_AsMVTGeom(geom, ST_TileEnvelope(z,x,y), 4096, 64, true)`.
+#   · nombre de la capa MVT = el nombre de la fuente de esta configuración.
+#   · `SECURITY DEFINER` + `REVOKE` sobre las tablas base: el rol de Martin solo
+#     puede ejecutar estas funciones, no leer tablas directamente. Así ninguna
+#     columna no listada abajo puede salir por accidente.
+#
+# ─── REGLA DE COLUMNAS (PII) ────────────────────────────────────────────────
+# En cada fuente se documenta EXACTAMENTE qué columnas se publican. No se
+# publica nunca `attrs` (JSONB crudo de R1/R2, puede traer campos no
+# inspeccionados), ni dirección domiciliaria completa, ni nada que venga de la
+# lista negra de `etl/config/pii-blocklist.ts`. La regla 3 de CLAUDE.md
+# (cero datos personales) se aplica también a las teselas: son el canal más
+# fácil de raspar a gran escala.
+# ═════════════════════════════════════════════════════════════════════════════
+
+# ─── Servidor ───────────────────────────────────────────────────────────────
+listen_addresses: '0.0.0.0:3000'
+
+# Un worker por núcleo; Martin es un solo proceso con hilos.
+worker_processes: 4
+
+# Caché de teselas en memoria del propio Martin. La caché "de verdad" (Redis o
+# CDN) está delante, en la API; esta solo absorbe ráfagas.
+cache_size_mb: 512
+
+# Comprimir en Brotli si el cliente lo acepta; MapLibre lo acepta.
+preferred_encoding: brotli
+
+keep_alive: 75
+
+postgres:
+  # La cadena de conexión viene del entorno: aquí NUNCA hay contraseñas.
+  # docker-compose.yml la inyecta como DATABASE_URL.
+  connection_string: ${DATABASE_URL}
+
+  # Reservar conexiones: Martin no debe agotar el pool que necesita la API.
+  # En producción va detrás de pgbouncer (PLAN §13).
+  pool_size: ${MARTIN_POOL_SIZE:-10}
+
+  # Tiempo máximo por tesela. El objetivo de §13 es < 200 ms p95 con caché;
+  # 3 s es el freno de emergencia para una tesela patológica.
+  max_feature_count: 50000
+
+  # ─── CRÍTICO: nada de publicación automática ──────────────────────────────
+  # Con `auto_publish` activo Martin publicaría toda tabla con geometría que
+  # encuentre, incluyendo `raw.*` (datos sin depurar, posible PII) y cualquier
+  # tabla nueva de una migración. Todo se declara a mano.
+  auto_publish: false
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # FUENTES
+  # ═══════════════════════════════════════════════════════════════════════════
+  functions:
+    # ───────────────────────────────────────────────────────────────────────
+    # CATASTRO (core) — Fuente: IGAC, Base Catastral, CC BY-SA 4.0.
+    # La atribución la añade el cliente (`apps/web`) leyendo `GET /layers`.
+    # ───────────────────────────────────────────────────────────────────────
+
+    # Predios. zoom mínimo 14: por debajo hay demasiados polígonos por tesela y
+    # el mapa debe mostrar `h3_cell` en su lugar (PLAN §10.3).
+    # Columnas publicadas: npn, muni_code, zone, economic_use, area_geom_m2,
+    #                      built_area_m2, has_building.
+    # NO se publica: attrs, address, cadastral_value, npn_old.
+    #   · `address` queda fuera porque la dirección domiciliaria del IGAC puede
+    #     identificar un inmueble concreto de una persona; se entrega solo en la
+    #     ficha, que pasa por control de plan y registro de uso.
+    #   · `cadastral_value` queda fuera porque sin la advertencia
+    #     "avalúo catastral ≠ valor comercial" (regla 5) no se puede mostrar, y
+    #     una tesela no lleva advertencias.
+    parcel:
+      schema: analytics
+      function: tile_parcel
+      minzoom: 14
+      maxzoom: 22
+      bounds: [-81.85, -4.3, -66.8, 13.6] # Colombia continental + insular
+
+    # Construcciones. Mismo zoom que predios: solo tienen sentido juntas.
+    # Columnas publicadas: parcel_npn, floors, built_area_m2, use.
+    # NO se publica: attrs.
+    building:
+      schema: analytics
+      function: tile_building
+      minzoom: 14
+      maxzoom: 22
+      bounds: [-81.85, -4.3, -66.8, 13.6]
+
+    # Manzanas urbanas. Sirven de nivel intermedio entre sector y predio.
+    # Columnas publicadas: code, muni_code, sector_code, n_parcels.
+    block:
+      schema: analytics
+      function: tile_block
+      minzoom: 12
+      maxzoom: 18
+      bounds: [-81.85, -4.3, -66.8, 13.6]
+
+    # Sectores catastrales (urbanos y rurales).
+    # Columnas publicadas: code, muni_code, zone, n_blocks, n_parcels.
+    sector:
+      schema: analytics
+      function: tile_sector
+      minzoom: 10
+      maxzoom: 16
+      bounds: [-81.85, -4.3, -66.8, 13.6]
+
+    # Municipios. Capa de navegación y de cobertura honesta (regla 6):
+    # `coverage_status` y `is_igac` vienen de `core.cadastral_manager`, así el
+    # mapa puede pintar en gris los municipios de otros gestores catastrales sin
+    # una petición adicional.
+    # Columnas publicadas: code, name, dept_code, dept_name, is_igac,
+    #                      coverage_status, manager_name, n_parcels.
+    municipality:
+      schema: analytics
+      function: tile_municipality
+      minzoom: 4
+      maxzoom: 14
+      bounds: [-81.85, -4.3, -66.8, 13.6]
+
+    # Departamentos. Geometrías simplificadas por zoom dentro de la función
+    # (`ST_SimplifyPreserveTopology`): el límite nacional en detalle completo
+    # pesa decenas de MB.
+    # Columnas publicadas: code, name, n_municipalities, n_parcels.
+    department:
+      schema: analytics
+      function: tile_department
+      minzoom: 0
+      maxzoom: 10
+      bounds: [-81.85, -4.3, -66.8, 13.6]
+
+    # ───────────────────────────────────────────────────────────────────────
+    # AGREGADOS (analytics)
+    # ───────────────────────────────────────────────────────────────────────
+
+    # Rejilla H3. La función elige la resolución según el zoom para que la
+    # cantidad de celdas por tesela sea estable:
+    #   z 0–5 → r5 · z 6–8 → r6 · z 9–10 → r7 · z 11–12 → r8 · z ≥13 → r9
+    # Se puede forzar con `?res=8` y elegir el indicador a pintar con
+    # `?indicator=pop|n_parcels|road_access_score|slope_mean|opportunity`.
+    # Columnas publicadas: h3, res, muni_code, n_parcels, pop, pop_school_age,
+    #                      n_schools, n_health, road_access_score, slope_mean,
+    #                      value (el indicador solicitado, ya normalizado 0–100).
+    # `area_stats`, `poi_counts` y `hazard_flags` (JSONB) NO van en la tesela:
+    # son voluminosos y se piden por API cuando el usuario abre una celda.
+    h3_cell:
+      schema: analytics
+      function: tile_h3_cell
+      minzoom: 0
+      maxzoom: 15
+      bounds: [-81.85, -4.3, -66.8, 13.6]
+
+    # ───────────────────────────────────────────────────────────────────────
+    # CONTEXTO (ctx)
+    # ───────────────────────────────────────────────────────────────────────
+
+    # Establecimientos educativos. Fuente: MEN vía datos.gov.co.
+    # Columnas publicadas: dane_code, name, sector (oficial/privado), levels,
+    #                      enrollment.
+    # Son datos de establecimientos (personas jurídicas / sedes), no de
+    # personas: no hay PII. Aun así no se publica ningún campo de contacto.
+    school:
+      schema: analytics
+      function: tile_school
+      minzoom: 9
+      maxzoom: 22
+      bounds: [-81.85, -4.3, -66.8, 13.6]
+
+    # IPS y sedes. Fuente: MinSalud REPS.
+    # Columnas publicadas: reps_code, name, level, nature.
+    # NO se publica `services` (arreglo largo) ni datos de contacto.
+    health_facility:
+      schema: analytics
+      function: tile_health_facility
+      minzoom: 9
+      maxzoom: 22
+      bounds: [-81.85, -4.3, -66.8, 13.6]
+
+    # Áreas protegidas (RUNAP) y determinantes ambientales.
+    # Columnas publicadas: code, name, category, authority.
+    # Polígonos grandes: la función usa las geometrías ya troceadas con
+    # `ST_Subdivide` de la ingesta (PLAN §7).
+    protected_area:
+      schema: analytics
+      function: tile_protected_area
+      minzoom: 5
+      maxzoom: 18
+      bounds: [-81.85, -4.3, -66.8, 13.6]
+
+    # Amenazas (SGC: movimientos en masa, sísmica; IDEAM: inundación).
+    # Filtrable con `?kind=remocion|sismica|inundacion`.
+    # Columnas publicadas: kind, level, level_label, source.
+    # `level_label` va en español porque la leyenda se pinta desde la tesela
+    # y un semáforo nunca puede ser solo color (PLAN §10.1).
+    hazard:
+      schema: analytics
+      function: tile_hazard
+      minzoom: 6
+      maxzoom: 18
+      bounds: [-81.85, -4.3, -66.8, 13.6]
+
+    # Unidades de suelo (Agrología IGAC): base de M5 Aptitud de terreno.
+    # Columnas publicadas: code, name, capability_class, vocation, texture.
+    # Geometrías troceadas con `ST_Subdivide`; el detalle completo del perfil
+    # de suelo se consulta por API.
+    soil_unit:
+      schema: analytics
+      function: tile_soil_unit
+      minzoom: 8
+      maxzoom: 18
+      bounds: [-81.85, -4.3, -66.8, 13.6]
+
+    # Zonificación del POT donde exista. Cobertura parcial por diseño
+    # (PLAN §2): la función devuelve solo los municipios con POT cargado y la
+    # UI dice explícitamente "no disponible: consulte Planeación municipal"
+    # para el resto.
+    # Columnas publicadas: muni_code, classification, use, source_doc, cut_date.
+    # `source_doc` es obligatorio: sin procedencia no se muestra (regla 4).
+    pot_zone:
+      schema: analytics
+      function: tile_pot_zone
+      minzoom: 10
+      maxzoom: 18
+      bounds: [-81.85, -4.3, -66.8, 13.6]

@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "spve-848d",
+  "name": "CONECTIVIDAD EN SEDES EDUCATIVAS OFICIALES DE LOS MUNICIPIOS NO CERTIFICADOS DEL DEPARTAMENTO DE SANTANDER",
+  "description": "ESTADO DE CONECTIVIDAD EN SEDES EDUCATIVAS OFICIALES DE LOS MUNICIPIOS NO CERTIFICADOS DEL DEPARTAMENTO DE SANTANDER",
+  "publisher": "Gobernación de Santander, Santander",
+  "category": "Ciencia, Tecnología e Innovación",
+  "theme": null,
+  "tags": [
+    "conectividad"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Santander, Santander",
+  "dataUri": "https://www.datos.gov.co/resource/spve-848d",
+  "webUri": "https://www.datos.gov.co/d/spve-848d",
+  "homepage": null,
+  "createdAt": "2024-06-14T01:19:18+0000",
+  "dataUpdatedAt": "2026-09-02T17:25:31+0000",
+  "cutDate": "2026-09-02",
+  "geographicCoverage": null,
+  "rowCount": 1227,
+  "columns": [
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "establecimiento_educativo",
+      "jsType": "ESTABLECIMIENTO EDUCATIVO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ancho_banda",
+      "jsType": "ANCHO BANDA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sede",
+      "jsType": "SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "no",
+      "jsType": "No.",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "operador_conectividad",
+      "jsType": "OPERADOR CONECTIVIDAD",
+      "pii": true,
+      "piiReason": "Identifica al funcionario u operario que editó el registro."
+    }
+  ],
+  "sample": [
+    {
+      "no": "1",
+      "municipio": "ALBANIA",
+      "establecimiento_educativo": "COLEGIO DEPARTAMENTAL INTEGRADO SAGRADO CORAZON DE JESUS",
+      "sede": "COLEGIO DEPARTAMENTAL INTEGRADO SAGRADO CORAZON DE JESUS",
+      "zona": "URBANA",
+      "ancho_banda": "100"
+    },
+    {
+      "no": "2",
+      "municipio": "ALBANIA",
+      "establecimiento_educativo": "COLEGIO DEPARTAMENTAL INTEGRADO SAGRADO CORAZON DE JESUS",
+      "sede": "ESCUELA RURAL CANOAS",
+      "zona": "RURAL",
+      "ancho_banda": "10"
+    },
+    {
+      "no": "3",
+      "municipio": "ALBANIA",
+      "establecimiento_educativo": "COLEGIO DEPARTAMENTAL INTEGRADO SAGRADO CORAZON DE JESUS",
+      "sede": "ESCUELA RURAL CANUTILLO",
+      "zona": "RURAL",
+      "ancho_banda": "10"
+    },
+    {
+      "no": "4",
+      "municipio": "ALBANIA",
+      "establecimiento_educativo": "COLEGIO DEPARTAMENTAL INTEGRADO SAGRADO CORAZON DE JESUS",
+      "sede": "ESCUELA RURAL CHEBRE",
+      "zona": "RURAL",
+      "ancho_banda": "10"
+    },
+    {
+      "no": "5",
+      "municipio": "ALBANIA",
+      "establecimiento_educativo": "COLEGIO DEPARTAMENTAL INTEGRADO SAGRADO CORAZON DE JESUS",
+      "sede": "ESCUELA RURAL EL SALITRE",
+      "zona": "RURAL",
+      "ancho_banda": "10"
+    }
+  ],
+  "piiDroppedColumns": [
+    "operador_conectividad"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:28.609Z"
+}

@@ -1,0 +1,293 @@
+{
+  "schemaVersion": 1,
+  "source": "igac",
+  "connector": "arcgis-rest",
+  "name": "capacidaddeusodelastierrasbordenortebogota2011",
+  "folder": "agrologia",
+  "serviceType": "MapServer",
+  "url": "https://mapas.igac.gov.co/server/rest/services/agrologia/capacidaddeusodelastierrasbordenortebogota2011/MapServer",
+  "description": "<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>Mapa temático que representa la clasificación por Capacidad de Uso en las áreas planas situadas al norte de Bogotá, Departamento de Cundinamarca, en una extensión de 1600 ha. a escala 1:10.000, publicado en el año 2011. Suministra información importante acerca del recurso suelo, a través de la determinación de las potencialidades y limitaciones de uso de las tierras a partir del análisis de las características de los suelos. Se definen las unidades cartográficas de capacidad de uso de la tierra con sus respectivos componentes: Clase, Subclase, Grupo de manejo, Principales limitantes y Prácticas de manejo.</SPAN></P><P><SPAN>Este producto es generado por la Subdirección de Agrología del Instituto Geográfico Agustín Codazzi - IGAC, dentro del convenio interadministrativo No 4177 entre el Instituto de Estudios Urbanos (IEU) de la Universidad Nacional de Colombia y el Instituto Geográfico Agustín Codazzi IGAC</SPAN></P></DIV></DIV></DIV>",
+  "copyrightText": "La información geográfica que suministra el Instituto Geográfico Agustín Codazzi (IGAC) de la clasificación por Capacidad de Uso de las Tierras de 1.600 ha. en las áreas planas de Bogotá, Departamento de Cundinamarca y los productos que resulten de la ejecución del proyecto hacen parte de la información básica oficial del país y por lo tanto el IGAC tiene la propiedad intelectual sobre las mismas, con base en la Ley 23 de 1982 sobre derechos de autor. Por lo tanto, dicha información no podrá ser utilizada, modificada, cedida o comercializada sin previa y expresa autorización del Instituto Geográfico Agustín Codazzi.",
+  "currentVersion": 11.3,
+  "capabilities": [
+    "map",
+    "query",
+    "data"
+  ],
+  "supportedQueryFormats": [
+    "json",
+    "geojson",
+    "pbf"
+  ],
+  "maxRecordCount": 2000,
+  "supportedExtensions": [
+    "WFSServer",
+    "WMSServer"
+  ],
+  "spatialReferenceWkid": 9377,
+  "fullExtent": {
+    "xmin": 4876063.084,
+    "ymin": 2083787.9086000007,
+    "xmax": 4885884.7185,
+    "ymax": 2089899.586100001,
+    "wkid": 9377
+  },
+  "layers": [
+    {
+      "id": 0,
+      "name": "CUT_BordeNorte_2011_10K",
+      "type": "Feature Layer",
+      "description": "<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>Mapa temático que representa la clasificación por Capacidad de Uso en las áreas planas situadas al norte de Bogotá, Departamento de Cundinamarca, en una extensión de 1600 ha. a escala 1:10.000, publicado en el año 2011. Suministra información importante acerca del recurso suelo, a través de la determinación de las potencialidades y limitaciones de uso de las tierras a partir del análisis de las características de los suelos. Se definen las unidades cartográficas de capacidad de uso de la tierra con sus respectivos componentes: Clase, Subclase, Grupo de manejo, Principales limitantes y Prácticas de manejo.</SPAN></P><P><SPAN>Este producto es generado por la Subdirección de Agrología del Instituto Geográfico Agustín Codazzi - IGAC, dentro del convenio interadministrativo No 4177 entre el Instituto de Estudios Urbanos (IEU) de la Universidad Nacional de Colombia y el Instituto Geográfico Agustín Codazzi IGAC</SPAN></P></DIV></DIV></DIV>",
+      "geometryType": "esriGeometryPolygon",
+      "url": "https://mapas.igac.gov.co/server/rest/services/agrologia/capacidaddeusodelastierrasbordenortebogota2011/MapServer/0",
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "crsLabel": "MAGNA-SIRGAS / Origen-Nacional",
+      "maxRecordCount": 2000,
+      "capabilities": [
+        "map",
+        "query",
+        "data"
+      ],
+      "supportedQueryFormats": [
+        "json",
+        "geojson",
+        "pbf"
+      ],
+      "supportsPagination": true,
+      "supportsStatistics": true,
+      "supportsOrderBy": true,
+      "objectIdField": "OBJECTID",
+      "displayField": "UCP",
+      "count": null,
+      "extent": {
+        "xmin": 4876063.084,
+        "ymin": 2083787.9086000007,
+        "xmax": 4885884.7185,
+        "ymax": 2089899.586100001,
+        "wkid": 9377
+      },
+      "fields": [
+        {
+          "name": "OBJECTID",
+          "alias": "OBJECTID",
+          "type": "esriFieldTypeOID",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SHAPE",
+          "alias": "SHAPE",
+          "type": "esriFieldTypeGeometry",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SHAPE_Length",
+          "alias": "SHAPE_Length",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SHAPE_Area",
+          "alias": "SHAPE_Area",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "UCP",
+          "alias": "UCP",
+          "type": "esriFieldTypeString",
+          "length": 20,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "CLASE",
+          "alias": "CLASE",
+          "type": "esriFieldTypeString",
+          "length": 20,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SUBCLASE",
+          "alias": "SUBCLASE",
+          "type": "esriFieldTypeString",
+          "length": 20,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "GRUPO_MANEJO",
+          "alias": "GRUPO_MANEJO",
+          "type": "esriFieldTypeString",
+          "length": 20,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "UCS",
+          "alias": "UCS",
+          "type": "esriFieldTypeString",
+          "length": 1200,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "CARACTERISTICAS",
+          "alias": "CARACTERISTICAS",
+          "type": "esriFieldTypeString",
+          "length": 500,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "LIMITANTES_USO",
+          "alias": "LIMITANTES_USO",
+          "type": "esriFieldTypeString",
+          "length": 500,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "USOS_RECOMENDADOS",
+          "alias": "USOS_RECOMENDADOS",
+          "type": "esriFieldTypeString",
+          "length": 1000,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "PRACTICAS_MANEJO",
+          "alias": "PRACTICAS_MANEJO",
+          "type": "esriFieldTypeString",
+          "length": 2000,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "AREA_ha",
+          "alias": "AREA_ha",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "ESTUDIO",
+          "alias": "ESTUDIO",
+          "type": "esriFieldTypeString",
+          "length": 10000000,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "ESCALA",
+          "alias": "ESCALA",
+          "type": "esriFieldTypeString",
+          "length": 10000000,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "AÑO",
+          "alias": "AÑO",
+          "type": "esriFieldTypeString",
+          "length": 10000000,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        }
+      ],
+      "sample": [],
+      "sampleRequested": 5,
+      "sampleReturned": 0,
+      "piiDroppedColumns": [],
+      "piiRedactedColumns": [],
+      "notes": [
+        "El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.",
+        "No se pudo traer la muestra: Se agotaron los 2 intentos contra https://mapas.igac.gov.co/server/rest/services/agrologia/capacidaddeusodelastierrasbordenortebogota2011/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=false&f=geojson&resultOffset=0&resultRecordCount=5&orderByFields=OBJECTID: This operation was aborted"
+      ],
+      "error": null
+    }
+  ],
+  "tables": [],
+  "inspectedAt": "2026-09-21T15:44:24.431Z",
+  "durationMs": 106129,
+  "notes": [],
+  "error": null
+}

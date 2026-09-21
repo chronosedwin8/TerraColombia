@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "rgxm-mmea",
+  "name": "Tienda Virtual del Estado Colombiano - Consolidado",
+  "description": "Procesos de compra pública hechos a través de procesos de agregacion de la demanda en acuerdos marco, en la plataforma de Tienda Virtual del Estado Colombiano",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "compra pública",
+    "tvec",
+    "colombia compra eficiente",
+    "tienda virtual estado colombiano"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/rgxm-mmea",
+  "webUri": "https://www.datos.gov.co/d/rgxm-mmea",
+  "homepage": null,
+  "createdAt": "2016-08-25T14:08:57+0000",
+  "dataUpdatedAt": "2026-09-18T06:32:49+0000",
+  "cutDate": "2026-09-18",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "entidad_obigada",
+      "jsType": "Entidad Obigada",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "proveedor",
+      "jsType": "Proveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rama_de_la_entidad",
+      "jsType": "Rama de la Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total",
+      "jsType": "Total",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_entidad",
+      "jsType": "ID Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sector_de_la_entidad",
+      "jsType": "Sector de la Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "agregacion",
+      "jsType": "Agregacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "solicitud",
+      "jsType": "Solicitud",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_proveedor",
+      "jsType": "NIT Proveedor",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "entidad",
+      "jsType": "Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "identificador_de_la_orden",
+      "jsType": "Identificador de la Orden",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "orden_de_la_entidad",
+      "jsType": "Orden de la Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_entidad",
+      "jsType": "NIT Entidad",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "estado",
+      "jsType": "Estado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciudad",
+      "jsType": "Ciudad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "Año",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "actividad_economica_proveedor",
+      "jsType": "Actividad Economica Proveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_vence",
+      "jsType": "Fecha vence",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "solicitante",
+      "jsType": "Solicitante",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (solicitante)."
+    },
+    {
+      "name": "fecha",
+      "jsType": "Fecha",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "items",
+      "jsType": "Items",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "espostconflicto",
+      "jsType": "EsPostconflicto",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nit_proveedor",
+    "nit_entidad",
+    "solicitante"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:07.017Z"
+}

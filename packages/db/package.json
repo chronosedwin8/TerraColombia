@@ -1,0 +1,38 @@
+{
+  "name": "@terracolombia/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./sql": "./src/sql.ts",
+    "./prisma": "./src/prisma.ts"
+  },
+  "scripts": {
+    "migrate": "tsx src/cli/migrate.ts up",
+    "migrate:status": "tsx src/cli/migrate.ts status",
+    "migrate:down": "tsx src/cli/migrate.ts down",
+    "seed": "tsx src/cli/seed.ts",
+    "reset": "tsx src/cli/migrate.ts reset",
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.1.0",
+    "@terracolombia/geo": "workspace:*",
+    "@terracolombia/shared": "workspace:*",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.10",
+    "prisma": "^6.1.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

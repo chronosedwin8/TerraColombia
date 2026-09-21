@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "65zu-5xdk",
+  "name": "Sedes de los Instituciones Educativas del Departamento de Boyacá",
+  "description": "Contiene información básica de las sedes de las instituciones educativos del sector oficial y no oficial por municipio del Departamento de Boyacá. Fuente: Sistema Integrado de Matricula – SIMAT y SINEB.\n\nDatos correspondientes",
+  "publisher": "Gobernación de Boyacá, Boyacá",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "establecimiento",
+    "educativo",
+    "sede",
+    "oficial",
+    "colegio",
+    "boyacá"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Boyacá, Boyacá",
+  "dataUri": "https://www.datos.gov.co/resource/65zu-5xdk",
+  "webUri": "https://www.datos.gov.co/d/65zu-5xdk",
+  "homepage": null,
+  "createdAt": "2017-07-21T22:12:46+0000",
+  "dataUpdatedAt": "2023-03-27T19:17:47+0000",
+  "cutDate": "2023-03-27",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "nombre_sede",
+      "jsType": " NOMBRE SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sector",
+      "jsType": "SECTOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_establecimiento",
+      "jsType": " NOMBRE ESTABLECIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "modelos",
+      "jsType": " MODELOS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": " ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direcci_n",
+      "jsType": " DIRECCIÓN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_sede",
+      "jsType": " ESTADO SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_establecimiento",
+      "jsType": " CÓDIGO ESTABLECIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "secretaria",
+      "jsType": "SECRETARIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados",
+      "jsType": " GRADOS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_sede",
+      "jsType": " CÓDIGO SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_municipio",
+      "jsType": "CÓDIGO MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_municipio",
+      "jsType": " NOMBRE MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tel_fono",
+      "jsType": " TELÉFONO",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "niveles",
+      "jsType": " NIVELES",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "tel_fono"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:32.959Z"
+}

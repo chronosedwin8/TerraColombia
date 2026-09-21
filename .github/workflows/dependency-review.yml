@@ -1,0 +1,85 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — revisión de dependencias en cada pull request
+#
+# Bloquea la fusión si un PR introduce:
+#   · una dependencia con vulnerabilidad conocida de severidad alta o crítica,
+#   · una licencia incompatible con el modelo del producto.
+#
+# ─── Sobre las licencias ────────────────────────────────────────────────────
+# La base catastral del IGAC es CC BY-SA 4.0 y el negocio se monta sobre
+# SERVICIO, no sobre exclusividad del dato (PLAN §2). Eso no obliga a que el
+# código sea copyleft, pero sí hace que las licencias fuertemente copyleft del
+# lado servidor (AGPL en particular) sean una decisión de producto, no una
+# decisión de quien añade un paquete. Por eso se deniegan aquí: no porque estén
+# mal, sino para que entren con conversación y no por descuido.
+# ═════════════════════════════════════════════════════════════════════════════
+
+name: Revisión de dependencias
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  revisar:
+    name: Revisar dependencias del PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      # Comentar el resumen en el PR.
+      pull-requests: write
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Revisión de dependencias
+        uses: actions/dependency-review-action@v4
+        with:
+          # Falla con vulnerabilidades altas o críticas. Las moderadas y bajas
+          # se reportan pero no bloquean: bloquear con todo convierte el
+          # control en algo que la gente aprende a saltarse.
+          fail-on-severity: high
+
+          # Licencias que NO pueden entrar sin decisión explícita.
+          #   AGPL-*       copyleft de red: afectaría a la GeoAPI pública
+          #   SSPL-1.0     licencia de servicio: incompatible con SaaS
+          #   BUSL-1.1     licencia de fuente disponible con restricción de uso
+          #   CC-BY-NC-*   prohíbe el uso comercial; el producto es comercial
+          #   Commons-Clause / "sin licencia" se revisan a mano
+          deny-licenses: >-
+            AGPL-1.0-only, AGPL-1.0-or-later, AGPL-3.0-only, AGPL-3.0-or-later,
+            SSPL-1.0,
+            BUSL-1.1,
+            CC-BY-NC-1.0, CC-BY-NC-2.0, CC-BY-NC-2.5, CC-BY-NC-3.0, CC-BY-NC-4.0,
+            CC-BY-NC-SA-1.0, CC-BY-NC-SA-2.0, CC-BY-NC-SA-2.5, CC-BY-NC-SA-3.0, CC-BY-NC-SA-4.0,
+            CC-BY-NC-ND-1.0, CC-BY-NC-ND-2.0, CC-BY-NC-ND-2.5, CC-BY-NC-ND-3.0, CC-BY-NC-ND-4.0
+
+          # Paquetes eximidos de la comprobación de licencia, con motivo.
+          # (Vacío hoy; cada entrada debe llevar su justificación en el PR que
+          # la añade.)
+          allow-dependencies-licenses: ''
+
+          comment-summary-in-pr: on-failure
+          warn-only: false
+
+      - name: Nota sobre licencias denegadas
+        if: failure()
+        run: |
+          {
+            echo "## Revisión de dependencias: no superada"
+            echo ""
+            echo "Si el fallo es por **licencia**, no lo resuelva añadiendo una excepción sin más."
+            echo "Las licencias denegadas están en \`.github/workflows/dependency-review.yml\`"
+            echo "con el motivo de cada una. Opciones, en orden de preferencia:"
+            echo ""
+            echo "1. Buscar una alternativa con licencia permisiva (MIT, Apache-2.0, BSD, ISC)."
+            echo "2. Si el paquete es imprescindible, abrir la discusión en el PR y registrar la"
+            echo "   decisión en \`docs/DECISIONES.md\` antes de eximirlo."
+            echo ""
+            echo "Si el fallo es por **vulnerabilidad**, actualice el paquete. Si no hay versión"
+            echo "corregida, evalúe si la ruta vulnerable se usa de verdad y documéntelo."
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,11 @@
+Fase 0 — recorriendo: igac-arcgis
+Muestras: 5 filas por capa
+
+GDAL detectado: GDAL 3.9.2, released 2024/08/13 en C:\Program Files\PostgreSQL\17\bin\ogr2ogr.exe (vía known-location).
+[igac-arcgis] Recorriendo el catálogo de https://mapas.igac.gov.co/server/rest/services…
+[igac-arcgis] 1401 servicios descubiertos (1400 consultables) en 13 carpetas.
+[igac-arcgis] (4/32) <raíz>/Datos_Fundamentales_Transporte_100k
+[igac-arcgis] (5/32) agrologia/actividadquimicanacional
+[igac-arcgis] (6/32) agrologia/areashomogeneasdetierra05360itagui
+[igac-arcgis] (7/32) agrologia/capacidaddeusodelastierrasbordenortebogota2011
+[igac-arcgis] (8/32) agrologia/capacidaddeusodelastierrascvc2023

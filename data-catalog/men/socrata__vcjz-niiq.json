@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "vcjz-niiq",
+  "name": "DIVIPOLA- Códigos departamentos",
+  "description": "Código de la división Político Administrativa del país, Actualización a corte 30 diciembre 2024.",
+  "publisher": "Departamento Administrativo Nacional de Estadísticas - DANE, Bogotá D.C.",
+  "category": "Mapas Nacionales",
+  "theme": null,
+  "tags": [
+    "departamento",
+    "divipola",
+    "codigo"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Departamento Administrativo Nacional de Estadísticas - DANE, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/vcjz-niiq",
+  "webUri": "https://www.datos.gov.co/d/vcjz-niiq",
+  "homepage": null,
+  "createdAt": "2020-06-12T13:11:24+0000",
+  "dataUpdatedAt": "2025-01-23T21:56:46+0000",
+  "cutDate": "2025-01-23",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "codigo_departamento",
+      "jsType": "Código Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "longitud",
+      "jsType": "longitud",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "latitud",
+      "jsType": "Latitud",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_departamento",
+      "jsType": "Nombre Departamento",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:37.821Z"
+}

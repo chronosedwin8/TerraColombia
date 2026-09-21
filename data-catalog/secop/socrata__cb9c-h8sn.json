@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "cb9c-h8sn",
+  "name": "SECOP II - Adiciones",
+  "description": "Adiciones hechas a los contratos firmados en la plataforma SECOP II",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "adición",
+    "contrato",
+    "secop ii",
+    "procesos de compra",
+    "presupuesto"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/cb9c-h8sn",
+  "webUri": "https://www.datos.gov.co/d/cb9c-h8sn",
+  "homepage": null,
+  "createdAt": "2020-06-05T03:25:49+0000",
+  "dataUpdatedAt": "2026-09-21T12:01:58+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "fecharegistro",
+      "jsType": "FechaRegistro",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "descripcion",
+      "jsType": "Descripcion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_contrato",
+      "jsType": "ID_Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo",
+      "jsType": "Tipo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "identificador",
+      "jsType": "Identificador",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:41:58.291Z"
+}

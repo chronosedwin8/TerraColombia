@@ -1,0 +1,37 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — fuentes de datos de Grafana (aprovisionamiento automático)
+#
+# El `uid` es fijo (`prometheus-tc`) porque los tableros de
+# `infra/grafana/dashboards/*.json` lo referencian. Si se cambia aquí, hay que
+# cambiarlo en los tres tableros.
+#
+# `PROMETHEUS_URL` la inyecta docker-compose. Grafana expande variables de
+# entorno con la sintaxis `$VAR` en los archivos de aprovisionamiento.
+# ═════════════════════════════════════════════════════════════════════════════
+
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    uid: prometheus-tc
+    type: prometheus
+    access: proxy
+    url: ${PROMETHEUS_URL}
+    isDefault: true
+    editable: false
+    jsonData:
+      # Debe coincidir con `global.scrape_interval` de prometheus.yml para que
+      # Grafana calcule bien los `rate()` automáticos.
+      timeInterval: 15s
+      httpMethod: POST
+      manageAlerts: false
+      prometheusType: Prometheus
+      prometheusVersion: 3.3.0
+      # Enlace desde una alerta de Grafana a la regla de Prometheus.
+      exemplarTraceIdDestinations: []
+
+# La base de datos NO se declara como fuente de datos de Grafana a propósito.
+# Un tablero con acceso directo a Postgres puede consultar `core.parcel` y
+# `app.user` sin pasar por ninguna de las guardas del producto; las métricas de
+# negocio se publican como métricas Prometheus desde la API, que sí sabe qué se
+# puede mostrar y qué no (docs/SEGURIDAD.md §Registro sin PII).

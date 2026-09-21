@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "qsh3-vq78",
+  "name": "Registro Especial de Prestadores de Salud en el Departamento del Atlántico.",
+  "description": "Se relaciona las IPS, ESE y Profesionales Independientes que existen en el departamento del Atlántico y que prestan servicios de salud.",
+  "publisher": "Gobernación del Atlántico, Atlántico",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "atlantico",
+    "atlántico",
+    "gobernacion del atlantico",
+    "gobernación del atlántico",
+    "gobernación del atlantico",
+    "salud",
+    "ips",
+    "eses",
+    "ese"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación del Atlántico, Atlántico",
+  "dataUri": "https://www.datos.gov.co/resource/qsh3-vq78",
+  "webUri": "https://www.datos.gov.co/d/qsh3-vq78",
+  "homepage": null,
+  "createdAt": "2020-10-30T02:42:22+0000",
+  "dataUpdatedAt": "2025-05-14T14:07:51+0000",
+  "cutDate": "2025-05-14",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "nivel",
+      "jsType": "NIVEL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "caracter",
+      "jsType": "CARÁCTER",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "habilitado",
+      "jsType": "HABILITADO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_habilitacion",
+      "jsType": "CODIGO HABILITACION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "clase_prestador",
+      "jsType": "CLASE_PRESTADOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "no_sede",
+      "jsType": "NUMERO SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion",
+      "jsType": "DIRECCION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "gerente",
+      "jsType": "GERENTE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "centro_poblado",
+      "jsType": "CENTRO_POBLADO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "email",
+      "jsType": "EMAIL",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (email)."
+    },
+    {
+      "name": "nom_prestador",
+      "jsType": "NOMBRE PRESTADOR",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "nit",
+      "jsType": "NIT",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (nit)."
+    },
+    {
+      "name": "cod_prestador",
+      "jsType": "CODIGO PRESTADOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_municipio",
+      "jsType": "CODIGO MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nom_sede",
+      "jsType": "NOMBRE DE SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "barrio",
+      "jsType": "BARRIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ese",
+      "jsType": "ESE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "telefono",
+      "jsType": "TELEFONO",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (telefono)."
+    },
+    {
+      "name": "clase_persona",
+      "jsType": "CLASE_PERSONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "naturaleza",
+      "jsType": "NATURALEZA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_nat_juridica",
+      "jsType": "COD_NAT_JURIDICA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sede_principal",
+      "jsType": "SEDE_PRINCIPAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_clase_prestador",
+      "jsType": "COD_CLASE_PRESTADOR",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "email",
+    "nom_prestador",
+    "nit",
+    "telefono"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:37.059Z"
+}

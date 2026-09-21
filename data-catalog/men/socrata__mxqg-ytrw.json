@@ -1,0 +1,391 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "mxqg-ytrw",
+  "name": "MEN_INDICE_PARIDAD_POR_GENERO_PARA_ETNICOS",
+  "description": "Contiene los datos de los indices de paridad por género (IPG=F/M) y la cantidad de matricula de EPBM Educación Prescolar, Básica y Media, por genero desagregados por Entidad Territorial Certificada ETC y Etnia, del año 2020",
+  "publisher": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "educación",
+    "etnia",
+    "genero",
+    "ministerio de educación"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/mxqg-ytrw",
+  "webUri": "https://www.datos.gov.co/d/mxqg-ytrw",
+  "homepage": null,
+  "createdAt": "2021-12-30T18:14:34+0000",
+  "dataUpdatedAt": "2021-12-30T18:36:10+0000",
+  "cutDate": "2021-12-30",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "etnico_no_m_trans",
+      "jsType": "ETNICO_NO_M_TRANS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_f_otras",
+      "jsType": "MATR_ETNICOS_F_Otras",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_no_m_media",
+      "jsType": "ETNICO_NO_M_MEDIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_etnico_no_secun",
+      "jsType": "IPG_ETNICO_NO_SECUN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_si_f_prim",
+      "jsType": "ETNICO_SI_F_PRIM",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_etnico_si_media",
+      "jsType": "IPG_ETNICO_SI_MEDIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digoetc",
+      "jsType": "CODIGOETC",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_m_raizales",
+      "jsType": "MATR_ETNICOS_M_Raizales",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_si_m_prim",
+      "jsType": "ETNICO_SI_M_PRIM",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_si_f_media",
+      "jsType": "ETNICO_SI_F_MEDIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_f_raizales",
+      "jsType": "MATR_ETNICOS_F_Raizales",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_etnico_si_trans",
+      "jsType": "IPG_ETNICO_SI_TRANS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_si_f_prej",
+      "jsType": "ETNICO_SI_F_PREJ",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_f_no_aplica",
+      "jsType": "MATR_ETNICOS_F_No_aplica",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "anno_inf",
+      "jsType": "AÑO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_no_f_secun",
+      "jsType": "ETNICO_NO_F_SECUN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_no_f_prim",
+      "jsType": "ETNICO_NO_F_PRIM",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_m_no_aplica",
+      "jsType": "MATR_ETNICOS_M_No_aplica",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_si_m_secun",
+      "jsType": "ETNICO_SI_M_SECUN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_matr_etnicos_negritudes",
+      "jsType": "IPG_MATR_ETNICOS_Negritudes",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_si_m_prej",
+      "jsType": "ETNICO_SI_M_PREJ",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_matr_etnicos_rom",
+      "jsType": "IPG_MATR_ETNICOS_Rom",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_f_ind_genas",
+      "jsType": "MATR_ETNICOS_F_Indígenas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_matr_etnicos_palenquero",
+      "jsType": "IPG_MATR_ETNICOS_Palenquero",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_f_afros",
+      "jsType": "MATR_ETNICOS_F_Afros",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_m_rom",
+      "jsType": "MATR_ETNICOS_M_Rom",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etc",
+      "jsType": "ETC",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_etnico_no_media",
+      "jsType": "IPG_ETNICO_NO_MEDIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_etnico_no_trans",
+      "jsType": "IPG_ETNICO_NO_TRANS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_m_negritudes",
+      "jsType": "MATR_ETNICOS_M_Negritudes",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_m_otras",
+      "jsType": "MATR_ETNICOS_M_Otras",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_f_rom",
+      "jsType": "MATR_ETNICOS_F_Rom",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_f_palenquero",
+      "jsType": "MATR_ETNICOS_F_Palenquero",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_si_m_trans",
+      "jsType": "ETNICO_SI_M_TRANS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_no_f_media",
+      "jsType": "ETNICO_NO_F_MEDIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digodepartamento",
+      "jsType": "CODIGODEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_matr_etnicos_ind_genas",
+      "jsType": "IPG_MATR_ETNICOS_Indígenas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_matr_etnicos_afros",
+      "jsType": "IPG_MATR_ETNICOS_Afros",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_m_ind_genas",
+      "jsType": "MATR_ETNICOS_M_Indígenas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_m_afros",
+      "jsType": "MATR_ETNICOS_M_Afros",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_etnico_si_secun",
+      "jsType": "IPG_ETNICO_SI_SECUN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_si_f_trans",
+      "jsType": "ETNICO_SI_F_TRANS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_f_negritudes",
+      "jsType": "MATR_ETNICOS_F_Negritudes",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_etnicos_m_palenquero",
+      "jsType": "MATR_ETNICOS_M_Palenquero",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_etnico_si_prim",
+      "jsType": "IPG_ETNICO_SI_PRIM",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_etnico_si_prej",
+      "jsType": "IPG_ETNICO_SI_PREJ",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_etnico_no_prim",
+      "jsType": "IPG_ETNICO_NO_PRIM",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_etnico_no_prej",
+      "jsType": "IPG_ETNICO_NO_PREJ",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_matr_etnicos_raizales",
+      "jsType": "IPG_MATR_ETNICOS_Raizales",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_matr_etnicos_otras",
+      "jsType": "IPG_MATR_ETNICOS_Otras",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_matr_etnicos_no_aplica",
+      "jsType": "IPG_MATR_ETNICOS_No_aplica",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_si_m_media",
+      "jsType": "ETNICO_SI_M_MEDIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_si_f_secun",
+      "jsType": "ETNICO_SI_F_SECUN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_no_m_secun",
+      "jsType": "ETNICO_NO_M_SECUN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_no_m_prim",
+      "jsType": "ETNICO_NO_M_PRIM",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_no_m_prej",
+      "jsType": "ETNICO_NO_M_PREJ",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_no_f_trans",
+      "jsType": "ETNICO_NO_F_TRANS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnico_no_f_prej",
+      "jsType": "ETNICO_NO_F_PREJ",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:40.140Z"
+}

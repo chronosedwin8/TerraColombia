@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "wwhe-4sq8",
+  "name": "SECOP II - Ubicaciones Adicionales",
+  "description": "Información de las ubicaciones adicionales para los contratos digitales suscritos en SECOP II",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "localización",
+    "contrato",
+    "secop",
+    "secop ii",
+    "compra pública",
+    "colombia compra eficiente",
+    "ejecución"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/wwhe-4sq8",
+  "webUri": "https://www.datos.gov.co/d/wwhe-4sq8",
+  "homepage": null,
+  "createdAt": "2019-10-01T06:09:54+0000",
+  "dataUpdatedAt": "2026-09-21T13:23:59+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "nombre_entidad",
+      "jsType": "Nombre Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_entidad",
+      "jsType": "NIT Entidad",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "departamento_original",
+      "jsType": "Departamento Original",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciudad_original",
+      "jsType": "Ciudad Original",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direcci_n_original",
+      "jsType": "Dirección Original",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direcci_n",
+      "jsType": "Dirección",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciudad",
+      "jsType": "Ciudad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "referencia_contrato",
+      "jsType": "Referencia Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_contrato",
+      "jsType": "ID Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_entidad",
+      "jsType": "Codigo Entidad",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nit_entidad"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:41:58.514Z"
+}

@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "jwvi-unqh",
+  "name": "Directorio de cuadrantes de Metropolitanas y Departamentos de Policía",
+  "description": "Información correspondiente a los números de contacto de los cuadrantes a nivel país.",
+  "publisher": "Dirección General de la Policía Nacional - DIPON, Bogotá D.C.",
+  "category": "Función pública",
+  "theme": null,
+  "tags": [],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Dirección General de la Policía Nacional - DIPON, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/jwvi-unqh",
+  "webUri": "https://www.datos.gov.co/d/jwvi-unqh",
+  "homepage": null,
+  "createdAt": "2020-06-26T14:53:50+0000",
+  "dataUpdatedAt": "2020-06-26T15:07:51+0000",
+  "cutDate": "2020-06-26",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "ciudad_municipio",
+      "jsType": "CIUDAD/MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cuadrante",
+      "jsType": "CUADRANTE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_cuadrante",
+      "jsType": "CODIGO_CUADRANTE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_celular_cuadrante",
+      "jsType": "NUMERO_CELULAR_CUADRANTE",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "tipo_unidad",
+      "jsType": "TIPO UNIDAD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "unidad",
+      "jsType": "UNIDAD",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "numero_celular_cuadrante"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:48.368Z"
+}

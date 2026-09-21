@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "source": "dane",
+  "connector": "socrata",
+  "id": "stc8-i9y9",
+  "name": "PROYECCIÓN DE POBLACIÓN MUNICIPAL DE CHIQUINQUIRÁ 2018 A 2035 CNPV 2018 DANE",
+  "description": "El conjunto es datos es una proyección poblacional desde el año 2018 hasta el año 2032 para el perímetro del municipio de Chiquinquirá con base en el Censo Nacional de Población y Vivienda realizado en 2018 por el Departamento Administrativo Nacional de Estadística DANE discriminado por Cabecera Municipal, Centros Poblados y Rural Disperso y el Total de manera anual.",
+  "publisher": "Alcaldía de Chiquinquirá, Boyacá",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "información poblacional",
+    "población",
+    "centros poblados",
+    "cabecera municipal",
+    "censo",
+    "dane"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Alcaldía de Chiquinquirá, Boyacá",
+  "dataUri": "https://www.datos.gov.co/resource/stc8-i9y9",
+  "webUri": "https://www.datos.gov.co/d/stc8-i9y9",
+  "homepage": null,
+  "createdAt": "2021-04-07T16:31:42+0000",
+  "dataUpdatedAt": "2021-04-07T16:46:20+0000",
+  "cutDate": "2021-04-07",
+  "geographicCoverage": null,
+  "rowCount": 54,
+  "columns": [
+    {
+      "name": "dpnom",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dp",
+      "jsType": "CODIGO DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "AÑO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dpmp",
+      "jsType": "COD MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total",
+      "jsType": "TOTAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "mpio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rea_geogr_fica",
+      "jsType": "ÁREA GEOGRÁFICA",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "dp": "15",
+      "dpnom": "Boyacá",
+      "dpmp": "15176",
+      "mpio": "Chiquinquirá",
+      "a_o": "2018",
+      "rea_geogr_fica": "Cabecera Municipal",
+      "total": "49016"
+    },
+    {
+      "dp": "15",
+      "dpnom": "Boyacá",
+      "dpmp": "15176",
+      "mpio": "Chiquinquirá",
+      "a_o": "2018",
+      "rea_geogr_fica": "Centros Poblados y Rural Disperso",
+      "total": "7038"
+    },
+    {
+      "dp": "15",
+      "dpnom": "Boyacá",
+      "dpmp": "15176",
+      "mpio": "Chiquinquirá",
+      "a_o": "2018",
+      "rea_geogr_fica": "Total",
+      "total": "56054"
+    },
+    {
+      "dp": "15",
+      "dpnom": "Boyacá",
+      "dpmp": "15176",
+      "mpio": "Chiquinquirá",
+      "a_o": "2019",
+      "rea_geogr_fica": "Cabecera Municipal",
+      "total": "50054"
+    },
+    {
+      "dp": "15",
+      "dpnom": "Boyacá",
+      "dpmp": "15176",
+      "mpio": "Chiquinquirá",
+      "a_o": "2019",
+      "rea_geogr_fica": "Centros Poblados y Rural Disperso",
+      "total": "7047"
+    }
+  ],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:15.017Z"
+}

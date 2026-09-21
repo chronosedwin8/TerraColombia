@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "v488-qa3u",
+  "name": "MEN_INDICADORES_EDUCACION_MEDIA",
+  "description": "Contiene información estadística de basica relacionada con indicadores de doble titulación\n\n**Fuente: SENA",
+  "publisher": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "educación",
+    "titulación"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/v488-qa3u",
+  "webUri": "https://www.datos.gov.co/d/v488-qa3u",
+  "homepage": null,
+  "createdAt": "2021-08-06T23:03:32+0000",
+  "dataUpdatedAt": "2022-02-25T19:54:54+0000",
+  "cutDate": "2022-02-25",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "doble_titulaci_n",
+      "jsType": "DOBLE_TITULACIÓN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_depto",
+      "jsType": "NOMBRE_DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_dane_depto",
+      "jsType": "COD_DANE_DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_corte",
+      "jsType": "FECHA_CORTE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha",
+      "jsType": "FECHA",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:43.747Z"
+}

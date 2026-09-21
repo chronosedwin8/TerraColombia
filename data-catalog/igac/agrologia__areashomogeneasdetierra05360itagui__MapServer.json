@@ -1,0 +1,1605 @@
+{
+  "schemaVersion": 1,
+  "source": "igac",
+  "connector": "arcgis-rest",
+  "name": "areashomogeneasdetierra05360itagui",
+  "folder": "agrologia",
+  "serviceType": "MapServer",
+  "url": "https://mapas.igac.gov.co/server/rest/services/agrologia/areashomogeneasdetierra05360itagui/MapServer",
+  "description": "<DIV STYLE=\"text-align:Left;font-size:12pt\"><DIV><DIV><P><SPAN>El mapa digital de Áreas Homogéneas de Tierras (AHT) con fines multipropósito a escala 1:25.000, representa características y cualidades similares de clima, relieve, material litológico o depósitos superficiales que dan origen a los suelos, lo cual permite delimitar espacios de la superficie terrestre en trece clases de AHT e identificarlas según sus principales limitaciones y caracterizarlas, a través de un índice numérico denominado valor potencial, que expresa la capacidad productiva de las tierras. Esta información geográfica se constituye en una de las más importantes aplicaciones de los levantamientos de suelos a diferentes escalas cartográficas, siendo el insumo base para calificar la capacidad productiva de las tierras rurales.</SPAN></P><P><SPAN>Este producto es generado por la Subdirección de Agrología del Instituto Geográfico Agustín Codazzi  - IGAC, para el municipio de Itagui (Antioquia) a escala 1:25.000.</SPAN></P><P /></DIV></DIV></DIV>",
+  "copyrightText": "Instituto Geográfico Agustín Codazzi – IGAC",
+  "currentVersion": 11.3,
+  "capabilities": [
+    "map",
+    "query",
+    "data"
+  ],
+  "supportedQueryFormats": [
+    "json",
+    "geojson",
+    "pbf"
+  ],
+  "maxRecordCount": 2000,
+  "supportedExtensions": [
+    "WFSServer",
+    "WMSServer"
+  ],
+  "spatialReferenceWkid": 9377,
+  "fullExtent": {
+    "xmin": 4707094.2135,
+    "ymin": 2238721.5475999992,
+    "xmax": 4714470.9592,
+    "ymax": 2243823.9198000003,
+    "wkid": 9377
+  },
+  "layers": [
+    {
+      "id": 0,
+      "name": "AREA_HOMOGENEA_TIERRA",
+      "type": "Feature Layer",
+      "description": null,
+      "geometryType": "esriGeometryPolygon",
+      "url": "https://mapas.igac.gov.co/server/rest/services/agrologia/areashomogeneasdetierra05360itagui/MapServer/0",
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "crsLabel": "MAGNA-SIRGAS / Origen-Nacional",
+      "maxRecordCount": 2000,
+      "capabilities": [
+        "map",
+        "query",
+        "data"
+      ],
+      "supportedQueryFormats": [
+        "json",
+        "geojson",
+        "pbf"
+      ],
+      "supportsPagination": true,
+      "supportsStatistics": true,
+      "supportsOrderBy": true,
+      "objectIdField": "OBJECTID",
+      "displayField": "Divipola",
+      "count": null,
+      "extent": {
+        "xmin": 4707094.2135,
+        "ymin": 2238721.5475999992,
+        "xmax": 4714470.9592,
+        "ymax": 2243823.9198000003,
+        "wkid": 9377
+      },
+      "fields": [
+        {
+          "name": "OBJECTID",
+          "alias": "OBJECTID",
+          "type": "esriFieldTypeOID",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Shape",
+          "alias": "Shape",
+          "type": "esriFieldTypeGeometry",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Divipola",
+          "alias": "Código Divipola",
+          "type": "esriFieldTypeString",
+          "length": 5,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SIMBOLO",
+          "alias": "Símbolo",
+          "type": "esriFieldTypeString",
+          "length": 25,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "UCSuelo",
+          "alias": "Unidades Cartográficas de Suelo",
+          "type": "esriFieldTypeString",
+          "length": 24,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "CLASE",
+          "alias": "Clase de AHT",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "CLASE DE TIERRAS VALOR POTENCIAL",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "Sin dato"
+              },
+              {
+                "code": 14,
+                "name": "ZU"
+              },
+              {
+                "code": 16,
+                "name": "CA"
+              },
+              {
+                "code": 2,
+                "name": "02"
+              },
+              {
+                "code": 3,
+                "name": "03"
+              },
+              {
+                "code": 4,
+                "name": "04"
+              },
+              {
+                "code": 5,
+                "name": "05"
+              },
+              {
+                "code": 6,
+                "name": "06"
+              },
+              {
+                "code": 7,
+                "name": "07"
+              },
+              {
+                "code": 8,
+                "name": "08"
+              },
+              {
+                "code": 10,
+                "name": "10"
+              },
+              {
+                "code": 11,
+                "name": "11"
+              },
+              {
+                "code": 12,
+                "name": "12"
+              },
+              {
+                "code": 13,
+                "name": "13"
+              },
+              {
+                "code": 1,
+                "name": "01"
+              },
+              {
+                "code": 9,
+                "name": "09"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "UClimatica",
+          "alias": "Unidad climática",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR CLIMA",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "Sin Dato"
+              },
+              {
+                "code": 1,
+                "name": "CA - Cálido Arido"
+              },
+              {
+                "code": 2,
+                "name": "CM - Cálido muy Seco"
+              },
+              {
+                "code": 3,
+                "name": "CS - Cálido seco"
+              },
+              {
+                "code": 4,
+                "name": "CH - Cálido Húmedo"
+              },
+              {
+                "code": 5,
+                "name": "CU - Cálido muy Húmedo"
+              },
+              {
+                "code": 7,
+                "name": "MM - Medio muy Seco"
+              },
+              {
+                "code": 8,
+                "name": "MS - Medio Seco"
+              },
+              {
+                "code": 9,
+                "name": "MH - Medio Húmedo"
+              },
+              {
+                "code": 10,
+                "name": "MU - Medio muy Húmedo"
+              },
+              {
+                "code": 11,
+                "name": "MP - Medio Pluvial"
+              },
+              {
+                "code": 12,
+                "name": "FS - Frío Seco"
+              },
+              {
+                "code": 13,
+                "name": "FH - Frío Húmedo"
+              },
+              {
+                "code": 14,
+                "name": "FU - Frío muy Húmedo"
+              },
+              {
+                "code": 15,
+                "name": "FP - Frío Pluvial"
+              },
+              {
+                "code": 16,
+                "name": "mFH - Muy Frío Húmedo"
+              },
+              {
+                "code": 17,
+                "name": "mFU - Muy Frío muy Húmedo"
+              },
+              {
+                "code": 18,
+                "name": "mFP - Muy Frío Pluvial"
+              },
+              {
+                "code": 19,
+                "name": "MU t MP - Medio muy Húmedo transicional a Medio Pluvial"
+              },
+              {
+                "code": 20,
+                "name": "EFP - Extremadamente Frío Pluvial"
+              },
+              {
+                "code": 22,
+                "name": "CH t MH - Cálido Húmedo transicional a Medio Húmedo"
+              },
+              {
+                "code": 24,
+                "name": "MS t MH - Medio Seco transicional a Medio Húmedo"
+              },
+              {
+                "code": 25,
+                "name": "FS t FH - Frío Seco transicional a Frío Húmedo"
+              },
+              {
+                "code": 28,
+                "name": "MS t FS - Medio Seco transicional a Frío Seco"
+              },
+              {
+                "code": 30,
+                "name": "mFH t EFP - muy Frío Húmedo transicional a Extremadamente Frío Pluvial"
+              },
+              {
+                "code": 31,
+                "name": "MH t FH - Medio Húmedo transicional a Frío Húmedo"
+              },
+              {
+                "code": 32,
+                "name": "MS t FH - Medio Seco transicional a Frío Húmedo"
+              },
+              {
+                "code": 35,
+                "name": "MH t MU - Medio Húmedo transicional a Medio muy Húmedo"
+              },
+              {
+                "code": 36,
+                "name": "FU t mFH - Frío muy Húmedo transicional a muy Frío Húmedo"
+              },
+              {
+                "code": 40,
+                "name": "CS t CH - Cálido Seco transicional a Cálido Húmedo"
+              },
+              {
+                "code": 41,
+                "name": "CH t CU - Cálido Húmedo transicional a Cálido muy Húmedo"
+              },
+              {
+                "code": 43,
+                "name": "MU t FU - Medio muy Húmedo transicional a Frío muy Húmedo"
+              },
+              {
+                "code": 44,
+                "name": "FH t FU - Frío Húmedo transicional a Frío muy Húmedo"
+              },
+              {
+                "code": 45,
+                "name": "FH t FP - Frío Húmedo transicional a Frío Pluvial"
+              },
+              {
+                "code": 46,
+                "name": "FU t FP - Frío muy Húmedo transicional a Frío Pluvial"
+              },
+              {
+                "code": 47,
+                "name": "FH t mFH - Frío Húmedo transicional a muy  Frío Húmedo"
+              },
+              {
+                "code": 50,
+                "name": "CS t MH - Cálido Seco transicional a Medio Húmedo"
+              },
+              {
+                "code": 57,
+                "name": "FH t mFU - Frío Húmedo transicional muy Frío muy Húmedo"
+              },
+              {
+                "code": 58,
+                "name": "N - Nival"
+              },
+              {
+                "code": 72,
+                "name": "CA t CS - Cálido Arido transicional a Cálido Seco"
+              },
+              {
+                "code": 73,
+                "name": "CA t MM - Cálido Arido transicional a Medio muy Seco"
+              },
+              {
+                "code": 74,
+                "name": "CA t MS - Cálido Arido transicional a Medio Seco"
+              },
+              {
+                "code": 81,
+                "name": "CH t MP - Cálido Húmedo transicional a Medio Pluvial"
+              },
+              {
+                "code": 82,
+                "name": "CH t MS - Cálido Húmedo transicional a Medio Seco"
+              },
+              {
+                "code": 83,
+                "name": "CH t MU - Cálido Húmedo transicional a Medio muy Húmedo"
+              },
+              {
+                "code": 96,
+                "name": "CS t MM - Cálido Seco transicional a Medio muy Seco"
+              },
+              {
+                "code": 97,
+                "name": "CS t MS - Cálido Seco transicional a Medio Seco"
+              },
+              {
+                "code": 98,
+                "name": "CS t MU - Cálido Seco transicional a Medio muy Húmedo"
+              },
+              {
+                "code": 105,
+                "name": "CU t MH - Cálido muy Húmedo transicional a Medio Húmedo"
+              },
+              {
+                "code": 107,
+                "name": "CU t MP - Cálido muy Húmedo transicional a Medio Pluvial"
+              }
+            ],
+            "truncated": true,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "PENDIENTE",
+          "alias": "Pendiente",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR PENDIENTE",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "Sin Dato"
+              },
+              {
+                "code": 1,
+                "name": "a"
+              },
+              {
+                "code": 2,
+                "name": "b"
+              },
+              {
+                "code": 3,
+                "name": "c"
+              },
+              {
+                "code": 4,
+                "name": "d"
+              },
+              {
+                "code": 5,
+                "name": "e"
+              },
+              {
+                "code": 6,
+                "name": "f"
+              },
+              {
+                "code": 7,
+                "name": "g"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "FPendiente",
+          "alias": "Forma de la pendiente",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "FORMAS DE LA PENDIENTE",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "Sin Dato"
+              },
+              {
+                "code": 1,
+                "name": "Ligeramente plano (Forma Simple)"
+              },
+              {
+                "code": 2,
+                "name": "Ligeramente inclinada (Forma Simple)"
+              },
+              {
+                "code": 3,
+                "name": "Moderadamente inclinada (Forma Simple)"
+              },
+              {
+                "code": 4,
+                "name": "Fuertemente inclinada (Forma Simple)"
+              },
+              {
+                "code": 5,
+                "name": "Ligeramente escarpada (Forma Simple)"
+              },
+              {
+                "code": 6,
+                "name": "Moderadamente Escarpada (Forma Simple)"
+              },
+              {
+                "code": 7,
+                "name": "Fuertemente escarpada (Forma Simple)"
+              },
+              {
+                "code": 8,
+                "name": "Ligeramente ondulada (Forma Compuesta)"
+              },
+              {
+                "code": 9,
+                "name": "Ondulada o ligeramente quebrada (Forma Compuesta)"
+              },
+              {
+                "code": 10,
+                "name": "Fuertemente ondulada o Moderadamente quebrada (Forma Compuesta)"
+              },
+              {
+                "code": 11,
+                "name": "Fuertemente quebrada (Forma Compuesta)"
+              },
+              {
+                "code": 12,
+                "name": "Moderadamente empinada (Forma Compuesta)"
+              },
+              {
+                "code": 13,
+                "name": "Fuertemente empinada (Forma Compuesta)"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "EHidrica",
+          "alias": "Erosión hídrica",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR EROSION HIDRICA",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No hay"
+              },
+              {
+                "code": 2,
+                "name": "2 - Moderada"
+              },
+              {
+                "code": 3,
+                "name": "3 - Severa"
+              },
+              {
+                "code": 1,
+                "name": "1 - Ligera"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "EEolica",
+          "alias": "Erosión eólica",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR EROSION EOLICA",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No hay"
+              },
+              {
+                "code": 1,
+                "name": "k2 - Moderada"
+              },
+              {
+                "code": 2,
+                "name": "k3 - Severa"
+              },
+              {
+                "code": 3,
+                "name": "k1 - Ligera"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "ERemosion",
+          "alias": "Erosión por remoción en masa",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE EROSION POR REMOCION EN MASA",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No hay"
+              },
+              {
+                "code": 1,
+                "name": "m2 - Moderada"
+              },
+              {
+                "code": 2,
+                "name": "m3 - Severa"
+              },
+              {
+                "code": 3,
+                "name": "m1 - Ligera"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "INUNDACION",
+          "alias": "Fase por Inundación",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR INUNDACION",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No se presenta"
+              },
+              {
+                "code": 1,
+                "name": "i - Inundaciones"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Encharcami",
+          "alias": "Fase por Encharcamiento",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR ENCHARCAMIENTO",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No se presenta"
+              },
+              {
+                "code": 1,
+                "name": "E - Encharcamiento"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "FNFreatico",
+          "alias": "Fluctuación del nivel freático",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR FLUC DEL NIVEL FREATICO",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No se presenta"
+              },
+              {
+                "code": 1,
+                "name": "h - Fluctuación del nivel freático"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "PEfectiva",
+          "alias": "Profundidad efectiva",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR PROFUNDIDAD EFECTIVA",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No se presenta"
+              },
+              {
+                "code": 1,
+                "name": "s - Limitante de la profundidad efectiva (excepto por h-n)"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "HDensicos",
+          "alias": "Horizontes densicos",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR HORIZONTES DENSICOS",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No se presenta"
+              },
+              {
+                "code": 1,
+                "name": "D - Presenta horizontes densicos"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "FGPerfil",
+          "alias": "Fragmentos gruesos en el perfil",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR FRAG GRUESOS",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No se presenta"
+              },
+              {
+                "code": 1,
+                "name": "q - Presencia de fragmentos gruesos en el perfil"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "PSuperfici",
+          "alias": "Pedregosidad superficial",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR PEDREGOSIDAD SUPERFICIAL",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No se presenta"
+              },
+              {
+                "code": 1,
+                "name": "p - Piedras en superficie"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "LRocosidad",
+          "alias": "Limitante por Rocosidad",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR ROCOSIDAD",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No se presenta"
+              },
+              {
+                "code": 1,
+                "name": "r - Rocas en superficie"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "LSodicidad",
+          "alias": "Limitante por Sodicidad",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR SODICIDAD",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No se presenta"
+              },
+              {
+                "code": 1,
+                "name": "n - Con sodicidad"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "LSalinidad",
+          "alias": "Limitante por Salinidad",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR SALINIDAD",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No se presenta"
+              },
+              {
+                "code": 1,
+                "name": "z - Con salinidad"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "CYeso",
+          "alias": "Contenido de yeso",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR CONTENIDO DE YESO",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No se presenta"
+              },
+              {
+                "code": 1,
+                "name": "y - Con yeso"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "DArtificia",
+          "alias": "Drenaje artificial",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR DRENAJE ARTIFICIAL",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No se presenta"
+              },
+              {
+                "code": 1,
+                "name": "v- Drenaje artificial"
+              },
+              {
+                "code": 2,
+                "name": "No aplica por metodología"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "AIntercamb",
+          "alias": "Acidez intercambiable",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR ACIDEZ INTERCAMBIABLE",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No se presenta"
+              },
+              {
+                "code": 2,
+                "name": "No aplica por metodología"
+              },
+              {
+                "code": 1,
+                "name": "L - Acidez intercambiable (Al)"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Miscelaneo",
+          "alias": "Misceláneos y otros",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR MISCELANEOS Y OTROS",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "No se presenta"
+              },
+              {
+                "code": 1,
+                "name": "MR - Misceláneo Rocoso"
+              },
+              {
+                "code": 2,
+                "name": "ME - Misceláneo Erosionado"
+              },
+              {
+                "code": 3,
+                "name": "BA - Bancos de Arena"
+              },
+              {
+                "code": 5,
+                "name": "PN - Pantanos"
+              },
+              {
+                "code": 6,
+                "name": "ZM - Zona Minera"
+              },
+              {
+                "code": 7,
+                "name": "FM - Fosas Mineras"
+              },
+              {
+                "code": 8,
+                "name": "SL - Saladares"
+              },
+              {
+                "code": 9,
+                "name": "MN - Manglares"
+              },
+              {
+                "code": 10,
+                "name": "CL - Canteras o Ladrilleras"
+              },
+              {
+                "code": 11,
+                "name": "RS - Rellenos Sanitarios"
+              },
+              {
+                "code": 13,
+                "name": "NP - Nieves Permanentes"
+              },
+              {
+                "code": 4,
+                "name": "BP - Bancos de Playa"
+              },
+              {
+                "code": 12,
+                "name": "EP - Explotación Petrolera"
+              },
+              {
+                "code": 14,
+                "name": "IS - Islas e islotes"
+              },
+              {
+                "code": 15,
+                "name": "RN - Parques naturales"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "VPotencial",
+          "alias": "Valor potencial",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "SUBCLASE POR VALOR POTENCIAL",
+            "codedValues": [
+              {
+                "code": 0,
+                "name": "Sin Dato"
+              },
+              {
+                "code": 1,
+                "name": "92"
+              },
+              {
+                "code": 2,
+                "name": "80"
+              },
+              {
+                "code": 3,
+                "name": "73"
+              },
+              {
+                "code": 4,
+                "name": "67"
+              },
+              {
+                "code": 5,
+                "name": "61"
+              },
+              {
+                "code": 6,
+                "name": "55"
+              },
+              {
+                "code": 7,
+                "name": "49"
+              },
+              {
+                "code": 8,
+                "name": "44"
+              },
+              {
+                "code": 9,
+                "name": "38"
+              },
+              {
+                "code": 10,
+                "name": "30"
+              },
+              {
+                "code": 11,
+                "name": "23"
+              },
+              {
+                "code": 12,
+                "name": "17"
+              },
+              {
+                "code": 13,
+                "name": "6"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Observacio",
+          "alias": "Observaciones",
+          "type": "esriFieldTypeString",
+          "length": 2147483647,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Fecha",
+          "alias": "Fecha actualización",
+          "type": "esriFieldTypeString",
+          "length": 4,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "TRelieve",
+          "alias": "Tipo de relieve",
+          "type": "esriFieldTypeString",
+          "length": 2147483647,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "TIPO_RELIEVE",
+            "codedValues": [
+              {
+                "code": "Sa",
+                "name": "Sa - Anticlinal"
+              },
+              {
+                "code": "Sar",
+                "name": "Sar - Artesa"
+              },
+              {
+                "code": "Sb",
+                "name": "Sb - Barras monoclinales"
+              },
+              {
+                "code": "Sc",
+                "name": "Sc - Cumbres andinas"
+              },
+              {
+                "code": "Scl",
+                "name": "Scl - Colada de Lava (y Lahar)"
+              },
+              {
+                "code": "Scm",
+                "name": "Scm - Campos morrénicos"
+              },
+              {
+                "code": "Scñ",
+                "name": "Scñ - Cañónes"
+              },
+              {
+                "code": "Scv",
+                "name": "Scv - Cono (Volcánico)"
+              },
+              {
+                "code": "Sd",
+                "name": "Sd - Depresión"
+              },
+              {
+                "code": "Se",
+                "name": "Se - Espinazo, hogback, flatirón"
+              },
+              {
+                "code": "Ses",
+                "name": "Ses - Escarpe"
+              },
+              {
+                "code": "Sev",
+                "name": "Sev - Estrato volcán"
+              },
+              {
+                "code": "Sf",
+                "name": "Sf - Filas y Vigas"
+              },
+              {
+                "code": "Sge",
+                "name": "Sge - Glacís de erosión"
+              },
+              {
+                "code": "Slc",
+                "name": "Slc - Lomas y Colinas"
+              },
+              {
+                "code": "Sm",
+                "name": "Sm - Mesa (Meseta)"
+              },
+              {
+                "code": "So",
+                "name": "So - Crestón (monoclinal)"
+              },
+              {
+                "code": "Ss",
+                "name": "Ss - Sinclinal"
+              },
+              {
+                "code": "Ssc",
+                "name": "Ssc - Sinclinal colgante"
+              },
+              {
+                "code": "St",
+                "name": "St - Cresta (monoclinal)"
+              },
+              {
+                "code": "Su",
+                "name": "Su - Cuesta (homoclinal)"
+              },
+              {
+                "code": "Sx",
+                "name": "Sx - Anticlinal excavado"
+              },
+              {
+                "code": "Da",
+                "name": "Da - Campo de arenas"
+              },
+              {
+                "code": "Dab",
+                "name": "Dab - Abanico"
+              },
+              {
+                "code": "Dcl",
+                "name": "Dcl - Coluvios"
+              },
+              {
+                "code": "Dco",
+                "name": "Dco - Cono"
+              },
+              {
+                "code": "Dd",
+                "name": "Dd - Delta – Plano deltaico"
+              },
+              {
+                "code": "Dde",
+                "name": "Dde - Superficie de desbordamiento"
+              },
+              {
+                "code": "De",
+                "name": "De - Estuario"
+              },
+              {
+                "code": "Df",
+                "name": "Df  - Plano fluvio marino – Plataforma costera"
+              },
+              {
+                "code": "Dg",
+                "name": "Dg - Glacís"
+              },
+              {
+                "code": "Di",
+                "name": "Di - Plano de inundación, Vega"
+              },
+              {
+                "code": "Dl",
+                "name": "Dl - Campo  de limos"
+              },
+              {
+                "code": "Dm",
+                "name": "Dm - Mesa (Meseta)"
+              },
+              {
+                "code": "Dme",
+                "name": "Dme - Campo de médanos"
+              },
+              {
+                "code": "Dp",
+                "name": "Dp - Plano de marea"
+              },
+              {
+                "code": "Dr",
+                "name": "Dr - Arrecife coralino"
+              },
+              {
+                "code": "Dt",
+                "name": "Dt - Terraza"
+              },
+              {
+                "code": "Du",
+                "name": "Du - Campo de dunas"
+              },
+              {
+                "code": "Dv",
+                "name": "Dv - Vallecito (swale: canal drenaje, depresión)"
+              },
+              {
+                "code": "Qc",
+                "name": "Qc - Cañón"
+              },
+              {
+                "code": "Qd",
+                "name": "Qd - Depresión"
+              },
+              {
+                "code": "Qo",
+                "name": "Qo - Domo"
+              },
+              {
+                "code": "Qp",
+                "name": "Qp - Polje"
+              },
+              {
+                "code": "Qt",
+                "name": "Qt - Torre"
+              },
+              {
+                "code": "Qw",
+                "name": "Qw - Wadi, valle seco"
+              },
+              {
+                "code": "Ra",
+                "name": "Ra - Aplanamiento"
+              },
+              {
+                "code": "Rd",
+                "name": "Rd - Domo"
+              },
+              {
+                "code": "Ri",
+                "name": "Ri - Inselberg, montes isla"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "MParental",
+          "alias": "Material parental",
+          "type": "esriFieldTypeString",
+          "length": 2147483647,
+          "nullable": null,
+          "domain": {
+            "type": "codedValue",
+            "name": "MATERIALPARENTAL",
+            "codedValues": [
+              {
+                "code": "Ifc",
+                "name": "Ifc - Ígneas Plutónicas - Granitos, Cuarzomonzonita, Granodiorita, Cuarzoarenitas"
+              },
+              {
+                "code": "Ii",
+                "name": "Ii - Ígneas Plutónicas - Monzonita, Diorita, Gabro"
+              },
+              {
+                "code": "Im",
+                "name": "Im -  Ígneas Plutónicas - Peridotita"
+              },
+              {
+                "code": "Isf",
+                "name": "Isf - Ígneas Plutónicas - Dunita"
+              },
+              {
+                "code": "Vfc",
+                "name": "Vfc - Ígneas Volcánicas - Riolita (Ignimbrita), Cuarzolatita, Riodacita, Dacita,"
+              },
+              {
+                "code": "Vi",
+                "name": "Vi - Ígneas Volcánicas - Latita, Andesita"
+              },
+              {
+                "code": "Vm",
+                "name": "Vm -  Ígneas Volcánicas - Basalto, Diabasa"
+              },
+              {
+                "code": "Vp",
+                "name": "Vp -  Ígneas Volcánicas - Tobas, Aglomerados y Brechas"
+              },
+              {
+                "code": "Sc",
+                "name": "Sc - Sedimentarias Clásticas - Orto y Paraconglomerados, Brechas, Tilita"
+              },
+              {
+                "code": "Sa",
+                "name": "Sa - Sedimentarias Clásticas - Areniscas"
+              },
+              {
+                "code": "Sl",
+                "name": "Sl - Sedimentarias Clásticas - Limolitas, lutitas, shales, Arcillolitas, Lodolitas, Margas"
+              },
+              {
+                "code": "Qc",
+                "name": "Qc -Sedimentarias Químicas - Caliza, Dolomita, Evaporitas"
+              },
+              {
+                "code": "Qs",
+                "name": "Qs - Sedimentarias Químicas - Chert (Lidita), Diatomita, Pedernal"
+              },
+              {
+                "code": "Qf",
+                "name": "Qf - Sedimentarias Químicas - Grupo Fosfáticas"
+              },
+              {
+                "code": "Mdt",
+                "name": "Mdt - Metamórficas Dinamotermal Regional - Pizarras, filitas, esquistos, neis, Anfibolita, Serpentina, Granulita, eclogita, Migmatita, meta-areniscas, metalimolita"
+              },
+              {
+                "code": "Mc",
+                "name": "Mc - Metamórficas de Contacto - Cuarcitas, mármoles, corneanas"
+              },
+              {
+                "code": "Md",
+                "name": "Md - Metamórficas Dinámicas - Microbrechas, Cataclasitas, Milonita, Filonita"
+              },
+              {
+                "code": "O",
+                "name": "O - Depósitos superficiales Orgánicos - Turba"
+              },
+              {
+                "code": "A",
+                "name": "A - Depósitos superficiales Clásticos hidrogénicos - Cantos y gravas, arenas, limos, arcillas, mixtos"
+              },
+              {
+                "code": "G",
+                "name": "G - Depósitos superficiales Clásticos glaciogénicos - Till, drift"
+              },
+              {
+                "code": "L",
+                "name": "L - Depósitos superficiales Clásticos anemogénicos - Loess, arenas eólicas"
+              },
+              {
+                "code": "P",
+                "name": "P - Depósitos superficiales Piroclásticos no consolidados - Cenizas, arenas volcánicas, lapilli"
+              },
+              {
+                "code": "If",
+                "name": "If - Ígneas Plutónicas - Tonalita (Cuarzodiorita), Sienita"
+              },
+              {
+                "code": "C",
+                "name": "C - Depósitos superficiales Clásticos gravigénicos e hidrogravigénicos - Coluviones, lodos, lahares, derrubios"
+              },
+              {
+                "code": "Vf",
+                "name": "Vf -  Ígneas Volcánicas - Traquita"
+              }
+            ],
+            "truncated": false,
+            "range": null
+          },
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "CSimbolo",
+          "alias": "Simbolo Correlación Suelos",
+          "type": "esriFieldTypeString",
+          "length": 50,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Shape_Length",
+          "alias": "Shape_Length",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Shape_Area",
+          "alias": "Shape_Area",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "AREA_HA",
+          "alias": "AREA_HA",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        }
+      ],
+      "sample": [],
+      "sampleRequested": 5,
+      "sampleReturned": 0,
+      "piiDroppedColumns": [],
+      "piiRedactedColumns": [],
+      "notes": [
+        "El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.",
+        "No se pudo traer la muestra: Se agotaron los 2 intentos contra https://mapas.igac.gov.co/server/rest/services/agrologia/areashomogeneasdetierra05360itagui/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=false&f=geojson&resultOffset=0&resultRecordCount=5&orderByFields=OBJECTID: This operation was aborted"
+      ],
+      "error": null
+    }
+  ],
+  "tables": [],
+  "inspectedAt": "2026-09-21T15:41:54.096Z",
+  "durationMs": 150331,
+  "notes": [],
+  "error": null
+}

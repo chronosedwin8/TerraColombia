@@ -1,0 +1,147 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — consultas propias para postgres_exporter
+#
+# El exportador ya trae las métricas estándar (conexiones, tamaño de base,
+# replicación). Aquí van las que son específicas de este producto: el estado de
+# los snapshots, el peso de las particiones de `core.parcel` y las consultas
+# más lentas.
+#
+# IMPORTANTE: ninguna consulta devuelve columnas con datos de predios o de
+# usuarios. Solo conteos y metadatos. Ver docs/SEGURIDAD.md §Registro sin PII.
+#
+# Todas usan `to_regclass`/`EXISTS` para no fallar antes de que las migraciones
+# hayan creado los esquemas (el exportador arranca antes que `pnpm db:migrate`).
+# ═════════════════════════════════════════════════════════════════════════════
+
+# ─── Consultas más lentas (alimenta el tablero de API) ──────────────────────
+pg_stat_statements_top:
+  query: |
+    SELECT
+      LEFT(REGEXP_REPLACE(s.query, '\s+', ' ', 'g'), 120) AS consulta,
+      s.calls                       AS llamadas,
+      s.total_exec_time / 1000.0    AS segundos_total,
+      s.mean_exec_time / 1000.0     AS segundos_media,
+      s.rows                        AS filas
+    FROM pg_stat_statements s
+    JOIN pg_database d ON d.oid = s.dbid
+    WHERE d.datname = current_database()
+      AND s.calls > 20
+    ORDER BY s.total_exec_time DESC
+    LIMIT 25
+  metrics:
+    - consulta:
+        usage: 'LABEL'
+        description: 'Consulta normalizada (primeros 120 caracteres)'
+    - llamadas:
+        usage: 'COUNTER'
+        description: 'Número de ejecuciones'
+    - segundos_total:
+        usage: 'COUNTER'
+        description: 'Tiempo total de ejecución en segundos'
+    - segundos_media:
+        usage: 'GAUGE'
+        description: 'Tiempo medio de ejecución en segundos'
+    - filas:
+        usage: 'COUNTER'
+        description: 'Filas devueltas en total'
+
+# ─── Peso de las particiones de core.parcel (una por departamento) ──────────
+tc_parcel_partition:
+  query: |
+    SELECT
+      c.relname                               AS particion,
+      COALESCE(pg_total_relation_size(c.oid), 0) AS bytes,
+      COALESCE(c.reltuples, 0)::bigint        AS filas_estimadas
+    FROM pg_class c
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    WHERE n.nspname = 'core'
+      AND c.relname LIKE 'parcel_%'
+      AND c.relkind = 'r'
+  metrics:
+    - particion:
+        usage: 'LABEL'
+        description: 'Nombre de la partición (core.parcel_<código de departamento>)'
+    - bytes:
+        usage: 'GAUGE'
+        description: 'Tamaño total de la partición incluyendo índices y TOAST'
+    - filas_estimadas:
+        usage: 'GAUGE'
+        description: 'Filas estimadas por el planificador'
+
+# ─── Estado de los snapshots (linaje, PLAN §8) ──────────────────────────────
+# La métrica autoritativa de edad de snapshot la publica el worker
+# (`tc_snapshot_age_days`). Esta es la contraparte leída directamente de la
+# base: si ambas discrepan, el worker está publicando métricas obsoletas.
+tc_snapshot:
+  query: |
+    SELECT
+      d.id                                                     AS dataset,
+      d.source                                                 AS fuente,
+      COALESCE(s.status, 'sin_snapshot')                       AS estado,
+      COALESCE(EXTRACT(EPOCH FROM (now() - s.cut_date)) / 86400.0, -1) AS edad_dias,
+      COALESCE(s.row_count, 0)                                 AS filas
+    FROM meta.dataset d
+    LEFT JOIN LATERAL (
+      SELECT sn.status, sn.cut_date, sn.row_count
+      FROM meta.snapshot sn
+      WHERE sn.dataset_id = d.id AND sn.status = 'active'
+      ORDER BY sn.cut_date DESC
+      LIMIT 1
+    ) s ON TRUE
+  metrics:
+    - dataset:
+        usage: 'LABEL'
+        description: 'Identificador del dataset en meta.dataset'
+    - fuente:
+        usage: 'LABEL'
+        description: 'Fuente del dato (IGAC, DANE, MEN, DEMO, …)'
+    - estado:
+        usage: 'LABEL'
+        description: 'Estado del snapshot activo'
+    - edad_dias:
+        usage: 'GAUGE'
+        description: 'Días transcurridos desde la fecha de corte; -1 si no hay snapshot activo'
+    - filas:
+        usage: 'GAUGE'
+        description: 'Filas del snapshot activo'
+
+# ─── Tamaño del volumen de datos (denominador de la alerta de disco) ────────
+tc_pg_volume:
+  query: |
+    SELECT
+      (SELECT SUM(pg_database_size(datname)) FROM pg_database)::bigint AS usado_bytes,
+      -- No hay forma portable de leer el tamaño del volumen desde SQL.
+      -- Se define por configuración y se compara contra el uso real.
+      (current_setting('tc.volume_total_bytes', true))::bigint         AS total_bytes
+  metrics:
+    - usado_bytes:
+        usage: 'GAUGE'
+        description: 'Bytes usados por todas las bases del clúster'
+    - total_bytes:
+        usage: 'GAUGE'
+        description: >-
+          Capacidad del volumen, definida con
+          `ALTER DATABASE terracolombia SET tc.volume_total_bytes = '...'`.
+          Si no está definida, la métrica sale NULL y la alerta de disco no evalúa.
+
+# ─── Vistas materializadas sin refrescar ────────────────────────────────────
+tc_matview:
+  query: |
+    SELECT
+      n.nspname || '.' || c.relname AS vista,
+      CASE WHEN c.relispopulated THEN 1 ELSE 0 END AS poblada,
+      COALESCE(pg_total_relation_size(c.oid), 0) AS bytes
+    FROM pg_class c
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    WHERE c.relkind = 'm'
+      AND n.nspname IN ('analytics', 'core', 'ctx')
+  metrics:
+    - vista:
+        usage: 'LABEL'
+        description: 'Vista materializada'
+    - poblada:
+        usage: 'GAUGE'
+        description: '1 si tiene datos; 0 si nunca se refrescó (devuelve error al consultarla)'
+    - bytes:
+        usage: 'GAUGE'
+        description: 'Tamaño en disco'

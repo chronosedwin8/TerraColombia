@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "fbyd-epjh",
+  "name": "Matricula con discapacidad Departamento de Risaralda",
+  "description": "Corresponde al número de estudiantes matriculados en los niveles educativos del sistema de educación formal oficial, con alguna discapacidad.",
+  "publisher": "Gobernación de Risaralda, Risaralda",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "estudiantes matriculados",
+    "discapacidad",
+    "departamento de risaralda",
+    "matriculados",
+    "educación",
+    "educación preescolar básica y media"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Risaralda, Risaralda",
+  "dataUri": "https://www.datos.gov.co/resource/fbyd-epjh",
+  "webUri": "https://www.datos.gov.co/d/fbyd-epjh",
+  "homepage": null,
+  "createdAt": "2022-10-11T15:13:49+0000",
+  "dataUpdatedAt": "2025-08-31T03:33:06+0000",
+  "cutDate": "2025-08-31",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "variable",
+      "jsType": "Variable",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cantidad",
+      "jsType": "Cantidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "Año",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:45.801Z"
+}

@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "prdx-nxyp",
+  "name": "SECOP I - PAA Encabezado",
+  "description": "Información registrada en los ultimos 3 años dentro del PAA que se carga en el SECOP I",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "paa",
+    "plan anual de adquisiciones",
+    "secop",
+    "secop i"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/prdx-nxyp",
+  "webUri": "https://www.datos.gov.co/d/prdx-nxyp",
+  "homepage": null,
+  "createdAt": "2021-09-06T15:48:41+0000",
+  "dataUpdatedAt": "2026-09-21T06:01:07+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "localidad_paa",
+      "jsType": "Localidad PAA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_entidad",
+      "jsType": "Codigo Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ppto_total",
+      "jsType": "Ppto total",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_ultima_actualizacion",
+      "jsType": "Fecha Ultima Actualizacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion_entidad",
+      "jsType": "Direccion Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "telefono_entidad",
+      "jsType": "Telefono Entidad",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "info_contacto",
+      "jsType": "Info Contacto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "limite_minima_cuantia",
+      "jsType": "Limite Minima Cuantia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "limite_menor_cuantia",
+      "jsType": "Limite Menor Cuantia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento_paa",
+      "jsType": "Departamento PAA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_cargue",
+      "jsType": "Fecha Cargue",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "perspectiva_estrategica",
+      "jsType": "Perspectiva Estrategica",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "mision_y_vision",
+      "jsType": "Mision y Vision",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio_paa",
+      "jsType": "Municipio PAA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_entidad",
+      "jsType": "Nombre Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_entidad",
+      "jsType": "NIT Entidad",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "identificador_paa",
+      "jsType": "Identificador PAA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "anno_paa",
+      "jsType": "Anno PAA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_municipio",
+      "jsType": "Codigo Municipio",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "telefono_entidad",
+    "nit_entidad"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:06.813Z"
+}

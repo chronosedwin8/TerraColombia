@@ -1,0 +1,1180 @@
+[
+  {
+    "id": "manual-pending-dane-geoportal-obtener-la-url-directa-y",
+    "severity": "media",
+    "source": "dane",
+    "target": "https://geoportal.dane.gov.co/",
+    "title": "Pendiente de verificar en Geoportal DANE — descargas del Marco Geoestadístico Nacional",
+    "detail": "Obtener la URL directa y estable del ZIP del MGN del año en curso (el portal usa descargas por formulario).",
+    "mitigation": "Resolver antes de declarar el dataset en `etl/config/datasets`.",
+    "modules": [
+      "M1"
+    ]
+  },
+  {
+    "id": "manual-pending-dane-geoportal-confirmar-la-licencia-de",
+    "severity": "media",
+    "source": "dane",
+    "target": "https://geoportal.dane.gov.co/",
+    "title": "Pendiente de verificar en Geoportal DANE — descargas del Marco Geoestadístico Nacional",
+    "detail": "Confirmar la licencia de uso y la atribución exigida.",
+    "mitigation": "Resolver antes de declarar el dataset en `etl/config/datasets`.",
+    "modules": [
+      "M1"
+    ]
+  },
+  {
+    "id": "manual-pending-dane-geoportal-verificar-el-crs-de-entr",
+    "severity": "media",
+    "source": "dane",
+    "target": "https://geoportal.dane.gov.co/",
+    "title": "Pendiente de verificar en Geoportal DANE — descargas del Marco Geoestadístico Nacional",
+    "detail": "Verificar el CRS de entrega (se espera EPSG:4686) y la codificación de los CSV.",
+    "mitigation": "Resolver antes de declarar el dataset en `etl/config/datasets`.",
+    "modules": [
+      "M1"
+    ]
+  },
+  {
+    "id": "manual-pending-igac-datos-abiertos-hub-localizar-la-url-directa",
+    "severity": "media",
+    "source": "igac",
+    "target": "https://datos-abiertos-igac-igac-oit.hub.arcgis.com/",
+    "title": "Pendiente de verificar en IGAC — portal de datos abiertos (ArcGIS Hub)",
+    "detail": "Localizar la URL directa del paquete departamental de la Base Catastral Pública del corte vigente.",
+    "mitigation": "Resolver antes de declarar el dataset en `etl/config/datasets`.",
+    "modules": [
+      "M1"
+    ]
+  },
+  {
+    "id": "manual-pending-igac-datos-abiertos-hub-confirmar-si-la-licencia",
+    "severity": "media",
+    "source": "igac",
+    "target": "https://datos-abiertos-igac-igac-oit.hub.arcgis.com/",
+    "title": "Pendiente de verificar en IGAC — portal de datos abiertos (ArcGIS Hub)",
+    "detail": "Confirmar si la licencia del paquete catastral es CC BY-SA 4.0 (como asume PLAN.md §2) o CC BY 4.0 (como declaran los datasets espejados en datos.gov.co).",
+    "mitigation": "Resolver antes de declarar el dataset en `etl/config/datasets`.",
+    "modules": [
+      "M1"
+    ]
+  },
+  {
+    "id": "manual-pending-osm-geofabrik-colombia-decidir-el-subconjunto-d",
+    "severity": "media",
+    "source": "osm",
+    "target": "https://download.geofabrik.de/south-america/colombia.html",
+    "title": "Pendiente de verificar en OpenStreetMap — extracto de Colombia (Geofabrik)",
+    "detail": "Decidir el subconjunto de etiquetas a ingerir (osm2pgsql style) para no cargar todo el país.",
+    "mitigation": "Resolver antes de declarar el dataset en `etl/config/datasets`.",
+    "modules": [
+      "M1"
+    ]
+  },
+  {
+    "id": "socrata-pii-bhcx-bx97",
+    "severity": "alta",
+    "source": "igac",
+    "target": "https://www.datos.gov.co/d/bhcx-bx97",
+    "title": "Dataset con columnas de datos personales: Gestores Catastrales de Colombia",
+    "detail": "Columnas descartadas por la lista negra: contacto.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-6arb-d547",
+    "severity": "alta",
+    "source": "igac",
+    "target": "https://www.datos.gov.co/d/6arb-d547",
+    "title": "Dataset con columnas de datos personales: Alimentos del trópico para alimentación animal - AlimenTro",
+    "detail": "Columnas descartadas por la lista negra: nombre_alterno_2, nombre_alterno_1, nombre_alterno_3.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-7y2j-43cv",
+    "severity": "alta",
+    "source": "igac",
+    "target": "https://www.datos.gov.co/d/7y2j-43cv",
+    "title": "Dataset con columnas de datos personales: Registro de transacciones inmobiliarias en Colombia IGAC",
+    "detail": "Columnas descartadas por la lista negra: nombre_natujur, documento_justificativo.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-tgsp-kujm",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/tgsp-kujm",
+    "title": "Dataset con columnas de datos personales: Sedes de los Establecimientos Educativos del Departamento de Antioquia",
+    "detail": "Columnas descartadas por la lista negra: tel_fono.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-emd6-ef7x",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/emd6-ef7x",
+    "title": "Dataset con columnas de datos personales: Establecimientos Educativos del sector oficial y no oficial por municipio - DEPARTAMENTO DE BOYACÁ",
+    "detail": "Columnas descartadas por la lista negra: genero, nombre, correo_electr_nico, tel_fono, discapacidades, nombre_rector.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-7g6s-xche",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/7g6s-xche",
+    "title": "Dataset con columnas de datos personales: Listado de sedes de los Establecimientos Educativos Oficiales (municipios no certificados) del Departamento del Atlántico.",
+    "detail": "Columnas descartadas por la lista negra: nombre_ee.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-m6wg-s96s",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/m6wg-s96s",
+    "title": "Dataset con columnas de datos personales: Listado de los Establecimientos Educativos No Oficiales del Departamento del Atlántico (municipios no certificados)",
+    "detail": "Columnas descartadas por la lista negra: correo_electr_nico, nombre, discapacidades, nombre_rector, tel_fono, genero.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-cfw5-qzt5",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/cfw5-qzt5",
+    "title": "Dataset con columnas de datos personales: MEN_ESTABLECIMIENTOS_EDUCATIVOS_PREESCOLAR_BÁSICA_Y_MEDIA",
+    "detail": "Columnas descartadas por la lista negra: email, telefono, fax.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-spve-848d",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/spve-848d",
+    "title": "Dataset con columnas de datos personales: CONECTIVIDAD EN SEDES EDUCATIVAS OFICIALES DE LOS MUNICIPIOS NO CERTIFICADOS DEL DEPARTAMENTO DE SANTANDER",
+    "detail": "Columnas descartadas por la lista negra: operador_conectividad.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-x5ay-984n",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/x5ay-984n",
+    "title": "Dataset con columnas de datos personales: MEN_SEDES_EDUCATIVAS_PREESCOLAR_BÁSICA_Y_MEDIA",
+    "detail": "Columnas descartadas por la lista negra: email, fax, telefono.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-b6yg-3vyi",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/b6yg-3vyi",
+    "title": "Dataset con columnas de datos personales: ESTUDIANTES CON DISCAPACIDAD DEPARTAMENTO DE SANTANDER",
+    "detail": "Columnas descartadas por la lista negra: etnia, d_genero.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-65zu-5xdk",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/65zu-5xdk",
+    "title": "Dataset con columnas de datos personales: Sedes de los Instituciones Educativas del Departamento de Boyacá",
+    "detail": "Columnas descartadas por la lista negra: tel_fono.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-7tec-5fhs",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/7tec-5fhs",
+    "title": "Dataset con columnas de datos personales: Listado de Instituciones Educativas Oficiales y No Oficiales del Departamento del Atlántico.",
+    "detail": "Columnas descartadas por la lista negra: nombre_rector, genero, discapacidades, nombre, correo_electr_nico.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-vqup-4isj",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/vqup-4isj",
+    "title": "Dataset con columnas de datos personales: Listado de instituciones y centros educativos públicos del departamento de Casanare",
+    "detail": "Columnas descartadas por la lista negra: nombre_del_establecimiento, telefono_de_la_institucion, email.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-hyqu-diue",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/hyqu-diue",
+    "title": "Dataset con columnas de datos personales: Exámenes médico legales por presunto delito sexual. Colombia, años 2015 a 2024. Cifras definitivas",
+    "detail": "Columnas descartadas por la lista negra: orientacion_sexual, sexo_de_la_victima, sexo_del_agresor, estado_civil, tipo_de_discapacidad, identidad_de_genero.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-pejt-qp6n",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/pejt-qp6n",
+    "title": "Dataset con columnas de datos personales: INSTITUCIONES EDUCATIVAS OFICIALES DE MUNICIPIOS NO CERTIFICADOS CON CONEXIÓN A INTERNET - DEPARTAMENTO DE BOYACÁ",
+    "detail": "Columnas descartadas por la lista negra: nombre_ie.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-xrdq-pb8b",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/xrdq-pb8b",
+    "title": "Dataset con columnas de datos personales: INSTITUCIONES EDUCATIVAS OFICIALES DE MUNICIPIOS DEL DEPARTAMENTO DE BOYACÁ CON CONEXION A INTERNET",
+    "detail": "Columnas descartadas por la lista negra: operador.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-rzcg-uhwd",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/rzcg-uhwd",
+    "title": "Dataset con columnas de datos personales: Programa conexión total del Departamento de Caldas",
+    "detail": "Columnas descartadas por la lista negra: nombre_instituci_n_educativa.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-ngw5-c5nw",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/ngw5-c5nw",
+    "title": "Dataset con columnas de datos personales: MEN_MATRICULA_EN_EDUCACION_EN_PREESCOLAR, BÁSICA Y MEDIA",
+    "detail": "Columnas descartadas por la lista negra: genero_1, genero.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-7y7n-8wu6",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/7y7n-8wu6",
+    "title": "Dataset con columnas de datos personales: Estudiantes Beneficiados con el Programa de Alimentación Escolar PAE en el Municipio de Sogamoso Boyacá",
+    "detail": "Columnas descartadas por la lista negra: genero, discapacidad, tipo_documento, nombre_de_la_institucion.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-e6kt-wdhu",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/e6kt-wdhu",
+    "title": "Dataset con columnas de datos personales: Zonas Comunitarias para la Paz – Puntos de Conectividad Instalados en el Departamento del Caquetá",
+    "detail": "Columnas descartadas por la lista negra: operador, nombre_ee.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-qsh3-vq78",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/qsh3-vq78",
+    "title": "Dataset con columnas de datos personales: Registro Especial de Prestadores de Salud en el Departamento del Atlántico.",
+    "detail": "Columnas descartadas por la lista negra: email, nom_prestador, nit, telefono.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-b4dp-ximh",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/b4dp-ximh",
+    "title": "Dataset con columnas de datos personales: Prestadores de Salud Departamento de Antioquia",
+    "detail": "Columnas descartadas por la lista negra: digito_verificacion_nit, email, nit, fax, telefono.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-w3uf-w23h",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/w3uf-w23h",
+    "title": "Dataset con columnas de datos personales: Directorio de instituciones establecimientos educativas oficiales y a nivel departamental",
+    "detail": "Columnas descartadas por la lista negra: telefono_de_la_institucion, email, nombre_del_establecimiento.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-bvpy-6cm7",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/bvpy-6cm7",
+    "title": "Dataset con columnas de datos personales: Entidades de salud en el Departamento de Risaralda",
+    "detail": "Columnas descartadas por la lista negra: email, telefono.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-y9ga-zwzy",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/y9ga-zwzy",
+    "title": "Dataset con columnas de datos personales: MEN_ESTADISTICAS MATRICULA POR MUNICIPIOS_ES",
+    "detail": "Columnas descartadas por la lista negra: nombre_del_departamento, nombre_del_municipio.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-enmx-7kvv",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/enmx-7kvv",
+    "title": "Dataset con columnas de datos personales: MEN_MATRICULA_MIGRANTES_EN_EDUCACION_BASICA_Y_MEDIA",
+    "detail": "Columnas descartadas por la lista negra: discapacidad, genero.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-4hrb-y62g",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/4hrb-y62g",
+    "title": "Dataset con columnas de datos personales: MEN_ESTADISTICAS DE MATRICULA POR DEPARTAMENTOS_ES",
+    "detail": "Columnas descartadas por la lista negra: nombre_del_departamento.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-upgu-2ytp",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/upgu-2ytp",
+    "title": "Dataset con columnas de datos personales: MATRICULA POR GRADO Y EDAD DEPARTAMENTO DE SANTANDER",
+    "detail": "Columnas descartadas por la lista negra: nomb_sec.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-hqpw-8e5g",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/hqpw-8e5g",
+    "title": "Dataset con columnas de datos personales: Entidades sin ánimo de lucro en Departamento de Casanare.",
+    "detail": "Columnas descartadas por la lista negra: tel_fono_2, nit, tel_fono_3, tel_fono_1, email.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-sras-4t5p",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/sras-4t5p",
+    "title": "Dataset con columnas de datos personales: MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR, BÁSICA Y MEDIA_POR_ETC",
+    "detail": "Columnas descartadas por la lista negra: nombre_etc.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-uhs6-qp53",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/uhs6-qp53",
+    "title": "Dataset con columnas de datos personales: ESTABLECIMIENTOS VIGILADOS POR EL INVIMA EN LA DISCIPLINA DE ALIMENTOS",
+    "detail": "Columnas descartadas por la lista negra: razon_social, nit.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-vwwf-4ftk",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/vwwf-4ftk",
+    "title": "Dataset con columnas de datos personales: CÓDIGO ÚNICO DE MEDICAMENTOS VENCIDOS",
+    "detail": "Columnas descartadas por la lista negra: titular.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-i7cb-raxc",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/i7cb-raxc",
+    "title": "Dataset con columnas de datos personales: CÓDIGO ÚNICO DE MEDICAMENTOS VIGENTES",
+    "detail": "Columnas descartadas por la lista negra: titular.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-vgr4-gemg",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/vgr4-gemg",
+    "title": "Dataset con columnas de datos personales: CÓDIGO ÚNICO DE MEDICAMENTOS EN TRÁMITE DE RENOVACIÓN",
+    "detail": "Columnas descartadas por la lista negra: titular.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-j8bh-xk3n",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/j8bh-xk3n",
+    "title": "Dataset con columnas de datos personales: Base de Prestadores de Servicios Turísticos \"SITUR\" - DEPARTAMENTO DE BOYACÁ",
+    "detail": "Columnas descartadas por la lista negra: correo_electronico, nombre_comercial, nombre_gerente.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-2btt-9z2g",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/2btt-9z2g",
+    "title": "Dataset con columnas de datos personales: ESTABLECIMIENTOS AUTORIZADOS PARA EL ALMACENAMIENTO Y DISTRIBUCIÓN DE MEDICAMENTOS",
+    "detail": "Columnas descartadas por la lista negra: nombre.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-jwvi-unqh",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/jwvi-unqh",
+    "title": "Dataset con columnas de datos personales: Directorio de cuadrantes de Metropolitanas y Departamentos de Policía",
+    "detail": "Columnas descartadas por la lista negra: numero_celular_cuadrante.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-spzp-dfuc",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/spzp-dfuc",
+    "title": "Dataset con columnas de datos personales: CÓDIGO ÚNICO DE MEDICAMENTOS OTROS ESTADOS",
+    "detail": "Columnas descartadas por la lista negra: titular.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-f25x-wa6y",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/f25x-wa6y",
+    "title": "Dataset con columnas de datos personales: ESTABLECIMIENTOS FABRICANTES DE DISPOSITIVOS MÉDICOS SOBRE MEDIDA",
+    "detail": "Columnas descartadas por la lista negra: nit.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-gc4x-u4iy",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/gc4x-u4iy",
+    "title": "Dataset con columnas de datos personales: ESTABLECIMIENTOS INSCRITOS PARA EL MANEJO DE MEDICAMENTOS DE CONTROL ESPECIAL",
+    "detail": "Columnas descartadas por la lista negra: nombre_o_razon_social.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-s3n2-sqjp",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/s3n2-sqjp",
+    "title": "Dataset con columnas de datos personales: ESTABLECIMIENTOS IMPORTADORES CERTIFICADOS EN CCAA DE DISPOSITIVOS MÉDICOS Y EQUIPOS BIOMÉDICOS",
+    "detail": "Columnas descartadas por la lista negra: nit.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-jebm-jp6y",
+    "severity": "alta",
+    "source": "men",
+    "target": "https://www.datos.gov.co/d/jebm-jp6y",
+    "title": "Dataset con columnas de datos personales: Establecimientos con manejo de medicamentos de control especial",
+    "detail": "Columnas descartadas por la lista negra: razon_social.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-s2ru-bqt6",
+    "severity": "alta",
+    "source": "minsalud",
+    "target": "https://www.datos.gov.co/d/s2ru-bqt6",
+    "title": "Dataset con columnas de datos personales: Relación de IPS públicas y privadas según el nivel de atención y capacidad instalada",
+    "detail": "Columnas descartadas por la lista negra: nom_grupo_capacidad, email, nombre_prestador, nom_descripcion_capacidad, tel_fono, nit_ips.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-c36g-9fc2",
+    "severity": "alta",
+    "source": "minsalud",
+    "target": "https://www.datos.gov.co/d/c36g-9fc2",
+    "title": "Dataset con columnas de datos personales: Registro Especial de Prestadores y Sedes de Servicios de Salud",
+    "detail": "Columnas descartadas por la lista negra: numeroidentificacion, email_prestador, email_sede, telefonoprestador.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-9vau-g3q7",
+    "severity": "alta",
+    "source": "minsalud",
+    "target": "https://www.datos.gov.co/d/9vau-g3q7",
+    "title": "Dataset con columnas de datos personales: Sedes de prestadores con servicio de vacunación",
+    "detail": "Columnas descartadas por la lista negra: nit.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-n4dj-8r7k",
+    "severity": "alta",
+    "source": "minsalud",
+    "target": "https://www.datos.gov.co/d/n4dj-8r7k",
+    "title": "Dataset con columnas de datos personales: Clicsalud - Termómetro de Precios de Medicamentos",
+    "detail": "Columnas descartadas por la lista negra: nombre_comercial.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-jbjy-vk9h",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/jbjy-vk9h",
+    "title": "Dataset con columnas de datos personales: SECOP II - Contratos Electrónicos",
+    "detail": "Columnas descartadas por la lista negra: n_mero_de_documento_ordenador_de_pago, nombre_del_banco, nombre_ordenador_del_gasto, nit_entidad, descripcion_documentos_tipo, documentos_tipo, fecha_de_firma, documento_proveedor, tipo_de_documento_ordenador_de_pago, nombre_ordenador_de_pago, n_mero_de_documento_supervisor, tipo_de_documento_supervisor, nombre_supervisor, n_mero_de_documento_ordenador_del_gasto, tipo_de_documento_ordenador_del_gasto, nombre_representante_legal.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-rpmr-utcd",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/rpmr-utcd",
+    "title": "Dataset con columnas de datos personales: SECOP Integrado",
+    "detail": "Columnas descartadas por la lista negra: tipo_documento_proveedor, documento_proveedor, nom_raz_social_contratista, nombre_de_la_entidad, nit_de_la_entidad, fecha_de_firma_del_contrato.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-qmzu-gj57",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/qmzu-gj57",
+    "title": "Dataset con columnas de datos personales: SECOP II - Proveedores Registrados",
+    "detail": "Columnas descartadas por la lista negra: nombre, nit, nombre_representante_legal, telefono, correo_representante_legal, telefono_representante_legal, fax, correo.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-gra4-pcp2",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/gra4-pcp2",
+    "title": "Dataset con columnas de datos personales: SECOP II - Ubicaciones ejecucion contratos",
+    "detail": "Columnas descartadas por la lista negra: nit_entidad, documento_proveedor.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-wwhe-4sq8",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/wwhe-4sq8",
+    "title": "Dataset con columnas de datos personales: SECOP II - Ubicaciones Adicionales",
+    "detail": "Columnas descartadas por la lista negra: nit_entidad.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-cwhv-7fnp",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/cwhv-7fnp",
+    "title": "Dataset con columnas de datos personales: SECOP II - Rubros Presupuestales",
+    "detail": "Columnas descartadas por la lista negra: nombre.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-a86w-fh92",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/a86w-fh92",
+    "title": "Dataset con columnas de datos personales: SECOP II - Solicitudes CDPs",
+    "detail": "Columnas descartadas por la lista negra: nit, nit_proveedor.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-s484-c9k3",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/s484-c9k3",
+    "title": "Dataset con columnas de datos personales: SECOP - Convenios Interadministrativos",
+    "detail": "Columnas descartadas por la lista negra: anno_firma, fecha_firma, identificacion_contratista.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-f789-7hwg",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/f789-7hwg",
+    "title": "Dataset con columnas de datos personales: SECOP I - Procesos de Compra Pública",
+    "detail": "Columnas descartadas por la lista negra: nombre_sub_unidad_ejecutora, fecha_de_firma_del_contrato, sexo_replegal, nombre_del_represen_legal, nombre_grupo, nombre_familia, nombre_rubro, nom_razon_social_contratista, identificacion_del_contratista, nombre_regimen_de_contratacion, anno_firma_contrato, nit_de_la_entidad.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-dmgg-8hin",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/dmgg-8hin",
+    "title": "Dataset con columnas de datos personales: SECOP II - Archivos Descarga Desde 2025",
+    "detail": "Columnas descartadas por la lista negra: id_documento, url_descarga_documento, nit_entidad.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-u8cx-r425",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/u8cx-r425",
+    "title": "Dataset con columnas de datos personales: SECOP II - Modificaciones a contratos",
+    "detail": "Columnas descartadas por la lista negra: nombre_aplicacion_creacion.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-ibyt-yi2f",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/ibyt-yi2f",
+    "title": "Dataset con columnas de datos personales: SECOP II - Facturas",
+    "detail": "Columnas descartadas por la lista negra: usuario_pago.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-4ex9-j3n8",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/4ex9-j3n8",
+    "title": "Dataset con columnas de datos personales: SECOP II - Contacto Entidades y Proveedores",
+    "detail": "Columnas descartadas por la lista negra: n_mero_documento_representante_legal, tipo_documento_representante_legal, nombre_representante_legal, correo_electronico, correo_representante_legal, nit_entidad, numero_fax.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-3skv-9na7",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/3skv-9na7",
+    "title": "Dataset con columnas de datos personales: SECOP II - Archivos Descarga Historico 2023",
+    "detail": "Columnas descartadas por la lista negra: id_documento, nit_entidad, url_descarga_documento.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-4n4q-k399",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/4n4q-k399",
+    "title": "Dataset con columnas de datos personales: Multas y Sanciones SECOP I",
+    "detail": "Columnas descartadas por la lista negra: nit_entidad, nombre_contratista, documento_contratista.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-hgi6-6wh3",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/hgi6-6wh3",
+    "title": "Dataset con columnas de datos personales: Proponentes por Proceso SECOP II",
+    "detail": "Columnas descartadas por la lista negra: nit_proveedor, nit_entidad, nombre_procedimiento.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-uymx-8p3j",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/uymx-8p3j",
+    "title": "Dataset con columnas de datos personales: SECOP II - Plan de pagos",
+    "detail": "Columnas descartadas por la lista negra: nombre_proveedor, nit_entidad, tipo_documento_supervisor, documento_proveedor, documento_supervisor, nombre_supervisor.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-p6dx-8zbt",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/p6dx-8zbt",
+    "title": "Dataset con columnas de datos personales: SECOP II - Procesos de Contratación",
+    "detail": "Columnas descartadas por la lista negra: nombre_del_proveedor, nit_entidad, nombre_de_la_unidad_de, nombre_del_procedimiento, nit_del_proveedor_adjudicado, nombre_del_adjudicador.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-f8va-cf4m",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/f8va-cf4m",
+    "title": "Dataset con columnas de datos personales: SECOP II - Archivos Descarga Historico Hasta 2021",
+    "detail": "Columnas descartadas por la lista negra: id_documento, url_descarga_documento, nit_entidad.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-kgcd-kt7i",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/kgcd-kt7i",
+    "title": "Dataset con columnas de datos personales: SECOP II - Archivos Descarga Historico 2022",
+    "detail": "Columnas descartadas por la lista negra: nit_entidad, url_descarga_documento, id_documento.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-ityv-bxct",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/ityv-bxct",
+    "title": "Dataset con columnas de datos personales: SECOP - Convenios Interadministrativos Historico",
+    "detail": "Columnas descartadas por la lista negra: fecha_firma, identificacion_contratista, anno_firma.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-qddk-cgux",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/qddk-cgux",
+    "title": "Dataset con columnas de datos personales: SECOP I - Procesos de Compra Pública Historico",
+    "detail": "Columnas descartadas por la lista negra: nombre_familia, nombre_rubro, nom_razon_social_contratista, identificacion_del_contratista, nombre_grupo, nombre_del_represen_legal, nombre_sub_unidad_ejecutora, anno_firma_contrato, nombre_regimen_de_contratacion, sexo_replegal, nit_de_la_entidad, fecha_de_firma_del_contrato.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-nbae-kzan",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/nbae-kzan",
+    "title": "Dataset con columnas de datos personales: SECOP II - Archivos Descarga Historico 2024",
+    "detail": "Columnas descartadas por la lista negra: nit_entidad, url_descarga_documento, id_documento.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-ceth-n4bn",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/ceth-n4bn",
+    "title": "Dataset con columnas de datos personales: Grupos de Proveedores - SECOP II",
+    "detail": "Columnas descartadas por la lista negra: nombre_participante, nit_participante, correo_representante_legal_grupo, correo_electronico_grupo, nombre_representante_legal_grupo, numero_tel_fono_grupo, telefono_representante_legal_grupo, numero_fax, nit_grupo, nombre_grupo.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-7fix-nd37",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/7fix-nd37",
+    "title": "Dataset con columnas de datos personales: SECOP I - Adiciones",
+    "detail": "Columnas descartadas por la lista negra: fecha_firma.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-e2u2-swiw",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/e2u2-swiw",
+    "title": "Dataset con columnas de datos personales: SECOP II - Modificaciones a Procesos",
+    "detail": "Columnas descartadas por la lista negra: nit_entidad.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-azeg-sgqg",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/azeg-sgqg",
+    "title": "Dataset con columnas de datos personales: SECOP I - PAA Detalle",
+    "detail": "Columnas descartadas por la lista negra: contacto_responsable_adquisicion.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-wi7w-2nvm",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/wi7w-2nvm",
+    "title": "Dataset con columnas de datos personales: SECOPII - Ofertas Por Proceso",
+    "detail": "Columnas descartadas por la lista negra: nit_del_proveedor, nombre_proveedor, nit_entidad_compradora.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-9sue-ezhx",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/9sue-ezhx",
+    "title": "Dataset con columnas de datos personales: SECOPII - Plan Anual De Adquisiciones Detalle",
+    "detail": "Columnas descartadas por la lista negra: correo_del_contacto, telefono_del_contacto, nombre_del_contacto, nit_entidad.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-prdx-nxyp",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/prdx-nxyp",
+    "title": "Dataset con columnas de datos personales: SECOP I - PAA Encabezado",
+    "detail": "Columnas descartadas por la lista negra: telefono_entidad, nit_entidad.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-rgxm-mmea",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/rgxm-mmea",
+    "title": "Dataset con columnas de datos personales: Tienda Virtual del Estado Colombiano - Consolidado",
+    "detail": "Columnas descartadas por la lista negra: nit_proveedor, nit_entidad, solicitante.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  },
+  {
+    "id": "socrata-pii-b28v-edj8",
+    "severity": "alta",
+    "source": "secop",
+    "target": "https://www.datos.gov.co/d/b28v-edj8",
+    "title": "Dataset con columnas de datos personales: SECOPII - Ofertas Por Proceso Historico",
+    "detail": "Columnas descartadas por la lista negra: nombre_proveedor, nit_del_proveedor, nit_entidad_compradora.",
+    "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
+    "modules": [
+      "M2",
+      "M4",
+      "M7"
+    ]
+  }
+]

@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "f5ai-gvqt",
+  "name": "MEN_INDICE_PARIDAD_POR_GENERO_MATRICULA",
+  "description": "Contiene los datos de los indices de paridad por género (IPG=F/M) y la cantidad de matricula de EPBM Educación Prescolar, Básica y Media, por genero desagregados por Entidad Territorial Certificada ETC, del año 2020",
+  "publisher": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "matrícula",
+    "genero",
+    "educación"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/f5ai-gvqt",
+  "webUri": "https://www.datos.gov.co/d/f5ai-gvqt",
+  "homepage": null,
+  "createdAt": "2021-12-30T17:37:47+0000",
+  "dataUpdatedAt": "2021-12-30T18:07:11+0000",
+  "cutDate": "2021-12-30",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "anno_inf",
+      "jsType": "AÑO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_matr_prim",
+      "jsType": "IPG_MATR_PRIM",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_matr_prej",
+      "jsType": "IPG_MATR_PREJ",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_fem_media",
+      "jsType": "MATR_FEM_MEDIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_fem_prej",
+      "jsType": "MATR_FEM_PREJ",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etc",
+      "jsType": "ETC",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_masc_prej",
+      "jsType": "MATR_MASC_PREJ",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_masc_prim",
+      "jsType": "MATR_MASC_PRIM",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_masc_media",
+      "jsType": "MATR_MASC_MEDIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_matr_media",
+      "jsType": "IPG_MATR_MEDIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digoetc",
+      "jsType": "CODIGOETC",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_masc_trans",
+      "jsType": "MATR_MASC_TRANS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_matr_sec",
+      "jsType": "IPG_MATR_SEC",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ipg_matr_trans",
+      "jsType": "IPG_MATR_TRANS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digodepartamento",
+      "jsType": "CODIGODEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_fem_prim",
+      "jsType": "MATR_FEM_PRIM",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_masc_sec",
+      "jsType": "MATR_MASC_SEC",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_fem_sec",
+      "jsType": "MATR_FEM_SEC",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_fem_trans",
+      "jsType": "MATR_FEM_TRANS",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:39.901Z"
+}

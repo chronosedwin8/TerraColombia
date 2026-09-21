@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "source": "igac",
+  "connector": "arcgis-rest",
+  "name": "Dato_Fundamental_Curvas_de_nivel_500k",
+  "folder": "",
+  "serviceType": "MapServer",
+  "url": "https://mapas.igac.gov.co/server/rest/services/Dato_Fundamental_Curvas_de_nivel_500k/MapServer",
+  "description": null,
+  "copyrightText": null,
+  "currentVersion": 11.3,
+  "capabilities": [
+    "map",
+    "query",
+    "data"
+  ],
+  "supportedQueryFormats": [
+    "json",
+    "geojson",
+    "pbf"
+  ],
+  "maxRecordCount": 2000,
+  "supportedExtensions": [
+    "WFSServer",
+    "WMSServer"
+  ],
+  "spatialReferenceWkid": 9377,
+  "fullExtent": {
+    "xmin": 4369737.9623,
+    "ymin": 1104433.1878999993,
+    "xmax": 5682856.683599999,
+    "ymax": 2917337.5798000004,
+    "wkid": 9377
+  },
+  "layers": [
+    {
+      "id": 0,
+      "name": "Elevacion_500k",
+      "type": "Feature Layer",
+      "description": null,
+      "geometryType": "esriGeometryPolyline",
+      "url": "https://mapas.igac.gov.co/server/rest/services/Dato_Fundamental_Curvas_de_nivel_500k/MapServer/0",
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "crsLabel": "MAGNA-SIRGAS / Origen-Nacional",
+      "maxRecordCount": 2000,
+      "capabilities": [
+        "map",
+        "query",
+        "data"
+      ],
+      "supportedQueryFormats": [
+        "json",
+        "geojson",
+        "pbf"
+      ],
+      "supportsPagination": false,
+      "supportsStatistics": false,
+      "supportsOrderBy": false,
+      "objectIdField": "FID",
+      "displayField": "CNIdentif",
+      "count": null,
+      "extent": {
+        "xmin": 4369737.9623,
+        "ymin": 1104433.1878999993,
+        "xmax": 5682856.683599999,
+        "ymax": 2917337.5798000004,
+        "wkid": 9377
+      },
+      "fields": [
+        {
+          "name": "FID",
+          "alias": "FID",
+          "type": "esriFieldTypeOID",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Shape",
+          "alias": "Shape",
+          "type": "esriFieldTypeGeometry",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "CNIdentif",
+          "alias": "CNIdentif",
+          "type": "esriFieldTypeString",
+          "length": 50,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "CNAltura",
+          "alias": "CNAltura",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "CNTipo",
+          "alias": "CNTipo",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SHAPE_Leng",
+          "alias": "SHAPE_Leng",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "RuleID",
+          "alias": "RuleID",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        }
+      ],
+      "sample": [],
+      "sampleRequested": 5,
+      "sampleReturned": 0,
+      "piiDroppedColumns": [],
+      "piiRedactedColumns": [],
+      "notes": [
+        "La capa declara `supportsPagination: false`: `resultOffset` no funciona y hay que paginar por ventanas de OBJECTID.",
+        "La capa declara `supportsStatistics: false`: no se pueden pedir agregados al servicio.",
+        "El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.",
+        "La capa declara supportsPagination=false; se pagina por ventanas de FID. Tampoco soporta orderByFields: el orden de las ventanas no está garantizado.",
+        "No se envía resultRecordCount: el servicio lo rechaza con \"Pagination is not supported.\" El tamaño de página se acota con un rango de FID.",
+        "No se pudo traer la muestra: HTTP 503 en https://mapas.igac.gov.co/server/rest/services/Dato_Fundamental_Curvas_de_nivel_500k/MapServer/0/query?where=%281%3D1%29+AND+FID+%3E+-1+AND+FID+%3C%3D+4&outFields=*&returnGeometry=false&f=geojson"
+      ],
+      "error": null
+    }
+  ],
+  "tables": [],
+  "inspectedAt": "2026-09-21T15:22:50.747Z",
+  "durationMs": 89963,
+  "notes": [],
+  "error": null
+}

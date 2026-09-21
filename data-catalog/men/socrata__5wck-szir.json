@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "5wck-szir",
+  "name": "MEN_MATRICULA_ESTADISTICA_ES",
+  "description": "Contiene la Matrícula estadística de educación superior desde el 2015 hasta el 2024",
+  "publisher": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "educación superior",
+    "educacion"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/5wck-szir",
+  "webUri": "https://www.datos.gov.co/d/5wck-szir",
+  "homepage": null,
+  "createdAt": "2016-09-29T14:41:22+0000",
+  "dataUpdatedAt": "2025-10-28T20:52:30+0000",
+  "cutDate": "2025-10-28",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "id_metodologia",
+      "jsType": "Id_Metodologia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_del_departamento_programa",
+      "jsType": "Código del Departamento(Programa)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "instituci_n_de_educaci_n_superior_ies",
+      "jsType": "Institución de Educación Superior (IES)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "programa_acad_mico",
+      "jsType": "Programa Académico",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_nucleo",
+      "jsType": "Id_Nucleo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_snies_delprograma",
+      "jsType": "Código SNIES delprograma",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "principal_oseccional",
+      "jsType": "Principal oSeccional",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_nivel",
+      "jsType": "Id_Nivel",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_del_municipio_ies",
+      "jsType": "Código del Municipio(IES)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_caracter",
+      "jsType": "Id_Caracter",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_cleo_b_sico_del_conocimiento_nbc",
+      "jsType": "Núcleo Básico del Conocimiento (NBC)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "Año",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matriculados_2015",
+      "jsType": "Total Matriculados",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento_de_domicilio_de_la_ies",
+      "jsType": "Departamento de domicilio de la IES",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_del_departamento_ies",
+      "jsType": "Código del departamento(IES)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_sector",
+      "jsType": "Id_Sector",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_nivel_formacion",
+      "jsType": "Id_Nivel_Formacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_area",
+      "jsType": "Id_Area",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_del_municipio_programa",
+      "jsType": "Código del Municipio(Programa)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_de_la_instituci_n",
+      "jsType": "Código de la Institución",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ies_padre",
+      "jsType": "IES PADRE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento_de_oferta_del_programa",
+      "jsType": "Departamento de oferta del programa",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio_de_oferta_del_programa",
+      "jsType": "Municipio de oferta del programa",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_g_nero",
+      "jsType": "Id Género",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio_dedomicilio_de_la_ies",
+      "jsType": "Municipio dedomicilio de la IES",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "semestre",
+      "jsType": "Semestre",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:39.356Z"
+}

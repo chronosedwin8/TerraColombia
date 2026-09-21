@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "pejt-qp6n",
+  "name": "INSTITUCIONES EDUCATIVAS OFICIALES DE MUNICIPIOS NO CERTIFICADOS CON CONEXIÓN A INTERNET - DEPARTAMENTO DE BOYACÁ",
+  "description": "Instituciones educativas oficiales de municipios no certificados que contaron con conectividad a internet en el año 2022 a través del programa conexión total",
+  "publisher": "Gobernación de Boyacá, Boyacá",
+  "category": "Ciencia, Tecnología e Innovación",
+  "theme": null,
+  "tags": [
+    "conectividad",
+    "internet",
+    "insituciones educativas sedes",
+    "rural",
+    "tecnologías de la información y las comunicaciones - tic",
+    "secretaria tic",
+    "apropiación tic"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Boyacá, Boyacá",
+  "dataUri": "https://www.datos.gov.co/resource/pejt-qp6n",
+  "webUri": "https://www.datos.gov.co/d/pejt-qp6n",
+  "homepage": null,
+  "createdAt": "2021-12-09T22:19:36+0000",
+  "dataUpdatedAt": "2023-03-27T21:16:13+0000",
+  "cutDate": "2023-03-27",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "nombre_sede_ie",
+      "jsType": "NOMBRE_SEDE_IE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "programa_conexi_n",
+      "jsType": "PROGRAMA_CONEXIÓN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_dane_sede_ie",
+      "jsType": "COD_DANE_SEDE_IE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "AÑO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "latitud",
+      "jsType": "LATITUD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tecnolog_a_conexi_n",
+      "jsType": "TECNOLOGÍA_CONEXIÓN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_sede",
+      "jsType": "TIPO_SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_dane_ie",
+      "jsType": "COD_DANE_IE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_ie",
+      "jsType": "NOMBRE_IE",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "ancho_de_banda_mbps_",
+      "jsType": "ANCHO_DE_BANDA(Mbps)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "longitud",
+      "jsType": "LONGITUD",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nombre_ie"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:33.963Z"
+}

@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "source": "minsalud",
+  "connector": "socrata",
+  "id": "s2ru-bqt6",
+  "name": "Relación de IPS públicas y privadas según el nivel de atención y capacidad instalada",
+  "description": "Relación de IPS públicas y privadas según el nivel de atención y capacidad instalada\nFuente: Base de datos Registros Especial de Prestadores de Servicios de Salud - REPS\nDiligencia la Encuesta de Satisfacción:\nhttps://tramites.minsalud.gov.co/FormularioInscripcion/EncuestaSatisfaccion.aspx",
+  "publisher": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "ips",
+    "nivel de atención",
+    "minsalud"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/s2ru-bqt6",
+  "webUri": "https://www.datos.gov.co/d/s2ru-bqt6",
+  "homepage": null,
+  "createdAt": "2017-06-16T21:57:13+0000",
+  "dataUpdatedAt": "2022-11-21T22:37:08+0000",
+  "cutDate": "2022-11-21",
+  "geographicCoverage": null,
+  "rowCount": 41427,
+  "columns": [
+    {
+      "name": "naturaleza",
+      "jsType": "naturaleza",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fuente",
+      "jsType": "Fuente",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nom_grupo_capacidad",
+      "jsType": "nom grupo capacidad ",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "gerente",
+      "jsType": "Gerente",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direcci_n",
+      "jsType": "Dirección",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_prestador",
+      "jsType": "Código prestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "email",
+      "jsType": "Email",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (email)."
+    },
+    {
+      "name": "num_digito_verificion",
+      "jsType": "num digito_verificion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nom_sede_ips",
+      "jsType": "nom sede IPS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_prestador",
+      "jsType": "Nombre prestador",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_mero_sede",
+      "jsType": "Número sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nom_descripcion_capacidad",
+      "jsType": "nom descripcion capacidad ",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "fecha_corte",
+      "jsType": "Fecha Corte",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tel_fono",
+      "jsType": "Teléfono",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "nit_ips",
+      "jsType": "nit IPS ",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "num_cantidad_capacidad_instalada",
+      "jsType": "num cantidad capacidad instalada",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "num_nivel_atencion",
+      "jsType": "num nivel atencion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_sede",
+      "jsType": "Código sede",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "departamento": "Antioquia",
+      "municipio": "APARTADÓ",
+      "c_digo_prestador": "[REDACTADO:co_cedula]",
+      "num_digito_verificion": "1",
+      "naturaleza": "Privada",
+      "c_digo_sede": "[REDACTADO:co_cedula]",
+      "n_mero_sede": "01",
+      "nom_sede_ips": "URAMEDICOS",
+      "gerente": "CLAUDIA CECILIA TRUJILLO GOMEZ",
+      "direcci_n": "KR 98 # 103-29/37",
+      "num_cantidad_capacidad_instalada": "1",
+      "fecha_corte": "Fecha corte REPS: Nov  5 2022  1:37PM",
+      "fuente": "Base de datos Registro Especial de Prestadores de Servicios de Salud - REPS."
+    },
+    {
+      "departamento": "Antioquia",
+      "municipio": "SALGAR",
+      "c_digo_prestador": "[REDACTADO:co_cedula]",
+      "num_digito_verificion": "7",
+      "naturaleza": "Pública",
+      "num_nivel_atencion": "1",
+      "c_digo_sede": "[REDACTADO:co_cedula]",
+      "n_mero_sede": "01",
+      "nom_sede_ips": "E.S.E. HOSPITAL SAN JOSE",
+      "gerente": "CESAR AUGUSTO PARDO ROSAS",
+      "direcci_n": "CL 32A # 33-04",
+      "num_cantidad_capacidad_instalada": "2",
+      "fecha_corte": "Fecha corte REPS: Nov  5 2022  1:37PM",
+      "fuente": "Base de datos Registro Especial de Prestadores de Servicios de Salud - REPS."
+    },
+    {
+      "departamento": "Amazonas",
+      "municipio": "EL ENCANTO",
+      "c_digo_prestador": "[REDACTADO:co_cedula]",
+      "num_digito_verificion": "7",
+      "naturaleza": "Pública",
+      "num_nivel_atencion": "2",
+      "c_digo_sede": "[REDACTADO:co_cedula]",
+      "n_mero_sede": "11",
+      "nom_sede_ips": "CENTRO DE SALUD SAN RAFAEL - E.S.E HOSPITAL SAN RAFAEL DE LETICIA",
+      "gerente": "SAIDA VIVIANA HERREÑO PRIETO",
+      "direcci_n": "CORREGIMIENTO DEL ENCANTO",
+      "num_cantidad_capacidad_instalada": "3",
+      "fecha_corte": "Fecha corte REPS: Nov  5 2022  1:37PM",
+      "fuente": "Base de datos Registro Especial de Prestadores de Servicios de Salud - REPS."
+    },
+    {
+      "departamento": "Amazonas",
+      "municipio": "EL ENCANTO",
+      "c_digo_prestador": "[REDACTADO:co_cedula]",
+      "num_digito_verificion": "7",
+      "naturaleza": "Pública",
+      "num_nivel_atencion": "2",
+      "c_digo_sede": "[REDACTADO:co_cedula]",
+      "n_mero_sede": "11",
+      "nom_sede_ips": "CENTRO DE SALUD SAN RAFAEL - E.S.E HOSPITAL SAN RAFAEL DE LETICIA",
+      "gerente": "SAIDA VIVIANA HERREÑO PRIETO",
+      "direcci_n": "CORREGIMIENTO DEL ENCANTO",
+      "num_cantidad_capacidad_instalada": "4",
+      "fecha_corte": "Fecha corte REPS: Nov  5 2022  1:37PM",
+      "fuente": "Base de datos Registro Especial de Prestadores de Servicios de Salud - REPS."
+    },
+    {
+      "departamento": "Amazonas",
+      "municipio": "EL ENCANTO",
+      "c_digo_prestador": "[REDACTADO:co_cedula]",
+      "num_digito_verificion": "7",
+      "naturaleza": "Pública",
+      "num_nivel_atencion": "2",
+      "c_digo_sede": "[REDACTADO:co_cedula]",
+      "n_mero_sede": "11",
+      "nom_sede_ips": "CENTRO DE SALUD SAN RAFAEL - E.S.E HOSPITAL SAN RAFAEL DE LETICIA",
+      "gerente": "SAIDA VIVIANA HERREÑO PRIETO",
+      "direcci_n": "CORREGIMIENTO DEL ENCANTO",
+      "num_cantidad_capacidad_instalada": "1",
+      "fecha_corte": "Fecha corte REPS: Nov  5 2022  1:37PM",
+      "fuente": "Base de datos Registro Especial de Prestadores de Servicios de Salud - REPS."
+    }
+  ],
+  "piiDroppedColumns": [
+    "email",
+    "nit_ips",
+    "nom_descripcion_capacidad",
+    "nom_grupo_capacidad",
+    "nombre_prestador",
+    "tel_fono"
+  ],
+  "piiRedactedColumns": [
+    "c_digo_prestador",
+    "c_digo_sede"
+  ],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:51.673Z"
+}

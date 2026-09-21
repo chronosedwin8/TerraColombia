@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "e6kt-wdhu",
+  "name": "Zonas Comunitarias para la Paz – Puntos de Conectividad Instalados en el Departamento del Caquetá",
+  "description": "Información de los puntos de conexión del programa Zonas Comunitarias para la Paz, incluyendo ubicación geográfica, entidad educativa asociada, fechas de instalación y operación, disponibilidad de energía y estado del servicio.",
+  "publisher": "Gobernación de Caquetá, Caquetá",
+  "category": "Ciencia, Tecnología e Innovación",
+  "theme": null,
+  "tags": [
+    "conectividad",
+    "paz",
+    "educación"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Caquetá, Caquetá",
+  "dataUri": "https://www.datos.gov.co/resource/e6kt-wdhu",
+  "webUri": "https://www.datos.gov.co/d/e6kt-wdhu",
+  "homepage": null,
+  "createdAt": "2025-11-21T15:32:54+0000",
+  "dataUpdatedAt": "2025-11-21T15:49:24+0000",
+  "cutDate": "2025-11-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "fecha_inicio_operacion",
+      "jsType": "FECHA_INICIO_OPERACION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_dane_departamento",
+      "jsType": "COD_DANE_DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "Zona",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_sede_2",
+      "jsType": "Codigo_Dane_Sede_2",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "latitud",
+      "jsType": "LATITUD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sede_id",
+      "jsType": "SEDE_ID",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "operador",
+      "jsType": "OPERADOR",
+      "pii": true,
+      "piiReason": "Identifica al funcionario u operario que editó el registro."
+    },
+    {
+      "name": "fecha_fin_operacion",
+      "jsType": "FECHA_FIN_OPERACION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cuenta_con_servicio_de_energia",
+      "jsType": "CUENTA_CON_SERVICIO_DE_ENERGIA_CONSULTA_SE_2023",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_beneficiario",
+      "jsType": "ID_BENEFICIARIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado",
+      "jsType": "ESTADO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "longitud",
+      "jsType": "LONGITUD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_instalacion",
+      "jsType": "FECHA_INSTALACION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_ee",
+      "jsType": "Codigo_Dane_EE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_ee",
+      "jsType": "Nombre_EE",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "tipo_energia_2023__consulta",
+      "jsType": "TIPO_ENERGIA_2023__CONSULTA_SE_2023",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_dane_municipio",
+      "jsType": "COD_DANE_MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "prioridad_proyecto_zcp",
+      "jsType": "PRIORIDAD_PROYECTO_ZCP",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_sede",
+      "jsType": "Nombre_Sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_sede",
+      "jsType": "Codigo_Dane_Sede",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "operador",
+    "nombre_ee"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:36.316Z"
+}

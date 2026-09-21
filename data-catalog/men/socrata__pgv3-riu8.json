@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "pgv3-riu8",
+  "name": "NÚMERO DE INSTITUCIONES EDUCATIVAS BENEFICIADAS DEL PROGRAMA DE ALIMENTACIÓN ESCOLAR (PAE) DE NORTE DE SANTANDER - 2016, 2017, 2018, 2019, 2020, 2021 y 2022",
+  "description": "En este dataset encontramos los municipios, numero de instituciones y sedes educativas beneficiadas por el Programa de Alimentación Escolar - PAE, Cupos y modalidad asignadas de acuerdo SIMAT de los años 2016, 2017, 2018, 2019, 2020, 2021 y 2022",
+  "publisher": "Gobernación de Santander, Santander",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "pae",
+    "plan de alimentación escolar",
+    "gobernación de norte de santander"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Santander, Santander",
+  "dataUri": "https://www.datos.gov.co/resource/pgv3-riu8",
+  "webUri": "https://www.datos.gov.co/d/pgv3-riu8",
+  "homepage": null,
+  "createdAt": "2020-08-18T01:23:47+0000",
+  "dataUpdatedAt": "2022-04-27T22:26:43+0000",
+  "cutDate": "2022-04-27",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "n_instituciones_y_sedes",
+      "jsType": "Nº INSTITUCIONES Y SEDES EDUCATIVAS BENEFICIADAS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_de_cupos_asignados",
+      "jsType": "TOTAL DE CUPOS ASIGNADOS POR SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_raciones_almuerzo_preparado",
+      "jsType": "Nº RACIONES ALMUERZO PREPARADO EN SITIO (APS)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "AÑO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_raciones_racion",
+      "jsType": "Nº RACIONES RACION INDUSTRIALIZADA (RI)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "no_raciones_para_preparar_en_casa_rcp_",
+      "jsType": "No RACIONES PARA PREPARAR EN CASA (RCP)",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:37.578Z"
+}

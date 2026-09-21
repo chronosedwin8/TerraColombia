@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "e2u2-swiw",
+  "name": "SECOP II - Modificaciones a Procesos",
+  "description": "Última fecha de Modificación para procesos que han sido objeto de cambio en su definición en los últimos 8 días",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "secop ii",
+    "procesos de compra",
+    "procesos de con"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/e2u2-swiw",
+  "webUri": "https://www.datos.gov.co/d/e2u2-swiw",
+  "homepage": null,
+  "createdAt": "2021-02-15T20:26:12+0000",
+  "dataUpdatedAt": "2021-02-15T20:58:27+0000",
+  "cutDate": "2021-02-15",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "proceso",
+      "jsType": "Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "portafolio",
+      "jsType": "Portafolio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_entidad",
+      "jsType": "Codigo Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_entidad",
+      "jsType": "NIT Entidad",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "ultima_modificacion",
+      "jsType": "Ultima Modificacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "descripcion_proceso",
+      "jsType": "Descripcion Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_entidad",
+      "jsType": "Nombre Entidad",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nit_entidad"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:05.784Z"
+}

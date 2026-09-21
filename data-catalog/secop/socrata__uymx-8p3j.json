@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "uymx-8p3j",
+  "name": "SECOP II - Plan de pagos",
+  "description": "Plan de pagos de los contratos publicados a través del SECOPII. Contiene la información de los pagos, entidad compradora y proveedor",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "secop ii",
+    "compra pública",
+    "colombia compra eficiente",
+    "pagos",
+    "contratación"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/uymx-8p3j",
+  "webUri": "https://www.datos.gov.co/d/uymx-8p3j",
+  "homepage": null,
+  "createdAt": "2025-10-13T15:32:08+0000",
+  "dataUpdatedAt": "2026-09-21T14:07:34+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "fecha_de_vencimiento",
+      "jsType": "Fecha de vencimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "plan_de_recepci_n",
+      "jsType": "Plan de recepción",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_neto",
+      "jsType": "Valor neto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cufe",
+      "jsType": "CUFE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_emisi_n",
+      "jsType": "Fecha de emisión",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_total_de_la_factura",
+      "jsType": "Valor total de la factura",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_total",
+      "jsType": "Valor total",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_recepci_n_original",
+      "jsType": "Fecha de recepción original",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_entrega_original",
+      "jsType": "Fecha de Entrega original",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "aprobado_por",
+      "jsType": "Aprobado por",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_de_factura",
+      "jsType": "Numero de factura",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_entidad",
+      "jsType": "Codigo Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_inicio_contrato",
+      "jsType": "Fecha inicio contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_proveedor",
+      "jsType": "Nombre proveedor",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "nit_entidad",
+      "jsType": "NIT Entidad",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "valor_neto_de_la_factura",
+      "jsType": "Valor neto de la factura",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_estimada_de_pago",
+      "jsType": "Fecha estimada de pago",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_real_de_pago",
+      "jsType": "Fecha real de pago",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_documento_supervisor",
+      "jsType": "Tipo documento supervisor",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "documento_proveedor",
+      "jsType": "Documento proveedor",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "estado",
+      "jsType": "Estado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_emision",
+      "jsType": "Fecha de emision",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "obligado_a_facturar_electr",
+      "jsType": "Obligado a facturar electrónicamente",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_recepcion",
+      "jsType": "Fecha de recepcion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "notas",
+      "jsType": "Notas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_mero_de_radicaci_n",
+      "jsType": "Número de radicación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_a_pagar",
+      "jsType": "Valor a pagar",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "documento_supervisor",
+      "jsType": "Documento supervisor",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "nombre_entidad",
+      "jsType": "Nombre Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_supervisor",
+      "jsType": "Nombre supervisor",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "id_del_contrato",
+      "jsType": "Id del Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "compromiso_presupuestal",
+      "jsType": "Compromiso presupuestal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "referencia_contrato",
+      "jsType": "Referencia Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_de_pago",
+      "jsType": "ID de pago",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nombre_proveedor",
+    "nit_entidad",
+    "tipo_documento_supervisor",
+    "documento_proveedor",
+    "documento_supervisor",
+    "nombre_supervisor"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:02.729Z"
+}

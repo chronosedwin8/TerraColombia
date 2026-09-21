@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "y9ga-zwzy",
+  "name": "MEN_ESTADISTICAS MATRICULA POR MUNICIPIOS_ES",
+  "description": "Contiene la información de  matrícula estadística de educación superior por nivel de formación y por municipios",
+  "publisher": "Alcaldía de Sipí, Chocó",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "educación superior",
+    "matrícula",
+    "municipios"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Alcaldía de Sipí, Chocó",
+  "dataUri": "https://www.datos.gov.co/resource/y9ga-zwzy",
+  "webUri": "https://www.datos.gov.co/d/y9ga-zwzy",
+  "homepage": null,
+  "createdAt": "2016-10-25T18:17:47+0000",
+  "dataUpdatedAt": "2025-10-29T13:56:37+0000",
+  "cutDate": "2025-10-29",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "maestria",
+      "jsType": "MAESTRIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tecnica_profesional",
+      "jsType": "TECNICA PROFESIONAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tecnologica",
+      "jsType": "TECNOLOGICA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "AÑO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_deldepartamento",
+      "jsType": "Código delDepartamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_del_departamento",
+      "jsType": "Nombre del Departamento",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "c_digo_delmunicipio",
+      "jsType": "Código delMunicipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "doctorado",
+      "jsType": "DOCTORADO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "universitaria",
+      "jsType": "UNIVERSITARIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "especializacion",
+      "jsType": "ESPECIALIZACION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_del_municipio",
+      "jsType": "Nombre del Municipio",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "ies_con_oferta",
+      "jsType": "IES CON OFERTA",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nombre_del_departamento",
+    "nombre_del_municipio"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:39.144Z"
+}

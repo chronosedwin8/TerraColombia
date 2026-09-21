@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "4ex9-j3n8",
+  "name": "SECOP II - Contacto Entidades y Proveedores",
+  "description": "Información de Contacto de Entidades y Proveedores registrados en el SECOP II",
+  "publisher": "Colombia Compra Eficiente CCE, Bogotá, D.C",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "contacto",
+    "secop ii",
+    "entidades",
+    "proveedores"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Colombia Compra Eficiente CCE, Bogotá, D.C",
+  "dataUri": "https://www.datos.gov.co/resource/4ex9-j3n8",
+  "webUri": "https://www.datos.gov.co/d/4ex9-j3n8",
+  "homepage": null,
+  "createdAt": "2021-09-14T13:31:04+0000",
+  "dataUpdatedAt": "2026-09-21T06:27:02+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "es_proveedor",
+      "jsType": "Es Proveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pais",
+      "jsType": "Pais",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_mero_documento_representante_legal",
+      "jsType": "Número documento representante legal",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "es_pyme",
+      "jsType": "Es Pyme",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_categoria_principal",
+      "jsType": "Codigo categoria principal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciudad",
+      "jsType": "Ciudad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "feacha_de_creacion",
+      "jsType": "Feacha de creacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_documento_representante_legal",
+      "jsType": "Tipo documento representante legal",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "descripci_n_categoria_principal",
+      "jsType": "Descripción categoria principal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_entidad",
+      "jsType": "Tipo entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_entidad",
+      "jsType": "Nombre Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_representante_legal",
+      "jsType": "Nombre representante legal",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "website",
+      "jsType": "Sitio web",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_ubicaci_n",
+      "jsType": "Código ubicación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "correo_electronico",
+      "jsType": "Correo Electronico",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (correo_electronico)."
+    },
+    {
+      "name": "departamento",
+      "jsType": "Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "es_entidad",
+      "jsType": "Es Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "correo_representante_legal",
+      "jsType": "Correo representante legal",
+      "pii": true,
+      "piiReason": "Correo electrónico."
+    },
+    {
+      "name": "nit_entidad",
+      "jsType": "NIT Entidad",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "codigo_entidad",
+      "jsType": "Codigo Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "es_grupo",
+      "jsType": "Es Grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_fax",
+      "jsType": "Numero Fax",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "esta_activa",
+      "jsType": "Esta activa",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "n_mero_documento_representante_legal",
+    "tipo_documento_representante_legal",
+    "nombre_representante_legal",
+    "correo_electronico",
+    "correo_representante_legal",
+    "nit_entidad",
+    "numero_fax"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:01.661Z"
+}

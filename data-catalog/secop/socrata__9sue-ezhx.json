@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "9sue-ezhx",
+  "name": "SECOPII - Plan Anual De Adquisiciones Detalle",
+  "description": "Informacion detallada de las compras que realizará la entidad durante el año definido en el plan anual de aquisiciones",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "paa"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/9sue-ezhx",
+  "webUri": "https://www.datos.gov.co/d/9sue-ezhx",
+  "homepage": null,
+  "createdAt": "2022-03-03T21:33:46+0000",
+  "dataUpdatedAt": "2026-09-21T15:36:13+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "fecha_esperada_de_inicio",
+      "jsType": "Fecha Esperada de Inicio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "version_del_paa",
+      "jsType": "Version del PAA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "requiere_vigencias_futuras",
+      "jsType": "Requiere vigencias futuras",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "identificador_unico",
+      "jsType": "Identificador Unico",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "seleccion_abreviada_o_acuerdo",
+      "jsType": "Seleccion Abreviada o Acuerdo Marco",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "duracion_esperada",
+      "jsType": "Duracion Esperada",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grupo_de_procedimiento",
+      "jsType": "Grupo de procedimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_esperada_de_recepcion",
+      "jsType": "Fecha Esperada de Recepcion de Ofertas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_plan_anual_de_adquisiciones",
+      "jsType": "Id Plan Anual de Adquisiciones",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_esperado_de_presupuesto",
+      "jsType": "Valor Esperado de Presupuesto Actual",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "procesos_relacionados",
+      "jsType": "Procesos Relacionados",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "descripcion",
+      "jsType": "Descripcion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_total_esperado",
+      "jsType": "Valor Total Esperado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_entidad",
+      "jsType": "Nombre Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "causal_de_contratacion",
+      "jsType": "Causal de contratacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "url_proceso",
+      "jsType": "URL Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id",
+      "jsType": "Id",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_carga_del_paa",
+      "jsType": "Fecha de carga del PAA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "annio",
+      "jsType": "Annio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo",
+      "jsType": "Tipo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "correo_del_contacto",
+      "jsType": "Correo del Contacto",
+      "pii": true,
+      "piiReason": "Correo electrónico."
+    },
+    {
+      "name": "modalidad",
+      "jsType": "Modalidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "categorias_unspsc",
+      "jsType": "Categorias UNSPSC",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "telefono_del_contacto",
+      "jsType": "Telefono del Contacto",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "estado_de_solicitud_de",
+      "jsType": "Estado de Solicitud de Vigencias Futuras",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_paa_encabezado",
+      "jsType": "ID PAA Encabezado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "unidad_de_duracion_esperada",
+      "jsType": "Unidad de Duracion Esperada",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "origen_recursos",
+      "jsType": "Origen Recursos",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_del_contacto",
+      "jsType": "Nombre del Contacto",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "fecha_version",
+      "jsType": "Fecha version del PAA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_entidad",
+      "jsType": "NIT Entidad",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "codigo_entidad",
+      "jsType": "Codigo Entidad",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "correo_del_contacto",
+    "telefono_del_contacto",
+    "nombre_del_contacto",
+    "nit_entidad"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:06.582Z"
+}

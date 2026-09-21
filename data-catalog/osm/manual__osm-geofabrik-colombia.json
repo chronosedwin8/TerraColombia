@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "source": "osm",
+  "connector": "osm",
+  "id": "osm-geofabrik-colombia",
+  "name": "OpenStreetMap — extracto de Colombia (Geofabrik)",
+  "description": "Extracto diario de Colombia en formato PBF, más los subconjuntos \"free\" en SHP y GPKG. Fuente de `ctx.road` y `ctx.poi` vía osm2pgsql (PLAN.md §5.2).",
+  "url": "https://download.geofabrik.de/south-america/colombia.html",
+  "httpStatus": 200,
+  "format": "PBF / SHP.ZIP / GPKG.ZIP",
+  "license": "ODbL 1.0",
+  "attribution": "© colaboradores de OpenStreetMap, ODbL 1.0",
+  "frequency": "Diaria",
+  "pending": [
+    "Decidir el subconjunto de etiquetas a ingerir (osm2pgsql style) para no cargar todo el país."
+  ],
+  "notes": [
+    "El descriptor completo (tamaños, fecha del corte, MD5) lo genera el conector `osm.ts` en cada corrida."
+  ],
+  "inspectedAt": "2026-09-21T15:30:23.848Z"
+}

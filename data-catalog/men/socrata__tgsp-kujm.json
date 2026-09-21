@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "tgsp-kujm",
+  "name": "Sedes de los Establecimientos Educativos del Departamento de Antioquia",
+  "description": "Contiene información básica sobre todas las sedes de los establecimientos educativos del departamento de Antioquia, adscritos a las diferentes seretarías de educación del departamento.",
+  "publisher": "Gobernación de Antioquia, Antioquia",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "sedes",
+    "establecimientos",
+    "educación"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Antioquia, Antioquia",
+  "dataUri": "https://www.datos.gov.co/resource/tgsp-kujm",
+  "webUri": "https://www.datos.gov.co/d/tgsp-kujm",
+  "homepage": null,
+  "createdAt": "2016-10-25T20:36:24+0000",
+  "dataUpdatedAt": "2022-06-08T20:55:41+0000",
+  "cutDate": "2022-06-08",
+  "geographicCoverage": null,
+  "rowCount": 7164,
+  "columns": [
+    {
+      "name": "codigo_departamento",
+      "jsType": "Código Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "modelos",
+      "jsType": "Modelos",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_sede",
+      "jsType": " Código Sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_sede_establecimiento_educativo",
+      "jsType": " Nombre Sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_departamento",
+      "jsType": " Nombre Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_municipio",
+      "jsType": "Código Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_sede",
+      "jsType": "Estado Sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona_sede",
+      "jsType": "Zona Sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_municipio",
+      "jsType": " Nombre municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_establecimiento_educativo",
+      "jsType": " Código Establecimiento Educativo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_establecimiento_educativo",
+      "jsType": " Nombre Establecimiento Educativo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados",
+      "jsType": "Grados",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "niveles",
+      "jsType": "Niveles",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direcci_n",
+      "jsType": "Dirección",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tel_fono",
+      "jsType": "Teléfono",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "secretar_a",
+      "jsType": "Secretaría",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "secretar_a": "ANTIOQUIA",
+      "codigo_departamento": "05",
+      "nombre_departamento": "ANTIOQUIA",
+      "codigo_municipio": "05284",
+      "nombre_municipio": "FRONTINO",
+      "codigo_establecimiento_educativo": "205284000464",
+      "nombre_establecimiento_educativo": "I. E. R. GABRIELA WHITE DE VELEZ",
+      "codigo_sede": "205284000464",
+      "nombre_sede_establecimiento_educativo": "I. E. R. GABRIELA WHITE DE VELEZ",
+      "zona_sede": "RURAL",
+      "direcci_n": "CL 16 11 53",
+      "estado_sede": "ANTIGUO-ACTIVO",
+      "niveles": "PREESCOLAR,MEDIA,BÁSICA SECUNDARIA,BÁSICA PRIMARIA",
+      "modelos": "PROGRAMA PARA JÓVENES EN EXTRAEDAD Y ADULTOS,EDUCACIÓN TRADICIONAL",
+      "grados": "0,1,2,3,4,5,6,7,8,9,10,11,22,23,24,25,26"
+    },
+    {
+      "secretar_a": "MEDELLIN",
+      "codigo_departamento": "05",
+      "nombre_departamento": "ANTIOQUIA",
+      "codigo_municipio": "05001",
+      "nombre_municipio": "MEDELLÍN",
+      "codigo_establecimiento_educativo": "105001003425",
+      "nombre_establecimiento_educativo": "INSTITUCION EDUCATIVA JOSE MARIA BRAVO MARQUEZ",
+      "codigo_sede": "105001006262",
+      "nombre_sede_establecimiento_educativo": "SECCION ESCUELA PORFIRIO BARBA JACOB",
+      "zona_sede": "URBANA",
+      "direcci_n": "KR 47 74 32",
+      "estado_sede": "ANTIGUO-ACTIVO",
+      "niveles": "PREESCOLAR,BÁSICA SECUNDARIA,BÁSICA PRIMARIA",
+      "modelos": "EDUCACIÓN TRADICIONAL,ACELERACIÓN DEL APRENDIZAJE",
+      "grados": "0,1,2,3,4,5,6,7,99"
+    },
+    {
+      "secretar_a": "MEDELLIN",
+      "codigo_departamento": "05",
+      "nombre_departamento": "ANTIOQUIA",
+      "codigo_municipio": "05001",
+      "nombre_municipio": "MEDELLÍN",
+      "codigo_establecimiento_educativo": "105001005291",
+      "nombre_establecimiento_educativo": "INSTITUCION EDUCATIVA CAMPO VALDES",
+      "codigo_sede": "105001005291",
+      "nombre_sede_establecimiento_educativo": "INSTITUCION EDUCATIVA CAMPO VALDES",
+      "zona_sede": "URBANA",
+      "direcci_n": "CL 83 47 33",
+      "estado_sede": "ANTIGUO-ACTIVO",
+      "niveles": "PREESCOLAR,MEDIA,BÁSICA SECUNDARIA,BÁSICA PRIMARIA",
+      "modelos": "EDUCACIÓN TRADICIONAL",
+      "grados": "0,1,2,3,4,5,6,7,8,9,10,11"
+    },
+    {
+      "secretar_a": "MEDELLIN",
+      "codigo_departamento": "05",
+      "nombre_departamento": "ANTIOQUIA",
+      "codigo_municipio": "05001",
+      "nombre_municipio": "MEDELLÍN",
+      "codigo_establecimiento_educativo": "105001002101",
+      "nombre_establecimiento_educativo": "INSTITUCION EDUCATIVA JUAN DE DIOS COCK",
+      "codigo_sede": "105001002101",
+      "nombre_sede_establecimiento_educativo": "INSTITUCION EDUCATIVA JUAN DE DIOS COCK",
+      "zona_sede": "URBANA",
+      "direcci_n": "CL 88 45 70",
+      "estado_sede": "ANTIGUO-ACTIVO",
+      "niveles": "PREESCOLAR,MEDIA,BÁSICA SECUNDARIA,BÁSICA PRIMARIA",
+      "modelos": "EDUCACIÓN TRADICIONAL",
+      "grados": "0,1,2,3,4,5,6,7,8,9,10,11"
+    },
+    {
+      "secretar_a": "MEDELLIN",
+      "codigo_departamento": "05",
+      "nombre_departamento": "ANTIOQUIA",
+      "codigo_municipio": "05001",
+      "nombre_municipio": "MEDELLÍN",
+      "codigo_establecimiento_educativo": "105001009695",
+      "nombre_establecimiento_educativo": "INSTITUCION EDUCATIVA SAN JUAN BOSCO",
+      "codigo_sede": "105001009695",
+      "nombre_sede_establecimiento_educativo": "INSTITUCION EDUCATIVA SAN JUAN BOSCO",
+      "zona_sede": "URBANA",
+      "direcci_n": "CL 82 50 C 10",
+      "estado_sede": "ANTIGUO-ACTIVO",
+      "niveles": "PREESCOLAR,MEDIA,BÁSICA SECUNDARIA,BÁSICA PRIMARIA",
+      "modelos": "EDUCACIÓN TRADICIONAL",
+      "grados": "0,1,2,3,4,5,6,7,8,9,10,11"
+    }
+  ],
+  "piiDroppedColumns": [
+    "tel_fono"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:16.987Z"
+}

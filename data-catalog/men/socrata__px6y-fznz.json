@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "px6y-fznz",
+  "name": "SERVICIO DE CONECTIVIDAD A INTERNET EN INSTITUCIONES EDUCATIVAS DEL DEPARTAMENTO NORTE DE SANTANDER",
+  "description": "En este data set se relacionan las Instituciones Educativas beneficiadas de la prestación del servicio de conectividad a internet en el Departamento Norte de Santander, como medio para fortalecer las competencias de los estudiantes en el uso de las TIC.",
+  "publisher": "Gobernación de Santander, Santander",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "acceso a internet",
+    "conectividad",
+    "educación"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Santander, Santander",
+  "dataUri": "https://www.datos.gov.co/resource/px6y-fznz",
+  "webUri": "https://www.datos.gov.co/d/px6y-fznz",
+  "homepage": null,
+  "createdAt": "2022-06-15T20:25:55+0000",
+  "dataUpdatedAt": "2022-06-16T18:36:12+0000",
+  "cutDate": "2022-06-16",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "codigo_dane_sede",
+      "jsType": "CODIGO DANE SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tecnolog_a_ltima_milla_cobre",
+      "jsType": "Tecnología Última Milla\n(Cobre – Fibra – HFC – Radio – Satelital – Móvil – Inalámbrica)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_fin_servicio",
+      "jsType": "FECHA FIN SERVICIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_sede_educativa",
+      "jsType": "NOMBRE SEDE EDUCATIVA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ancho_de_banda_mbps_capacidad",
+      "jsType": "ANCHO DE BANDA (Mbps) \nCAPACIDAD PLAN DE DATOS (GB)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id",
+      "jsType": "ID",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "conetividad_para_estudiantes",
+      "jsType": "CONETIVIDAD PARA ESTUDIANTES DE LA SEDE (PLANES MÓVILES - ZONA WIFI - CONECTIVIDAD EN SEDE)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_inicio_servicio",
+      "jsType": "FECHA INICIO SERVICIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona_urbana_rural",
+      "jsType": "ZONA (URBANA/RURAL)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matr_cula_a_beneficiar_por",
+      "jsType": "MATRÍCULA A BENEFICIAR POR SEDE EDUCATIVA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "meses_de_servicio",
+      "jsType": "MESES DE SERVICIO",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:35.519Z"
+}

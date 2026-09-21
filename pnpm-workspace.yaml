@@ -1,0 +1,6 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+  # Declaración de datasets del ETL. Vive fuera de packages/ porque es configuración
+  # del producto, no código de librería, pero se resuelve como paquete del workspace.
+  - 'etl/config'

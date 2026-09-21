@@ -1,0 +1,198 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — plantilla: problema de datos
+#
+# Esta es la plantilla más importante del proyecto. TerraColombia normaliza
+# datos de una docena de entidades públicas: la mayoría de los "errores" que
+# reporta la gente no son fallos del programa, son datos de origen incompletos,
+# desactualizados, mal georreferenciados o con una estructura que cambió.
+#
+# Distinguir esos dos casos es la mitad del trabajo, y esta plantilla existe
+# para pedir la información que permite distinguirlos.
+# ═════════════════════════════════════════════════════════════════════════════
+
+name: Problema de datos
+description: Un dato está mal, falta, está desactualizado o no coincide con la fuente oficial.
+title: '[datos] '
+labels: ['datos', 'triaje']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Antes de reportar
+
+        Tres cosas que parecen errores y no lo son:
+
+        1. **Su municipio no aparece.** La base catastral abierta del IGAC cubre
+           solo los municipios donde el IGAC es gestor catastral. Bogotá,
+           Medellín, Cali, Barranquilla, Antioquia y un número creciente de
+           gestores habilitados tienen su propio catastro. La ficha del municipio
+           dice quién es su gestor y qué datos sí tenemos.
+        2. **El avalúo catastral no es el precio de mercado.** Son dos cosas
+           distintas por definición legal. El avalúo catastral suele estar muy por
+           debajo del valor comercial. No es un error de cálculo nuestro.
+        3. **El POT no está disponible.** No existe un repositorio nacional
+           completo de planes de ordenamiento. Integramos lo que hay; donde no
+           hay, lo decimos.
+
+        ---
+
+        ## ⚠️ Si encontró datos personales
+
+        **No los pegue aquí.** Si aparece un nombre de propietario, un número de
+        documento, un teléfono o cualquier dato que identifique a una persona,
+        cierre esta plantilla y escriba a **privacidad@terracolombia.co**.
+        Lo tratamos como incidente de seguridad, no como una incidencia normal.
+
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: Tipo de problema
+      options:
+        - El dato está equivocado (no coincide con la fuente oficial)
+        - Falta el dato (la fuente lo tiene, nosotros no lo mostramos)
+        - El dato está desactualizado (hay un corte más reciente publicado)
+        - La geometría está mal (desplazada, deformada, en el sitio equivocado)
+        - Los datos no cuadran entre sí (por ejemplo, el área no coincide con la geometría)
+        - La fuente cambió de estructura o de URL
+        - La procedencia está mal (fuente, fecha de corte o licencia incorrectas)
+        - Cobertura mal declarada (dice que no hay datos y sí hay, o al contrario)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: dataset
+    attributes:
+      label: Fuente o dataset afectado
+      multiple: true
+      options:
+        - IGAC · Base Catastral (predios, construcciones, manzanas, sectores)
+        - IGAC · Límites oficiales y DIVIPOLA
+        - IGAC · Agrología (suelos, capacidad de uso, vocación, conflictos)
+        - IGAC · Zonas homogéneas físicas o geoeconómicas
+        - IGAC · Nombres geográficos
+        - IGAC · Cartografía básica u ortoimágenes
+        - DANE · MGN y CNPV 2018 (población, hogares, viviendas)
+        - DANE · Proyecciones de población
+        - MEN · Establecimientos y sedes educativas
+        - MinSalud · REPS (IPS y sedes)
+        - SGC · Amenaza sísmica o por movimientos en masa
+        - IDEAM · Zonas inundables o clima
+        - PNN · RUNAP (áreas protegidas)
+        - ANT / MinInterior · Resguardos y consejos comunitarios
+        - UPRA · Frontera agrícola y aptitudes
+        - ANM / ANH · Títulos mineros o bloques
+        - POT municipal
+        - OpenStreetMap · vías, POI, edificios
+        - DEM Copernicus · pendiente y altitud
+        - SECOP II · contratación pública
+        - Indicador o agregado propio de TerraColombia
+        - No lo sé
+    validations:
+      required: true
+
+  - type: input
+    id: ubicacion
+    attributes:
+      label: Dónde
+      description: >-
+        Código predial (NPN de 30 o 20 dígitos), código de municipio (DIVIPOLA),
+        o coordenadas. **No escriba una dirección residencial concreta**: use el
+        código predial o el municipio.
+      placeholder: '08573001000000010001000000000 · o municipio 08573 · o -74.85, 10.92'
+    validations:
+      required: true
+
+  - type: textarea
+    id: mostrado
+    attributes:
+      label: Qué muestra TerraColombia
+      description: Copie el valor tal cual aparece, con sus unidades.
+      placeholder: 'Área del terreno: 1.245 m² · Vocación: NO_DISPONIBLE'
+    validations:
+      required: true
+
+  - type: textarea
+    id: correcto
+    attributes:
+      label: Qué dice la fuente oficial
+      description: El valor correcto y **de dónde lo sacó**. Sin esto no podemos verificar nada.
+      placeholder: |
+        Área del terreno: 1.450 m²
+        Fuente: consulta catastral en https://mapas.igac.gov.co/... consultada el 2026-09-15
+        (o: certificado catastral emitido el ..., cuyo número de área es ...)
+    validations:
+      required: true
+
+  - type: input
+    id: url_fuente
+    attributes:
+      label: Enlace a la fuente oficial
+      description: URL del servicio, del portal de datos abiertos o del visor donde se puede comprobar.
+      placeholder: https://mapas.igac.gov.co/server/rest/services/...
+    validations:
+      required: true
+
+  - type: input
+    id: corte_mostrado
+    attributes:
+      label: Fecha de corte que muestra TerraColombia
+      description: Está en la sección «Fuentes» de la ficha o del informe. Es el dato que más ahorra tiempo de diagnóstico.
+      placeholder: '2026-08'
+    validations:
+      required: true
+
+  - type: input
+    id: corte_fuente
+    attributes:
+      label: Fecha de corte de la fuente oficial que consultó
+      placeholder: '2026-09'
+
+  - type: dropdown
+    id: alcance
+    attributes:
+      label: Alcance del problema
+      description: Un caso aislado y un problema sistemático se atienden de forma muy distinta.
+      options:
+        - Un solo predio o registro
+        - Varios predios de la misma manzana o sector
+        - Todo un municipio
+        - Todo un departamento
+        - Todo el dataset
+        - No lo sé
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: Enlace de TerraColombia donde se ve
+      placeholder: https://terracolombia.co/predio/...
+
+  - type: textarea
+    id: capturas
+    attributes:
+      label: Capturas
+      description: >-
+        Una captura de TerraColombia y otra de la fuente oficial, lado a lado, es
+        la evidencia más útil. **Tape cualquier dato personal** que aparezca en
+        la captura de la fuente oficial antes de subirla.
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Contexto adicional
+      description: ¿Sabe si el predio cambió recientemente (englobe, desenglobe, actualización catastral)? ¿Es zona limítrofe entre municipios?
+
+  - type: checkboxes
+    id: confirmaciones
+    attributes:
+      label: Confirmaciones
+      options:
+        - label: Verifiqué el valor contra la fuente oficial, no contra otro producto o mi memoria.
+          required: true
+        - label: Revisé la fecha de corte que muestra TerraColombia y la de la fuente.
+          required: true
+        - label: No he incluido ningún dato personal (nombre, documento, teléfono, dirección residencial) en este informe ni en las capturas.
+          required: true
+        - label: Entiendo que el avalúo catastral no es el valor comercial del predio.
+          required: true

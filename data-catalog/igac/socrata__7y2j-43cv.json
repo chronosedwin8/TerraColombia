@@ -1,0 +1,298 @@
+{
+  "schemaVersion": 1,
+  "source": "igac",
+  "connector": "socrata",
+  "id": "7y2j-43cv",
+  "name": "Registro de transacciones inmobiliarias en Colombia IGAC",
+  "description": "El dataset corresponde a los 30'905.678 registros de las transacciones inmobiliarias únicas dentro del periodo 2015-2023 para 1.105 municipios de Colombia, construidas a partir de la matricula inmobiliaria, código de DIVIPOLA, el código de la oficina de registro - ORIP, el número del folio y de la anotación, el código del acto de la naturaleza jurídica y el año de radicación. Permite reconocer las transacciones que se refieren a folios nuevos, identificar los registros con indicios de dinámica inmobiliaria, las transacciones que tienen valor y el valor de las transacciones.",
+  "publisher": "Instituto Geográfico Agustín Codazzi (IGAC)",
+  "category": "Vivienda, Ciudad y Territorio",
+  "theme": null,
+  "tags": [
+    "inmobiliario",
+    "ordenamiento territorial"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Instituto Geográfico Agustín Codazzi (IGAC)",
+  "dataUri": "https://www.datos.gov.co/resource/7y2j-43cv",
+  "webUri": "https://www.datos.gov.co/d/7y2j-43cv",
+  "homepage": null,
+  "createdAt": "2025-04-03T15:43:32+0000",
+  "dataUpdatedAt": "2025-04-04T17:58:44+0000",
+  "cutDate": "2025-04-04",
+  "geographicCoverage": null,
+  "rowCount": 30903248,
+  "columns": [
+    {
+      "name": "categoria_ruralidad_2024",
+      "jsType": "CATEGORIA_RURALIDAD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "predios_nuevos",
+      "jsType": "PREDIOS_NUEVOS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_apertura_texto",
+      "jsType": "FECHA_APERTURA_TEXTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_folio",
+      "jsType": "ESTADO_FOLIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pk",
+      "jsType": "PK",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matricula",
+      "jsType": "MATRICULA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_radica_texto",
+      "jsType": "FECHA_RADICA_TEXTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "year_radica",
+      "jsType": "YEAR_RADICA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "orip",
+      "jsType": "ORIP",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "divipola",
+      "jsType": "DIVIPOLA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_predio_zona",
+      "jsType": "TIPO_PREDIO_ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "folios_derivados",
+      "jsType": "FOLIOS_DERIVADOS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "num_anotacion",
+      "jsType": "NUM_ANOTACION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dinamica_2024",
+      "jsType": "Dinámica_Inmobiliaria",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_natujur",
+      "jsType": "NOMBRE_NATUJUR",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "cod_natujur",
+      "jsType": "COD_NATUJUR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "documento_justificativo",
+      "jsType": "DOCUMENTO_JUSTIFICATIVO",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "count_de",
+      "jsType": "COUNT_DE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "count_a",
+      "jsType": "COUNT_A",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tiene_valor",
+      "jsType": "TIENE_VALOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor",
+      "jsType": "VALOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_catastral_antiguo",
+      "jsType": "NUMERO_CATASTRAL_ANTIGUO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tiene_mas_de_un_valor",
+      "jsType": "TIENE_MAS_DE_UN_VALOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_catastral",
+      "jsType": "NUMERO_CATASTRAL",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "pk": "05001-001-000013-00014-00313-2018",
+      "matricula": "001-13",
+      "fecha_radica_texto": "2018-02-05 00:00:00",
+      "fecha_apertura_texto": "1973-01-11 00:00:00",
+      "year_radica": "2018",
+      "orip": "1",
+      "divipola": "5001",
+      "departamento": "ANTIOQUIA",
+      "municipio": "MEDELLÍN",
+      "tipo_predio_zona": "URBANO",
+      "categoria_ruralidad_2024": "Ciudades y aglomeraciones",
+      "num_anotacion": "14",
+      "dinamica_2024": "0",
+      "cod_natujur": "313",
+      "count_a": "2",
+      "count_de": "1",
+      "predios_nuevos": "0",
+      "tiene_valor": "0",
+      "tiene_mas_de_un_valor": "0"
+    },
+    {
+      "pk": "05001-001-000014-00015-00313-2018",
+      "matricula": "001-14",
+      "fecha_radica_texto": "2018-02-05 00:00:00",
+      "fecha_apertura_texto": "1973-01-11 00:00:00",
+      "year_radica": "2018",
+      "orip": "1",
+      "divipola": "5001",
+      "departamento": "ANTIOQUIA",
+      "municipio": "MEDELLÍN",
+      "tipo_predio_zona": "URBANO",
+      "categoria_ruralidad_2024": "Ciudades y aglomeraciones",
+      "num_anotacion": "15",
+      "dinamica_2024": "0",
+      "cod_natujur": "313",
+      "count_a": "2",
+      "count_de": "1",
+      "predios_nuevos": "0",
+      "tiene_valor": "0",
+      "tiene_mas_de_un_valor": "0"
+    },
+    {
+      "pk": "05001-001-000023-00007-00109-2020",
+      "matricula": "001-23",
+      "fecha_radica_texto": "2020-12-02 00:00:00",
+      "fecha_apertura_texto": "1973-01-10 00:00:00",
+      "year_radica": "2020",
+      "orip": "1",
+      "divipola": "5001",
+      "departamento": "ANTIOQUIA",
+      "municipio": "MEDELLÍN",
+      "tipo_predio_zona": "URBANO",
+      "categoria_ruralidad_2024": "Ciudades y aglomeraciones",
+      "num_anotacion": "7",
+      "dinamica_2024": "1",
+      "cod_natujur": "109",
+      "count_a": "5",
+      "count_de": "1",
+      "predios_nuevos": "0",
+      "tiene_valor": "0",
+      "tiene_mas_de_un_valor": "0"
+    },
+    {
+      "pk": "05001-001-000065-00013-00317-2015",
+      "matricula": "001-65",
+      "fecha_radica_texto": "2015-12-16 00:00:00",
+      "fecha_apertura_texto": "1973-01-10 00:00:00",
+      "year_radica": "2015",
+      "orip": "1",
+      "divipola": "5001",
+      "departamento": "ANTIOQUIA",
+      "municipio": "MEDELLÍN",
+      "tipo_predio_zona": "URBANO",
+      "categoria_ruralidad_2024": "Ciudades y aglomeraciones",
+      "num_anotacion": "13",
+      "dinamica_2024": "1",
+      "cod_natujur": "317",
+      "count_a": "0",
+      "count_de": "1",
+      "predios_nuevos": "0",
+      "tiene_valor": "0",
+      "tiene_mas_de_un_valor": "0"
+    },
+    {
+      "pk": "05001-001-000067-00014-00109-2016",
+      "matricula": "001-67",
+      "fecha_radica_texto": "2016-03-29 00:00:00",
+      "fecha_apertura_texto": "1973-01-11 00:00:00",
+      "year_radica": "2016",
+      "orip": "1",
+      "divipola": "5001",
+      "departamento": "ANTIOQUIA",
+      "municipio": "MEDELLÍN",
+      "tipo_predio_zona": "URBANO",
+      "categoria_ruralidad_2024": "Ciudades y aglomeraciones",
+      "num_anotacion": "14",
+      "dinamica_2024": "1",
+      "cod_natujur": "109",
+      "count_a": "1",
+      "count_de": "1",
+      "predios_nuevos": "0",
+      "tiene_valor": "0",
+      "tiene_mas_de_un_valor": "0"
+    }
+  ],
+  "piiDroppedColumns": [
+    "documento_justificativo",
+    "nombre_natujur"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:35:43.230Z"
+}

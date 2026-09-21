@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "2btt-9z2g",
+  "name": "ESTABLECIMIENTOS AUTORIZADOS PARA EL ALMACENAMIENTO Y DISTRIBUCIÓN DE MEDICAMENTOS",
+  "description": "Listado de establecimientos farmacéuticos autorizados para el almacenamiento y distribución de medicamentos en el departamento de Norte de Santander",
+  "publisher": "Instituto Departamental de Salud del Norte de Santander, Norte de Santander",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "idsnds",
+    "establecimientos autorizados",
+    "medicamentos"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Instituto Departamental de Salud del Norte de Santander, Norte de Santander",
+  "dataUri": "https://www.datos.gov.co/resource/2btt-9z2g",
+  "webUri": "https://www.datos.gov.co/d/2btt-9z2g",
+  "homepage": null,
+  "createdAt": "2016-11-02T13:43:47+0000",
+  "dataUpdatedAt": "2026-07-20T17:06:44+0000",
+  "cutDate": "2026-07-20",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "clase",
+      "jsType": "CLASE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion",
+      "jsType": "DIRECCION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_mpio",
+      "jsType": "COD_MPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre",
+      "jsType": "NOMBRE",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (nombre)."
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "barrio",
+      "jsType": "BARRIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_clase",
+      "jsType": "COD_CLASE",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nombre"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:48.103Z"
+}

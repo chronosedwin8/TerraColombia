@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "b4dp-ximh",
+  "name": "Prestadores de Salud Departamento de Antioquia",
+  "description": "Registro de Prestadores de servicios de salud habilitados en el Departamento de Antioquia",
+  "publisher": "Gobernación de Antioquia, Antioquia",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "salud",
+    "antioquia",
+    "ips"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Antioquia, Antioquia",
+  "dataUri": "https://www.datos.gov.co/resource/b4dp-ximh",
+  "webUri": "https://www.datos.gov.co/d/b4dp-ximh",
+  "homepage": null,
+  "createdAt": "2016-07-14T02:58:46+0000",
+  "dataUpdatedAt": "2025-03-19T21:38:32+0000",
+  "cutDate": "2025-03-19",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "horario_viernes",
+      "jsType": "horario viernes",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombreprestador",
+      "jsType": "nombre prestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_apertura",
+      "jsType": "fecha apertura",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_clase_prestador",
+      "jsType": "codigo clase prestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "clasepersona",
+      "jsType": "clase persona",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "claseprestador",
+      "jsType": "clase prestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nivel",
+      "jsType": "nivel",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_centro_poblado",
+      "jsType": "nombre centro poblado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "privadapublica",
+      "jsType": "nombre naturaleza juridica",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_naturaleza_juridica",
+      "jsType": "codigo naturaleza juridica",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_centro_poblado",
+      "jsType": "codigo centro poblado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "horario_lunes",
+      "jsType": "horario lunes",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "barrio",
+      "jsType": "barrio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "gerente",
+      "jsType": "gerente",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_sede",
+      "jsType": "nombre sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "horario_martes",
+      "jsType": "horario martes",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "horario_jueves",
+      "jsType": "horario jueves",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_sede",
+      "jsType": "número sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "horario_sabado",
+      "jsType": "horario sabado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "digito_verificacion_nit",
+      "jsType": "digito verificacion nit",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "email",
+      "jsType": "email",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (email)."
+    },
+    {
+      "name": "horario_domingo",
+      "jsType": "horario domingo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit",
+      "jsType": "nit",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (nit)."
+    },
+    {
+      "name": "tipo_zona",
+      "jsType": "tipo zona",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fax",
+      "jsType": "fax",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (fax)."
+    },
+    {
+      "name": "municipio",
+      "jsType": "municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigohabilitacion",
+      "jsType": "codigo habilitacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ese",
+      "jsType": "ese",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion",
+      "jsType": "direccion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "horario_miercoles",
+      "jsType": "horario miercoles",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "telefono",
+      "jsType": "telefono",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (telefono)."
+    },
+    {
+      "name": "departamento",
+      "jsType": "departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "caracter",
+      "jsType": "caracter",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "digito_verificacion_nit",
+    "email",
+    "nit",
+    "fax",
+    "telefono"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:38.085Z"
+}

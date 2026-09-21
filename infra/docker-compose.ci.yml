@@ -1,0 +1,61 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# TerraColombia — PostGIS efímero para pruebas de integración.
+#
+# Sirve para dos cosas:
+#   1. Reproducir en local exactamente la base que usa CI (.github/workflows/ci.yml
+#      la levanta como `services:`, no con este archivo).
+#   2. Correr los tests de integración sin tocar la base de desarrollo.
+#
+# Uso:
+#   cd infra
+#   docker compose -f docker-compose.ci.yml up -d --wait
+#   DATABASE_URL=postgresql://postgres:postgres@localhost:55433/terracolombia_test \
+#     pnpm db:migrate && pnpm db:seed && pnpm test
+#   docker compose -f docker-compose.ci.yml down -v     # -v: borra los datos
+#
+# Todo es efímero y las credenciales son fijas y públicas A PROPÓSITO: esta base
+# solo existe durante la corrida de pruebas, escucha en 127.0.0.1 y nunca
+# contiene datos reales. No copiar este patrón a otros entornos.
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: terracolombia-ci
+
+services:
+  postgis:
+    image: postgis/postgis:16-3.4
+    container_name: tc-ci-postgis
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: terracolombia_test
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8 --locale=C.UTF-8'
+      TZ: America/Bogota
+    command:
+      # `fsync=off` y compañía: la durabilidad no importa en una base desechable
+      # y acelera mucho la carga de la semilla.
+      - postgres
+      - -c
+      - fsync=off
+      - -c
+      - synchronous_commit=off
+      - -c
+      - full_page_writes=off
+      - -c
+      - shared_buffers=512MB
+      - -c
+      - work_mem=32MB
+      - -c
+      - max_locks_per_transaction=512
+    volumes:
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    # tmpfs: los datos viven en RAM y desaparecen al bajar el contenedor.
+    tmpfs:
+      - /var/lib/postgresql/data
+    ports:
+      - '127.0.0.1:${CI_POSTGRES_PORT:-55433}:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d terracolombia_test']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s

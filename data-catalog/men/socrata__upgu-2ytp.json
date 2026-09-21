@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "upgu-2ytp",
+  "name": "MATRICULA POR GRADO Y EDAD DEPARTAMENTO DE SANTANDER",
+  "description": "Matricula por grado y edad de planteles educativos tanto oficiales como privados en los 82 municipios no certificados del Departamento de Santander.",
+  "publisher": "Gobernación de Santander, Santander",
+  "category": "Educación",
+  "theme": null,
+  "tags": [],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Santander, Santander",
+  "dataUri": "https://www.datos.gov.co/resource/upgu-2ytp",
+  "webUri": "https://www.datos.gov.co/d/upgu-2ytp",
+  "homepage": null,
+  "createdAt": "2017-05-05T15:17:21+0000",
+  "dataUpdatedAt": "2025-03-03T19:00:36+0000",
+  "cutDate": "2025-03-03",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "de_sede",
+      "jsType": "de_sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_nombzona",
+      "jsType": "de_nombzona",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_jornada",
+      "jsType": "de_jornada",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_ano",
+      "jsType": "de_ano",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_edad",
+      "jsType": "de_edad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_nombmuni",
+      "jsType": "de_nombmuni",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_hombres",
+      "jsType": "de_hombres",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nomb_sec",
+      "jsType": "nomb_sec",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "de_nombsede",
+      "jsType": "de_nombsede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_muni",
+      "jsType": "de_muni",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_grado",
+      "jsType": "de_grado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_total",
+      "jsType": "de_total",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_mujeres",
+      "jsType": "de_mujeres",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_institu",
+      "jsType": "de_institu",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nomb_sec"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:44.012Z"
+}

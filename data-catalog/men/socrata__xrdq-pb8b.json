@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "xrdq-pb8b",
+  "name": "INSTITUCIONES EDUCATIVAS OFICIALES DE MUNICIPIOS DEL DEPARTAMENTO DE BOYACÁ CON CONEXION A INTERNET",
+  "description": "Mediante el siguiente activo de información se relacionan las sedes educativas del departamento de Boyacá que actualmente cuentan con servicio de conectividad bajo los proyectos de centros digitales del ministerio de las tic, conectividad escolar del ministerio de educación y proyecto de regalías liderado por la Gobernación de Boyacá periodo 2024.",
+  "publisher": "Gobernación de Boyacá, Boyacá",
+  "category": "Ciencia, Tecnología e Innovación",
+  "theme": null,
+  "tags": [
+    "tecnologia",
+    "conectividad",
+    "internet"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Boyacá, Boyacá",
+  "dataUri": "https://www.datos.gov.co/resource/xrdq-pb8b",
+  "webUri": "https://www.datos.gov.co/d/xrdq-pb8b",
+  "homepage": null,
+  "createdAt": "2024-08-06T19:35:42+0000",
+  "dataUpdatedAt": "2024-08-06T21:32:13+0000",
+  "cutDate": "2024-08-06",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "proyectos_de_conectividad",
+      "jsType": "PROYECTOS DE CONECTIVIDAD 2024",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_sede_educativa",
+      "jsType": "NOMBRE SEDE EDUCATIVA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ancho_de_banda_descarga_mb",
+      "jsType": "ANCHO DE BANDA DESCARGA (MB)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "medio_de_enlace",
+      "jsType": "MEDIO DE ENLACE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ancho_de_banda_de_subida",
+      "jsType": "ANCHO DE BANDA DE SUBIDA (MB)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "latitud",
+      "jsType": "LATITUD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "longitud",
+      "jsType": "LONGITUD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_institucion",
+      "jsType": "CODIGO DANE INSTITUCION EDUCATIVA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "operador",
+      "jsType": "OPERADOR",
+      "pii": true,
+      "piiReason": "Identifica al funcionario u operario que editó el registro."
+    },
+    {
+      "name": "codigo_departamento",
+      "jsType": "CÓDIGO DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_institucion_educativa",
+      "jsType": "NOMBRE INSTITUCION EDUCATIVA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "provincia",
+      "jsType": "PROVINCIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado",
+      "jsType": "ESTADO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_municipio",
+      "jsType": "CÓDIGO MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "finalizaci_n_del_contrato",
+      "jsType": "FINALIZACIÓN DEL CONTRATO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_sede",
+      "jsType": "CODIGO DANE SEDE",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "operador"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:34.220Z"
+}

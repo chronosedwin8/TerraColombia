@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "mfmm-jqmq",
+  "name": "SECOP II - Ejecución Contratos",
+  "description": "Informacion relacionada con la ejecucion de los contratos firmados en el SECOP II, en términos de avance estimado y real",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "gastos",
+    "secop",
+    "secop ii"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/mfmm-jqmq",
+  "webUri": "https://www.datos.gov.co/d/mfmm-jqmq",
+  "homepage": null,
+  "createdAt": "2021-06-22T03:13:19+0000",
+  "dataUpdatedAt": "2026-09-21T12:58:23+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "nombreplan",
+      "jsType": "Nombre del Plan",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "porcentaje_de_avance_real",
+      "jsType": "Porcentaje de avance real",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "referencia_de_articulos",
+      "jsType": "Referencia de articulos",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "identificadorcontrato",
+      "jsType": "Identificador del Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "unidad",
+      "jsType": "Unidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "descripci_n",
+      "jsType": "Descripción",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fechacreacion",
+      "jsType": "Fecha Creacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipoejecucion",
+      "jsType": "Tipo de Ejecucion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cantidad_planeada",
+      "jsType": "Cantidad planeada",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cantidad_adjudicada",
+      "jsType": "Cantidad adjudicada",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_del_contrato",
+      "jsType": "Estado del contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "porcentajedeavanceesperado",
+      "jsType": "Porcentaje de Avance Esperado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fechadeentregareal",
+      "jsType": "Fecha de Entrega Real",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cantidadporrecibir",
+      "jsType": "Cantidad por Recibir",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cantidadrecibida",
+      "jsType": "Cantidad Recibida",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fechadeentregaesperada",
+      "jsType": "Fecha de Entrega Esperada",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:41:59.315Z"
+}

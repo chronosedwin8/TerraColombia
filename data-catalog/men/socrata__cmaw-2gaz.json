@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "cmaw-2gaz",
+  "name": "MATRICULA POR MUNICIPIOS EN EL SECTOR OFICIAL Y PRIVADO, DEPARTAMENTO DEL MAGDALENA AÑOS 2010 - 2020",
+  "description": "Número de alumnos matriculados en colegios oficiales y privados en los municipios del Departamento del Magdalena durante la vigencia 2010 - 2020.  Desde el año 201En los años 2010De este listado se excluye a Santa Marta y al municipio de Ciénaga.",
+  "publisher": "Gobernación de Magdalena, Magdalena",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "matricula",
+    "oficial",
+    "privada"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Magdalena, Magdalena",
+  "dataUri": "https://www.datos.gov.co/resource/cmaw-2gaz",
+  "webUri": "https://www.datos.gov.co/d/cmaw-2gaz",
+  "homepage": null,
+  "createdAt": "2021-06-02T17:53:37+0000",
+  "dataUpdatedAt": "2025-03-13T20:23:53+0000",
+  "cutDate": "2025-03-13",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "privada",
+      "jsType": "PRIVADA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "oficial",
+      "jsType": "OFICIAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "AÑO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "subregion",
+      "jsType": "SUBREGION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "contratada_privada",
+      "jsType": "CONTRATADA PRIVADA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane",
+      "jsType": "CODIGO DANE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "contratada_oficial",
+      "jsType": "CONTRATADA OFICIAL",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:45.545Z"
+}

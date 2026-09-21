@@ -1,0 +1,301 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# TerraColombia — pila completa de infraestructura (referencia de producción)
+#
+# Este archivo es el camino "todo en contenedores". El equipo de desarrollo de
+# Windows usa PostgreSQL 17 nativo (ver docs/DECISIONES.md, ADR-001) y solo
+# levanta Redis + MinIO con `infra/docker-compose.dev.yml`.
+#
+# Uso:
+#   cd infra
+#   cp ../.env.example ../.env   # y editar los valores
+#   docker compose --env-file ../.env up -d
+#   docker compose --env-file ../.env --profile observability up -d   # + Prometheus/Grafana
+#
+# NUNCA se escriben contraseñas aquí: todas las variables vienen de `.env`
+# (raíz del repositorio). Si una variable obligatoria falta, `docker compose`
+# avisa y el contenedor no arranca con un valor vacío por accidente.
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: terracolombia
+
+networks:
+  terracolombia:
+    name: terracolombia
+    driver: bridge
+
+volumes:
+  pgdata:
+    name: terracolombia_pgdata
+  redisdata:
+    name: terracolombia_redisdata
+  miniodata:
+    name: terracolombia_miniodata
+  prometheusdata:
+    name: terracolombia_prometheusdata
+  grafanadata:
+    name: terracolombia_grafanadata
+
+services:
+  # ───────────────────────────────────────────────────────────────────────────
+  # Base de datos: PostgreSQL 16 + PostGIS 3.4 (versión de referencia del plan).
+  # Las extensiones y EPSG:9377 los crea `postgres/init/01-extensions.sql`,
+  # que docker-entrypoint ejecuta SOLO en la primera inicialización del volumen.
+  # ───────────────────────────────────────────────────────────────────────────
+  postgis:
+    image: postgis/postgis:16-3.4
+    container_name: tc-postgis
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD es obligatoria; definir en .env}
+      POSTGRES_DB: ${POSTGRES_DB:-terracolombia}
+      # Español de Colombia en mensajes y ordenamiento de la base.
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8 --locale=C.UTF-8'
+      TZ: America/Bogota
+      PGTZ: America/Bogota
+    command:
+      # Parámetros pensados para un nodo de 8 GB. En RDS esto se hace por
+      # parameter group; ver docs/OPERACION.md §Entornos.
+      - postgres
+      - -c
+      - shared_buffers=2GB
+      - -c
+      - effective_cache_size=6GB
+      - -c
+      - work_mem=64MB
+      - -c
+      - maintenance_work_mem=512MB
+      - -c
+      - max_parallel_workers_per_gather=4
+      - -c
+      - random_page_cost=1.1
+      - -c
+      - max_locks_per_transaction=512 # particiones de core.parcel por departamento
+      - -c
+      - shared_preload_libraries=pg_stat_statements
+      - -c
+      - pg_stat_statements.track=all
+      - -c
+      - log_min_duration_statement=1000
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      # Puerto distinto al 5432 por defecto para no chocar con el Postgres nativo.
+      - '${POSTGRES_PORT:-55432}:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$${POSTGRES_USER:-postgres}" -d "$${POSTGRES_DB:-terracolombia}"']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    networks: [terracolombia]
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Cola (BullMQ) y caché de teselas / respuestas.
+  # ───────────────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: tc-redis
+    restart: unless-stopped
+    command:
+      - redis-server
+      - --appendonly
+      - 'yes'
+      - --maxmemory
+      - ${REDIS_MAXMEMORY:-1gb}
+      # `noeviction` es obligatorio para BullMQ: si Redis desaloja claves,
+      # se pierden trabajos de ETL a medias.
+      - --maxmemory-policy
+      - noeviction
+      - --requirepass
+      - ${REDIS_PASSWORD:?REDIS_PASSWORD es obligatoria; definir en .env}
+    volumes:
+      - redisdata:/data
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+    healthcheck:
+      test: ['CMD-SHELL', 'redis-cli -a "$$REDIS_PASSWORD" ping | grep -q PONG']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    networks: [terracolombia]
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Almacén de objetos S3 compatible: descargas crudas del ETL, informes PDF,
+  # exportaciones y PMTiles.
+  # ───────────────────────────────────────────────────────────────────────────
+  minio:
+    image: minio/minio:RELEASE.2025-04-22T22-12-26Z
+    container_name: tc-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?MINIO_ROOT_USER es obligatoria; definir en .env}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD es obligatoria; definir en .env}
+      MINIO_REGION: ${S3_REGION:-us-east-1}
+      MINIO_BROWSER_REDIRECT_URL: ${MINIO_CONSOLE_URL:-http://localhost:9001}
+    volumes:
+      - miniodata:/data
+    ports:
+      - '${MINIO_PORT:-9000}:9000'
+      - '${MINIO_CONSOLE_PORT:-9001}:9001'
+    healthcheck:
+      test: ['CMD-SHELL', 'mc ready local || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+    networks: [terracolombia]
+
+  # Job de inicialización: crea el bucket, lo versiona (respaldo de informes
+  # inmutables, §11 del plan) y crea un usuario de aplicación con permisos
+  # limitados para que la API/worker no usen las credenciales root.
+  minio-init:
+    image: minio/mc:RELEASE.2025-04-16T18-13-26Z
+    container_name: tc-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      S3_BUCKET: ${S3_BUCKET:-terracolombia}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-terracolombia-app}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:?S3_SECRET_KEY es obligatoria; definir en .env}
+    entrypoint: ['/bin/sh', '/init/minio-init.sh']
+    volumes:
+      - ./minio/minio-init.sh:/init/minio-init.sh:ro
+    restart: 'no'
+    networks: [terracolombia]
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Servidor de teselas vectoriales. Lee las fuentes de `martin.yaml`.
+  # La API sigue siendo la puerta de entrada (control de plan, cuotas y marca
+  # de agua): Martin no se expone a Internet, se publica solo en la red interna.
+  # Ver docs/DECISIONES.md ADR-003.
+  # ───────────────────────────────────────────────────────────────────────────
+  martin:
+    image: ghcr.io/maplibre/martin:v0.15.0
+    container_name: tc-martin
+    restart: unless-stopped
+    depends_on:
+      postgis:
+        condition: service_healthy
+    environment:
+      # Martin acepta la cadena de conexión por variable; la contraseña nunca
+      # aparece en el YAML de configuración.
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgis:5432/${POSTGRES_DB:-terracolombia}
+      RUST_LOG: ${MARTIN_LOG_LEVEL:-martin=info,actix_web=warn}
+    command: ['--config', '/config/martin.yaml']
+    volumes:
+      - ./martin.yaml:/config/martin.yaml:ro
+    ports:
+      # Solo localhost: el acceso público va por la API.
+      - '127.0.0.1:${MARTIN_PORT:-3010}:3000'
+    healthcheck:
+      # La imagen oficial incluye `curl`. Si en una versión futura no lo trae,
+      # sustituir por `wget -q -O - http://localhost:3000/health`.
+      test: ['CMD-SHELL', 'curl -fsS http://localhost:3000/health || exit 1']
+      interval: 15s
+      timeout: 5s
+      retries: 8
+      start_period: 20s
+    networks: [terracolombia]
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Observabilidad (perfil `observability`).
+  #   docker compose --profile observability up -d
+  # ───────────────────────────────────────────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:v3.3.1
+    container_name: tc-prometheus
+    restart: unless-stopped
+    profiles: [observability]
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=${PROMETHEUS_RETENTION:-30d}
+      - --web.enable-lifecycle
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - prometheusdata:/prometheus
+    ports:
+      - '127.0.0.1:${PROMETHEUS_PORT:-9090}:9090'
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -q -O - http://localhost:9090/-/healthy > /dev/null || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks: [terracolombia]
+
+  grafana:
+    image: grafana/grafana:11.6.1
+    container_name: tc-grafana
+    restart: unless-stopped
+    profiles: [observability]
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?GRAFANA_ADMIN_PASSWORD es obligatoria; definir en .env}
+      GF_USERS_ALLOW_SIGN_UP: 'false'
+      GF_ANALYTICS_REPORTING_ENABLED: 'false'
+      GF_ANALYTICS_CHECK_FOR_UPDATES: 'false'
+      GF_DEFAULT_INSTANCE_NAME: TerraColombia
+      # Zona horaria y formato de fecha para los tableros en español (Colombia).
+      GF_DATE_FORMATS_DEFAULT_TIMEZONE: America/Bogota
+      # Fuente de datos de Prometheus (referenciada por los tableros por UID).
+      PROMETHEUS_URL: http://prometheus:9090
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafanadata:/var/lib/grafana
+    ports:
+      - '127.0.0.1:${GRAFANA_PORT:-3030}:3000'
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -q -O - http://localhost:3000/api/health > /dev/null || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks: [terracolombia]
+
+  # Exportadores que alimentan los objetivos declarados en prometheus/prometheus.yml.
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.17.1
+    container_name: tc-postgres-exporter
+    restart: unless-stopped
+    profiles: [observability]
+    depends_on:
+      postgis:
+        condition: service_healthy
+    environment:
+      DATA_SOURCE_URI: postgis:5432/${POSTGRES_DB:-terracolombia}?sslmode=disable
+      DATA_SOURCE_USER: ${POSTGRES_USER:-postgres}
+      DATA_SOURCE_PASS: ${POSTGRES_PASSWORD}
+      PG_EXPORTER_EXTEND_QUERY_PATH: /etc/postgres-exporter/queries.yml
+    volumes:
+      - ./prometheus/postgres-exporter-queries.yml:/etc/postgres-exporter/queries.yml:ro
+    expose: ['9187']
+    networks: [terracolombia]
+
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.70.0
+    container_name: tc-redis-exporter
+    restart: unless-stopped
+    profiles: [observability]
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      REDIS_ADDR: redis://redis:6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    expose: ['9121']
+    networks: [terracolombia]

@@ -1,0 +1,136 @@
+@import 'maplibre-gl/dist/maplibre-gl.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Tokens ───────────────────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    color-scheme: light;
+    --tc-focus: #0b5fff;
+  }
+
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+    --tc-focus: #8ab4ff;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-surface text-slate-900;
+    min-height: 100dvh;
+  }
+
+  :root[data-theme='dark'] body {
+    @apply bg-slate-950 text-slate-100;
+  }
+
+  /* Foco visible siempre: requisito WCAG 2.4.7. Nunca usar outline:none sin reemplazo. */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 3px solid var(--tc-focus);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Respeta a quien pide menos movimiento. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ── Componentes reutilizables ────────────────────────────────────────────────── */
+@layer components {
+  .tc-card {
+    @apply rounded-lg border border-slate-200 bg-white shadow-panel;
+  }
+
+  :root[data-theme='dark'] .tc-card {
+    @apply border-slate-700 bg-slate-900;
+  }
+
+  .tc-label {
+    @apply text-xs font-medium uppercase tracking-wide text-slate-500;
+  }
+
+  :root[data-theme='dark'] .tc-label {
+    @apply text-slate-400;
+  }
+
+  .tc-input {
+    @apply w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900
+      placeholder:text-slate-400 disabled:cursor-not-allowed disabled:bg-slate-100;
+  }
+
+  :root[data-theme='dark'] .tc-input {
+    @apply border-slate-600 bg-slate-800 text-slate-100 placeholder:text-slate-500;
+  }
+
+  .tc-link {
+    @apply text-brand-700 underline decoration-brand-300 underline-offset-2 hover:decoration-brand-600;
+  }
+
+  :root[data-theme='dark'] .tc-link {
+    @apply text-brand-300 decoration-brand-500;
+  }
+
+  /* Tabla de resultados: cabecera pegajosa y celdas compactas. */
+  .tc-table {
+    @apply w-full border-collapse text-sm;
+  }
+  .tc-table th {
+    @apply sticky top-0 z-10 border-b border-slate-200 bg-surface-muted px-3 py-2 text-left
+      text-xs font-semibold uppercase tracking-wide text-slate-600;
+  }
+  .tc-table td {
+    @apply border-b border-slate-100 px-3 py-2 align-top;
+  }
+}
+
+/* ── MapLibre: ajustes mínimos ────────────────────────────────────────────────── */
+.maplibregl-ctrl-attrib {
+  font-size: 11px;
+}
+
+/* La atribución del IGAC es obligatoria y no debe poder ocultarse con CSS del tema. */
+.tc-map-attribution {
+  @apply pointer-events-none absolute bottom-0 left-0 right-0 z-overlay bg-white/85 px-2 py-1
+    text-[11px] leading-tight text-slate-700;
+}
+
+:root[data-theme='dark'] .tc-map-attribution {
+  @apply bg-slate-900/85 text-slate-300;
+}
+
+/* Contenedor del mapa: MapLibre necesita alto explícito. */
+.tc-map-canvas {
+  @apply h-full w-full;
+}
+
+/* Rejilla de esqueletos de carga. */
+@keyframes tc-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+.tc-skeleton {
+  @apply rounded bg-slate-200;
+  animation: tc-pulse 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+:root[data-theme='dark'] .tc-skeleton {
+  @apply bg-slate-700;
+}

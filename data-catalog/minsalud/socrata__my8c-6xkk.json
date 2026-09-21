@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "source": "minsalud",
+  "connector": "socrata",
+  "id": "my8c-6xkk",
+  "name": "Registro Único Nacional del Talento Humano en Salud​ - Rethus",
+  "description": "Registro Único Nacional del Talento Humano en Salud​ - Rethus\nDiligencia la Encuesta de Satisfacción:\nhttps://tramites.minsalud.gov.co/FormularioInscripcion/EncuestaSatisfaccion.aspx",
+  "publisher": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/my8c-6xkk",
+  "webUri": "https://www.datos.gov.co/d/my8c-6xkk",
+  "homepage": null,
+  "createdAt": "2022-05-30T01:03:20+0000",
+  "dataUpdatedAt": "2022-05-30T01:09:51+0000",
+  "cutDate": "2022-05-30",
+  "geographicCoverage": null,
+  "rowCount": 92373,
+  "columns": [
+    {
+      "name": "municipioresidencia",
+      "jsType": "MunicipioResidencia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "perfilprofesional",
+      "jsType": "PerfilProfesional",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_oactoadministrativo",
+      "jsType": "AñoActoAdministrativo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamentoresidencia",
+      "jsType": "DepartamentoResidencia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipoprograma",
+      "jsType": "TipoPrograma",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numeroregistros",
+      "jsType": "NumeroRegistros",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "origentitulo",
+      "jsType": "OrigenTitulo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipoinstitucion",
+      "jsType": "TipoInstitucion",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "origentitulo": "1 - LOCAL",
+      "tipoinstitucion": "2 - EDUCACIÓN PARA EL TRABAJO Y EL DESARROLLO HUMANO",
+      "tipoprograma": "AUXILIAR",
+      "perfilprofesional": "A02 - AUXILIAR EN ENFERMERÍA",
+      "a_oactoadministrativo": "2014",
+      "departamentoresidencia": "05 - ANTIOQUIA",
+      "municipioresidencia": "05120 - CÁCERES",
+      "numeroregistros": "1"
+    },
+    {
+      "origentitulo": "1 - LOCAL",
+      "tipoinstitucion": "2 - EDUCACIÓN PARA EL TRABAJO Y EL DESARROLLO HUMANO",
+      "tipoprograma": "AUXILIAR",
+      "perfilprofesional": "SIN INFORMACION",
+      "a_oactoadministrativo": "2015",
+      "departamentoresidencia": "15 - BOYACÁ",
+      "municipioresidencia": "15001 - TUNJA",
+      "numeroregistros": "11"
+    },
+    {
+      "origentitulo": "1 - LOCAL",
+      "tipoinstitucion": "2 - EDUCACIÓN PARA EL TRABAJO Y EL DESARROLLO HUMANO",
+      "tipoprograma": "AUXILIAR",
+      "perfilprofesional": "A02 - AUXILIAR EN ENFERMERÍA",
+      "a_oactoadministrativo": "2014",
+      "departamentoresidencia": "50 - META",
+      "municipioresidencia": "50711 - VISTAHERMOSA",
+      "numeroregistros": "3"
+    },
+    {
+      "origentitulo": "1 - LOCAL",
+      "tipoinstitucion": "1 - EDUCACIÓN SUPERIOR",
+      "tipoprograma": "ESPECIALIZACIÓN",
+      "perfilprofesional": "M06 - MEDICINA DE URGENCIAS",
+      "a_oactoadministrativo": "2021",
+      "departamentoresidencia": "05 - ANTIOQUIA",
+      "municipioresidencia": "05001 - MEDELLÍN",
+      "numeroregistros": "5"
+    },
+    {
+      "origentitulo": "1 - LOCAL",
+      "tipoinstitucion": "1 - EDUCACIÓN SUPERIOR",
+      "tipoprograma": "ESPECIALIZACIÓN",
+      "perfilprofesional": "E01 - SALUD FAMILIAR Y COMUNITARIA",
+      "a_oactoadministrativo": "2021",
+      "departamentoresidencia": "SIN INFORMACION",
+      "municipioresidencia": "SIN INFORMACION",
+      "numeroregistros": "1"
+    }
+  ],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:38:32.829Z"
+}

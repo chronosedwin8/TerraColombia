@@ -1,0 +1,255 @@
+<script setup lang="ts">
+/**
+ * Observatorio municipal (pantalla 8 de §10.2, módulo M9).
+ *
+ * Indicadores agregados, puesto nacional y series por periodo. Cada indicador trae su fórmula
+ * y sus datasets: un ranking sin fórmula visible es una opinión disfrazada de dato.
+ */
+import { computed, ref, watch } from 'vue';
+import type { EChartsOption } from 'echarts';
+import { AppError, MESSAGES, type ResponseMeta } from '@terracolombia/shared';
+import { getIndicators } from '@/api/indicators';
+import { getMunicipality } from '@/api/municipalities';
+import { emptyMeta } from '@/api/client';
+import { stringCodec, useUrlState } from '@/composables/useUrlState';
+import type { MunicipalIndicators, MunicipalityDetail } from '@/api/types';
+import SearchBox from '@/components/SearchBox.vue';
+import ChartCard from '@/components/ChartCard.vue';
+import BaseCard from '@/components/ui/BaseCard.vue';
+import BaseBadge from '@/components/ui/BaseBadge.vue';
+import CoverageNotice from '@/components/ui/CoverageNotice.vue';
+import DataValue from '@/components/ui/DataValue.vue';
+import EmptyState from '@/components/ui/EmptyState.vue';
+import ExplainButton from '@/components/ui/ExplainButton.vue';
+import HowCalculated from '@/components/ui/HowCalculated.vue';
+import LoadingSkeleton from '@/components/ui/LoadingSkeleton.vue';
+import ProvenanceFooter from '@/components/ui/ProvenanceFooter.vue';
+import ResultActionBar from '@/components/ui/ResultActionBar.vue';
+import SyntheticDataBanner from '@/components/ui/SyntheticDataBanner.vue';
+
+const props = withDefaults(defineProps<{ muniCode?: string }>(), { muniCode: undefined });
+
+const { state, shareUrl } = useUrlState({
+  municipio: { default: '', codec: stringCodec },
+});
+
+const indicators = ref<MunicipalIndicators | null>(null);
+const indicatorsMeta = ref<ResponseMeta>(emptyMeta());
+const municipality = ref<MunicipalityDetail | null>(null);
+const municipalityMeta = ref<ResponseMeta>(emptyMeta());
+const isLoading = ref(false);
+const error = ref<AppError | null>(null);
+
+/**
+ * El código del path manda; si no viene, se usa el de la query.
+ * Un parámetro opcional de ruta puede llegar como cadena vacía, así que se valida la longitud
+ * en vez de confiar en `??`.
+ */
+const activeCode = computed<string | null>(() => {
+  const fromPath = props.muniCode ?? '';
+  if (fromPath.length === 5) return fromPath;
+  return state.municipio.length === 5 ? state.municipio : null;
+});
+
+async function load(code: string): Promise<void> {
+  isLoading.value = true;
+  error.value = null;
+  try {
+    const [muni, ind] = await Promise.all([getMunicipality(code), getIndicators(code)]);
+    municipality.value = muni.data;
+    municipalityMeta.value = muni.meta;
+    indicators.value = ind.data;
+    indicatorsMeta.value = ind.meta;
+  } catch (e) {
+    error.value = e instanceof AppError ? e : new AppError('INTERNAL', MESSAGES.common.error);
+    indicators.value = null;
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+watch(
+  activeCode,
+  (code) => {
+    if (code) void load(code);
+  },
+  { immediate: true },
+);
+
+function onSelect(result: { kind: string; id: string }): void {
+  if (result.kind !== 'municipality') return;
+  state.municipio = result.id;
+}
+
+/** Serie temporal de un indicador. Los huecos se dejan como huecos, no se interpolan. */
+function seriesOption(indicator: MunicipalIndicators['indicators'][number]): EChartsOption {
+  return {
+    xAxis: { type: 'category', data: indicator.series.map((point) => point.period) },
+    yAxis: { type: 'value', name: indicator.unit ?? '' },
+    series: [
+      {
+        type: 'line',
+        name: indicator.label,
+        // `connectNulls: false`: un periodo sin dato se ve como un corte, no como una recta.
+        connectNulls: false,
+        smooth: false,
+        data: indicator.series.map((point) => point.value),
+      },
+    ],
+  };
+}
+
+const coverage = computed(() => municipality.value?.coverage ?? indicators.value?.coverage ?? null);
+const sources = computed(() => indicatorsMeta.value.sources);
+
+function sourcesFor(indicator: MunicipalIndicators['indicators'][number]) {
+  return sources.value.filter((source) => indicator.sourceDatasetIds.includes(source.datasetId));
+}
+</script>
+
+<template>
+  <div class="mx-auto max-w-[80rem] space-y-3 p-3">
+    <SyntheticDataBanner :meta="indicatorsMeta" />
+
+    <header class="space-y-2">
+      <h1 class="text-xl font-semibold">Observatorio municipal</h1>
+      <div class="max-w-xl">
+        <SearchBox placeholder="Busca un municipio por nombre o código DIVIPOLA" @select="onSelect" />
+      </div>
+    </header>
+
+    <EmptyState
+      v-if="!activeCode"
+      title="Elige un municipio"
+      body="Busca el municipio arriba. Te mostramos sus indicadores, su puesto frente al resto del país y cómo han cambiado por fecha de corte."
+      icon="search"
+    />
+
+    <LoadingSkeleton v-else-if="isLoading" variant="card" />
+
+    <EmptyState
+      v-else-if="error"
+      :title="MESSAGES.common.error"
+      :body="error.message"
+      icon="data"
+      action-label="Reintentar"
+      @action="activeCode && load(activeCode)"
+    />
+
+    <template v-else-if="indicators">
+      <CoverageNotice :coverage="coverage" />
+
+      <BaseCard
+        :title="`${indicators.muniName} (${indicators.muniCode})`"
+        :heading-level="2"
+        :subtitle="municipality ? `${municipality.deptName}` : undefined"
+      >
+        <dl class="grid grid-cols-1 gap-x-6 sm:grid-cols-3">
+          <DataValue
+            label="Población"
+            :value="municipality?.population ?? null"
+            format="number"
+            :sources="municipalityMeta.sources"
+            layout="inline"
+          />
+          <DataValue
+            label="Área municipal"
+            :value="municipality?.areaKm2 ?? null"
+            format="number"
+            unit="km²"
+            :digits="1"
+            :sources="municipalityMeta.sources"
+            layout="inline"
+          />
+          <DataValue
+            label="Cortes catastrales disponibles"
+            :value="municipality?.availableCutDates.length ?? null"
+            format="number"
+            :sources="municipalityMeta.sources"
+            layout="inline"
+          />
+        </dl>
+
+        <template #footer>
+          <ProvenanceFooter :meta="municipalityMeta" compact />
+        </template>
+      </BaseCard>
+
+      <EmptyState
+        v-if="indicators.indicators.length === 0"
+        title="Todavía no tenemos indicadores de este municipio"
+        body="Los indicadores se calculan cuando hay al menos dos cortes cargados. Sí puedes consultar el mapa, los equipamientos y la población."
+        icon="data"
+      />
+
+      <!-- Un bloque por indicador: cifra actual, puesto nacional, serie y fórmula. -->
+      <div v-else class="grid gap-3 lg:grid-cols-2">
+        <BaseCard
+          v-for="indicator in indicators.indicators"
+          :key="indicator.key"
+          :title="indicator.label"
+          :heading-level="3"
+        >
+          <template #actions>
+            <BaseBadge v-if="indicator.rank" tone="brand">
+              Puesto {{ indicator.rank.position }} de {{ indicator.rank.of }}
+            </BaseBadge>
+          </template>
+
+          <DataValue
+            :label="`Valor más reciente${indicator.latestPeriod ? ` (${indicator.latestPeriod})` : ''}`"
+            :value="indicator.latest"
+            format="number"
+            :unit="indicator.unit ?? undefined"
+            :digits="2"
+            :sources="sourcesFor(indicator)"
+          />
+
+          <ChartCard
+            v-if="indicator.series.length > 1"
+            class="mt-3"
+            :title="`Serie de ${indicator.label}`"
+            :option="seriesOption(indicator)"
+            :sources="sourcesFor(indicator)"
+            :unit="indicator.unit"
+            height="200px"
+            :table-rows="
+              indicator.series.map((point) => ({
+                label: point.period,
+                value: point.value,
+                unit: indicator.unit,
+              }))
+            "
+          />
+
+          <HowCalculated
+            class="mt-3"
+            :formula="indicator.formula"
+            :unit="indicator.unit"
+            :sources="sourcesFor(indicator)"
+          />
+
+          <ExplainButton
+            class="mt-2"
+            :subject="`indicador:${indicator.key}`"
+            :payload="{
+              label: indicator.label,
+              latest: indicator.latest,
+              unit: indicator.unit,
+              rank: indicator.rank,
+              formula: indicator.formula,
+            }"
+          />
+        </BaseCard>
+      </div>
+
+      <ResultActionBar
+        :share-url="shareUrl()"
+        :share-title="`Observatorio de ${indicators.muniName}`"
+        :formats="['pdf', 'xlsx', 'csv']"
+        :can-compare="false"
+        @save="$router.push('/proyectos')"
+      />
+    </template>
+  </div>
+</template>

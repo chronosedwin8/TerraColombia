@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "a86w-fh92",
+  "name": "SECOP II - Solicitudes CDPs",
+  "description": "Información detallada de las integraciones desarrolladas para la comprobación de información de CDPs en la plataforma, asociadas a un contrato",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "cdp"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/a86w-fh92",
+  "webUri": "https://www.datos.gov.co/d/a86w-fh92",
+  "homepage": null,
+  "createdAt": "2019-10-01T04:43:10+0000",
+  "dataUpdatedAt": "2026-09-21T13:44:09+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "proveedor",
+      "jsType": "Proveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo",
+      "jsType": "Código vigencias futuras",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_del_contrato",
+      "jsType": "Estado del contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_cdp",
+      "jsType": "Código CDP",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "recursos_propios",
+      "jsType": "Recursos propios",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "acuerdo_marco",
+      "jsType": "Acuerdo_marco",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "destino_del_gasto",
+      "jsType": "Destino del gasto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_siif",
+      "jsType": "Estado_SIIF",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ultima_consulta_siif",
+      "jsType": "Ultima consulta SIIF",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "entidad_bpin",
+      "jsType": "Entidad BPIN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_utilizado",
+      "jsType": "Valor Utilizado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pci_unidad_subejecutora",
+      "jsType": "PCI Unidad Subejecutora",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o_bpin",
+      "jsType": "Año BPIN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sistema_nacional_participaciones",
+      "jsType": "Sistema Nacional Participaciones",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit",
+      "jsType": "NIT",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (nit)."
+    },
+    {
+      "name": "ciudad",
+      "jsType": "Ciudad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_siif",
+      "jsType": "ID SIIF",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pilar_acuerdo_paz",
+      "jsType": "Pilar acuerdo paz",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_consulta_siif",
+      "jsType": "Fecha consulta SIIF",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "referencia_del_proceso",
+      "jsType": "Referencia del proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "bpin_codigo",
+      "jsType": "BPIN Codigo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_proceso",
+      "jsType": "ID Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "registrado_en_siif",
+      "jsType": "Registrado en SIIF",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "recursos_de_credito",
+      "jsType": "Recursos de credito",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "saldo_cdp",
+      "jsType": "Saldo_CDP",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sistema_general_de_regal_as",
+      "jsType": "Sistema general de regalías",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_vigencias_futuras",
+      "jsType": "Tipo vigencias futuras",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "bpin_validacion",
+      "jsType": "BPIN_Validacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_contrato",
+      "jsType": "ID Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fuente_de_los_recursos",
+      "jsType": "Fuente_de_los_recursos",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "entidad",
+      "jsType": "Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "saldo_total_a_comprometer",
+      "jsType": "Saldo total a comprometer",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "presupuesto_general_estado",
+      "jsType": "Presupuesto General Estado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_portafolio",
+      "jsType": "ID Portafolio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_proveedor",
+      "jsType": "NIT Proveedor",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "saldo_vigencias_futuras",
+      "jsType": "Saldo vigencias futuras",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "referencia_contrato",
+      "jsType": "Referencia Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_unidad_ejecutora",
+      "jsType": "Codigo unidad ejecutora",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "recursos_propios_agri",
+      "jsType": "Recursos Propios AGRI",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nit",
+    "nit_proveedor"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:41:59.797Z"
+}

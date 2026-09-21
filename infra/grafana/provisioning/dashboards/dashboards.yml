@@ -1,0 +1,25 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — aprovisionamiento de tableros
+#
+# Los tableros se versionan como JSON en `infra/grafana/dashboards/` y Grafana
+# los carga desde ahí en cada arranque. `allowUiUpdates: false` significa que
+# NO se pueden editar desde la interfaz: un tablero editado a mano se perdería
+# en el siguiente despliegue. Para cambiarlos: editar en la UI, exportar el
+# JSON ("Share → Export → Save to file"), y reemplazar el archivo del repo.
+# ═════════════════════════════════════════════════════════════════════════════
+
+apiVersion: 1
+
+providers:
+  - name: TerraColombia
+    orgId: 1
+    folder: TerraColombia
+    folderUid: terracolombia
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 60
+    allowUiUpdates: false
+    options:
+      path: /var/lib/grafana/dashboards
+      # Respeta la estructura de subcarpetas si algún día se agrupan.
+      foldersFromFilesStructure: false

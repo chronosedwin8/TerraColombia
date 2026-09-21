@@ -1,0 +1,86 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — análisis estático de seguridad con CodeQL
+#
+# Busca las clases de fallo que más importan en este sistema:
+#   · inyección SQL (el DSL de /parcels/query construye consultas a partir de
+#     entrada del usuario; ver docs/DECISIONES.md ADR-007)
+#   · recorrido de rutas (descargas de informes y exportaciones)
+#   · SSRF (los conectores de ETL piden URL a servicios externos)
+#   · XSS en la SPA y en las plantillas HTML de los informes
+#
+# El conjunto `security-and-quality` es más ruidoso que `security-extended`,
+# pero en un proyecto que apenas empieza conviene: el coste de limpiar avisos
+# ahora es mucho menor que después.
+# ═════════════════════════════════════════════════════════════════════════════
+
+name: CodeQL
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Lunes a las 07:00 UTC (02:00 en Colombia): las bases de consultas de
+    # CodeQL se actualizan y un análisis semanal encuentra fallos nuevos en
+    # código que no ha cambiado.
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  analizar:
+    name: Analizar ${{ matrix.lenguaje }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    permissions:
+      # Publicar los hallazgos en la pestaña Security.
+      security-events: write
+      contents: read
+      actions: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # `javascript-typescript` cubre .ts, .vue y .js del monorepo entero.
+          - lenguaje: javascript-typescript
+            construir: false
+          # Los propios workflows: CodeQL detecta inyección de expresiones en
+          # `run:` y permisos excesivos. Con secretos de despliegue en juego,
+          # merece la pena.
+          - lenguaje: actions
+            construir: false
+
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Inicializar CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.lenguaje }}
+          queries: security-and-quality
+          config-file: ./.github/codeql-config.yml
+
+      # `autobuild` no hace falta para JavaScript/TypeScript: CodeQL analiza el
+      # código fuente directamente. Se deja el paso condicionado por si algún
+      # día se añade un lenguaje compilado.
+      - name: Construcción automática
+        if: matrix.construir
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Analizar
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: /language:${{ matrix.lenguaje }}
+          # `upload: always` deja el resultado en Security incluso si el
+          # análisis encontró problemas de configuración.
+          upload: always

@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "hux2-dk3u",
+  "name": "RELACION DE INSTITUCIONES EDUCATIVAS BENEFICIDAS DEL PROGRAMA DE ALIMENTACIÓN ESCOLAR (PAE) DE NORTE DE SANTANDER - 2019-2020",
+  "description": "En este dataset encontramos los municipios, instituciones y sedes educativas beneficiadas por el Programa de Alimentación Escolar - PAE, Cupos y modalidad asignadas de acuerdo SIMAT de los años 2019 y 2020",
+  "publisher": "Gobernación de Santander, Santander",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "pae",
+    "gobernación de norte de santander",
+    "plan de alimentación escolar"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Santander, Santander",
+  "dataUri": "https://www.datos.gov.co/resource/hux2-dk3u",
+  "webUri": "https://www.datos.gov.co/d/hux2-dk3u",
+  "homepage": null,
+  "createdAt": "2020-08-17T23:51:35+0000",
+  "dataUpdatedAt": "2020-08-18T00:01:17+0000",
+  "cutDate": "2020-08-18",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "raci_n_industrializada_ri",
+      "jsType": "RACIÓN INDUSTRIALIZADA (RI)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "establecimiento_educativo",
+      "jsType": "ESTABLECIMIENTO EDUCATIVO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sede_educativa",
+      "jsType": "SEDE EDUCATIVA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_i_e",
+      "jsType": "CODIGO DANE I.E",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "almuerzo_preparado_en_sitio",
+      "jsType": "ALMUERZO PREPARADO EN SITIO (APS)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "AÑO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_instituciones_y_sedes",
+      "jsType": "Nº INSTITUCIONES Y SEDES EDUCATIVAS BENEFICIADAS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_de_cupos_asignados",
+      "jsType": "TOTAL DE CUPOS ASIGNADOS POR SEDE",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:32.697Z"
+}

@@ -1,0 +1,38 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — configuración de CodeQL
+#
+# Reduce el ruido sin perder cobertura de lo que importa.
+# ═════════════════════════════════════════════════════════════════════════════
+
+name: TerraColombia CodeQL
+
+# Directorios que no aportan nada al análisis de seguridad y sí mucho ruido.
+paths-ignore:
+  - '**/node_modules'
+  - '**/dist'
+  - '**/.output'
+  - '**/coverage'
+  # Catálogo de la Fase 0: JSON descargado de fuentes externas, no es código.
+  - 'data-catalog'
+  # Los tests usan credenciales y datos falsos a propósito.
+  - '**/*.test.ts'
+  - '**/*.spec.ts'
+  - '**/tests/fixtures/**'
+
+# Las rutas que SÍ interesan especialmente. CodeQL analiza todo lo que no esté
+# excluido; esto solo documenta dónde están los puntos sensibles:
+#
+#   packages/db/src/sql.ts        constructor de SQL parametrizado (ADR-007)
+#   apps/api/src/routes/**        todo borde de entrada
+#   packages/sources/**           peticiones a URL externas (riesgo de SSRF)
+#   packages/reports/**           plantillas HTML (riesgo de XSS en el PDF)
+#   apps/api/src/plugins/auth*    autenticación y llaves de API
+
+query-filters:
+  # Los avisos de "función demasiado compleja" y similares no son seguridad y
+  # ya los cubre ESLint.
+  - exclude:
+      tags contain: maintainability
+  # Los TODO/FIXME los gestionamos con incidencias, no con alertas de seguridad.
+  - exclude:
+      id: js/todo-comment

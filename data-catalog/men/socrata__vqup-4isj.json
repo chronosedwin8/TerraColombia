@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "vqup-4isj",
+  "name": "Listado de instituciones y centros educativos públicos del departamento de Casanare",
+  "description": "Este conjunto de datos contiene los datos de las instituciones educativas oficiales ubicadas en los municipios del departamento de Casanare.\n\nPara reportar hallazgos, comentarios o sugerencias, puede escribirnos por medio de los siguientes mecanismos:\nhttps://apps.casanare.gov.co/correspondencia/pqrs\nsistemas@casanare.gov.co",
+  "publisher": "Gobernación de Casanare, Casanare",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "instituciones educativas",
+    "departamento de casanare",
+    "gobernación de casanare"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Casanare, Casanare",
+  "dataUri": "https://www.datos.gov.co/resource/vqup-4isj",
+  "webUri": "https://www.datos.gov.co/d/vqup-4isj",
+  "homepage": null,
+  "createdAt": "2016-08-26T21:45:58+0000",
+  "dataUpdatedAt": "2025-09-01T20:08:22+0000",
+  "cutDate": "2025-09-01",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "zona",
+      "jsType": "Zona",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_est",
+      "jsType": "Tipo Est",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_del_establecimiento",
+      "jsType": "Nombre Del Establecimiento",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "direccion",
+      "jsType": "Direccion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "car_cter",
+      "jsType": "Carácter",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "telefono_de_la_institucion",
+      "jsType": "Telefono De La Institucion",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "rector_o_director",
+      "jsType": "Rector O Director",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "barrio_o_inspeccion",
+      "jsType": "Barrio O Inspeccion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "no_",
+      "jsType": "No. ",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "especialidad_modalida",
+      "jsType": "Especialidad/Modalida",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "email",
+      "jsType": "Email",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (email)."
+    },
+    {
+      "name": "cod_dane",
+      "jsType": "Cod_Dane",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nombre_del_establecimiento",
+    "telefono_de_la_institucion",
+    "email"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:33.462Z"
+}

@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "7tec-5fhs",
+  "name": "Listado de Instituciones Educativas Oficiales y No Oficiales del Departamento del Atlántico.",
+  "description": "Este conjunto de datos contiene el Listado de las Instituciones Educativas Oficiales y No Oficiales de los municipios certificados del Departamento del Atlántico.",
+  "publisher": "Gobernación del Atlántico, Atlántico",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "gobernacion del atlantico",
+    "atlantico",
+    "colegios no oficiales",
+    "instituciones educativas",
+    "educacion"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación del Atlántico, Atlántico",
+  "dataUri": "https://www.datos.gov.co/resource/7tec-5fhs",
+  "webUri": "https://www.datos.gov.co/d/7tec-5fhs",
+  "homepage": null,
+  "createdAt": "2019-06-19T01:32:31+0000",
+  "dataUpdatedAt": "2024-08-21T21:51:04+0000",
+  "cutDate": "2024-08-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "tipo_establecimiento",
+      "jsType": "Tipo Establecimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "Zona",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_rector",
+      "jsType": "Nombre Rector",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "licencia",
+      "jsType": "Licencia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "niveles",
+      "jsType": "Niveles",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "modelos_educativos",
+      "jsType": "Modelos Educativos",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo",
+      "jsType": "Código",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "prestador_de_servicio",
+      "jsType": "Prestador de servicio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_mero_de_sedes",
+      "jsType": "Número de Sedes",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "jornadas",
+      "jsType": "Jornadas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "genero",
+      "jsType": "Genero",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (genero)."
+    },
+    {
+      "name": "especialidad",
+      "jsType": "Especialidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "propiedad_de_la_planta_fis",
+      "jsType": "Propiedad de la planta fisíca",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direcci_n",
+      "jsType": "Dirección",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "idiomas",
+      "jsType": "Idiomas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sector",
+      "jsType": "Sector",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "discapacidades",
+      "jsType": "Discapacidades",
+      "pii": true,
+      "piiReason": "Dato sensible de la persona (Ley 1581/2012, art. 5)."
+    },
+    {
+      "name": "caracter",
+      "jsType": "Caracter",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados",
+      "jsType": "Grados",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_municipio",
+      "jsType": "Código Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre",
+      "jsType": "Nombre",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (nombre)."
+    },
+    {
+      "name": "estado",
+      "jsType": "Estado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "correo_electr_nico",
+      "jsType": "Correo Electrónico",
+      "pii": true,
+      "piiReason": "Correo electrónico."
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nombre_rector",
+    "genero",
+    "discapacidades",
+    "nombre",
+    "correo_electr_nico"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:33.196Z"
+}

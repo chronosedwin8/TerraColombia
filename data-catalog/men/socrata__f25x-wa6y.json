@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "f25x-wa6y",
+  "name": "ESTABLECIMIENTOS FABRICANTES DE DISPOSITIVOS MÉDICOS SOBRE MEDIDA",
+  "description": "Son los establecimientos fabricantes de dispositivos médicos a \nmedida para la salud visual y ocular, tecnología ortopédica externa, ayuda auditiva y salud bucal.",
+  "publisher": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "dispositivos ortopedica"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/f25x-wa6y",
+  "webUri": "https://www.datos.gov.co/d/f25x-wa6y",
+  "homepage": null,
+  "createdAt": "2017-03-04T16:32:39+0000",
+  "dataUpdatedAt": "2026-09-09T16:12:26+0000",
+  "cutDate": "2026-09-09",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "actividad",
+      "jsType": "ACTIVIDAD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "concepto",
+      "jsType": "CONCEPTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "lineaproductos",
+      "jsType": "LINEAPRODUCTOS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciudadmunicipio",
+      "jsType": "CIUDADMUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "establecimiento",
+      "jsType": "ESTABLECIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fechaconcepto",
+      "jsType": "FECHACONCEPTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit",
+      "jsType": "NIT",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (nit)."
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nit"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:49.134Z"
+}

@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "u99c-7mfm",
+  "name": "SECOP II - Suspensiones de Contratos",
+  "description": "Registro de las suspensiones y reanudaciones de contratos registrados en el SECOP II, informe creado a solicitud de la Contraloría General de la República",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "contratos",
+    "secop ii",
+    "secop",
+    "suspensiones",
+    "compra pública"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/u99c-7mfm",
+  "webUri": "https://www.datos.gov.co/d/u99c-7mfm",
+  "homepage": null,
+  "createdAt": "2022-08-09T13:06:04+0000",
+  "dataUpdatedAt": "2026-09-21T13:11:25+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "fecha_de_aprobacion",
+      "jsType": "Fecha de Aprobacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_fin_del_contrato",
+      "jsType": "Fecha de Fin del Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "proposito_de_la_modificacion",
+      "jsType": "Proposito de la modificacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_contrato",
+      "jsType": "ID Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_inicio_del_contrato",
+      "jsType": "Fecha de Inicio del Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo",
+      "jsType": "Tipo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_creacion",
+      "jsType": "Fecha de Creacion",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:41:58.778Z"
+}

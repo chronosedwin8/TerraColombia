@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "hgi6-6wh3",
+  "name": "Proponentes por Proceso SECOP II",
+  "description": "Contiene información sobre los proveedores que presentan propuestas en los procesos de contratación pública gestionados a través de la plataforma SECOP II.",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/hgi6-6wh3",
+  "webUri": "https://www.datos.gov.co/d/hgi6-6wh3",
+  "homepage": null,
+  "createdAt": "2018-11-23T22:35:47+0000",
+  "dataUpdatedAt": "2026-09-21T06:22:49+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "proveedor",
+      "jsType": "Proveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_proveedor",
+      "jsType": "NIT Proveedor",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "codigo_proveedor",
+      "jsType": "Codigo Proveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_entidad",
+      "jsType": "NIT Entidad",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "nombre_procedimiento",
+      "jsType": "Nombre Procedimiento",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "codigo_entidad",
+      "jsType": "Codigo Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_publicaci_n",
+      "jsType": "Fecha Publicación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "entidad_compradora",
+      "jsType": "Entidad Compradora",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_procedimiento",
+      "jsType": "ID Procedimiento",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nit_proveedor",
+    "nit_entidad",
+    "nombre_procedimiento"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:02.485Z"
+}

@@ -1,0 +1,186 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — configuración de Prometheus
+#
+# Los objetivos están escritos con los nombres de servicio de
+# `infra/docker-compose.yml`. En producción (CapRover) los nombres son
+# `srv-captain--terracolombia-api`, etc.: ver el bloque comentado al final de
+# cada job.
+#
+# ─── ACCESO A /metrics ──────────────────────────────────────────────────────
+# `/metrics` NO se publica a Internet: ni la API ni el worker exponen ese puerto
+# fuera de la red interna, y el proxy de CapRover no enruta la ruta `/metrics`.
+# Esa es la protección principal. Si algún día hay que raspar desde fuera de la
+# red (p. ej. un Prometheus gestionado), se activa el bloque `authorization`
+# de abajo y se define `METRICS_TOKEN` en la app; el token va en un archivo
+# montado, nunca en este YAML.
+#
+# ─── CONTRATO DE MÉTRICAS ───────────────────────────────────────────────────
+# Las alertas de `alerts.yml` y los tableros de `../grafana/dashboards/`
+# dependen de estos nombres. Los implementan `apps/api` y `apps/worker`:
+#
+#   HTTP (prom-client / @fastify/metrics)
+#     http_request_duration_seconds_bucket{route,method,status_code}
+#     http_requests_total{route,method,status_code}
+#
+#   Producto (§13 del plan)
+#     tc_tile_duration_seconds_bucket{layer,cache="hit|miss"}
+#     tc_area_analysis_duration_seconds_bucket{area_bucket="le5km2|gt5km2"}
+#     tc_report_duration_seconds_bucket{report_type,level}
+#     tc_parcel_card_duration_seconds_bucket{}      -- ficha de predio completa
+#     tc_tile_quota_exceeded_total{plan}            -- cuota de teselas agotada
+#     tc_area_quota_exceeded_total{plan}            -- cuota de área agotada
+#     tc_monthly_active_users                       -- usuarios activos del mes
+#     tc_active_snapshot_synthetic{dataset}         -- 1 si el activo es sintético
+#
+#   ETL y linaje (§8)
+#     tc_etl_run_duration_seconds_bucket{dataset,step}
+#     tc_etl_runs_total{dataset,status="ok|failed"}
+#     tc_etl_last_success_timestamp_seconds{dataset}
+#     tc_etl_rows_loaded{dataset,snapshot}
+#     tc_etl_validation_failures_total{dataset,check}
+#     tc_etl_row_count_delta_ratio{dataset}         -- variación vs. corte anterior
+#     tc_snapshot_age_days{dataset}                 -- edad del snapshot ACTIVO
+#     tc_pii_detected_total{dataset,column}         -- debe ser siempre 0
+#     tc_geometry_invalid_total{dataset}
+#     tc_npn_malformed_total{dataset}
+#
+#   Cola
+#     tc_queue_jobs{queue,state="waiting|active|delayed|failed"}   -- medidor
+#     tc_queue_jobs_failed_total{queue}                            -- contador
+#     tc_queue_job_duration_seconds_bucket{queue}
+#     tc_worker_heartbeat_timestamp_seconds{worker}
+#
+#   El medidor y el contador de fallos NO son lo mismo y hacen falta los dos:
+#   el medidor dice cuántos trabajos fallidos hay ACUMULADOS en la cola (puede
+#   quedarse alto para siempre si nadie los limpia); el contador dice cuántos
+#   han fallado en una ventana de tiempo, que es lo que indica si el problema
+#   está ocurriendo ahora.
+#
+#   Negocio (§12)
+#     tc_mrr_cop{plan}                              -- ingreso recurrente mensual
+#     tc_active_subscriptions{plan}
+#     tc_signups_total
+#     tc_activated_users_total                      -- hicieron ≥1 consulta útil
+#     tc_paid_conversions_total{plan}
+#     tc_churned_subscriptions_total{plan}
+#     tc_reports_generated_total{plan,report_type}
+#     tc_credits_consumed_total{operation}
+#     tc_payment_attempts_total{provider,status}
+#
+#   Las siguientes NO las publica la aplicación: salen de las consultas propias
+#   del postgres_exporter en `postgres-exporter-queries.yml`. Si falta alguna,
+#   el problema está ahí y no en `apps/api` ni en `apps/worker`:
+#     tc_snapshot_edad_dias{dataset,fuente,estado}
+#     tc_snapshot_filas{dataset,fuente,estado}
+#     tc_parcel_partition_bytes{particion}
+#     tc_parcel_partition_filas_estimadas{particion}
+#     tc_pg_volume_usado_bytes / tc_pg_volume_total_bytes
+#     tc_matview_poblada{vista} / tc_matview_bytes{vista}
+#     pg_stat_statements_top_*  (requiere pg_stat_statements cargada)
+# ═════════════════════════════════════════════════════════════════════════════
+
+global:
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  evaluation_interval: 30s
+  external_labels:
+    # Se sobreescribe por entorno con --web.external-url / variables de la app.
+    proyecto: terracolombia
+    entorno: dev
+
+rule_files:
+  - /etc/prometheus/alerts.yml
+
+# Alertmanager: opcional. Sin él, las alertas se ven en Prometheus y Grafana
+# pero no se notifican. En producción se apunta a un Alertmanager con destino
+# a correo y Slack (ver docs/OPERACION.md §Alertas).
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+          # - targets: ['alertmanager:9093']
+
+scrape_configs:
+  # ───────────────────────────────────────────────────────────────────────────
+  # API (Fastify). Métricas HTTP + métricas de producto y de negocio.
+  # ───────────────────────────────────────────────────────────────────────────
+  - job_name: api
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets: ['api:3001']
+        labels:
+          servicio: api
+    # En CapRover:
+    #   - targets: ['srv-captain--terracolombia-api:3001']
+    # Si /metrics queda accesible desde fuera de la red interna, protegerlo:
+    # authorization:
+    #   type: Bearer
+    #   credentials_file: /run/secrets/metrics_token
+    relabel_configs:
+      # `instance` legible en los tableros en vez de host:puerto.
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '([^:]+)(:[0-9]+)?'
+        replacement: '$1'
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Worker (BullMQ): ETL, informes, análisis, alertas.
+  # ───────────────────────────────────────────────────────────────────────────
+  - job_name: worker
+    metrics_path: /metrics
+    scheme: http
+    # El ETL produce series de vida larga (último éxito por dataset) y otras
+    # que solo cambian una vez al mes: intervalo más holgado.
+    scrape_interval: 30s
+    scrape_timeout: 20s
+    static_configs:
+      - targets: ['worker:9100']
+        labels:
+          servicio: worker
+    # En CapRover:
+    #   - targets: ['srv-captain--terracolombia-worker:9100']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '([^:]+)(:[0-9]+)?'
+        replacement: '$1'
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # PostgreSQL. Consultas propias en `postgres-exporter-queries.yml`:
+  # tamaño de las particiones de `core.parcel`, antigüedad de los snapshots y
+  # p95 de las consultas de `pg_stat_statements`.
+  # ───────────────────────────────────────────────────────────────────────────
+  - job_name: postgres_exporter
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+        labels:
+          servicio: postgres
+    # En producción la base es RDS: el exportador se despliega como app
+    # CapRover apuntando al endpoint de RDS.
+    #   - targets: ['srv-captain--postgres-exporter:9187']
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Redis (cola BullMQ + caché de teselas).
+  # ───────────────────────────────────────────────────────────────────────────
+  - job_name: redis_exporter
+    static_configs:
+      - targets: ['redis-exporter:9121']
+        labels:
+          servicio: redis
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Prometheus mismo: si deja de evaluar reglas, nadie lo notaría.
+  # ───────────────────────────────────────────────────────────────────────────
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          servicio: prometheus
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Martin no expone /metrics en la versión que usamos (v0.15). La latencia de
+  # teselas se mide en la API, que es quien hace el proxy y quien conoce el
+  # estado de la caché (`tc_tile_duration_seconds{cache=...}`). Si una versión
+  # futura añade el endpoint, añadir aquí un job `martin`.
+  # ───────────────────────────────────────────────────────────────────────────

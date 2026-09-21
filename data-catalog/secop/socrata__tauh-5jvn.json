@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "tauh-5jvn",
+  "name": "SECOP I - Proponentes",
+  "description": "Información de proponentes por proceso de compra y su calificación",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "proponentes",
+    "secop i",
+    "compra pública"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/tauh-5jvn",
+  "webUri": "https://www.datos.gov.co/d/tauh-5jvn",
+  "homepage": null,
+  "createdAt": "2019-10-18T19:20:21+0000",
+  "dataUpdatedAt": "2026-09-20T06:02:27+0000",
+  "cutDate": "2026-09-20",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "id_adjudicacion",
+      "jsType": "ID Adjudicacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_doc_proponente",
+      "jsType": "Tipo Doc Proponente",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "calificacion",
+      "jsType": "Calificacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_publicacion_del_proceso",
+      "jsType": "Fecha Publicacion del Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "num_doc_proponente",
+      "jsType": "Num Doc Proponente",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_contrato",
+      "jsType": "Numero Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "proponente",
+      "jsType": "Proponente",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "digito_verificaci_n_proponente",
+      "jsType": "Digito Verificación Proponente",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_proceso",
+      "jsType": "ID Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "adjudicado",
+      "jsType": "Adjudicado",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:03.941Z"
+}

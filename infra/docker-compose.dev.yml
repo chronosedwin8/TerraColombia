@@ -1,0 +1,102 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# TerraColombia — complemento para el equipo de desarrollo de Windows.
+#
+# El equipo ya tiene PostgreSQL 17.10 + PostGIS 3.6.2 nativo en localhost:5432
+# (docs/DECISIONES.md ADR-001), así que aquí NO hay servicio de base de datos:
+# solo lo que falta en el sistema operativo, Redis y MinIO.
+#
+# Uso:
+#   cd infra
+#   docker compose -f docker-compose.dev.yml --env-file ../.env up -d
+#   docker compose -f docker-compose.dev.yml --env-file ../.env down
+#
+# Después de levantarlo, en `.env` de la raíz:
+#   REDIS_URL=redis://:LA_CLAVE@localhost:6379
+#   S3_ENDPOINT=http://localhost:9000
+#
+# Si no se levanta nada, la aplicación degrada sola: cola en memoria y
+# almacenamiento en disco (docs/DECISIONES.md ADR-004). Este archivo es para
+# probar el camino "de verdad" antes de desplegar.
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: terracolombia-dev
+
+networks:
+  terracolombia-dev:
+    name: terracolombia-dev
+    driver: bridge
+
+volumes:
+  redisdata-dev:
+    name: terracolombia_dev_redisdata
+  miniodata-dev:
+    name: terracolombia_dev_miniodata
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: tc-dev-redis
+    restart: unless-stopped
+    command:
+      - redis-server
+      - --appendonly
+      - 'yes'
+      - --maxmemory
+      - ${REDIS_MAXMEMORY:-512mb}
+      - --maxmemory-policy
+      - noeviction
+      - --requirepass
+      - ${REDIS_PASSWORD:?REDIS_PASSWORD es obligatoria; definir en .env}
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    volumes:
+      - redisdata-dev:/data
+    ports:
+      - '127.0.0.1:${REDIS_PORT:-6379}:6379'
+    healthcheck:
+      test: ['CMD-SHELL', 'redis-cli -a "$$REDIS_PASSWORD" ping | grep -q PONG']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks: [terracolombia-dev]
+
+  minio:
+    image: minio/minio:RELEASE.2025-04-22T22-12-26Z
+    container_name: tc-dev-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?MINIO_ROOT_USER es obligatoria; definir en .env}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD es obligatoria; definir en .env}
+      MINIO_REGION: ${S3_REGION:-us-east-1}
+    volumes:
+      - miniodata-dev:/data
+    ports:
+      - '127.0.0.1:${MINIO_PORT:-9000}:9000'
+      - '127.0.0.1:${MINIO_CONSOLE_PORT:-9001}:9001'
+    healthcheck:
+      test: ['CMD-SHELL', 'mc ready local || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+    networks: [terracolombia-dev]
+
+  minio-init:
+    image: minio/mc:RELEASE.2025-04-16T18-13-26Z
+    container_name: tc-dev-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      S3_BUCKET: ${S3_BUCKET:-terracolombia}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-terracolombia-app}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:?S3_SECRET_KEY es obligatoria; definir en .env}
+    entrypoint: ['/bin/sh', '/init/minio-init.sh']
+    volumes:
+      - ./minio/minio-init.sh:/init/minio-init.sh:ro
+    restart: 'no'
+    networks: [terracolombia-dev]

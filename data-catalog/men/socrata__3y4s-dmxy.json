@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "3y4s-dmxy",
+  "name": "MEN_INDICADORES_PRIMERA_INFANCIA",
+  "description": "Contiene información estadística de primera infancia a relacionada con indicadores de (EDUCACIÓN INICIAL ICBF, NIÑOS Y NIÑAS EN PREESCOLAR CON EDUCACIÓN INICIAL y NIÑOS Y NIÑAS CON EDUCACIÓN INICIAL), con un histórico desde el 2015 hasta 2023 datos oficiales definitivos.\n\nse adiciona información correspondiente al indicador de \"CONCURRENCIA DE ATENCIONES\" contiene el porcentaje de niños y niñas en servicios de educación inicial en el marco de la atención integral que cuentan con 6 o más atenciones priorizadas.",
+  "publisher": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "primera infancia",
+    "educación",
+    "niños"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/3y4s-dmxy",
+  "webUri": "https://www.datos.gov.co/d/3y4s-dmxy",
+  "homepage": null,
+  "createdAt": "2021-07-27T03:56:24+0000",
+  "dataUpdatedAt": "2024-08-15T15:45:52+0000",
+  "cutDate": "2024-08-15",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "cod_dane_mun",
+      "jsType": "COD_DANE_MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_corte",
+      "jsType": "FECHA_CORTE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_dane_depto",
+      "jsType": "COD_DANE_DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_depto",
+      "jsType": "NOMBRE_DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "indicador_1_educaci_n_inicial",
+      "jsType": "INDICADOR 1.\nEDUCACIÓN INICIAL ICBF\n(Incluye Mujeres Gestantes)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "indicador_2_ni_os_y_ni_as",
+      "jsType": "INDICADOR 2.\nNIÑOS Y NIÑAS EN PREESCOLAR CON EDUCACIÓN INICIAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "indicador_3_total_educaci",
+      "jsType": "INDICADOR 3.\nTOTAL EDUCACIÓN INICIAL\nICBF + MEN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "indicador_4_concurrencia_de_atenciones",
+      "jsType": "INDICADOR 4. CONCURRENCIA DE ATENCIONES",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_mun",
+      "jsType": "NOMBRE_MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha",
+      "jsType": "FECHA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etc",
+      "jsType": "ETC",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:41.067Z"
+}

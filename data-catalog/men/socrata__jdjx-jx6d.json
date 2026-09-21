@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "jdjx-jx6d",
+  "name": "FÁBRICAS DE ALIMENTOS CERTIFICADAS EN BUENAS PRÁCTICAS DE MANUFACTURA - BPM",
+  "description": "Contiene los datos de las fabricas certificadas por el INVIMA en BPM",
+  "publisher": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "invima"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/jdjx-jx6d",
+  "webUri": "https://www.datos.gov.co/d/jdjx-jx6d",
+  "homepage": null,
+  "createdAt": "2016-07-15T00:10:45+0000",
+  "dataUpdatedAt": "2026-09-09T16:25:52+0000",
+  "cutDate": "2026-09-09",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "fechacertificacion",
+      "jsType": "FECHACERTIFICACION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "prodcutoselaborados",
+      "jsType": "PRODUCTOSELABORADOS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "consecutivo",
+      "jsType": "CONSECUTIVO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "establecimiento",
+      "jsType": "ESTABLECIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion",
+      "jsType": "DIRECCION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciudadmunicipio",
+      "jsType": "CIUDADMUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:48.873Z"
+}

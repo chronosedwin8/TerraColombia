@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "3skv-9na7",
+  "name": "SECOP II - Archivos Descarga Historico 2023",
+  "description": "Información de referencia para la descarga de documentos, entregada por la Agencia entre el 01/01/2023 y el 31/12/2023",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "archivos",
+    "secop"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/3skv-9na7",
+  "webUri": "https://www.datos.gov.co/d/3skv-9na7",
+  "homepage": null,
+  "createdAt": "2025-07-03T06:51:51+0000",
+  "dataUpdatedAt": "2026-09-21T13:49:52+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "id_documento",
+      "jsType": "ID Documento",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "proceso",
+      "jsType": "Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_archivo",
+      "jsType": "Nombre Documento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_entidad",
+      "jsType": "NIT Entidad",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "tamanno_archivo",
+      "jsType": "Tamaño Documento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_mero_de_contrato",
+      "jsType": "Número de Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "url_descarga_documento",
+      "jsType": "URL Descarga Documento",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "extensi_n",
+      "jsType": "Extensión",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "descripci_n",
+      "jsType": "Descripción",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_carga",
+      "jsType": "Fecha Carga",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "entidad",
+      "jsType": "Entidad",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "id_documento",
+    "nit_entidad",
+    "url_descarga_documento"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:01.900Z"
+}

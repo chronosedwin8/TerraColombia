@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "epkg-mphw",
+  "name": "MEN_INDICADORES_PAE",
+  "description": "Contiene información estadística de los niveles preescolar, básica y media relacionada con indicadores del PAE, hasta 20231 datos oficiales definitivos.",
+  "publisher": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "plan de alimentación escolar",
+    "educación",
+    "niños y niñas"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/epkg-mphw",
+  "webUri": "https://www.datos.gov.co/d/epkg-mphw",
+  "homepage": null,
+  "createdAt": "2021-07-27T03:54:08+0000",
+  "dataUpdatedAt": "2022-05-23T21:21:53+0000",
+  "cutDate": "2022-05-23",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "cantidad_beneficiarios_pae",
+      "jsType": "CANTIDAD_BENEFICIARIOS_PAE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona_sede",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_corte",
+      "jsType": "FECHA_CORTE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "jornada",
+      "jsType": "JORNADA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grupo_poblacional",
+      "jsType": "GRUPO_POBLACIONAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_departamento",
+      "jsType": "CODIGO_DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha",
+      "jsType": "FECHA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_municipio",
+      "jsType": "CODIGO_MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:45.046Z"
+}

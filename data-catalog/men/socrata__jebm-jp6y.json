@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "jebm-jp6y",
+  "name": "Establecimientos con manejo de medicamentos de control especial",
+  "description": "Establecimientos con manejo de medicamentos de control especial",
+  "publisher": "Unidad Ejecutora de Saneamiento del Valle del Cauca, Valle del Cauca",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "establecimiento",
+    "manejo",
+    "medicamentos",
+    "control",
+    "especial",
+    "año",
+    "2018"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Unidad Ejecutora de Saneamiento del Valle del Cauca, Valle del Cauca",
+  "dataUri": "https://www.datos.gov.co/resource/jebm-jp6y",
+  "webUri": "https://www.datos.gov.co/d/jebm-jp6y",
+  "homepage": null,
+  "createdAt": "2019-02-07T14:45:00+0000",
+  "dataUpdatedAt": "2025-07-28T17:58:17+0000",
+  "cutDate": "2025-07-28",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "razon_social",
+      "jsType": "Razon Social",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (razon_social)."
+    },
+    {
+      "name": "area_operativa",
+      "jsType": "Area Operativa",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direcci_n",
+      "jsType": "Dirección",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_establecimiento",
+      "jsType": "Tipo establecimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "razon_social"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:50.718Z"
+}

@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "2sza-3ea9",
+  "name": "COBERTURA DEL PROGRAMA DE ALIMENTACIÓN ESCOLAR (PAE) EN EL DEPARTAMENTO DE NORTE DE SANTANDER",
+  "description": "El conjunto de datos \"Cobertura del Programa de Alimentación Escolar (PAE) en el Departamento de Norte de Santander para el año 2023 y 2024\" presenta información detallada sobre el alcance y la cobertura del PAE en los municipios de Norte de Santander. Incluye datos sobre la cantidad de estudiantes beneficiados, la distribución de los recursos, y el número de instituciones educativas participantes en cada periodo. Este conjunto permite evaluar el impacto del programa en términos de cobertura y ayuda a identificar áreas donde se puede mejorar el apoyo alimentario escolar.",
+  "publisher": "Gobernación de Santander, Santander",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "pae",
+    "programa de alimentación escolar",
+    "educacion"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Santander, Santander",
+  "dataUri": "https://www.datos.gov.co/resource/2sza-3ea9",
+  "webUri": "https://www.datos.gov.co/d/2sza-3ea9",
+  "homepage": null,
+  "createdAt": "2024-11-06T02:18:26+0000",
+  "dataUpdatedAt": "2024-11-06T02:38:54+0000",
+  "cutDate": "2024-11-06",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "programado_raci_n_comida",
+      "jsType": "(PROGRAMADO)  RACIÓN COMIDA CALIENTE TRANSPORTADA - CCT - ALMUERZO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "entregado_rps",
+      "jsType": "(ENTREGADO) RPS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "entregado_cct_almuerzo",
+      "jsType": "(ENTREGADO) CCT - ALMUERZO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "programado_raci_n_para",
+      "jsType": "(PROGRAMADO) RACIÓN PARA PREPARAR EN EL SITIO – ALMUERZO (RPS)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "entregado_raci_n",
+      "jsType": "(ENTREGADO) RACIÓN INDUSTRIALIZADA (RI)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane",
+      "jsType": "CODIGO DANE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha",
+      "jsType": "FECHA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "institucion_educativas",
+      "jsType": "INSTITUCION EDUCATIVAS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "programado_raci_n",
+      "jsType": "(PROGRAMADO)  RACIÓN INDUSTRIALIZADA (RI)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matricula_a_corte_29_03_2023",
+      "jsType": "MATRICULA A CORTE\n29/03/2023",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sedes_educativas",
+      "jsType": "SEDES EDUCATIVAS",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:35.291Z"
+}

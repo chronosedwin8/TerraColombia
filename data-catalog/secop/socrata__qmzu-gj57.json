@@ -1,0 +1,301 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "qmzu-gj57",
+  "name": "SECOP II - Proveedores Registrados",
+  "description": "Información de los proveedores registrados en SECOP II",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "proveedores",
+    "secop ii"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/qmzu-gj57",
+  "webUri": "https://www.datos.gov.co/d/qmzu-gj57",
+  "homepage": null,
+  "createdAt": "2018-04-24T16:15:06+0000",
+  "dataUpdatedAt": "2026-09-21T12:08:21+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": 1612550,
+  "columns": [
+    {
+      "name": "espyme",
+      "jsType": "EsPyme",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sitio_web",
+      "jsType": "Sitio web",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_empresa",
+      "jsType": "Tipo Empresa",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre",
+      "jsType": "Nombre",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (nombre)."
+    },
+    {
+      "name": "esta_activa",
+      "jsType": "Esta Activa",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "es_entidad",
+      "jsType": "Es Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tama_o_entidad",
+      "jsType": "Tamaño Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit",
+      "jsType": "NIT",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (nit)."
+    },
+    {
+      "name": "codigo_categoria_principal",
+      "jsType": "Codigo Categoria Principal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_representante_legal",
+      "jsType": "Nombre representante legal",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "telefono",
+      "jsType": "Telefono",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (telefono)."
+    },
+    {
+      "name": "correo_representante_legal",
+      "jsType": "Correo representante legal",
+      "pii": true,
+      "piiReason": "Correo electrónico."
+    },
+    {
+      "name": "ubicacion",
+      "jsType": "Ubicación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "telefono_representante_legal",
+      "jsType": "Telefono representante legal",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "fecha_creacion",
+      "jsType": "Fecha Creación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo",
+      "jsType": "Codigo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "descripcion_categoria_principal",
+      "jsType": "Descripcion Categoria Principal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pais",
+      "jsType": "Pais",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion",
+      "jsType": "Direccion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_mero_doc_representante_legal",
+      "jsType": "Número doc representante legal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_doc_representante_legal",
+      "jsType": "Tipo doc representante legal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fax",
+      "jsType": "Fax",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (fax)."
+    },
+    {
+      "name": "correo",
+      "jsType": "Correo",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (correo)."
+    },
+    {
+      "name": "es_grupo",
+      "jsType": "Es grupo",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "codigo": "722697190",
+      "es_entidad": "No",
+      "es_grupo": "No",
+      "esta_activa": "Si",
+      "fecha_creacion": "2023-07-20T00:00:00.000",
+      "codigo_categoria_principal": "No Definido",
+      "descripcion_categoria_principal": "No Definido",
+      "direccion": "VEREDA PLAYA ALTA DE SAN PABLO NARIÑO",
+      "pais": "CO",
+      "departamento": "NARIÑO",
+      "municipio": "LA CRUZ",
+      "sitio_web": "No Provisto",
+      "tipo_empresa": "PERSONA NATURAL COLOMBIANA",
+      "tipo_doc_representante_legal": "Cédula de Ciudadanía",
+      "n_mero_doc_representante_legal": "[REDACTADO:co_cedula]",
+      "espyme": "NO",
+      "ubicacion": "CO-NAR-52378",
+      "tama_o_entidad": "No definido"
+    },
+    {
+      "codigo": "708611363",
+      "es_entidad": "No",
+      "es_grupo": "No",
+      "esta_activa": "Si",
+      "fecha_creacion": "2020-01-22T00:00:00.000",
+      "codigo_categoria_principal": "No Definido",
+      "descripcion_categoria_principal": "No Definido",
+      "direccion": "No Provisto",
+      "pais": "CO",
+      "departamento": "No Provisto",
+      "municipio": "No Provisto",
+      "sitio_web": "No Provisto",
+      "tipo_empresa": "PERSONA NATURAL COLOMBIANA",
+      "tipo_doc_representante_legal": "Cédula de Ciudadanía",
+      "n_mero_doc_representante_legal": "[REDACTADO:co_cedula]",
+      "espyme": "SI",
+      "ubicacion": "No definido",
+      "tama_o_entidad": "No definido"
+    },
+    {
+      "codigo": "705728061",
+      "es_entidad": "No",
+      "es_grupo": "No",
+      "esta_activa": "Si",
+      "fecha_creacion": "2018-11-23T00:00:00.000",
+      "codigo_categoria_principal": "No Definido",
+      "descripcion_categoria_principal": "No Definido",
+      "direccion": "No Provisto",
+      "pais": "CO",
+      "departamento": "No Provisto",
+      "municipio": "No Provisto",
+      "sitio_web": "No Provisto",
+      "tipo_empresa": "PERSONA NATURAL COLOMBIANA",
+      "tipo_doc_representante_legal": "Cédula de Ciudadanía",
+      "n_mero_doc_representante_legal": "[REDACTADO:co_cedula]",
+      "espyme": "NO",
+      "ubicacion": "No definido",
+      "tama_o_entidad": "No definido"
+    },
+    {
+      "codigo": "719406555",
+      "es_entidad": "No",
+      "es_grupo": "No",
+      "esta_activa": "Si",
+      "fecha_creacion": "2022-10-03T00:00:00.000",
+      "codigo_categoria_principal": "No Definido",
+      "descripcion_categoria_principal": "No Definido",
+      "direccion": "CALLE 15 NO. 44C - 132 BARRIO EL BUQUE",
+      "pais": "CO",
+      "departamento": "META",
+      "municipio": "VILLAVICENCIO",
+      "sitio_web": "No Provisto",
+      "tipo_empresa": "PERSONA NATURAL COLOMBIANA",
+      "tipo_doc_representante_legal": "Cédula de Ciudadanía",
+      "n_mero_doc_representante_legal": "[REDACTADO:co_cedula]",
+      "espyme": "NO",
+      "ubicacion": "CO-MET-50001",
+      "tama_o_entidad": "No definido"
+    },
+    {
+      "codigo": "727971723",
+      "es_entidad": "No",
+      "es_grupo": "No",
+      "esta_activa": "Si",
+      "fecha_creacion": "2024-08-16T00:00:00.000",
+      "codigo_categoria_principal": "No Definido",
+      "descripcion_categoria_principal": "No Definido",
+      "direccion": "CARRERA 3F NO. 7N-34 BARRIO EL DIVINO NIÑO PIEDECUESTA",
+      "pais": "CO",
+      "departamento": "SANTANDER",
+      "municipio": "PIEDECUESTA",
+      "sitio_web": "No Provisto",
+      "tipo_empresa": "PERSONA NATURAL COLOMBIANA",
+      "tipo_doc_representante_legal": "Cédula de Ciudadanía",
+      "n_mero_doc_representante_legal": "[REDACTADO:co_cedula]",
+      "espyme": "NO",
+      "ubicacion": "CO-SAN-68547",
+      "tama_o_entidad": "No definido"
+    }
+  ],
+  "piiDroppedColumns": [
+    "correo",
+    "correo_representante_legal",
+    "fax",
+    "nit",
+    "nombre",
+    "nombre_representante_legal",
+    "telefono",
+    "telefono_representante_legal"
+  ],
+  "piiRedactedColumns": [
+    "n_mero_doc_representante_legal"
+  ],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:40:48.419Z"
+}

@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "7g6s-xche",
+  "name": "Listado de sedes de los Establecimientos Educativos Oficiales (municipios no certificados) del Departamento del Atlántico.",
+  "description": "Listado de sedes de los Establecimientos Educativos Oficiales (municipios no certificados) del Departamento del Atlántico por municipio.",
+  "publisher": "Gobernación del Atlántico, Atlántico",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "atlantico",
+    "atlántico",
+    "gobernacion del atlantico",
+    "gobernación del atlántico",
+    "gobernación del atlantico",
+    "educación",
+    "listado",
+    "instituciones educativas",
+    "colegios oficiales"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación del Atlántico, Atlántico",
+  "dataUri": "https://www.datos.gov.co/resource/7g6s-xche",
+  "webUri": "https://www.datos.gov.co/d/7g6s-xche",
+  "homepage": null,
+  "createdAt": "2020-10-30T21:57:07+0000",
+  "dataUpdatedAt": "2020-10-30T22:02:56+0000",
+  "cutDate": "2020-10-30",
+  "geographicCoverage": null,
+  "rowCount": 204,
+  "columns": [
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_sede",
+      "jsType": "Nombre Sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_ee",
+      "jsType": "Nombre EE",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "direcci_n_sede",
+      "jsType": "Dirección Sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_sede",
+      "jsType": "Codigo Dane Sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_ee",
+      "jsType": "Codigo Dane EE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "Zona",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "municipio": "Baranoa",
+      "codigo_dane_ee": "208078000813",
+      "codigo_dane_sede": "208078000813",
+      "nombre_sede": "I.E. TECNICA MARIA INMACULADA DE PITAL DE MEGUA",
+      "direcci_n_sede": "KR 15 11 96",
+      "zona": "RURAL"
+    },
+    {
+      "municipio": "Baranoa",
+      "codigo_dane_ee": "208078000201",
+      "codigo_dane_sede": "208078000201",
+      "nombre_sede": "INSTITUCION EDUCATIVA DE SIBARCO",
+      "direcci_n_sede": "CALLE 3 NO. 3-36",
+      "zona": "RURAL"
+    },
+    {
+      "municipio": "Baranoa",
+      "codigo_dane_ee": "108078000673",
+      "codigo_dane_sede": "108078000673",
+      "nombre_sede": "INSTITUCION EDUCATIVA TECNICA AGROPECUARIA DE CAMPECHE",
+      "direcci_n_sede": "CALLE 6A  16 - 115",
+      "zona": "RURAL"
+    },
+    {
+      "municipio": "Baranoa",
+      "codigo_dane_ee": "108078000215",
+      "codigo_dane_sede": "108078000215",
+      "nombre_sede": "INSTITUCION EDUCATIVA TECNICO INDUSTRIAL PEDRO A. OÑORO DE BARANOA",
+      "direcci_n_sede": "CALLE 12  19 - 409",
+      "zona": "URBANA"
+    },
+    {
+      "municipio": "Baranoa",
+      "codigo_dane_ee": "108078000151",
+      "codigo_dane_sede": "108078000151",
+      "nombre_sede": "INSTITUCION EDUCATIVA FRANCISCO JOSE DE CALDAS",
+      "direcci_n_sede": "CALLE 14  21 - 35",
+      "zona": "URBANA"
+    }
+  ],
+  "piiDroppedColumns": [
+    "nombre_ee"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:21.229Z"
+}

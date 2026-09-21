@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "ngw5-c5nw",
+  "name": "MEN_MATRICULA_EN_EDUCACION_EN_PREESCOLAR, BÁSICA Y MEDIA",
+  "description": "Contiene la información estadística de los estudiantes matriculados en Educación Preescolar Básica y Media de Colombia, del año 2010 al 2025.",
+  "publisher": "Ministerio de Educación Nacional",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "educación",
+    "matrícula",
+    "preescolar básica y media"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Educación Nacional",
+  "dataUri": "https://www.datos.gov.co/resource/ngw5-c5nw",
+  "webUri": "https://www.datos.gov.co/d/ngw5-c5nw",
+  "homepage": null,
+  "createdAt": "2016-09-29T20:22:29+0000",
+  "dataUpdatedAt": "2026-08-27T14:55:51+0000",
+  "cutDate": "2026-08-27",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "cod_dane_departamento",
+      "jsType": "COD_DANE_DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane",
+      "jsType": "CODIGO_DANE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_dane_municipio",
+      "jsType": "COD_DANE_MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sector_conpes",
+      "jsType": "COD_SECTOR_CONPES",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "secretaria",
+      "jsType": "SECRETARIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_sed",
+      "jsType": "COD_SECRETARIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "anno_inf",
+      "jsType": "ANNO_INF",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sector",
+      "jsType": "SECTOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "especialidad",
+      "jsType": "ESPECIALIDAD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cte_id_sector",
+      "jsType": "COD_SECTOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_grado",
+      "jsType": "COD_GRADO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado",
+      "jsType": "GRADO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cte_id_zona",
+      "jsType": "COD_ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "genero_1",
+      "jsType": "GENERO",
+      "pii": true,
+      "piiReason": "Dato sensible de la persona (Ley 1581/2012, art. 5)."
+    },
+    {
+      "name": "cte_id_calendario",
+      "jsType": "COD_CALENDARIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grupo_etnico",
+      "jsType": "COD_GRUPO_ETNICO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cte_caracter",
+      "jsType": "COD_CARACTER",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "metodologia",
+      "jsType": "METODOLOGIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "caracter",
+      "jsType": "CARACTER",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_establecimiento",
+      "jsType": "NOMBRE_ESTABLECIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "edad",
+      "jsType": "EDAD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grupo_etnico_2",
+      "jsType": "GRUPO_ETNICO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "calendario",
+      "jsType": "CALENDARIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cte_metodologia",
+      "jsType": "COD_METODOLOGIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_sede",
+      "jsType": "CODIGO_DANE_SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cte_tipo_jornada",
+      "jsType": "COD_TIPO_JORNADA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_matricula",
+      "jsType": "TOTAL_MATRICULA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_sede",
+      "jsType": "NOMBRE_SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_jornada",
+      "jsType": "TIPO_JORNADA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sector_conpes_2",
+      "jsType": "SECTOR_CONPES",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_especialidad",
+      "jsType": "COD_ESPECIALIDAD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "genero",
+      "jsType": "COD_GENERO",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (genero)."
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "genero_1",
+    "genero"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:34.735Z"
+}

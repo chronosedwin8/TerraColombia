@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="TerraColombia">
+  <rect width="32" height="32" rx="6" fill="#1c4f42" />
+  <path d="M6 22.5 12.5 11l5 8 3-4.5L26 22.5Z" fill="#76b8a3" />
+  <circle cx="11" cy="8.5" r="2.5" fill="#d4e9e1" />
+</svg>

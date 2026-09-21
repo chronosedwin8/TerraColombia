@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "source": "minsalud",
+  "connector": "socrata",
+  "id": "thui-g47e",
+  "name": "Clicsalud- Indicadores de calidad IPS",
+  "description": "Brinda información de las IP, para darse cuenta de la calidad de la atención en salud que reciben los usuarios del Sistema General de Seguridad Social en Salud (SGSSS).\nDiligencia la Encuesta de Satisfacción:\nhttps://tramites.minsalud.gov.co/FormularioInscripcion/EncuestaSatisfaccion.aspx",
+  "publisher": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "calidad en salud",
+    "instituciones prestadores de salud",
+    "minsalud"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/thui-g47e",
+  "webUri": "https://www.datos.gov.co/d/thui-g47e",
+  "homepage": null,
+  "createdAt": "2016-07-14T23:40:35+0000",
+  "dataUpdatedAt": "2022-05-26T16:38:55+0000",
+  "cutDate": "2022-05-26",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "nomfuente",
+      "jsType": "nomfuente",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "coddepartamento",
+      "jsType": "coddepartamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "enlace",
+      "jsType": "enlace",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "periodo",
+      "jsType": "periodo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "denominador",
+      "jsType": "denominador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nomcategorias",
+      "jsType": "nomcategorias",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nomindicador",
+      "jsType": "nomindicador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ips",
+      "jsType": "ips",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nomespecifique",
+      "jsType": "nomespecifique",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numerador",
+      "jsType": "numerador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codmunicipio",
+      "jsType": "codmunicipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nomunidad",
+      "jsType": "nomunidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "idips",
+      "jsType": "idips",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "resultado",
+      "jsType": "resultado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nomservicio",
+      "jsType": "nomservicio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "departamento",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:38:34.131Z"
+}

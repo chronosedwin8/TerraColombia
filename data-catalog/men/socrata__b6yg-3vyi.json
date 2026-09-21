@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "b6yg-3vyi",
+  "name": "ESTUDIANTES CON DISCAPACIDAD DEPARTAMENTO DE SANTANDER",
+  "description": "Estudiantes matriculados en planteles educativos oficiales y no oficiales correspondiente a los 82 municipios no certificados del Departamento de Santander  y que se identifican como personas con discapacidad.",
+  "publisher": "Gobernación de Santander, Santander",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "discapacidad",
+    "estudiantes matriculados",
+    "alumnos",
+    "colegios oficiales",
+    "colegios no oficiales"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Santander, Santander",
+  "dataUri": "https://www.datos.gov.co/resource/b6yg-3vyi",
+  "webUri": "https://www.datos.gov.co/d/b6yg-3vyi",
+  "homepage": null,
+  "createdAt": "2017-03-15T14:48:22+0000",
+  "dataUpdatedAt": "2026-09-01T15:44:31+0000",
+  "cutDate": "2026-09-01",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "d_sede",
+      "jsType": "d_sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "etnia",
+      "jsType": "etnia",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (etnia)."
+    },
+    {
+      "name": "d_grado",
+      "jsType": "d_grado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_mujeres",
+      "jsType": "d_mujeres",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_genero",
+      "jsType": "d_genero",
+      "pii": true,
+      "piiReason": "Dato sensible de la persona (Ley 1581/2012, art. 5)."
+    },
+    {
+      "name": "d_nomzon",
+      "jsType": "d_nomzon",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_nombsede",
+      "jsType": "d_nombsede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "desplazado",
+      "jsType": "desplazado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_hombres",
+      "jsType": "d_hombres",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_muni",
+      "jsType": "d_muni",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_nomsec",
+      "jsType": "d_nomsec",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dane_ant",
+      "jsType": "dane_ant",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_nombinst",
+      "jsType": "d_nombinst",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_nombmuni",
+      "jsType": "d_nombmuni",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_nomjor",
+      "jsType": "d_nomjor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_edad",
+      "jsType": "d_edad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_a_o",
+      "jsType": "d_año",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_tipo",
+      "jsType": "d_tipo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_provincia",
+      "jsType": "d_provincia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_total",
+      "jsType": "d_total",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "etnia",
+    "d_genero"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:32.191Z"
+}

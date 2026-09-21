@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "source": "minsalud",
+  "connector": "socrata",
+  "id": "c36g-9fc2",
+  "name": "Registro Especial de Prestadores y Sedes de Servicios de Salud",
+  "description": "Registro Especial de Prestadores  y Sedes de Servicios de Salud, por clase de prestador IPS-Instituciones Prestadoras de Servicios de Salud.",
+  "publisher": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "ministerio de salud y protección social",
+    "reps"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/c36g-9fc2",
+  "webUri": "https://www.datos.gov.co/d/c36g-9fc2",
+  "homepage": null,
+  "createdAt": "2016-07-14T22:31:05+0000",
+  "dataUpdatedAt": "2026-04-17T19:57:23+0000",
+  "cutDate": "2026-04-17",
+  "geographicCoverage": null,
+  "rowCount": 76821,
+  "columns": [
+    {
+      "name": "municipiosededesc",
+      "jsType": "MunicipioSedeDesc",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipioprestadordesc",
+      "jsType": "MunicipioPrestadorDesc",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigoprestador",
+      "jsType": "CodigoPrestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "t_lefonosede",
+      "jsType": "TelefonoSede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamentoprestadordesc",
+      "jsType": "DepartamentoPrestadorDesc",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numeroidentificacion",
+      "jsType": "NumeroIdentificacion",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "ese",
+      "jsType": "ESE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "email_prestador",
+      "jsType": "EmailPrestador",
+      "pii": true,
+      "piiReason": "Correo electrónico."
+    },
+    {
+      "name": "naturalezajuridica",
+      "jsType": "NaturalezaJuridica",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_corte_reps",
+      "jsType": "FechaCorte",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigohabilitacionsede",
+      "jsType": "CodigoHabilitacionSede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombresede",
+      "jsType": "NombreSede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipoid",
+      "jsType": "TipoIdentificacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipiosede",
+      "jsType": "MunicipioSede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamentodededesc",
+      "jsType": "DepartamentoSedeDesc",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccionprestador",
+      "jsType": "DireccionPrestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombreprestador",
+      "jsType": "NombrePrestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "email_sede",
+      "jsType": "EmailSede",
+      "pii": true,
+      "piiReason": "Correo electrónico."
+    },
+    {
+      "name": "municipio_prestador",
+      "jsType": "MunicipioPrestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "telefonoprestador",
+      "jsType": "TelefonoPrestador",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "direcci_nsede",
+      "jsType": "DireccionSede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "claseprestador",
+      "jsType": "ClasePrestadorDesc",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "codigoprestador": "[REDACTADO:co_cedula]",
+      "nombreprestador": "MANUEL DE JESUS LUBO OROZCO",
+      "codigohabilitacionsede": "910010001701",
+      "nombresede": "MANUEL DE JESUS LUBO OROZCO",
+      "tipoid": "CC",
+      "naturalezajuridica": "Privada",
+      "ese": "NO",
+      "municipio_prestador": "91001",
+      "departamentoprestadordesc": "Amazonas",
+      "municipioprestadordesc": "LETICIA",
+      "direccionprestador": "Carrera 6 No. 10-12 Local 2",
+      "municipiosede": "91001",
+      "departamentodededesc": "Amazonas",
+      "municipiosededesc": "LETICIA",
+      "direcci_nsede": "Carrera 6 No. 10-12 Local 2",
+      "t_lefonosede": "[REDACTADO:co_phone]",
+      "claseprestador": "Profesional Independiente",
+      "fecha_corte_reps": "Fecha corte REPS: Mar 12 2026  3:11PM"
+    },
+    {
+      "codigoprestador": "[REDACTADO:co_cedula]",
+      "nombreprestador": "E.S.E. HOSPITAL SAN RAFAEL DE LETICIA",
+      "codigohabilitacionsede": "910010001901",
+      "nombresede": "E.S.E. HOSPITAL SAN RAFAEL",
+      "tipoid": "NI",
+      "naturalezajuridica": "Pública",
+      "ese": "SI",
+      "municipio_prestador": "91001",
+      "departamentoprestadordesc": "Amazonas",
+      "municipioprestadordesc": "LETICIA",
+      "direccionprestador": "Carrera 10  NO. 13-78 Leticia (Amazonas)",
+      "municipiosede": "91001",
+      "departamentodededesc": "Amazonas",
+      "municipiosededesc": "LETICIA",
+      "direcci_nsede": "CRA 10 # 13-78",
+      "claseprestador": "Instituciones Prestadoras de Servicios de Salud - IPS",
+      "fecha_corte_reps": "Fecha corte REPS: Mar 12 2026  3:11PM"
+    },
+    {
+      "codigoprestador": "[REDACTADO:co_cedula]",
+      "nombreprestador": "E.S.E. HOSPITAL SAN RAFAEL DE LETICIA",
+      "codigohabilitacionsede": "912630001911",
+      "nombresede": "CENTRO DE SALUD SAN RAFAEL - E.S.E HOSPITAL SAN RAFAEL DE LETICIA",
+      "tipoid": "NI",
+      "naturalezajuridica": "Pública",
+      "ese": "SI",
+      "municipio_prestador": "91001",
+      "departamentoprestadordesc": "Amazonas",
+      "municipioprestadordesc": "LETICIA",
+      "direccionprestador": "Carrera 10  NO. 13-78 Leticia (Amazonas)",
+      "municipiosede": "91263",
+      "departamentodededesc": "Amazonas",
+      "municipiosededesc": "EL ENCANTO",
+      "direcci_nsede": "CORREGIMIENTO DEL ENCANTO",
+      "t_lefonosede": "[REDACTADO:co_phone]",
+      "claseprestador": "Instituciones Prestadoras de Servicios de Salud - IPS",
+      "fecha_corte_reps": "Fecha corte REPS: Mar 12 2026  3:11PM"
+    },
+    {
+      "codigoprestador": "[REDACTADO:co_cedula]",
+      "nombreprestador": "E.S.E. HOSPITAL SAN RAFAEL DE LETICIA",
+      "codigohabilitacionsede": "914050001914",
+      "nombresede": "CENTRO DE SALUD DE LA CHORRERA- E.S.E HOSPITAL SAN RAFAEL DE LETICIA",
+      "tipoid": "NI",
+      "naturalezajuridica": "Pública",
+      "ese": "SI",
+      "municipio_prestador": "91001",
+      "departamentoprestadordesc": "Amazonas",
+      "municipioprestadordesc": "LETICIA",
+      "direccionprestador": "Carrera 10  NO. 13-78 Leticia (Amazonas)",
+      "municipiosede": "91405",
+      "departamentodededesc": "Amazonas",
+      "municipiosededesc": "LA CHORRERA",
+      "direcci_nsede": "CORREGIMIENTO DE LA CHORRERA",
+      "t_lefonosede": "[REDACTADO:co_phone]",
+      "claseprestador": "Instituciones Prestadoras de Servicios de Salud - IPS",
+      "fecha_corte_reps": "Fecha corte REPS: Mar 12 2026  3:11PM"
+    },
+    {
+      "codigoprestador": "[REDACTADO:co_cedula]",
+      "nombreprestador": "E.S.E. HOSPITAL SAN RAFAEL DE LETICIA",
+      "codigohabilitacionsede": "914070001915",
+      "nombresede": "CENTRO DE SALUD DE LA PEDRERA - E.S.E HOSPITAL SAN RAFAEL DE LETICIA",
+      "tipoid": "NI",
+      "naturalezajuridica": "Pública",
+      "ese": "SI",
+      "municipio_prestador": "91001",
+      "departamentoprestadordesc": "Amazonas",
+      "municipioprestadordesc": "LETICIA",
+      "direccionprestador": "Carrera 10  NO. 13-78 Leticia (Amazonas)",
+      "municipiosede": "91407",
+      "departamentodededesc": "Amazonas",
+      "municipiosededesc": "LA PEDRERA",
+      "direcci_nsede": "CORREGIMIENTO DE LA PEDRERA",
+      "t_lefonosede": "[REDACTADO:co_phone]",
+      "claseprestador": "Instituciones Prestadoras de Servicios de Salud - IPS",
+      "fecha_corte_reps": "Fecha corte REPS: Mar 12 2026  3:11PM"
+    }
+  ],
+  "piiDroppedColumns": [
+    "email_prestador",
+    "email_sede",
+    "numeroidentificacion",
+    "telefonoprestador"
+  ],
+  "piiRedactedColumns": [
+    "codigoprestador",
+    "t_lefonosede"
+  ],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:53.512Z"
+}

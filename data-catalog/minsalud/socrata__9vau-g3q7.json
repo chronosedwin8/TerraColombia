@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "source": "minsalud",
+  "connector": "socrata",
+  "id": "9vau-g3q7",
+  "name": "Sedes de prestadores con servicio de vacunación",
+  "description": "Sedes de prestadores con servicio de vacunación. Fecha de corte: 13 de abril de 2023\nDiligencia la Encuesta de Satisfacción:\nhttps://tramites.minsalud.gov.co/FormularioInscripcion/EncuestaSatisfaccion.aspx",
+  "publisher": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "vacunación",
+    "prestadores habilitados",
+    "registro de prestadores"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/9vau-g3q7",
+  "webUri": "https://www.datos.gov.co/d/9vau-g3q7",
+  "homepage": null,
+  "createdAt": "2022-05-18T17:10:24+0000",
+  "dataUpdatedAt": "2023-07-25T23:31:47+0000",
+  "cutDate": "2023-07-25",
+  "geographicCoverage": null,
+  "rowCount": 3962,
+  "columns": [
+    {
+      "name": "numero_sede",
+      "jsType": "numero_sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombresedeprestador",
+      "jsType": "nombresedeprestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "barrio_sede_prestador",
+      "jsType": "barrio_sede_prestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento_divipola_sede",
+      "jsType": "departamento_divipola_sede_prestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit",
+      "jsType": "nit",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (nit)."
+    },
+    {
+      "name": "municipio",
+      "jsType": "municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "clase_prestador",
+      "jsType": "clase_prestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion_sede_prestador",
+      "jsType": "direccion_sede_prestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_corte_reps",
+      "jsType": "fecha_corte_REPS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "habi_codigo_habilitacion",
+      "jsType": "habi_codigo_habilitacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "serv_codigo",
+      "jsType": "serv_codigo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_servicio",
+      "jsType": "nombre_servicio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio_divipola_sede",
+      "jsType": "municipio_divipola_sede_prestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_habilitacion",
+      "jsType": "codigo_habilitacion",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "departamento": "Antioquia",
+      "departamento_divipola_sede": "05",
+      "municipio": "APARTADÓ",
+      "municipio_divipola_sede": "05045",
+      "habi_codigo_habilitacion": "500109099",
+      "codigo_habilitacion": "504509099",
+      "numero_sede": "39",
+      "nombresedeprestador": "PROMEDAN IPS ALFONSO LÓPEZ APARTADÓ",
+      "clase_prestador": "Instituciones Prestadoras de Servicios de Salud - IPS",
+      "serv_codigo": "420",
+      "nombre_servicio": "VACUNACIÓN",
+      "barrio_sede_prestador": "ALFONSO LOPEZ",
+      "direccion_sede_prestador": "KR 82 B  # 97-07",
+      "fecha_corte_reps": "2023-04-13T00:00:00.000"
+    },
+    {
+      "departamento": "Antioquia",
+      "departamento_divipola_sede": "05",
+      "municipio": "CAUCASIA",
+      "municipio_divipola_sede": "05154",
+      "habi_codigo_habilitacion": "500109099",
+      "codigo_habilitacion": "515409099",
+      "numero_sede": "30",
+      "nombresedeprestador": "PROMEDAN IPS CAUCASIA",
+      "clase_prestador": "Instituciones Prestadoras de Servicios de Salud - IPS",
+      "serv_codigo": "420",
+      "nombre_servicio": "VACUNACIÓN",
+      "barrio_sede_prestador": "LAS GAVIOTAS MALL CANDILEJAS",
+      "direccion_sede_prestador": "CARRERA 20 No 28-24",
+      "fecha_corte_reps": "2023-04-13T00:00:00.000"
+    },
+    {
+      "departamento": "Antioquia",
+      "departamento_divipola_sede": "05",
+      "municipio": "ENVIGADO",
+      "municipio_divipola_sede": "05266",
+      "habi_codigo_habilitacion": "500109509",
+      "codigo_habilitacion": "526609509",
+      "numero_sede": "2",
+      "nombresedeprestador": "ASESORIAS Y SOLUCIONES INTEGRALES EN SALUD A&S S.A.",
+      "clase_prestador": "Instituciones Prestadoras de Servicios de Salud - IPS",
+      "serv_codigo": "420",
+      "nombre_servicio": "VACUNACIÓN",
+      "barrio_sede_prestador": "NULL",
+      "direccion_sede_prestador": "CARRERA 41 N° 33 B SUR 36",
+      "fecha_corte_reps": "2023-04-13T00:00:00.000"
+    },
+    {
+      "departamento": "Antioquia",
+      "departamento_divipola_sede": "05",
+      "municipio": "MEDELLÍN",
+      "municipio_divipola_sede": "05001",
+      "habi_codigo_habilitacion": "500118050",
+      "codigo_habilitacion": "500118050",
+      "numero_sede": "1",
+      "nombresedeprestador": "SALUD OCUPACIONAL DE LOS ANDES LTDA",
+      "clase_prestador": "Instituciones Prestadoras de Servicios de Salud - IPS",
+      "serv_codigo": "420",
+      "nombre_servicio": "VACUNACIÓN",
+      "barrio_sede_prestador": "Campo Amor",
+      "direccion_sede_prestador": "Calle 8 B 65 191 INMUEBLE COMERCIAL # 65-150",
+      "fecha_corte_reps": "2023-04-13T00:00:00.000"
+    },
+    {
+      "departamento": "Antioquia",
+      "departamento_divipola_sede": "05",
+      "municipio": "MEDELLÍN",
+      "municipio_divipola_sede": "05001",
+      "habi_codigo_habilitacion": "500118128",
+      "codigo_habilitacion": "500118128",
+      "numero_sede": "1",
+      "nombresedeprestador": "fundacion integral de servicios medicos (fismedic)",
+      "clase_prestador": "Instituciones Prestadoras de Servicios de Salud - IPS",
+      "serv_codigo": "420",
+      "nombre_servicio": "VACUNACIÓN",
+      "barrio_sede_prestador": "BELEN LA PALMA",
+      "direccion_sede_prestador": "kra 45 N° 55-53",
+      "fecha_corte_reps": "2023-04-13T00:00:00.000"
+    }
+  ],
+  "piiDroppedColumns": [
+    "nit"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:38:05.953Z"
+}

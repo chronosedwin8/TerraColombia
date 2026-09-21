@@ -1,0 +1,257 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — pruebas de extremo a extremo (Playwright)
+#
+# Levanta la pila real (PostGIS + Redis + API + web construida y servida) y
+# ejecuta los recorridos de usuario. Es la única comprobación que verifica lo
+# que el plan considera el criterio de aceptación de la Fase 3: que una persona
+# encuentre un predio y entienda su ficha.
+#
+# Va en su propio workflow y no en `ci.yml` porque es lenta (10–20 min) y no
+# tiene sentido correrla en cada commit de un borrador. Se dispara:
+#   · en pull requests que no sean borradores,
+#   · en push a main/develop,
+#   · a mano.
+# ═════════════════════════════════════════════════════════════════════════════
+
+name: E2E
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      grep:
+        description: 'Filtrar pruebas por título (opcional)'
+        required: false
+        type: string
+
+concurrency:
+  group: e2e-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    name: Playwright (${{ matrix.navegador }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    # No gastar minutos en borradores.
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # Chromium siempre. Firefox y WebKit solo en las ramas principales:
+        # en los PR aportan poco y triplican el tiempo.
+        navegador: [chromium]
+        include:
+          - navegador: chromium
+            principal: true
+
+    services:
+      postgis:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres # base efímera del runner, sin datos reales
+          POSTGRES_DB: terracolombia_e2e
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d terracolombia_e2e"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+          --health-start-period=20s
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/terracolombia_e2e
+      REDIS_URL: redis://localhost:6379
+      STORAGE_LOCAL_DIR: ./storage-e2e
+      JWT_SECRET: solo-para-e2e-no-es-un-secreto-real-0123456789
+      JWT_REFRESH_SECRET: solo-para-e2e-otro-distinto-9876543210abcdef
+      API_PORT: 3001
+      API_HOST: 127.0.0.1
+      PUBLIC_API_URL: http://127.0.0.1:3001
+      WEB_ORIGIN: http://127.0.0.1:4173
+      # La web se construye apuntando a la API local del runner.
+      VITE_API_URL: http://127.0.0.1:3001
+      # Proveedor de pagos simulado: nunca se llama a Wompi desde CI.
+      PAYMENT_PROVIDER: mock
+      # Sin llave de IA: el asistente devuelve "no disponible" y las pruebas lo
+      # comprueban (es el comportamiento correcto, no un fallo).
+      ANTHROPIC_API_KEY: ''
+      NODE_ENV: test
+      TZ: America/Bogota
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.playwright-browsers
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Instalar Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      # Los navegadores pesan ~500 MB: con caché, las corridas siguientes se
+      # ahorran la descarga.
+      - name: Caché de navegadores de Playwright
+        id: cache-navegadores
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Instalar navegadores de Playwright
+        run: pnpm exec playwright install --with-deps ${{ matrix.navegador }}
+
+      - name: Instalar GDAL
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends gdal-bin
+
+      - name: Preparar la base de datos
+        env:
+          PGPASSWORD: postgres
+        run: |
+          set -euo pipefail
+          psql -h localhost -U postgres -d terracolombia_e2e -v ON_ERROR_STOP=1 \
+               -f infra/postgres/init/01-extensions.sql
+          pnpm db:migrate
+          pnpm db:seed
+
+      - name: Construir la aplicación
+        run: pnpm build
+
+      # Los servidores se levantan en segundo plano y se espera a que respondan.
+      # No se usa el `webServer` de Playwright porque hay dos procesos (API y
+      # web) y aquí el registro de cada uno queda en un archivo aparte, que es
+      # lo que de verdad se necesita cuando una prueba falla.
+      - name: Levantar la API
+        run: |
+          mkdir -p e2e-logs
+          pnpm --filter @terracolombia/api start > e2e-logs/api.log 2>&1 &
+          echo $! > e2e-logs/api.pid
+
+      - name: Levantar la web
+        run: |
+          pnpm --filter @terracolombia/web exec vite preview \
+            --host 127.0.0.1 --port 4173 --strictPort > e2e-logs/web.log 2>&1 &
+          echo $! > e2e-logs/web.pid
+
+      - name: Esperar a que ambos respondan
+        run: |
+          set -euo pipefail
+          esperar() {
+            local url="$1" nombre="$2" intentos=60
+            echo "Esperando $nombre en $url …"
+            until curl -fsS --max-time 2 "$url" > /dev/null 2>&1; do
+              intentos=$((intentos - 1))
+              if [ "$intentos" -le 0 ]; then
+                echo "::error::$nombre no respondió en 60 intentos."
+                echo "─── registro de $nombre ───"
+                cat "e2e-logs/$(echo "$nombre" | tr 'A-Z' 'a-z').log" 2>/dev/null | tail -n 80 || true
+                exit 1
+              fi
+              sleep 1
+            done
+            echo "OK: $nombre responde."
+          }
+          esperar 'http://127.0.0.1:3001/health' 'api'
+          esperar 'http://127.0.0.1:4173/' 'web'
+
+      - name: Comprobar que /ready ve todas las dependencias
+        run: |
+          set -euo pipefail
+          respuesta="$(curl -fsS http://127.0.0.1:3001/ready)"
+          echo "$respuesta"
+          echo "$respuesta" | grep -q '"database"' || {
+            echo "::error::/ready no reporta el estado de la base de datos."
+            exit 1
+          }
+
+      - name: Ejecutar las pruebas end-to-end
+        run: |
+          pnpm --filter @terracolombia/web exec playwright test \
+            --project=${{ matrix.navegador }} \
+            ${{ github.event.inputs.grep && format('--grep "{0}"', github.event.inputs.grep) || '' }}
+
+      - name: Detener los servidores
+        if: always()
+        run: |
+          for p in e2e-logs/api.pid e2e-logs/web.pid; do
+            [ -f "$p" ] && kill "$(cat "$p")" 2>/dev/null || true
+          done
+
+      # El informe HTML de Playwright, con capturas y vídeo de los fallos, es
+      # lo único que permite entender un fallo que no se reproduce en local.
+      - name: Subir el informe de Playwright
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: informe-playwright-${{ matrix.navegador }}
+          path: |
+            apps/web/playwright-report/**
+            apps/web/test-results/**
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Subir los registros de los servidores
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: registros-servidores-${{ matrix.navegador }}
+          path: e2e-logs/*.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Resumen en la pestaña Actions
+        if: always()
+        run: |
+          {
+            echo "## Pruebas end-to-end · ${{ matrix.navegador }}"
+            echo ""
+            echo "- Resultado: **${{ job.status }}**"
+            echo "- Informe HTML: artefacto \`informe-playwright-${{ matrix.navegador }}\`"
+            echo "- Base de datos: semilla del municipio piloto (snapshot sintético, ADR-006)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # Navegadores adicionales solo en las ramas principales.
+  e2e-navegadores-extra:
+    name: Playwright (${{ matrix.navegador }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    if: github.event_name == 'push'
+    needs: [e2e]
+    strategy:
+      fail-fast: false
+      matrix:
+        navegador: [firefox, webkit]
+    steps:
+      - name: Marcador
+        run: |
+          echo "::notice::La cobertura en ${{ matrix.navegador }} se activará junto con la Fase 11 (endurecimiento)."
+          echo "Hasta entonces, chromium es el único navegador con pruebas e2e obligatorias:"
+          echo "es el motor que usa el generador de informes PDF y cubre el 80 % del tráfico esperado."

@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "source": "minsalud",
+  "connector": "socrata",
+  "id": "kjjp-kasm",
+  "name": "Número de prestadores de servicios de salud por departamento, clase de prestador, año y naturaleza jurídica",
+  "description": "Número de prestadores de servicios de salud por departamento, clase de prestador, año y naturaleza jurídica a partir del 2017.\nDiligencia la Encuesta de Satisfacción:\nhttps://tramites.minsalud.gov.co/FormularioInscripcion/EncuestaSatisfaccion.aspx",
+  "publisher": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/kjjp-kasm",
+  "webUri": "https://www.datos.gov.co/d/kjjp-kasm",
+  "homepage": null,
+  "createdAt": "2021-09-10T02:36:45+0000",
+  "dataUpdatedAt": "2022-11-21T21:34:18+0000",
+  "cutDate": "2022-11-21",
+  "geographicCoverage": null,
+  "rowCount": 1114,
+  "columns": [
+    {
+      "name": "departamento",
+      "jsType": "Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "Año",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "clase_prestador",
+      "jsType": "Clase prestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cantidad_de_prestadores",
+      "jsType": "Cantidad de prestadores",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "naturaleza",
+      "jsType": "Naturaleza",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "departamento": "Amazonas",
+      "clase_prestador": "Instituciones - IPS",
+      "naturaleza": "Privada",
+      "a_o": "2017",
+      "cantidad_de_prestadores": "12"
+    },
+    {
+      "departamento": "Amazonas",
+      "clase_prestador": "Instituciones - IPS",
+      "naturaleza": "Privada",
+      "a_o": "2018",
+      "cantidad_de_prestadores": "12"
+    },
+    {
+      "departamento": "Amazonas",
+      "clase_prestador": "Instituciones - IPS",
+      "naturaleza": "Privada",
+      "a_o": "2019",
+      "cantidad_de_prestadores": "12"
+    },
+    {
+      "departamento": "Amazonas",
+      "clase_prestador": "Instituciones - IPS",
+      "naturaleza": "Privada",
+      "a_o": "2020",
+      "cantidad_de_prestadores": "11"
+    },
+    {
+      "departamento": "Amazonas",
+      "clase_prestador": "Instituciones - IPS",
+      "naturaleza": "Pública",
+      "a_o": "2017",
+      "cantidad_de_prestadores": "2"
+    }
+  ],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:54.418Z"
+}

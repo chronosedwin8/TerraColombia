@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "xeb3-fi75",
+  "name": "Matricula total en el Departamento de Risaralda",
+  "description": "Corresponde al número de estudiantes matriculados en los niveles educativos del sistema de educación formal oficial, independiente de la edad que tengan.",
+  "publisher": "Gobernación de Risaralda, Risaralda",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "matriculados",
+    "estudiantes matriculados",
+    "educación preescolar básica y media"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Risaralda, Risaralda",
+  "dataUri": "https://www.datos.gov.co/resource/xeb3-fi75",
+  "webUri": "https://www.datos.gov.co/d/xeb3-fi75",
+  "homepage": null,
+  "createdAt": "2022-10-11T14:54:08+0000",
+  "dataUpdatedAt": "2025-08-31T03:56:34+0000",
+  "cutDate": "2025-08-31",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor",
+      "jsType": "Valor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "variable",
+      "jsType": "Variable",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "Año",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:44.262Z"
+}

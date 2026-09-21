@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "b28v-edj8",
+  "name": "SECOPII - Ofertas Por Proceso Historico",
+  "description": "Registro de las Ofertas cargadas en el sistema, por cada proceso de compra publica, hasta el 31 de diciembre de 2023",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "ofertas",
+    "secop ii",
+    "compra pública",
+    "contratacion"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/b28v-edj8",
+  "webUri": "https://www.datos.gov.co/d/b28v-edj8",
+  "homepage": null,
+  "createdAt": "2025-07-29T04:29:32+0000",
+  "dataUpdatedAt": "2026-09-21T12:59:21+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "entidad_compradora",
+      "jsType": "Entidad Compradora",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "descripcion_del_procedimiento",
+      "jsType": "Descripcion del Procedimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "invitacion_directa",
+      "jsType": "Invitacion Directa",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_del_proceso_de_compra",
+      "jsType": "ID del Proceso de Compra",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "referencia_de_la_oferta",
+      "jsType": "Referencia de la Oferta",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_proveedor",
+      "jsType": "Nombre Proveedor",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "c_digo_proveedor",
+      "jsType": "Código Proveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_registro",
+      "jsType": "Fecha de Registro",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_entidad",
+      "jsType": "Código Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_del_proveedor",
+      "jsType": "NIT del Proveedor",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "valor_de_la_oferta",
+      "jsType": "Valor de la Oferta",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "modalidad",
+      "jsType": "Modalidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_entidad_compradora",
+      "jsType": "NIT Entidad Compradora",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "referencia_del_proceso",
+      "jsType": "Referencia del Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "moneda",
+      "jsType": "Moneda",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "identificador_de_la_oferta",
+      "jsType": "Identificador de la Oferta",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nombre_proveedor",
+    "nit_del_proveedor",
+    "nit_entidad_compradora"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:07.292Z"
+}

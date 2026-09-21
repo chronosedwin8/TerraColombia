@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "skc9-met7",
+  "name": "SECOP II - Compromisos Presupuestales",
+  "description": "En el desarrollo de la ejecución de un contrato, un proceso de compra genera solicitudes para aprobar el compromiso presupuestal para el cual fue planteado, los compromisos presupeustales son aprobados por el Ministerio de Hacienda a través de una interoperabiidad con la plataforma del SIIF, cada consulta en el sistema corresponde a uno de los ítems asociados al proceso de compra pública",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "compromiso presupuestal",
+    "ejecución gastos presupuestal",
+    "siif",
+    "vigencias futuras",
+    "presupuesto",
+    "ejecución",
+    "gastos"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/skc9-met7",
+  "webUri": "https://www.datos.gov.co/d/skc9-met7",
+  "homepage": null,
+  "createdAt": "2019-10-01T04:42:57+0000",
+  "dataUpdatedAt": "2026-09-17T09:53:48+0000",
+  "cutDate": "2026-09-17",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "valor_a_liberar",
+      "jsType": "Valor a Liberar",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_registro_item",
+      "jsType": "Fecha Registro Item",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "balance_compromiso",
+      "jsType": "Saldo de compromisos CDP",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_item",
+      "jsType": "Saldo total comprometido",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_integraci_n_item",
+      "jsType": "Estado Compromiso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "balance_vigencia_futura",
+      "jsType": "Saldo de compromisos AVF",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_contrato",
+      "jsType": "ID Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_integraci_n",
+      "jsType": "Ultima consulta al SIIF",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "identificador_item",
+      "jsType": "Identificador Item",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_item",
+      "jsType": "Código Item",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "identificador_nico",
+      "jsType": "Identificador Único",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_de_compromiso",
+      "jsType": "Tipo de Compromiso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "referencia_contrato",
+      "jsType": "Referencia Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_interfase",
+      "jsType": "Fecha de Consulta SIIF",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:05.248Z"
+}

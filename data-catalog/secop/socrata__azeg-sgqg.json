@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "azeg-sgqg",
+  "name": "SECOP I - PAA Detalle",
+  "description": "Detalle de los planes anuales de adquisiciones publicados en el SECOP I, durante los ultimos 3 años",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "paa",
+    "plan anual de adquisición",
+    "secop",
+    "secop i"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/azeg-sgqg",
+  "webUri": "https://www.datos.gov.co/d/azeg-sgqg",
+  "homepage": null,
+  "createdAt": "2021-09-06T16:14:08+0000",
+  "dataUpdatedAt": "2026-09-21T06:14:14+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "valor_estimado_vig_actual",
+      "jsType": "Valor Estimado Vig Actual",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "idpaa",
+      "jsType": "IDPAA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id",
+      "jsType": "ID",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "contacto_responsable_adquisicion",
+      "jsType": "Contacto Responsable Adquisicion",
+      "pii": true,
+      "piiReason": "Identifica al funcionario u operario que editó el registro."
+    },
+    {
+      "name": "duracion_estimada",
+      "jsType": "Duracion Estimada",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_estimado",
+      "jsType": "Valor Estimado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "requiere_vigencias_futuras",
+      "jsType": "Requiere Vigencias Futuras",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fuente_de_recursos",
+      "jsType": "Fuente de Recursos",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_unspsc",
+      "jsType": "Codigo UNSPSC",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "modalidad",
+      "jsType": "Modalidad Seleccion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "descripcio_item",
+      "jsType": "Descripcion Item",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_inicio",
+      "jsType": "Fecha Inicio",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "contacto_responsable_adquisicion"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:06.007Z"
+}

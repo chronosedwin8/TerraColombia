@@ -1,0 +1,167 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — actualizaciones automáticas de dependencias
+#
+# Criterio: las actualizaciones de seguridad llegan de inmediato y por separado;
+# las de rutina llegan agrupadas y una vez por semana, porque diez PR sueltos
+# a la semana no se revisan, se ignoran.
+#
+# Las actualizaciones mayores de las piezas que sostienen el producto (Vue,
+# Fastify, Prisma, MapLibre, PostgreSQL) se dejan FUERA a propósito: una versión
+# mayor de MapLibre o de Prisma exige leer su guía de migración y probar, no
+# aprobar un PR. Se hacen a mano, con su entrada en docs/DECISIONES.md.
+# ═════════════════════════════════════════════════════════════════════════════
+
+version: 2
+
+updates:
+  # ───────────────────────────────────────────────────────────────────────────
+  # Monorepo de Node (pnpm workspaces). Un solo ecosistema cubre todo el
+  # workspace cuando se apunta a la raíz.
+  # ───────────────────────────────────────────────────────────────────────────
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: America/Bogota
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    labels: ['dependencias', 'automático']
+    commit-message:
+      # Commits convencionales (CLAUDE.md regla 7).
+      prefix: 'chore(deps)'
+      prefix-development: 'chore(deps-dev)'
+      include: scope
+    groups:
+      # Parches y menores de todo: un PR semanal.
+      rutina-menores:
+        applies-to: version-updates
+        patterns: ['*']
+        update-types: ['minor', 'patch']
+      # Herramientas de desarrollo: se pueden actualizar con más confianza,
+      # incluidas las mayores. Si rompen, rompen en CI y no en producción.
+      herramientas:
+        applies-to: version-updates
+        dependency-type: development
+        patterns:
+          - 'eslint*'
+          - '@typescript-eslint/*'
+          - 'prettier'
+          - 'vitest'
+          - '@vitest/*'
+          - 'turbo'
+          - 'tsx'
+          - '@types/*'
+      # Seguridad: nunca agrupada, para poder fusionarla sola y rápido.
+      # (Dependabot manda las alertas de seguridad aparte por defecto; esto
+      # solo lo hace explícito.)
+    ignore:
+      # Mayores de las piezas estructurales: a mano.
+      - dependency-name: 'vue'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'vue-router'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'pinia'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'vite'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'fastify'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@fastify/*'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'prisma'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@prisma/*'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'maplibre-gl'
+        update-types: ['version-update:semver-major']
+      # h3-js: una mayor puede cambiar los índices calculados y dejaría
+      # inconsistente todo `analytics.h3_cell` (ADR-002). Solo a mano y con
+      # recálculo completo de los agregados.
+      - dependency-name: 'h3-js'
+        update-types: ['version-update:semver-major', 'version-update:semver-minor']
+      - dependency-name: 'zod'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
+      # Playwright: la versión de la librería y la del navegador van juntas.
+      # Subirla exige reconstruir la imagen del worker y volver a probar los
+      # informes PDF.
+      - dependency-name: 'playwright'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@playwright/test'
+        update-types: ['version-update:semver-major']
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Acciones de GitHub. Aquí sí interesan las mayores: una acción sin actualizar
+  # es una de las vías más comunes de compromiso de la cadena de suministro.
+  # ───────────────────────────────────────────────────────────────────────────
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: America/Bogota
+    open-pull-requests-limit: 5
+    labels: ['dependencias', 'ci', 'automático']
+    commit-message:
+      prefix: 'ci(deps)'
+    groups:
+      acciones:
+        patterns: ['*']
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Imágenes base de los cuatro Dockerfile. Las actualizaciones de la imagen
+  # base son la forma más barata de cerrar vulnerabilidades del sistema
+  # operativo: `node:22-bookworm-slim` recibe parches sin cambiar de versión.
+  # ───────────────────────────────────────────────────────────────────────────
+  - package-ecosystem: docker
+    directories:
+      - /infra/caprover/api
+      - /infra/caprover/web
+      - /infra/caprover/worker
+      - /infra/caprover/docs-site
+    schedule:
+      interval: weekly
+      day: tuesday
+      time: '06:00'
+      timezone: America/Bogota
+    open-pull-requests-limit: 4
+    labels: ['dependencias', 'infraestructura', 'automático']
+    commit-message:
+      prefix: 'chore(docker)'
+    ignore:
+      # Node mayor: el proyecto declara `engines.node >= 22` y CI prueba 22 y 24.
+      # Cambiar la base a 26 es una decisión, no una actualización.
+      - dependency-name: 'node'
+        update-types: ['version-update:semver-major']
+      # nginx mayor: la configuración de `web` y `docs-site` depende de
+      # directivas concretas.
+      - dependency-name: 'nginx'
+        update-types: ['version-update:semver-major']
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Servicios de docker-compose (PostGIS, Redis, MinIO, Martin, Prometheus,
+  # Grafana, exportadores).
+  #
+  # PostGIS está FIJADO en 16-3.4 a propósito: es la versión de referencia del
+  # plan y la que usa CI. Subirla implica verificar que las migraciones y las
+  # funciones de tesela siguen funcionando, y coordinarlo con la versión de RDS
+  # en producción. Nunca por Dependabot.
+  # ───────────────────────────────────────────────────────────────────────────
+  - package-ecosystem: docker-compose
+    directory: /infra
+    schedule:
+      interval: monthly
+      time: '06:00'
+      timezone: America/Bogota
+    open-pull-requests-limit: 3
+    labels: ['dependencias', 'infraestructura', 'automático']
+    commit-message:
+      prefix: 'chore(infra)'
+    ignore:
+      - dependency-name: 'postgis/postgis'
+      - dependency-name: 'redis'
+        update-types: ['version-update:semver-major']

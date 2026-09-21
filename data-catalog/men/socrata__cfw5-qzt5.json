@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "cfw5-qzt5",
+  "name": "MEN_ESTABLECIMIENTOS_EDUCATIVOS_PREESCOLAR_BÁSICA_Y_MEDIA",
+  "description": "Contiene los establecimientos educativos de Preescolar,  básica y Media en Colombia, con historia desde el 2015 hasta 2025.\n\nTener en cuenta que esta conjunto de datos contiene la información a nivel de departamento y secretaria, si requiere información a nivel municipal dirigirse a  el informe que se encuentra por sedes.",
+  "publisher": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "educación",
+    "establecimientos educativos"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/cfw5-qzt5",
+  "webUri": "https://www.datos.gov.co/d/cfw5-qzt5",
+  "homepage": null,
+  "createdAt": "2020-10-06T15:12:19+0000",
+  "dataUpdatedAt": "2026-09-03T20:56:42+0000",
+  "cutDate": "2026-09-03",
+  "geographicCoverage": null,
+  "rowCount": 606206,
+  "columns": [
+    {
+      "name": "caracter",
+      "jsType": "CARACTER",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "calendario",
+      "jsType": "CALENDARIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_sector",
+      "jsType": "COD_SECTOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "barrio_vereda",
+      "jsType": "BARRIO_VEREDA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rector",
+      "jsType": "RECTOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cantidad_sedes",
+      "jsType": "CANTIDAD_SEDES",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_dane_municipio",
+      "jsType": "COD_DANE_MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_establecimiento",
+      "jsType": "NOMBRE_ESTABLECIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "email",
+      "jsType": "EMAIL",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (email)."
+    },
+    {
+      "name": "secretaria",
+      "jsType": "SECRETARIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "telefono",
+      "jsType": "TELEFONO",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (telefono)."
+    },
+    {
+      "name": "fax",
+      "jsType": "FAX",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (fax)."
+    },
+    {
+      "name": "a_o",
+      "jsType": "AÑO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_calendario",
+      "jsType": "COD_CALENDARIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "web",
+      "jsType": "WEB",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_dane_departamento",
+      "jsType": "COD_DANE_DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sector",
+      "jsType": "SECTOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_matricula",
+      "jsType": "TOTAL_MATRICULA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane",
+      "jsType": "CODIGO_DANE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_caracter",
+      "jsType": "COD_CARACTER",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion",
+      "jsType": "DIRECCION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_secretaria",
+      "jsType": "COD_SECRETARIA",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "a_o": "2015",
+      "cod_dane_departamento": "13",
+      "departamento": "BOLÍVAR",
+      "cod_secretaria": "4910",
+      "secretaria": "CARTAGENA",
+      "cod_dane_municipio": "13001",
+      "municipio": "Cartagena",
+      "codigo_dane": "[REDACTADO:co_phone]",
+      "nombre_establecimiento": "INSTITUTO EDUCATIVO NISSI",
+      "cod_sector": "1002",
+      "sector": "NO_OFICIAL",
+      "cod_caracter": "-",
+      "caracter": "-",
+      "cod_calendario": "52",
+      "calendario": "A",
+      "direccion": "IND MZ 27 LT 9 - 10 -11",
+      "rector": "REYNALDA GUDIÑO GONZALEZ",
+      "total_matricula": "187",
+      "cantidad_sedes": "1"
+    },
+    {
+      "a_o": "2015",
+      "cod_dane_departamento": "47",
+      "departamento": "MAGDALENA",
+      "cod_secretaria": "4911",
+      "secretaria": "SANTA MARTA",
+      "cod_dane_municipio": "47001",
+      "municipio": "Santa Marta",
+      "codigo_dane": "347001051415",
+      "nombre_establecimiento": "COLEGIO PERSONITAS DEL FUTURO",
+      "cod_sector": "1002",
+      "sector": "NO_OFICIAL",
+      "cod_caracter": "-",
+      "caracter": "-",
+      "cod_calendario": "52",
+      "calendario": "A",
+      "direccion": "CL 17 9 93",
+      "rector": "TATIANA VARGAS PEREIRA",
+      "total_matricula": "47",
+      "cantidad_sedes": "1"
+    },
+    {
+      "a_o": "2015",
+      "cod_dane_departamento": "52",
+      "departamento": "NARIÑO",
+      "cod_secretaria": "3800",
+      "secretaria": "TUMACO",
+      "cod_dane_municipio": "52835",
+      "municipio": "San Andres De Tumaco",
+      "codigo_dane": "252835006246",
+      "nombre_establecimiento": "CE. VALLENATO",
+      "cod_sector": "1001",
+      "sector": "OFICIAL",
+      "cod_caracter": "-",
+      "caracter": "-",
+      "cod_calendario": "52",
+      "calendario": "A",
+      "direccion": "CORREGIMIENTO PLAYON RIO MIRA",
+      "rector": "JUAN CARLOS CASANOVA ROSERO",
+      "total_matricula": "519",
+      "cantidad_sedes": "14"
+    },
+    {
+      "a_o": "2015",
+      "cod_dane_departamento": "8",
+      "departamento": "ATLÁNTICO",
+      "cod_secretaria": "3764",
+      "secretaria": "ATLÁNTICO",
+      "cod_dane_municipio": "8638",
+      "municipio": "Sabanalarga",
+      "codigo_dane": "308638001084",
+      "nombre_establecimiento": "CENTRO EDUCATIVO CORAZON DE JESUS",
+      "cod_sector": "1002",
+      "sector": "NO_OFICIAL",
+      "cod_caracter": "-",
+      "caracter": "-",
+      "cod_calendario": "52",
+      "calendario": "A",
+      "direccion": "KR 16 A 25 15",
+      "rector": "LISBET ARAUJO ALTAMAR",
+      "total_matricula": "73",
+      "cantidad_sedes": "1"
+    },
+    {
+      "a_o": "2015",
+      "cod_dane_departamento": "20",
+      "departamento": "CESAR",
+      "cod_secretaria": "3779",
+      "secretaria": "CESAR",
+      "cod_dane_municipio": "20400",
+      "municipio": "La Jagua De Ibirico",
+      "codigo_dane": "220400008795",
+      "nombre_establecimiento": "C.E. SAN ANTONIO",
+      "cod_sector": "1001",
+      "sector": "OFICIAL",
+      "cod_caracter": "-",
+      "caracter": "-",
+      "cod_calendario": "52",
+      "calendario": "A",
+      "direccion": "VEREDA SAN ANTONIO",
+      "rector": "JHOVANNYS CANOLE PEÑARANDA",
+      "total_matricula": "775",
+      "cantidad_sedes": "23"
+    }
+  ],
+  "piiDroppedColumns": [
+    "email",
+    "fax",
+    "telefono"
+  ],
+  "piiRedactedColumns": [
+    "codigo_dane"
+  ],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:23.720Z"
+}

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "2iht-wwxh",
+  "name": "ESTABLECIMIENTOS NACIONALES DE GASES MEDICINALES CERTIFICADOS CON BUENAS PRÁCTICAS DE MANUFACTURA",
+  "description": "Base de datos donde se consolidan los establecimientos nacionales que cuentan con certificación en buenas practicas de manufactura vigente, para la producción de gases medicinales.",
+  "publisher": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "gases medicinales"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/2iht-wwxh",
+  "webUri": "https://www.datos.gov.co/d/2iht-wwxh",
+  "homepage": null,
+  "createdAt": "2020-07-27T19:25:25+0000",
+  "dataUpdatedAt": "2026-09-09T20:32:26+0000",
+  "cutDate": "2026-09-09",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "fecha_vencimiento",
+      "jsType": "FECHA VENCIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciudad",
+      "jsType": "CIUDAD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion",
+      "jsType": "DIRECCION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "concepto_corto",
+      "jsType": "CONCEPTO CORTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "expediente",
+      "jsType": "EXPEDIENTE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_notificacion",
+      "jsType": "FECHA NOTIFICACION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_establecimiento",
+      "jsType": "NOMBRE ESTABLECIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "concepto",
+      "jsType": "CONCEPTO",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:50.152Z"
+}

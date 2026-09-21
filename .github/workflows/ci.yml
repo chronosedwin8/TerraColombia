@@ -1,0 +1,458 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — integración continua
+#
+# Corre en cada push a las ramas principales y en cada pull request.
+#
+# Orden de las comprobaciones, de la más rápida a la más lenta, para que un
+# error tonto no haga esperar quince minutos:
+#   1. secretos      · ¿alguien está subiendo un .env o una llave?
+#   2. verificar     · lint + typecheck + tests unitarios (matriz Node 22 y 24)
+#   3. integracion   · PostGIS real + migraciones + semilla del piloto
+#   4. infraestructura · YAML, Dockerfiles y scripts de infra/
+#
+# Las cuatro son obligatorias para fusionar (configurar como "required status
+# checks" en la protección de rama).
+# ═════════════════════════════════════════════════════════════════════════════
+
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  # Permite relanzarla a mano desde la pestaña Actions.
+  workflow_dispatch:
+
+# Cancela la corrida anterior de la misma rama o PR: nadie necesita el
+# resultado de un commit que ya quedó atrás.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Permisos mínimos. Cada job que necesite más los pide explícitamente.
+permissions:
+  contents: read
+
+env:
+  # Turborepo sin telemetría ni intentos de conectarse a la nube.
+  TURBO_TELEMETRY_DISABLED: 1
+  DO_NOT_TRACK: 1
+  # Salida sin colores ANSI: los registros de Actions se leen mejor.
+  FORCE_COLOR: 0
+  NODE_OPTIONS: --max-old-space-size=4096
+
+jobs:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 1. Secretos: lo más rápido y lo más grave si falla.
+  # ═══════════════════════════════════════════════════════════════════════════
+  secretos:
+    name: Sin secretos en el repositorio
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Historial completo: hace falta para revisar el rango de commits del PR.
+          fetch-depth: 0
+
+      - name: Ningún archivo .env versionado
+        run: |
+          set -euo pipefail
+          # `.env.example` sí, cualquier otro `.env*` no.
+          prohibidos="$(git ls-files | grep -E '(^|/)\.env($|\.)' | grep -v '\.env\.example$' || true)"
+          if [ -n "$prohibidos" ]; then
+            echo "::error::Hay archivos de entorno versionados. Los secretos NUNCA van al repositorio (CLAUDE.md regla 7)."
+            echo "$prohibidos"
+            echo "Solución: git rm --cached <archivo> y rote todos los secretos que contenía."
+            exit 1
+          fi
+          echo "OK: no hay archivos .env versionados."
+
+      - name: Patrones de secretos en el código
+        run: |
+          set -euo pipefail
+          # Búsqueda deliberadamente estrecha para no llenarse de falsos
+          # positivos: solo formatos de llave reconocibles y contraseñas de
+          # conexión que no sean marcadores de plantilla.
+          patrones='sk-ant-api[0-9]{2}-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----|prv_(test|prod)_[A-Za-z0-9]{20,}'
+          if git grep -nIE "$patrones" -- \
+               ':!*.example' ':!.github/workflows/*' ':!docs/SEGURIDAD.md' > /tmp/hallazgos.txt 2>/dev/null; then
+            echo "::error::Posibles secretos en el código:"
+            cat /tmp/hallazgos.txt
+            exit 1
+          fi
+          echo "OK: no se encontraron patrones de secretos."
+
+      - name: Contraseñas de conexión reales en archivos versionados
+        run: |
+          set -euo pipefail
+          # postgres://usuario:contraseña@ donde la contraseña no es un marcador.
+          if git grep -nIP 'postgres(ql)?://[A-Za-z0-9_]+:(?!CHANGEME|\$\{|postgres\b|password\b)[^@:/[:space:]]{4,}@' \
+               -- ':!*.example' ':!docs/**' ':!infra/docker-compose.ci.yml' > /tmp/conex.txt 2>/dev/null; then
+            echo "::error::Cadenas de conexión con contraseña real:"
+            cat /tmp/conex.txt
+            exit 1
+          fi
+          echo "OK: no hay cadenas de conexión con contraseña literal."
+        continue-on-error: false
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 2. Lint, typecheck y tests unitarios. Matriz de Node 22 y 24.
+  # ═══════════════════════════════════════════════════════════════════════════
+  verificar:
+    name: Verificar (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false # queremos ver si falla en las dos versiones o solo en una
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+
+      # `pnpm/action-setup` lee la versión de `packageManager` en package.json,
+      # así que no hay que mantenerla en dos sitios.
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Instalar Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+
+      - name: Instalar dependencias
+        # `--frozen-lockfile` falla si el lockfile no corresponde a los
+        # package.json: evita que una rama instale versiones distintas de las
+        # que se revisaron.
+        run: pnpm install --frozen-lockfile
+
+      # Caché de Turborepo entre corridas: si un paquete no cambió, no se
+      # vuelve a compilar ni a testear.
+      - name: Caché de Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-node${{ matrix.node }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-node${{ matrix.node }}-
+
+      - name: Formato (Prettier)
+        run: pnpm exec prettier --check "**/*.{ts,vue,json,md,sql,yml,yaml}"
+
+      - name: Lint (ESLint)
+        run: pnpm lint
+
+      - name: Comprobación de tipos
+        run: pnpm typecheck
+
+      - name: Tests unitarios
+        run: pnpm test
+
+      - name: Subir informes de cobertura
+        if: always() && matrix.node == 22
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobertura
+          path: |
+            **/coverage/**
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 3. Integración con PostGIS real.
+  #
+  # Se usa la misma imagen que `infra/docker-compose.ci.yml`
+  # (`postgis/postgis:16-3.4`) para que un fallo aquí sea reproducible en local
+  # con un solo comando.
+  # ═══════════════════════════════════════════════════════════════════════════
+  integracion:
+    name: Integración con PostGIS (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    needs: [verificar]
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
+
+    services:
+      postgis:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres # base efímera del runner, sin datos reales
+          POSTGRES_DB: terracolombia_test
+        ports:
+          - 5432:5432
+        # Sin healthcheck, los pasos siguientes arrancan antes de que Postgres
+        # acepte conexiones y fallan de forma intermitente.
+        options: >-
+          --health-cmd="pg_isready -U postgres -d terracolombia_test"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+          --health-start-period=20s
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/terracolombia_test
+      REDIS_URL: redis://localhost:6379
+      # Sin S3: el almacenamiento degrada a disco (docs/DECISIONES.md ADR-004).
+      STORAGE_LOCAL_DIR: ./storage-test
+      JWT_SECRET: solo-para-ci-no-es-un-secreto-real-0123456789
+      JWT_REFRESH_SECRET: solo-para-ci-otro-distinto-9876543210abcdef
+      ETL_PILOT_DEPARTMENT: '08'
+      NODE_ENV: test
+      TZ: America/Bogota
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Instalar Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      # GDAL: necesario para los tests que cargan GeoPackage/Shapefile
+      # (docs/DECISIONES.md ADR-005). Los runners de Ubuntu no lo traen.
+      - name: Instalar GDAL
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends gdal-bin
+          ogr2ogr --version
+
+      - name: Aplicar extensiones y EPSG:9377
+        # Exactamente el mismo script que usa el contenedor y el equipo local:
+        # si divergiera, CI pasaría y producción fallaría.
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d terracolombia_test \
+               -v ON_ERROR_STOP=1 \
+               -f infra/postgres/init/01-extensions.sql
+
+      - name: Verificar que EPSG:9377 quedó registrado
+        env:
+          PGPASSWORD: postgres
+        run: |
+          set -euo pipefail
+          n="$(psql -h localhost -U postgres -d terracolombia_test -tAc \
+               'SELECT count(*) FROM spatial_ref_sys WHERE srid = 9377;')"
+          if [ "$n" != "1" ]; then
+            echo "::error::EPSG:9377 no está en spatial_ref_sys. Sin él no se pueden calcular áreas ni distancias."
+            exit 1
+          fi
+          echo "OK: EPSG:9377 registrado."
+
+      - name: Aplicar migraciones
+        run: pnpm db:migrate
+
+      - name: Cargar la semilla del municipio piloto
+        # Semilla reproducible marcada como sintética (ADR-006): los tests no
+        # dependen de descargar 1 GB del IGAC.
+        run: pnpm db:seed
+
+      - name: Comprobar que la semilla no introdujo PII
+        # Regla 3 de CLAUDE.md verificada por máquina, no por buena voluntad:
+        # ninguna columna de `core` ni `ctx` puede llamarse como un dato personal.
+        env:
+          PGPASSWORD: postgres
+        run: |
+          set -euo pipefail
+          sospechosas="$(psql -h localhost -U postgres -d terracolombia_test -tA -c "
+            SELECT table_schema || '.' || table_name || '.' || column_name
+            FROM information_schema.columns
+            WHERE table_schema IN ('core','ctx','analytics','meta')
+              AND (
+                column_name ~* '(propietario|owner|titular|cedula|cédula|documento|nit|telefono|teléfono|celular|correo|email|nombre_pers|primer_nombre|apellido)'
+              );")"
+          if [ -n "$sospechosas" ]; then
+            echo "::error::Columnas con posible PII en esquemas publicados (CLAUDE.md regla 3):"
+            echo "$sospechosas"
+            exit 1
+          fi
+          echo "OK: ninguna columna con nombre de dato personal en core/ctx/analytics/meta."
+
+      - name: Tests de integración
+        run: pnpm -r --if-present run test:integration
+
+      - name: Volcar registros de Postgres si algo falló
+        if: failure()
+        run: docker logs "${{ job.services.postgis.id }}" 2>&1 | tail -n 200 || true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 4. Infraestructura: que los YAML, Dockerfiles y scripts de infra/ sean
+  #    válidos ANTES de que alguien intente desplegar con ellos.
+  # ═══════════════════════════════════════════════════════════════════════════
+  infraestructura:
+    name: Validar infraestructura
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validar los docker-compose
+        run: |
+          set -euo pipefail
+          # Variables ficticias solo para que la interpolación no falle: no son
+          # credenciales, el archivo nunca se levanta en este job.
+          cat > /tmp/ci.env <<'VARS'
+          POSTGRES_PASSWORD=ci-placeholder
+          REDIS_PASSWORD=ci-placeholder
+          MINIO_ROOT_USER=ci-placeholder
+          MINIO_ROOT_PASSWORD=ci-placeholder
+          S3_SECRET_KEY=ci-placeholder
+          GRAFANA_ADMIN_PASSWORD=ci-placeholder
+          VARS
+          for f in infra/docker-compose.yml infra/docker-compose.dev.yml infra/docker-compose.ci.yml; do
+            echo "── $f"
+            docker compose -f "$f" --env-file /tmp/ci.env config --quiet
+          done
+          echo "OK: los tres archivos de compose son válidos."
+
+      - name: Validar los YAML de Prometheus, Grafana y Martin
+        run: |
+          set -euo pipefail
+          python3 -m pip install --quiet --disable-pip-version-check pyyaml
+          python3 - <<'PY'
+          import sys, glob, yaml
+          archivos = [
+              'infra/martin.yaml',
+              'infra/prometheus/prometheus.yml',
+              'infra/prometheus/alerts.yml',
+              'infra/prometheus/postgres-exporter-queries.yml',
+          ] + glob.glob('infra/grafana/provisioning/**/*.yml', recursive=True)
+          errores = 0
+          for a in archivos:
+              try:
+                  with open(a, encoding='utf-8') as fh:
+                      yaml.safe_load(fh)
+                  print(f'OK   {a}')
+              except Exception as e:
+                  print(f'::error file={a}::YAML inválido: {e}')
+                  errores += 1
+          sys.exit(1 if errores else 0)
+          PY
+
+      - name: Validar las reglas de alerta con promtool
+        run: |
+          set -euo pipefail
+          VERSION=3.3.1
+          curl -sSLo /tmp/prom.tar.gz \
+            "https://github.com/prometheus/prometheus/releases/download/v${VERSION}/prometheus-${VERSION}.linux-amd64.tar.gz"
+          tar -xzf /tmp/prom.tar.gz -C /tmp
+          PROMTOOL="/tmp/prometheus-${VERSION}.linux-amd64/promtool"
+          "$PROMTOOL" check rules infra/prometheus/alerts.yml
+          # `check config` avisaría de los objetivos que no resuelven en CI;
+          # solo interesa que la sintaxis y las reglas sean correctas.
+          "$PROMTOOL" check config infra/prometheus/prometheus.yml || \
+            echo "::notice::promtool avisó sobre prometheus.yml (normal: los objetivos no existen en CI)."
+
+      - name: Validar los tableros de Grafana
+        run: |
+          set -euo pipefail
+          for f in infra/grafana/dashboards/*.json; do
+            node -e "
+              const d = JSON.parse(require('fs').readFileSync('$f','utf8'));
+              if (!d.uid)    throw new Error('falta uid');
+              if (!d.title)  throw new Error('falta title');
+              if (!Array.isArray(d.panels) || d.panels.length === 0) throw new Error('sin paneles');
+              // Todo panel con consultas debe apuntar a la fuente aprovisionada.
+              const mal = d.panels.filter(p => p.targets && (!p.datasource || p.datasource.uid !== 'prometheus-tc'));
+              if (mal.length) throw new Error('paneles con datasource incorrecto: ' + mal.map(p => p.title).join(', '));
+              console.log('OK   $f (' + d.panels.length + ' paneles)');
+            "
+          done
+
+      - name: Analizar los scripts de bash (shellcheck)
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends shellcheck
+          # SC1091: no sigue los `source` de rutas que no existen en CI.
+          shellcheck --severity=warning --exclude=SC1091 \
+            infra/scripts/*.sh infra/minio/*.sh
+
+      - name: Analizar los scripts de PowerShell
+        shell: pwsh
+        run: |
+          $fallos = 0
+          foreach ($f in Get-ChildItem infra/scripts/*.ps1) {
+            $errores = $null
+            [System.Management.Automation.Language.Parser]::ParseFile($f.FullName, [ref]$null, [ref]$errores) | Out-Null
+            if ($errores.Count -gt 0) {
+              Write-Host "::error file=$($f.FullName)::No compila:"
+              $errores | ForEach-Object { Write-Host "  línea $($_.Extent.StartLineNumber): $($_.Message)" }
+              $fallos++
+            } else {
+              Write-Host "OK   $($f.Name)"
+            }
+          }
+          if ($fallos -gt 0) { exit 1 }
+
+      - name: Construir las imágenes de Docker (sin publicar)
+        # Solo comprueba que los Dockerfile son construibles hasta la etapa de
+        # descarga de dependencias: construir el proyecto entero cuatro veces
+        # es trabajo de `build-images.yml`, que solo corre en las ramas
+        # principales.
+        run: |
+          set -euo pipefail
+          for app in api web worker docs-site; do
+            echo "── $app"
+            docker build --target fetch -f "infra/caprover/$app/Dockerfile" -t "tc-$app:ci" . \
+              || { echo "::error::Falló la construcción de la imagen de $app"; exit 1; }
+          done
+
+      - name: Verificar los captain-definition
+        run: |
+          set -euo pipefail
+          for app in api web worker docs-site; do
+            f="infra/caprover/$app/captain-definition"
+            node -e "
+              const d = JSON.parse(require('fs').readFileSync('$f','utf8'));
+              if (d.schemaVersion !== 2) throw new Error('schemaVersion debe ser 2');
+              const esperado = './infra/caprover/$app/Dockerfile';
+              if (d.dockerfilePath !== esperado) throw new Error('dockerfilePath debe ser ' + esperado);
+              console.log('OK   $f');
+            "
+          done
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Puerta única para la protección de rama: en vez de marcar seis checks
+  # obligatorios (que hay que actualizar cada vez que cambia la matriz), se
+  # marca solo este.
+  # ═══════════════════════════════════════════════════════════════════════════
+  ci-completo:
+    name: CI completo
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [secretos, verificar, integracion, infraestructura]
+    steps:
+      - name: Comprobar el resultado de los jobs anteriores
+        run: |
+          set -euo pipefail
+          resultados='${{ toJSON(needs) }}'
+          echo "$resultados"
+          if echo "$resultados" | grep -qE '"result"[[:space:]]*:[[:space:]]*"(failure|cancelled)"'; then
+            echo "::error::Algún job de CI no terminó correctamente."
+            exit 1
+          fi
+          echo "Todos los jobs de CI terminaron correctamente."

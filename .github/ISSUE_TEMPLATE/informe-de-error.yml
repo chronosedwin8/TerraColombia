@@ -1,0 +1,141 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — plantilla: informe de error
+# ═════════════════════════════════════════════════════════════════════════════
+
+name: Informe de error
+description: Algo no funciona como debería en la aplicación, la API o el ETL.
+title: '[error] '
+labels: ['error', 'triaje']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por reportarlo.
+
+        **Antes de continuar:** si el problema tiene que ver con un dato
+        concreto (una cifra que parece equivocada, un predio que falta, un
+        municipio sin información), es probable que sea un **problema de datos**
+        y no un error del programa. Use la plantilla «Problema de datos», que
+        pide la información adecuada.
+
+        **Nunca incluya datos personales** en esta incidencia: ni suyos ni de
+        terceros. Si el error consiste precisamente en que aparecen datos
+        personales, **no lo reporte aquí**: escriba a privacidad@terracolombia.co.
+
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Qué pasa
+      description: Descríbalo en una o dos frases, como se lo contaría a alguien por teléfono.
+      placeholder: Al abrir la ficha de un predio rural, la sección de suelos aparece vacía aunque el mapa sí muestra la unidad de suelo.
+    validations:
+      required: true
+
+  - type: textarea
+    id: pasos
+    attributes:
+      label: Cómo reproducirlo
+      description: Paso a paso, desde el principio. Si hay un enlace que lo reproduce, péguelo (las vistas de TerraColombia son compartibles).
+      placeholder: |
+        1. Abrir https://terracolombia.co/predio/08573...
+        2. Desplegar la sección «Suelo y aptitud»
+        3. La sección aparece vacía, sin mensaje
+    validations:
+      required: true
+
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Qué esperaba que pasara
+      placeholder: Que mostrara la unidad de suelo, su clase de capacidad y su vocación, con la fuente del IGAC (Agrología).
+    validations:
+      required: true
+
+  - type: dropdown
+    id: componente
+    attributes:
+      label: Dónde ocurre
+      multiple: true
+      options:
+        - Mapa / explorador
+        - Ficha de predio
+        - Buscador (dirección, NPN, municipio, topónimo)
+        - Buscador avanzado de predios
+        - Analizador de zona
+        - Aptitud de terreno
+        - Localización de negocio
+        - Cambio territorial
+        - Observatorio municipal
+        - Informes (PDF / XLSX / exportaciones)
+        - Asistente de lenguaje natural
+        - Cuenta, planes o pagos
+        - GeoAPI pública
+        - ETL / carga de datos
+        - Panel de administración
+        - No lo sé
+    validations:
+      required: true
+
+  - type: dropdown
+    id: gravedad
+    attributes:
+      label: Gravedad
+      options:
+        - Crítica · el sistema no se puede usar, o hay riesgo de datos personales
+        - Alta · una función principal no funciona y no hay alternativa
+        - Media · funciona pero mal, o hay una forma de rodearlo
+        - Baja · detalle visual o molestia menor
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: Enlace donde se reproduce
+      description: Toda vista de TerraColombia es un enlace compartible. Pegarlo ahorra la mitad del trabajo de diagnóstico.
+      placeholder: https://terracolombia.co/...
+
+  - type: textarea
+    id: entorno
+    attributes:
+      label: Entorno
+      description: Navegador y versión, sistema operativo, y si es producción, staging o local.
+      placeholder: |
+        Entorno: producción
+        Navegador: Chrome 131 en Windows 11
+        Plan: Pro
+        Móvil o escritorio: escritorio
+    validations:
+      required: true
+
+  - type: textarea
+    id: errores
+    attributes:
+      label: Mensajes de error o registros
+      description: Consola del navegador (F12 → Console), respuesta de la API, o salida del ETL. Quite cualquier token o credencial antes de pegarlo.
+      render: text
+
+  - type: input
+    id: corte
+    attributes:
+      label: Fecha de corte de los datos
+      description: Aparece en la sección «Fuentes» de la ficha o del informe. Sirve para saber si el problema es del corte o del código.
+      placeholder: '2026-08'
+
+  - type: textarea
+    id: capturas
+    attributes:
+      label: Capturas o archivos
+      description: Arrastre aquí las imágenes. Si es un informe PDF, adjúntelo (revise antes que no contenga nada privado).
+
+  - type: checkboxes
+    id: confirmaciones
+    attributes:
+      label: Confirmaciones
+      options:
+        - label: Busqué entre las incidencias existentes y no encontré esta.
+          required: true
+        - label: No he incluido datos personales de nadie en este informe.
+          required: true
+        - label: Si esto fuera un fallo de seguridad, usaría un aviso privado en vez de una incidencia pública.
+          required: true

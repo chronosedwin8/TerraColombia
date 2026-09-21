@@ -1,0 +1,37 @@
+# Contexto de build: solo debe viajar el código fuente.
+node_modules
+**/node_modules
+.git
+.github
+dist
+**/dist
+.output
+**/.output
+.turbo
+**/.turbo
+coverage
+**/coverage
+*.tsbuildinfo
+
+# Datos y artefactos que se generan, no se versionan ni se copian a la imagen
+data
+data-catalog/**/raw-cache
+storage
+backups
+.cache
+*.gdb
+*.gpkg
+*.pbf
+*.tif
+*.zip
+
+# Secretos
+.env
+.env.*
+!.env.example
+
+# Documentación y desarrollo local
+docs
+*.md
+!README.md
+infra/grafana/data

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "eb5n-rfw8",
+  "name": "Sedes de Instituciones Educativas ubicadas en zonas rurales de difícil acceso en el Departamento de Boyacá",
+  "description": "Sedes de las Instituciones Educativas ubicadas en Zonas Rurales de Difícil Acceso de los municipios no certificados en Educación del Departamento de Boyacá, para la vigencia 2022. Decreto 393 de 08 de septiembre de 2021.\n\nEs importante para nosotros sus sugerencias, por favor ingresar en el siguiente enlace para registrar su idea, solicitud, comentario o compartir el uso dado a los conjuntos de datos abiertos publicados. http://www.boyaca.gov.co/datosabiertos/",
+  "publisher": "Gobernación de Boyacá, Boyacá",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "sede educativa",
+    "difícil acceso",
+    "rural"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Boyacá, Boyacá",
+  "dataUri": "https://www.datos.gov.co/resource/eb5n-rfw8",
+  "webUri": "https://www.datos.gov.co/d/eb5n-rfw8",
+  "homepage": null,
+  "createdAt": "2016-10-26T23:00:50+0000",
+  "dataUpdatedAt": "2022-04-13T03:46:06+0000",
+  "cutDate": "2022-04-13",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "sede",
+      "jsType": "SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_instituci_n",
+      "jsType": "CODIGO DANE INSTITUCIÓN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "vereda",
+      "jsType": "VEREDA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_sede",
+      "jsType": "CODIGO DANE SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "establecimiento_educativo",
+      "jsType": "ESTABLECIMIENTO EDUCATIVO",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:31.914Z"
+}

@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "g53n-xypy",
+  "name": "Cobertura del Programa de Alimentación Escolar (PAE) en el departamento Norte de Santander-Mayo del 2021",
+  "description": "La siguiente información detalla el número de  estudiantes beneficiados con el Programa de Alimentación Escolar (PAE) en las Instituciones educativas rurales y urbanas de los 39 municipios no certificados en educación del departamento Norte de Santander.  La información contiene las siguientes columnas.  ID, Municipio, Nombre del establecimiento educativo, nombre de la sede educativa, código Dane IE, Zona, Total de cupos asignados (paquetes alimentarios) y porcentaje de cobertura que corresponde al nivel de beneficiados en relación con la matrícula de los estudiantes. \n\nLos estudiantes priorizados se obtuvieron de acuerdo a los criterios de focalización que establece la Resolución 29452 de 2017 del Min Educación Nacional",
+  "publisher": "Gobernación de Santander, Santander",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "paquete alimentario",
+    "programa de alimentación escolar",
+    "pae"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Santander, Santander",
+  "dataUri": "https://www.datos.gov.co/resource/g53n-xypy",
+  "webUri": "https://www.datos.gov.co/d/g53n-xypy",
+  "homepage": null,
+  "createdAt": "2021-05-20T14:32:42+0000",
+  "dataUpdatedAt": "2021-05-20T14:47:51+0000",
+  "cutDate": "2021-05-20",
+  "geographicCoverage": null,
+  "rowCount": 1858,
+  "columns": [
+    {
+      "name": "establecimiento_educativo",
+      "jsType": "ESTABLECIMIENTO EDUCATIVO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_de_cupos_asignados",
+      "jsType": "TOTAL DE CUPOS ASIGNADOS (PAQUETES ALIMENTARIOS)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sede_educativa",
+      "jsType": "SEDE EDUCATIVA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_ie",
+      "jsType": "CODIGO DANE IE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id",
+      "jsType": "ID",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "porcentaje_de_cobertura",
+      "jsType": "PORCENTAJE DE COBERTURA",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "id": "1",
+      "municipio": "ABREGO",
+      "establecimiento_educativo": "C.E.R EL TARRA",
+      "sede_educativa": "C.E.R. EL TARRA",
+      "codigo_dane_ie": "254003000364",
+      "zona": "RURAL",
+      "total_de_cupos_asignados": "128",
+      "porcentaje_de_cobertura": "0.94"
+    },
+    {
+      "id": "2",
+      "municipio": "ABREGO",
+      "establecimiento_educativo": "C.E.R EL TARRA",
+      "sede_educativa": "SEDE BERLIN",
+      "codigo_dane_ie": "254003002324",
+      "zona": "RURAL",
+      "total_de_cupos_asignados": "12",
+      "porcentaje_de_cobertura": "1"
+    },
+    {
+      "id": "3",
+      "municipio": "ABREGO",
+      "establecimiento_educativo": "C.E.R EL TARRA",
+      "sede_educativa": "SEDE BRISAS DEL TARRA",
+      "codigo_dane_ie": "254003000020",
+      "zona": "RURAL",
+      "total_de_cupos_asignados": "13",
+      "porcentaje_de_cobertura": "1"
+    },
+    {
+      "id": "4",
+      "municipio": "ABREGO",
+      "establecimiento_educativo": "C.E.R EL TARRA",
+      "sede_educativa": "SEDE EL REMOLINO",
+      "codigo_dane_ie": "254003002120",
+      "zona": "RURAL",
+      "total_de_cupos_asignados": "11",
+      "porcentaje_de_cobertura": "1"
+    },
+    {
+      "id": "5",
+      "municipio": "ABREGO",
+      "establecimiento_educativo": "C.E.R EL TARRA",
+      "sede_educativa": "SEDE KM 12",
+      "codigo_dane_ie": "254003002111",
+      "zona": "RURAL",
+      "total_de_cupos_asignados": "18",
+      "porcentaje_de_cobertura": "1"
+    }
+  ],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:30.911Z"
+}

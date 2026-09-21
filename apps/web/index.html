@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es-CO" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <title>TerraColombia — Pregúntale al territorio</title>
+    <meta
+      name="description"
+      content="Consulta un predio, analiza una zona o decide dónde abrir tu negocio con datos oficiales de Colombia, con fuentes y fechas de corte citadas."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class="bg-surface text-slate-900 antialiased">
+    <!-- Enlace de salto: primer elemento enfocable, requisito WCAG 2.4.1 -->
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-brand-700 focus:px-3 focus:py-2 focus:text-white"
+      >Saltar al contenido</a
+    >
+    <div id="app"></div>
+    <noscript>
+      TerraColombia necesita JavaScript para mostrar el mapa interactivo. Si no puedes activarlo,
+      escríbenos y te enviamos el informe en PDF.
+    </noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

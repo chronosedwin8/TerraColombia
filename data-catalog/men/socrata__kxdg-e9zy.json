@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "kxdg-e9zy",
+  "name": "Programa de Alimentación Escolar (PAE) 2019-2020 en las Instituciones Etnoeducativas de Norte de Santander beneficiadas con el programa de alimentación escolar  año 2019 y 2020",
+  "description": "Conjunto de datos relacionados con el beneficio  del Programa de Alimentación Escolar PAE para los grupos  Étnicos del Departamento Norte de Santander: Comunidades Indígenas U'wa y Motilón Barí.",
+  "publisher": "Gobernación de Santander, Santander",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "pae",
+    "plan de alimentación escolar"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Santander, Santander",
+  "dataUri": "https://www.datos.gov.co/resource/kxdg-e9zy",
+  "webUri": "https://www.datos.gov.co/d/kxdg-e9zy",
+  "homepage": null,
+  "createdAt": "2020-10-14T20:49:47+0000",
+  "dataUpdatedAt": "2020-10-21T23:09:04+0000",
+  "cutDate": "2020-10-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "a_o",
+      "jsType": "Año",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matricula_corte_simat_24",
+      "jsType": "MATRICULA CORTE SIMAT 24 DE SEPTIEMBRE 2019",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_de_cupos_asignados",
+      "jsType": "TOTAL DE CUPOS ASIGNADOS POR SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "establecimiento_educativo",
+      "jsType": "ESTABLECIMIENTO EDUCATIVO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sede_educativa",
+      "jsType": "SEDE EDUCATIVA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "complemento_alim_am_y_pm",
+      "jsType": "COMPLEMENTO ALIM. AM Y PM",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "complemento_tipo_almuerzo",
+      "jsType": "COMPLEMENTO TIPO ALMUERZO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_ie",
+      "jsType": "CODIGO DANE IE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:32.422Z"
+}

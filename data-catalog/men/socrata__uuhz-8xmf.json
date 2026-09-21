@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "uuhz-8xmf",
+  "name": "Matrículas de estudiantes en instituciones educativas oficiales departamento de Casanare",
+  "description": "En el presente conjunto de datos abiertos se presenta las Matrículas en instituciones oficiales por municipio en el departamento de Casanare.\nPara reportar hallazgos, comentarios o sugerencias, puede escribirnos por medio de los siguientes mecanismos:\nhttps://apps.casanare.gov.co/correspondencia/pqrs\nsistemas@casanare.gov.co",
+  "publisher": "Gobernación de Casanare, Casanare",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "matrículas casanare",
+    "estudiantes casanare",
+    "insituciones casanare",
+    "gobernación de casanare"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Casanare, Casanare",
+  "dataUri": "https://www.datos.gov.co/resource/uuhz-8xmf",
+  "webUri": "https://www.datos.gov.co/d/uuhz-8xmf",
+  "homepage": null,
+  "createdAt": "2017-09-25T17:42:38+0000",
+  "dataUpdatedAt": "2025-09-01T20:56:29+0000",
+  "cutDate": "2025-09-01",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "total_general",
+      "jsType": "Total General",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_8",
+      "jsType": "Grados_ 8",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_ciclo_i",
+      "jsType": "Grados_ CICLO I",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_ciclo_v",
+      "jsType": "Grados_ Ciclo V",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_7",
+      "jsType": "Grados_ 7",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_ciclo_iii",
+      "jsType": "Grados_ CICLO III",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_11",
+      "jsType": "Grados_ 11",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "institucion",
+      "jsType": "Institucion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_2",
+      "jsType": "Grados_ -2",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_0",
+      "jsType": "Grados_ 0",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_ciclo_ii",
+      "jsType": "Grados_ CICLO II",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_45",
+      "jsType": "Grados_ 45",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_10",
+      "jsType": "Grados_ 10",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_2_2",
+      "jsType": "Grados_ 2",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_44",
+      "jsType": "Grados_ 44",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_99",
+      "jsType": "Grados_ 99",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_43",
+      "jsType": "Grados_ 43",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_1_1",
+      "jsType": "Grados_ 1",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_1",
+      "jsType": "Grados_ -1",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_4",
+      "jsType": "Grados_ 4",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_41",
+      "jsType": "Grados_ 41",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_9",
+      "jsType": "Grados_ 9",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_3",
+      "jsType": "Grados_ 3",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sector",
+      "jsType": "Sector",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_6",
+      "jsType": "Grados_ 6",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_5",
+      "jsType": "Grados_ 5",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_ciclo_vi",
+      "jsType": "Grados_ Ciclo VI",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_ciclo_iv",
+      "jsType": "Grados_ CICLO IV",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sede",
+      "jsType": "Sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grados_42",
+      "jsType": "Grados_ 42",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:42.890Z"
+}

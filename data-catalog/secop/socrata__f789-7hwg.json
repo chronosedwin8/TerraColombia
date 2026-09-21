@@ -1,0 +1,526 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "f789-7hwg",
+  "name": "SECOP I - Procesos de Compra Pública",
+  "description": "Procesos de Compra pública registrados en el SECOP I desde el 01 de enero de 2018, contiene la información del proceso, fase de selección y la adjudicación",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "secop i",
+    "compra pública",
+    "colombia compra eficiente",
+    "licitaciones",
+    "licitacion",
+    "contratacion"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/f789-7hwg",
+  "webUri": "https://www.datos.gov.co/d/f789-7hwg",
+  "homepage": null,
+  "createdAt": "2022-04-04T13:48:22+0000",
+  "dataUpdatedAt": "2026-09-21T11:57:05+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "pliegos_tipo",
+      "jsType": "Pliegos tipo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sector_pliegos_tipo",
+      "jsType": "Sector pliegos tipo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "uid",
+      "jsType": "UID",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_total_de_adiciones",
+      "jsType": "Valor Total de Adiciones",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tiempo_adiciones_en_meses",
+      "jsType": "Tiempo Adiciones en Meses",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tiempo_adiciones_en_dias",
+      "jsType": "Tiempo Adiciones en Dias",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_cargue_en_el_secop",
+      "jsType": "Fecha de Cargue en el SECOP",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "moneda",
+      "jsType": "Moneda",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_de_constancia",
+      "jsType": "Numero de Constancia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_sub_unidad_ejecutora",
+      "jsType": "Nombre Sub Unidad Ejecutora",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "municipio_entidad",
+      "jsType": "Municipio Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "punto_acuerdo_paz",
+      "jsType": "Punto Acuerdo Paz",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pilar_acuerdo_paz",
+      "jsType": "Pilar Acuerdo Paz",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_de_proceso",
+      "jsType": "Numero de Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rango_de_ejec_del_contrato",
+      "jsType": "Rango de Ejec del Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_de_contrato",
+      "jsType": "Numero de Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_firma_del_contrato",
+      "jsType": "Fecha de Firma del Contrato",
+      "pii": true,
+      "piiReason": "Dato biométrico o imagen de la persona."
+    },
+    {
+      "name": "cuantia_proceso",
+      "jsType": "Cuantia Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sexo_replegal",
+      "jsType": "Sexo RepLegal",
+      "pii": true,
+      "piiReason": "Dato sensible de la persona (Ley 1581/2012, art. 5)."
+    },
+    {
+      "name": "valor_rubro",
+      "jsType": "Valor Rubro",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_del_represen_legal",
+      "jsType": "Nombre del Represen Legal",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "tipo_doc_representante_legal",
+      "jsType": "Tipo Doc Representante Legal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "orden_entidad",
+      "jsType": "Orden Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ruta_proceso_en_secop_i",
+      "jsType": "Ruta Proceso en SECOP I",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "identific_representante_legal",
+      "jsType": "Identific Representante Legal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_grupo",
+      "jsType": "ID Grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "plazo_de_ejec_del_contrato",
+      "jsType": "Plazo de Ejec del Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_grupo",
+      "jsType": "Nombre Grupo",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "id_familia",
+      "jsType": "ID Familia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_familia",
+      "jsType": "Nombre Familia",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "tipo_identifi_del_contratista",
+      "jsType": "Tipo Identifi del Contratista",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_ini_ejec_contrato",
+      "jsType": "Fecha Ini Ejec Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_clase",
+      "jsType": "ID Clase",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_rubro",
+      "jsType": "Nombre Rubro",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "dpto_y_muni_contratista",
+      "jsType": "Dpto y Muni Contratista",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nom_razon_social_contratista",
+      "jsType": "Nom Razon Social Contratista",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "nombre_clase",
+      "jsType": "Nombre Clase",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_adjudicacion",
+      "jsType": "ID Adjudicacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "identificacion_del_contratista",
+      "jsType": "Identificacion del Contratista",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "nivel_entidad",
+      "jsType": "Nivel Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_regimen_de_contratacion",
+      "jsType": "Nombre Regimen de Contratacion",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "posicion_rubro",
+      "jsType": "Posicion Rubro",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "es_postconflicto",
+      "jsType": "Es PostConflicto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "marcacion_adiciones",
+      "jsType": "Marcacion Adiciones",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "anno_firma_contrato",
+      "jsType": "Anno Firma Contrato",
+      "pii": true,
+      "piiReason": "Dato biométrico o imagen de la persona."
+    },
+    {
+      "name": "id_modalidad",
+      "jsType": "ID Modalidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "anno_cargue_secop",
+      "jsType": "Anno Cargue SECOP",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "modalidad_de_contratacion",
+      "jsType": "Modalidad de Contratacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_contrato_con_adiciones",
+      "jsType": "Valor Contrato con Adiciones",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_del_proceso",
+      "jsType": "Estado del Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_objeto_a_contratar",
+      "jsType": "ID Objeto a Contratar",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cuantia_contrato",
+      "jsType": "Cuantia Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "objeto_a_contratar",
+      "jsType": "Objeto a Contratar",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "detalle_del_objeto_a_contratar",
+      "jsType": "Detalle del Objeto a Contratar",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_regimen_de_contratacion",
+      "jsType": "ID Regimen de Contratacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "objeto_del_contrato_a_la",
+      "jsType": "Objeto del Contrato a la Firma",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "proponentes_seleccionados",
+      "jsType": "Proponentes Seleccionados",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "causal_de_otras_formas_de",
+      "jsType": "Causal de Otras formas de Contratacion Directa",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_de_la_entidad",
+      "jsType": "Código de la Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_de_la_entidad",
+      "jsType": "NIT de la Entidad",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "ultima_actualizacion",
+      "jsType": "Ultima Actualizacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_entidad",
+      "jsType": "Nombre Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_liquidacion",
+      "jsType": "Fecha Liquidacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cumpledecreto248",
+      "jsType": "Cumple Decreto 248",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "incluyebienesdecreto248",
+      "jsType": "IncluyeBienesDecreto248",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cumple_sentencia_t302",
+      "jsType": "Cumple Sentencia T302",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "es_mipyme",
+      "jsType": "Es MiPyme",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tama_o_mipyme",
+      "jsType": "Tamaño Mipyme",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_de_contrato",
+      "jsType": "Tipo De Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio_de_obtencion",
+      "jsType": "Municipio de Obtencion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "calificacion_definitiva",
+      "jsType": "Calificacion Definitiva",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento_entidad",
+      "jsType": "Departamento Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio_de_entrega",
+      "jsType": "Municipio de Entrega",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_bpin",
+      "jsType": "Codigo BPIN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "destino_gasto",
+      "jsType": "Destino gasto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "compromiso_presupuestal",
+      "jsType": "Compromiso Presupuestal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_fin_ejec_contrato",
+      "jsType": "Fecha Fin Ejec Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_sub_unidad_ejecutora",
+      "jsType": "ID Sub Unidad Ejecutora",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipios_ejecucion",
+      "jsType": "Municipios Ejecucion",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nombre_sub_unidad_ejecutora",
+    "fecha_de_firma_del_contrato",
+    "sexo_replegal",
+    "nombre_del_represen_legal",
+    "nombre_grupo",
+    "nombre_familia",
+    "nombre_rubro",
+    "nom_razon_social_contratista",
+    "identificacion_del_contratista",
+    "nombre_regimen_de_contratacion",
+    "anno_firma_contrato",
+    "nit_de_la_entidad"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:00.329Z"
+}

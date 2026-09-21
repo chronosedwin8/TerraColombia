@@ -1,0 +1,251 @@
+{
+  "uid": "tc-negocio",
+  "title": "TerraColombia · Negocio",
+  "description": "Métricas del PLAN §12: MRR, activación, conversión a pago, informes por usuario y churn. Todas se publican como métricas agregadas desde la API: este tablero nunca consulta la base directamente, así que no puede exponer datos de ningún usuario concreto (docs/SEGURIDAD.md §Registro sin PII).",
+  "tags": ["terracolombia", "negocio", "mrr"],
+  "timezone": "America/Bogota",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": false,
+  "refresh": "5m",
+  "time": { "from": "now-90d", "to": "now" },
+  "graphTooltip": 1,
+  "templating": {
+    "list": [
+      {
+        "name": "plan",
+        "label": "Plan",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+        "query": "label_values(tc_active_subscriptions, plan)",
+        "includeAll": true,
+        "multi": true,
+        "current": { "text": "Todos", "value": "$__all" },
+        "refresh": 2,
+        "sort": 1
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "row",
+      "title": "Resumen",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "MRR",
+      "description": "Ingreso recurrente mensual en pesos colombianos. No incluye el pago por informe suelto (no es recurrente): eso está en el panel de ingresos por informe.",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 6, "w": 5, "x": 0, "y": 1 },
+      "targets": [{ "refId": "A", "expr": "sum(tc_mrr_cop{plan=~\"$plan\"})", "legendFormat": "MRR" }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyCOP",
+          "decimals": 0,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] }
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "colorMode": "value", "graphMode": "area", "textMode": "auto" }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Suscripciones activas",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 6, "w": 4, "x": 5, "y": 1 },
+      "targets": [{ "refId": "A", "expr": "sum(tc_active_subscriptions{plan=~\"$plan\"})", "legendFormat": "activas" }],
+      "fieldConfig": {
+        "defaults": { "unit": "short", "decimals": 0, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "colorMode": "value", "graphMode": "area", "textMode": "auto" }
+    },
+    {
+      "id": 4,
+      "type": "gauge",
+      "title": "Activación (30 d)",
+      "description": "Porcentaje de usuarios registrados que llegaron a hacer al menos una consulta útil (una ficha de predio o un análisis de zona completos). Es la métrica que dice si el producto se entiende solo.",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 6, "w": 5, "x": 9, "y": 1 },
+      "targets": [
+        { "refId": "A", "expr": "increase(tc_activated_users_total[30d]) / clamp_min(increase(tc_signups_total[30d]), 1)", "legendFormat": "activación" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "decimals": 1,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 0.25 }, { "color": "green", "value": 0.4 }] }
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showThresholdMarkers": true }
+    },
+    {
+      "id": 5,
+      "type": "gauge",
+      "title": "Conversión a pago (30 d)",
+      "description": "De los registrados, cuántos terminaron pagando algo (suscripción o informe suelto).",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 6, "w": 5, "x": 14, "y": 1 },
+      "targets": [
+        { "refId": "A", "expr": "sum(increase(tc_paid_conversions_total[30d])) / clamp_min(increase(tc_signups_total[30d]), 1)", "legendFormat": "conversión" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 0.5,
+          "decimals": 2,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 0.02 }, { "color": "green", "value": 0.05 }] }
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showThresholdMarkers": true }
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Informes por usuario activo (30 d)",
+      "description": "Informes generados dividido entre usuarios que usaron el producto. Mide si el producto se usa de verdad o solo se prueba una vez.",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 6, "w": 5, "x": 19, "y": 1 },
+      "targets": [
+        { "refId": "A", "expr": "sum(increase(tc_reports_generated_total[30d])) / clamp_min(sum(tc_monthly_active_users), 1)", "legendFormat": "informes/usuario" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 2,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 0.5 }, { "color": "green", "value": 1.5 }] }
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "colorMode": "value", "graphMode": "area", "textMode": "auto" }
+    },
+    {
+      "id": 10,
+      "type": "row",
+      "title": "Ingresos",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 7 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 11,
+      "type": "timeseries",
+      "title": "MRR por plan",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 8 },
+      "targets": [{ "refId": "A", "expr": "sum by (plan) (tc_mrr_cop{plan=~\"$plan\"})", "legendFormat": "{{plan}}" }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyCOP",
+          "decimals": 0,
+          "custom": { "drawStyle": "line", "lineWidth": 1, "fillOpacity": 35, "stacking": { "mode": "normal" }, "showPoints": "never" }
+        },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "table", "placement": "right", "showLegend": true, "calcs": ["lastNotNull"] }, "tooltip": { "mode": "multi", "sort": "desc" } }
+    },
+    {
+      "id": 12,
+      "type": "timeseries",
+      "title": "Altas, bajas y conversiones por día",
+      "description": "Churn = bajas / suscripciones activas al inicio del periodo. Aquí se ven los tres flujos juntos para entender si el crecimiento es neto.",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        { "refId": "A", "expr": "sum(increase(tc_signups_total[1d]))", "legendFormat": "registros" },
+        { "refId": "B", "expr": "sum(increase(tc_paid_conversions_total{plan=~\"$plan\"}[1d]))", "legendFormat": "conversiones a pago" },
+        { "refId": "C", "expr": "sum(increase(tc_churned_subscriptions_total{plan=~\"$plan\"}[1d]))", "legendFormat": "bajas" }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "short", "decimals": 0, "custom": { "drawStyle": "bars", "lineWidth": 1, "fillOpacity": 70, "showPoints": "never" } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "bajas" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }] },
+          { "matcher": { "id": "byName", "options": "conversiones a pago" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "green" } }] },
+          { "matcher": { "id": "byName", "options": "registros" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "blue" } }] }
+        ]
+      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } }
+    },
+    {
+      "id": 20,
+      "type": "row",
+      "title": "Uso del producto",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 17 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 21,
+      "type": "timeseries",
+      "title": "Informes generados por día, por tipo",
+      "description": "Tipos: predio (M7), zona, localización de negocio, cambio territorial, municipal.",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 18 },
+      "targets": [{ "refId": "A", "expr": "sum by (report_type) (increase(tc_reports_generated_total[1d]))", "legendFormat": "{{report_type}}" }],
+      "fieldConfig": {
+        "defaults": { "unit": "short", "decimals": 0, "custom": { "drawStyle": "bars", "lineWidth": 1, "fillOpacity": 70, "stacking": { "mode": "normal" }, "showPoints": "never" } },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "table", "placement": "right", "showLegend": true, "calcs": ["sum"] }, "tooltip": { "mode": "multi", "sort": "desc" } }
+    },
+    {
+      "id": 22,
+      "type": "bargauge",
+      "title": "Créditos consumidos por operación (30 d)",
+      "description": "Dice dónde se va el coste variable: informes, análisis de zona grandes, exportaciones masivas y llamadas a la API (PLAN §12).",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 18 },
+      "targets": [{ "refId": "A", "expr": "sum by (operation) (increase(tc_credits_consumed_total[30d]))", "legendFormat": "{{operation}}", "instant": true }],
+      "fieldConfig": {
+        "defaults": { "unit": "short", "decimals": 0, "thresholds": { "mode": "absolute", "steps": [{ "color": "purple", "value": null }] } },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "displayMode": "gradient", "orientation": "horizontal", "showUnfilled": true }
+    },
+    {
+      "id": 23,
+      "type": "timeseries",
+      "title": "Consumo de la GeoAPI por plan",
+      "description": "Peticiones a /geo/v1 con llave de API. Sirve para detectar clientes que se quedan cortos de plan (candidatos a subir de escalón) y clientes que raspan.",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 27 },
+      "targets": [
+        { "refId": "A", "expr": "sum by (plan) (rate(http_requests_total{job=\"api\",route=~\"/geo/v1.*\"}[$__rate_interval]))", "legendFormat": "{{plan}}" }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "reqps", "custom": { "drawStyle": "line", "lineWidth": 1, "fillOpacity": 25, "stacking": { "mode": "normal" }, "showPoints": "never" } },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "table", "placement": "right", "showLegend": true, "calcs": ["mean", "max"] }, "tooltip": { "mode": "multi", "sort": "desc" } }
+    },
+    {
+      "id": 24,
+      "type": "timeseries",
+      "title": "Intentos de pago",
+      "description": "Un pico de fallos puede ser del proveedor, no nuestro: confirmar en el panel de estado de Wompi antes de tocar nada.",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 27 },
+      "targets": [{ "refId": "A", "expr": "sum by (status) (increase(tc_payment_attempts_total[1h]))", "legendFormat": "{{status}}" }],
+      "fieldConfig": {
+        "defaults": { "unit": "short", "decimals": 0, "custom": { "drawStyle": "bars", "lineWidth": 1, "fillOpacity": 70, "stacking": { "mode": "normal" }, "showPoints": "never" } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "failed" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }, { "id": "displayName", "value": "fallidos" }] },
+          { "matcher": { "id": "byName", "options": "approved" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "green" } }, { "id": "displayName", "value": "aprobados" }] },
+          { "matcher": { "id": "byName", "options": "pending" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "yellow" } }, { "id": "displayName", "value": "pendientes" }] }
+        ]
+      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } }
+    }
+  ]
+}

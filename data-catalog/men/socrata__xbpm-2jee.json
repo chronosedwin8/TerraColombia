@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "xbpm-2jee",
+  "name": "ESTABLECIMIENTOS NACIONALES FABRICANTES DE MEDICAMENTOS CERTIFICADOS CON BUENAS PRÁCTICAS DE MANUFACTURA",
+  "description": "En este listado se consolidan los establecimientos nacionales que cuentan con certificación en Buenas Prácticas de Manufactura vigente, para la fabricación de medicamentos",
+  "publisher": "Secretaría Distrital de Cultura, Recreación y Deporte, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Secretaría Distrital de Cultura, Recreación y Deporte, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/xbpm-2jee",
+  "webUri": "https://www.datos.gov.co/d/xbpm-2jee",
+  "homepage": null,
+  "createdAt": "2020-07-21T20:02:29+0000",
+  "dataUpdatedAt": "2026-09-09T20:34:01+0000",
+  "cutDate": "2026-09-09",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "concepto",
+      "jsType": "CONCEPTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "concepto_corto",
+      "jsType": "CONCEPTO CORTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_notificacion",
+      "jsType": "FECHA NOTIFICACION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_vencimiento",
+      "jsType": "FECHA VENCIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_establecimiento",
+      "jsType": "NOMBRE ESTABLECIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "expediente",
+      "jsType": "EXPEDIENTE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciudad",
+      "jsType": "CIUDAD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion",
+      "jsType": "DIRECCION",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:47.843Z"
+}

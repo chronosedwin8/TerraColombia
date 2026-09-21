@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "jmkk-qiin",
+  "name": "Equipos y servicios tecnológicos en las instituciones educativas - DEPARTAMENTO DE BOYACÁ",
+  "description": "El conjunto de datos contiene información de computadores, tabletas, servidores de contenido y laboratorios de innovación que hay en las diferentes sedes de las instituciones educativas en el departamento de Boyacá.",
+  "publisher": "Gobernación de Boyacá, Boyacá",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "equipos",
+    "tecnologicos",
+    "instituciones",
+    "computadores"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Boyacá, Boyacá",
+  "dataUri": "https://www.datos.gov.co/resource/jmkk-qiin",
+  "webUri": "https://www.datos.gov.co/d/jmkk-qiin",
+  "homepage": null,
+  "createdAt": "2023-09-30T00:55:11+0000",
+  "dataUpdatedAt": "2023-09-30T01:07:39+0000",
+  "cutDate": "2023-09-30",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "longitud",
+      "jsType": "Longitud",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "inventario_educacion_2022",
+      "jsType": "INVENTARIO EDUCACION 2022 COMP ESCRITORIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "servidores_contenidos",
+      "jsType": "SERVIDORES  CONTENIDOS EDUCATIVOS OFFLINE -CEO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "inventario_educacion_2022_2",
+      "jsType": "INVENTARIO EDUCACION 2022 TABLETAS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "latitud",
+      "jsType": "latitud",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sede",
+      "jsType": "SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "institucion",
+      "jsType": "INSTITUCION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "inventario_educacion_2022_1",
+      "jsType": "INVENTARIO EDUCACION 2022 PORTÁTILES",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matricula_01_04_2023",
+      "jsType": "MATRICULA 01-04-2023",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "provincia",
+      "jsType": "Provincia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dane_sede",
+      "jsType": "DANE SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "lab_stem_2020_2022",
+      "jsType": "LAB STEM 2020-2022",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:37.312Z"
+}

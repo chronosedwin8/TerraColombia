@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "4e5t-9b6q",
+  "name": "NIÑOS, NIÑAS Y ADOLESCENTES DE ESTABLECIMIENTOS EDUCATIVOS DEL MUNICIPIO DE TIBÚ BENEFICIADOS CON EL PROGRAMA DE ALIMENTACIÒN ESCOLAR (PAE) VIGENCIA 2020",
+  "description": "Como parte de las políticas de acceso y permanencia de niños, niñas y adolescentes en el sistema educativo público del país se publica la siguiente información de interés dirigida a la comunidad educativa del municipio de Tibú y demás actores involucrados en sector de la educación mostrando el beneficio del Programa de Alimentación Escolar en los establecimientos educativos de la jurisdicción local articulado con la Gobernación de Norte de Santander durante la vigencia 2020",
+  "publisher": "Alcaldía de Tibú, Norte de Santander",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "nna",
+    "establecimientos educativos",
+    "educación",
+    "programa de alimentación",
+    "pae",
+    "alimentación escolar",
+    "programa de alimentación escolar"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Alcaldía de Tibú, Norte de Santander",
+  "dataUri": "https://www.datos.gov.co/resource/4e5t-9b6q",
+  "webUri": "https://www.datos.gov.co/d/4e5t-9b6q",
+  "homepage": null,
+  "createdAt": "2021-09-27T17:02:59+0000",
+  "dataUpdatedAt": "2021-09-27T17:15:51+0000",
+  "cutDate": "2021-09-27",
+  "geographicCoverage": null,
+  "rowCount": 164,
+  "columns": [
+    {
+      "name": "racion_industrializada",
+      "jsType": "RACION INDUSTRIALIZADA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "raci_n_preparada_en_sitio",
+      "jsType": "RACIÓN PREPARADA EN SITIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane",
+      "jsType": "CODIGO DANE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "establecimiento_educativo",
+      "jsType": "ESTABLECIMIENTO EDUCATIVO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "escolares_beneficiados_reporte",
+      "jsType": "ESCOLARES BENEFICIADOS REPORTE SIMAT",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cupos_asignados",
+      "jsType": "CUPOS ASIGNADOS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sede_educativa",
+      "jsType": "SEDE EDUCATIVA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_de_comunidad",
+      "jsType": "TIPO DE COMUNIDAD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "municipio": "TIBÚ",
+      "establecimiento_educativo": "INTITUCIÓN ETNOEDUCATIVA BARI",
+      "tipo_de_comunidad": "INDIGENA",
+      "sede_educativa": "SEDE PRINCIPAL",
+      "codigo_dane": "254810000653",
+      "zona": "RURAL",
+      "escolares_beneficiados_reporte": "194",
+      "raci_n_preparada_en_sitio": "194",
+      "racion_industrializada": "0",
+      "cupos_asignados": "194"
+    },
+    {
+      "municipio": "TIBÚ",
+      "establecimiento_educativo": "INTITUCIÓN ETNOEDUCATIVA BARI",
+      "tipo_de_comunidad": "INDIGENA",
+      "sede_educativa": "SEDE ARACTOBARI",
+      "codigo_dane": "254245800012",
+      "zona": "RURAL",
+      "escolares_beneficiados_reporte": "22",
+      "raci_n_preparada_en_sitio": "22",
+      "racion_industrializada": "0",
+      "cupos_asignados": "22"
+    },
+    {
+      "municipio": "TIBÚ",
+      "establecimiento_educativo": "INTITUCIÓN ETNOEDUCATIVA BARI",
+      "tipo_de_comunidad": "INDIGENA",
+      "sede_educativa": "SEDE AXDOSARIDA",
+      "codigo_dane": "254245800004",
+      "zona": "RURAL",
+      "escolares_beneficiados_reporte": "11",
+      "raci_n_preparada_en_sitio": "11",
+      "racion_industrializada": "0",
+      "cupos_asignados": "11"
+    },
+    {
+      "municipio": "TIBÚ",
+      "establecimiento_educativo": "INTITUCIÓN ETNOEDUCATIVA BARI",
+      "tipo_de_comunidad": "INDIGENA",
+      "sede_educativa": "SEDE BEBOQUIRA",
+      "codigo_dane": "254810001382",
+      "zona": "RURAL",
+      "escolares_beneficiados_reporte": "10",
+      "raci_n_preparada_en_sitio": "10",
+      "racion_industrializada": "0",
+      "cupos_asignados": "10"
+    },
+    {
+      "municipio": "TIBÚ",
+      "establecimiento_educativo": "INTITUCIÓN ETNOEDUCATIVA BARI",
+      "tipo_de_comunidad": "INDIGENA",
+      "sede_educativa": "SEDE BRYDICAYRA",
+      "codigo_dane": "254206000912",
+      "zona": "RURAL",
+      "escolares_beneficiados_reporte": "14",
+      "raci_n_preparada_en_sitio": "14",
+      "racion_industrializada": "0",
+      "cupos_asignados": "14"
+    }
+  ],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:26.339Z"
+}

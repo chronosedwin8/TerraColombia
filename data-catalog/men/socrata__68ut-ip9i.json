@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "68ut-ip9i",
+  "name": "COBERTURA DEL PROGRAMA DE ALIMENTACIÓN ESCOLAR (PAE) EN EL DEPARTAMENTO DE NORTE DE SANTANDER",
+  "description": "En este dataset encontrarán la proyección de los municipios, las instituciones educativas y sedes educativas beneficiadas del programa de alimentación escolar en el año 2022, esta proyección se basa teniendo en cuenta el corte de matricula a febrero de 2022",
+  "publisher": "Gobernación de Santander, Santander",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "pae",
+    "programa de alimentación escolar"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Santander, Santander",
+  "dataUri": "https://www.datos.gov.co/resource/68ut-ip9i",
+  "webUri": "https://www.datos.gov.co/d/68ut-ip9i",
+  "homepage": null,
+  "createdAt": "2022-04-25T22:43:13+0000",
+  "dataUpdatedAt": "2022-04-25T23:09:52+0000",
+  "cutDate": "2022-04-25",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sedes_educativas",
+      "jsType": "SEDES EDUCATIVAS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "raci_n_para_preparar_en_el",
+      "jsType": "RACIÓN PARA PREPARAR EN EL SITIO – ALMUERZO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estudiantes_matriculados",
+      "jsType": "ESTUDIANTES MATRICULADOS HASTA 15/02/2022",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_de_cupos_asignados",
+      "jsType": "TOTAL DE CUPOS ASIGNADOS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha",
+      "jsType": "FECHA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane",
+      "jsType": "CODIGO DANE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "institucion_educativas",
+      "jsType": "INSTITUCION EDUCATIVAS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_cobertura",
+      "jsType": "% DE COBERTURA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "raci_n_industrializada",
+      "jsType": "RACIÓN INDUSTRIALIZADA",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:36.038Z"
+}

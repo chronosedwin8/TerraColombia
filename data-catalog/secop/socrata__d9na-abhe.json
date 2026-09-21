@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "d9na-abhe",
+  "name": "SECOP II - BPIN por Proceso",
+  "description": "Informacion de los codigos BPIN de los procesos de compra y contratos",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "procesos de contratación",
+    "compra pública",
+    "contratos",
+    "secop"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/d9na-abhe",
+  "webUri": "https://www.datos.gov.co/d/d9na-abhe",
+  "homepage": null,
+  "createdAt": "2026-02-21T21:08:38+0000",
+  "dataUpdatedAt": "2026-09-21T06:07:54+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "validacion_bpin",
+      "jsType": "Validacion BPIN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_portafolio",
+      "jsType": "ID Portafolio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "anno_bpin",
+      "jsType": "Anno BPIN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_bpin",
+      "jsType": "Codigo BPIN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_proceso",
+      "jsType": "ID Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_contracto",
+      "jsType": "ID Contracto",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:41:59.541Z"
+}

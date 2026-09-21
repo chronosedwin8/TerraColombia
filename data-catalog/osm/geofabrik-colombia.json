@@ -1,0 +1,43 @@
+{
+  "source": "OSM",
+  "region": "Colombia",
+  "pageUrl": "https://download.geofabrik.de/south-america/colombia.html",
+  "cutDate": "2026-09-20",
+  "cutDateRaw": "2026-09-20T20:22:06Z",
+  "license": "ODbL 1.0 (Open Database License)",
+  "attribution": "© colaboradores de OpenStreetMap, ODbL 1.0",
+  "files": [
+    {
+      "name": "colombia-latest-free.gpkg.zip",
+      "url": "https://download.geofabrik.de/south-america/colombia-latest-free.gpkg.zip",
+      "format": "gpkg",
+      "bytes": 793973043,
+      "lastModified": "2026-09-21T04:52:38.000Z",
+      "md5Url": null,
+      "md5": null,
+      "acceptsRanges": true
+    },
+    {
+      "name": "colombia-latest-free.shp.zip",
+      "url": "https://download.geofabrik.de/south-america/colombia-latest-free.shp.zip",
+      "format": "shp",
+      "bytes": 773134791,
+      "lastModified": "2026-09-21T04:51:27.000Z",
+      "md5Url": null,
+      "md5": null,
+      "acceptsRanges": true
+    },
+    {
+      "name": "colombia-latest.osm.pbf",
+      "url": "https://download.geofabrik.de/south-america/colombia-latest.osm.pbf",
+      "format": "pbf",
+      "bytes": 329720308,
+      "lastModified": "2026-09-20T22:52:42.000Z",
+      "md5Url": "https://download.geofabrik.de/south-america/colombia-latest.osm.pbf.md5",
+      "md5": "e55fbc2186df3fb513b966f0c9940bbd",
+      "acceptsRanges": true
+    }
+  ],
+  "notes": [],
+  "inspectedAt": "2026-09-21T15:30:22.954Z"
+}

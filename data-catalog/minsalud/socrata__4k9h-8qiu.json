@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "source": "minsalud",
+  "connector": "socrata",
+  "id": "4k9h-8qiu",
+  "name": "Registros Individuales de Prestación de Servicios de Salud – RIPS",
+  "description": "Registros Individuales de Prestación de Servicios de Salud – RIPS\nDiligencia la Encuesta de Satisfacción:\nhttps://tramites.minsalud.gov.co/FormularioInscripcion/EncuestaSatisfaccion.aspx",
+  "publisher": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/4k9h-8qiu",
+  "webUri": "https://www.datos.gov.co/d/4k9h-8qiu",
+  "homepage": null,
+  "createdAt": "2022-06-03T22:12:35+0000",
+  "dataUpdatedAt": "2022-06-09T02:20:37+0000",
+  "cutDate": "2022-06-09",
+  "geographicCoverage": null,
+  "rowCount": 38000000,
+  "columns": [
+    {
+      "name": "departamento",
+      "jsType": "Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipoatencion",
+      "jsType": "TipoAtencion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numeroatenciones",
+      "jsType": "NumeroAtenciones",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "diagnostico",
+      "jsType": "Diagnostico",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "Año",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "departamento": "05 - Antioquia",
+      "municipio": "05212 - Copacabana",
+      "a_o": "2012",
+      "tipoatencion": "CONSULTAS",
+      "diagnostico": "F431 - TRASTORNO DE ESTRÃ‰S POSTRAUMATICO",
+      "numeroatenciones": "2"
+    },
+    {
+      "departamento": "05 - Antioquia",
+      "municipio": "05576 - Pueblorrico",
+      "a_o": "2011",
+      "tipoatencion": "CONSULTAS",
+      "diagnostico": "C779 - TUMOR MALIGNO DEL GANGLIO LINFATICO, SITIO NO ESPECIFICADO",
+      "numeroatenciones": "1"
+    },
+    {
+      "departamento": "05 - Antioquia",
+      "municipio": "05086 - Belmira",
+      "a_o": "2014",
+      "tipoatencion": "PROCEDIMIENTOS DE SALUD",
+      "diagnostico": "Z340 - SUPERVISION DE PRIMER EMBARAZO NORMAL",
+      "numeroatenciones": "48"
+    },
+    {
+      "departamento": "05 - Antioquia",
+      "municipio": "05490 - NecoclÃ­",
+      "a_o": "2015",
+      "tipoatencion": "CONSULTAS",
+      "diagnostico": "M545 - LUMBAGO NO ESPECIFICADO",
+      "numeroatenciones": "961"
+    },
+    {
+      "departamento": "05 - Antioquia",
+      "municipio": "05212 - Copacabana",
+      "a_o": "2012",
+      "tipoatencion": "CONSULTAS",
+      "diagnostico": "F510 - INSOMNIO NO ORGANICO",
+      "numeroatenciones": "32"
+    }
+  ],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:55.324Z"
+}

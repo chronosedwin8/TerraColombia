@@ -1,0 +1,352 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "emd6-ef7x",
+  "name": "Establecimientos Educativos del sector oficial y no oficial por municipio - DEPARTAMENTO DE BOYACÁ",
+  "description": "Contiene información básica de los establecimientos educativos activos del sector oficial y no oficial por municipio del departamento de Boyacá. Fuente: Sistema Integrado de Matricula – SIMAT. SINEB.",
+  "publisher": "Gobernación de Boyacá, Boyacá",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "establecimiento",
+    "educativo",
+    "sede",
+    "oficial",
+    "colegio",
+    "boyacá",
+    "instituciones educativas"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Boyacá, Boyacá",
+  "dataUri": "https://www.datos.gov.co/resource/emd6-ef7x",
+  "webUri": "https://www.datos.gov.co/d/emd6-ef7x",
+  "homepage": null,
+  "createdAt": "2017-07-21T21:38:04+0000",
+  "dataUpdatedAt": "2023-03-01T16:06:57+0000",
+  "cutDate": "2023-03-01",
+  "geographicCoverage": null,
+  "rowCount": 2184,
+  "columns": [
+    {
+      "name": "licencia",
+      "jsType": " LICENCIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "genero",
+      "jsType": " GENERO",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (genero)."
+    },
+    {
+      "name": "internado",
+      "jsType": " INTERNADO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "idiomas",
+      "jsType": " IDIOMAS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matricula_contratada",
+      "jsType": " MATRICULA CONTRATADA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "capacidades_excepcionales",
+      "jsType": "  CAPACIDADES EXCEPCIONALES",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "resguardo",
+      "jsType": " RESGUARDO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre",
+      "jsType": " NOMBRE",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (nombre)."
+    },
+    {
+      "name": "tipo_establecimiento",
+      "jsType": " TIPO ESTABLECIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_municipio",
+      "jsType": "CÓDIGO MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sector",
+      "jsType": " SECTOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "propiedad_de_la_planta_fis_ca",
+      "jsType": " PROPIEDAD DE LA PLANTA FISÍCA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_mero_de_sedes",
+      "jsType": " NÚMERO DE SEDES",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direcci_n",
+      "jsType": "  DIRECCIÓN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "prestador_de_servicio",
+      "jsType": " PRESTADOR DE SERVICIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "correo_electr_nico",
+      "jsType": " CORREO ELECTRÓNICO",
+      "pii": true,
+      "piiReason": "Correo electrónico."
+    },
+    {
+      "name": "tel_fono",
+      "jsType": " TELÉFONO",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "jornadas",
+      "jsType": " JORNADAS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "discapacidades",
+      "jsType": " DISCAPACIDADES",
+      "pii": true,
+      "piiReason": "Dato sensible de la persona (Ley 1581/2012, art. 5)."
+    },
+    {
+      "name": "estado",
+      "jsType": " ESTADO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "calendario",
+      "jsType": " CALENDARIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "especialidad",
+      "jsType": " ESPECIALIDAD",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": " MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_rector",
+      "jsType": " NOMBRE RECTOR",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "grados",
+      "jsType": " GRADOS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": " ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "secretar_a",
+      "jsType": "SECRETARÍA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estrato_socio_economico",
+      "jsType": " ESTRATO SOCIO-ECONOMICO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "modelos_educativos",
+      "jsType": " MODELOS EDUCATIVOS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "niveles",
+      "jsType": " NIVELES",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo",
+      "jsType": "CÓDIGO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "caracter",
+      "jsType": " CARACTER",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "secretar_a": "TUNJA",
+      "c_digo_municipio": "15001",
+      "municipio": "TUNJA",
+      "c_digo": "115001000057",
+      "direcci_n": "KR 10 18 99",
+      "tipo_establecimiento": "INSTITUCION EDUCATIVA",
+      "sector": "OFICIAL",
+      "zona": "URBANA",
+      "niveles": "PREESCOLAR,MEDIA,BÁSICA SECUNDARIA,BÁSICA PRIMARIA",
+      "jornadas": "MAÑANA,COMPLETA,TARDE",
+      "caracter": "ACADÉMICO",
+      "especialidad": "ACADÉMICA",
+      "licencia": "SIN REVISAR",
+      "grados": "0,1,2,3,4,5,6,7,8,9,10,11",
+      "modelos_educativos": "EDUCACIÓN TRADICIONAL",
+      "n_mero_de_sedes": "1",
+      "estado": "ANTIGUO-ACTIVO",
+      "prestador_de_servicio": "CONCESION",
+      "propiedad_de_la_planta_fis_ca": "CONCESION",
+      "resguardo": "NO APLICA",
+      "matricula_contratada": "SI",
+      "calendario": "A"
+    },
+    {
+      "secretar_a": "TUNJA",
+      "c_digo_municipio": "15001",
+      "municipio": "TUNJA",
+      "c_digo": "115001002807",
+      "direcci_n": "CLL 34 B 17-00",
+      "tipo_establecimiento": "INSTITUCION EDUCATIVA",
+      "sector": "OFICIAL",
+      "zona": "URBANA,RURAL",
+      "niveles": "PREESCOLAR,MEDIA,BÁSICA SECUNDARIA,BÁSICA PRIMARIA",
+      "jornadas": "MAÑANA,ÚNICA,NOCTURNA,TARDE,FIN DE SEMANA",
+      "caracter": "TÉCNICO/ACADEMICO",
+      "especialidad": "OTRO,COMERCIAL,ACADÉMICA",
+      "licencia": "RECONOCIMIENTO OFICIAL",
+      "grados": "0,1,2,3,4,5,6,7,8,9,10,11,21,22,23,24,25,26",
+      "modelos_educativos": "TRANSFORMEMOS,FLEXIBLE ESCUELA INTEGRAL,PROGRAMA PARA JÓVENES EN EXTRAEDAD Y ADULTOS,ESCUELA NUEVA,EDUCACIÓN TRADICIONAL",
+      "n_mero_de_sedes": "6",
+      "estado": "ANTIGUO-ACTIVO",
+      "prestador_de_servicio": "CONCESION",
+      "propiedad_de_la_planta_fis_ca": "CONCESION",
+      "resguardo": "NO APLICA",
+      "matricula_contratada": "SI",
+      "calendario": "A"
+    },
+    {
+      "secretar_a": "TUNJA",
+      "c_digo_municipio": "15001",
+      "municipio": "TUNJA",
+      "c_digo": "115001000367",
+      "direcci_n": "KR 15 9 A 72",
+      "tipo_establecimiento": "INSTITUCION EDUCATIVA",
+      "sector": "OFICIAL",
+      "zona": "URBANA",
+      "niveles": "PREESCOLAR,MEDIA,BÁSICA SECUNDARIA,BÁSICA PRIMARIA",
+      "jornadas": "MAÑANA,ÚNICA,NOCTURNA,TARDE,FIN DE SEMANA",
+      "caracter": "TÉCNICO/ACADEMICO",
+      "especialidad": "OTRO,COMERCIAL,ACADÉMICA",
+      "licencia": "RECONOCIMIENTO OFICIAL",
+      "grados": "0,1,2,3,4,5,6,7,8,9,10,11,21,22,23,24,25,26",
+      "modelos_educativos": "TRANSFORMEMOS,FLEXIBLE ESCUELA INTEGRAL,PROGRAMA PARA JÓVENES EN EXTRAEDAD Y ADULTOS,POST PRIMARIA,EDUCACIÓN TRADICIONAL",
+      "n_mero_de_sedes": "4",
+      "estado": "ANTIGUO-ACTIVO",
+      "prestador_de_servicio": "CONCESION",
+      "propiedad_de_la_planta_fis_ca": "CONCESION",
+      "resguardo": "NO APLICA",
+      "matricula_contratada": "SI",
+      "calendario": "A"
+    },
+    {
+      "secretar_a": "TUNJA",
+      "c_digo_municipio": "15001",
+      "municipio": "TUNJA",
+      "c_digo": "315001002686",
+      "direcci_n": "CRA. 12 # 17-19",
+      "tipo_establecimiento": "CENTRO EDUCATIVO",
+      "sector": "NO OFICIAL",
+      "zona": "URBANA",
+      "caracter": "NO APLICA",
+      "licencia": "SIN REVISAR",
+      "n_mero_de_sedes": "1",
+      "estado": "CIERRE DEFINITIVO",
+      "prestador_de_servicio": "PERSONA NATURAL",
+      "propiedad_de_la_planta_fis_ca": "PERSONA NATURAL",
+      "resguardo": "NO APLICA",
+      "matricula_contratada": "NO",
+      "calendario": "A"
+    },
+    {
+      "secretar_a": "TUNJA",
+      "c_digo_municipio": "15001",
+      "municipio": "TUNJA",
+      "c_digo": "315001003021",
+      "direcci_n": "KR 13 17 69",
+      "tipo_establecimiento": "CENTRO EDUCATIVO",
+      "sector": "NO OFICIAL",
+      "zona": "URBANA",
+      "niveles": "PREESCOLAR,BÁSICA PRIMARIA",
+      "jornadas": "COMPLETA",
+      "caracter": "NO APLICA",
+      "licencia": "CONDICIONAL",
+      "grados": "-2,-1,0,1,2,3,4,5",
+      "modelos_educativos": "EDUCACIÓN TRADICIONAL",
+      "n_mero_de_sedes": "1",
+      "estado": "ANTIGUO-ACTIVO",
+      "prestador_de_servicio": "PERSONA NATURAL",
+      "propiedad_de_la_planta_fis_ca": "PERSONA NATURAL",
+      "resguardo": "NO APLICA",
+      "matricula_contratada": "NO",
+      "calendario": "A"
+    }
+  ],
+  "piiDroppedColumns": [
+    "correo_electr_nico",
+    "discapacidades",
+    "genero",
+    "nombre",
+    "nombre_rector",
+    "tel_fono"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:18.266Z"
+}

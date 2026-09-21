@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "7y7n-8wu6",
+  "name": "Estudiantes Beneficiados con el Programa de Alimentación Escolar PAE en el Municipio de Sogamoso Boyacá",
+  "description": "En este conjunto de datos encuentra la cantidad de estudiantes beneficiados con el Programa de Alimentación Escolar PAE, el colegio y sede donde están matriculados, grado escolar, jornada, núcleo, tipo de documento de identidad, género estrato y más datos interesantes.",
+  "publisher": "Alcaldía de Sogamoso, Boyacá",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "pae",
+    "programa de alimentación escolar",
+    "sogamoso",
+    "estudiantes beneficiados",
+    "beneficio"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Alcaldía de Sogamoso, Boyacá",
+  "dataUri": "https://www.datos.gov.co/resource/7y7n-8wu6",
+  "webUri": "https://www.datos.gov.co/d/7y7n-8wu6",
+  "homepage": null,
+  "createdAt": "2021-11-24T19:55:09+0000",
+  "dataUpdatedAt": "2025-10-17T20:39:20+0000",
+  "cutDate": "2025-10-17",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "pais_origen",
+      "jsType": "PAIS_ORIGEN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "genero",
+      "jsType": "GENERO",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (genero)."
+    },
+    {
+      "name": "discapacidad",
+      "jsType": "DISCAPACIDAD",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (discapacidad)."
+    },
+    {
+      "name": "estrato",
+      "jsType": "ESTRATO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "modelo",
+      "jsType": "MODELO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grupo",
+      "jsType": "GRUPO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_acad_mico",
+      "jsType": "GRADO ACADÉMICO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_documento",
+      "jsType": "TIPO DOCUMENTO",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (tipo_documento)."
+    },
+    {
+      "name": "sisben_tres",
+      "jsType": "SISBEN_TRES",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado",
+      "jsType": "ESTADO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "jerarquia",
+      "jsType": "JERARQUIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "jornada",
+      "jsType": "JORNADA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona_de_la_sede",
+      "jsType": "ZONA DE LA SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "consecutivo",
+      "jsType": "CONSECUTIVO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_de_la_sede",
+      "jsType": "CODIGO DANE DE LA SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "calendario",
+      "jsType": "CALENDARIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sede_de_la_instituci_n",
+      "jsType": "SEDE DE LA INSTITUCIÓN EDUCATIVA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sector",
+      "jsType": "SECTOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_de_la_institucion",
+      "jsType": "NOMBRE DE LA INSTITUCION EDUCATIVA",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "c_digo_dane",
+      "jsType": "CÓDIGO DANE",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "genero",
+    "discapacidad",
+    "tipo_documento",
+    "nombre_de_la_institucion"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:35.761Z"
+}

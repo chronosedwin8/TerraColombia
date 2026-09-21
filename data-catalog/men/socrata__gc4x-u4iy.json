@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "gc4x-u4iy",
+  "name": "ESTABLECIMIENTOS INSCRITOS PARA EL MANEJO DE MEDICAMENTOS DE CONTROL ESPECIAL",
+  "description": "Listado de establecimientos autorizados para el manejo de medicamentos de control especial en el departamento de Norte de Santander",
+  "publisher": "Instituto Departamental de Salud del Norte de Santander, Norte de Santander",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "idsnds",
+    "medicamentos"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Instituto Departamental de Salud del Norte de Santander, Norte de Santander",
+  "dataUri": "https://www.datos.gov.co/resource/gc4x-u4iy",
+  "webUri": "https://www.datos.gov.co/d/gc4x-u4iy",
+  "homepage": null,
+  "createdAt": "2016-11-02T12:25:05+0000",
+  "dataUpdatedAt": "2026-07-20T14:15:02+0000",
+  "cutDate": "2026-07-20",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "barrio",
+      "jsType": "BARRIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "vencimiento",
+      "jsType": "VENCIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "expedicion",
+      "jsType": "EXPEDICION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_mpio",
+      "jsType": "COD_MPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "clase",
+      "jsType": "CLASE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion",
+      "jsType": "DIRECCION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "resolucion",
+      "jsType": "RESOLUCION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_clase",
+      "jsType": "COD_CLASE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_o_razon_social",
+      "jsType": "NOMBRE O RAZON SOCIAL",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nombre_o_razon_social"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:49.643Z"
+}

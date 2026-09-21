@@ -1,0 +1,281 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "x5ay-984n",
+  "name": "MEN_SEDES_EDUCATIVAS_PREESCOLAR_BÁSICA_Y_MEDIA",
+  "description": "Contiene las sedes educativas de Preescolar, básica y Media en Colombia, con historia desde el 2019\n\nFUENTE: Sistema Integrado de Matrícula SIMAT- Directorio Unico de Establecimientos DUE- Ministerio Educación Nacional y DANE para los datos georreferenciados\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\nNOTA1: Información de matrícula definitiva 2019.\t\t\t\t\t\t\t\t\t\t\t\t\t\nNOTA2: Los códigos DANE de los establecimientos educativos (EE) y sedes educativas son asignados por el Departamento Nacional de Estadística – DANE; algunos EE y sedes  manejan otros códigos que no corresponden a los asignados por el DANE, razón por la cual desde el año 2016, se viene realizando depuración de la información. En sentido, para efectos de cruces de información de EE y sedes de otros cortes o años anteriores, se sugiere utilizar para las sedes el código único de sedes SEDE_ID y para los establecimientos, el código único EST_ID, los cuales se relacionan en este reporte.",
+  "publisher": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "educación",
+    "sedes"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/x5ay-984n",
+  "webUri": "https://www.datos.gov.co/d/x5ay-984n",
+  "homepage": null,
+  "createdAt": "2021-03-19T19:18:42+0000",
+  "dataUpdatedAt": "2021-03-19T19:29:48+0000",
+  "cutDate": "2021-03-19",
+  "geographicCoverage": null,
+  "rowCount": 53796,
+  "columns": [
+    {
+      "name": "direccion",
+      "jsType": "DIRECCION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "email",
+      "jsType": "EMAIL",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (email)."
+    },
+    {
+      "name": "barrio_vereda",
+      "jsType": "BARRIO_VEREDA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cte_id_sector",
+      "jsType": "CTE_ID_SECTOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_sede",
+      "jsType": "NOMBRE_SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "coordenada_y_sede",
+      "jsType": "COORDENADA_Y_SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_sede",
+      "jsType": "CODIGO_DANE_SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fax",
+      "jsType": "FAX",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (fax)."
+    },
+    {
+      "name": "sede_id",
+      "jsType": "SEDE_ID",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_establecimiento",
+      "jsType": "NOMBRE_ESTABLECIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "est_id",
+      "jsType": "EST_ID",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "secretaria",
+      "jsType": "SECRETARIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane",
+      "jsType": "CODIGO_DANE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "principal",
+      "jsType": "PRINCIPAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "coordenada_x_sede",
+      "jsType": "COORDENADA_X_SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cod_dane_municipio",
+      "jsType": "COD_DANE_MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cte_id_calendario",
+      "jsType": "CTE_ID_CALENDARIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_matricula",
+      "jsType": "TOTAL_MATRICULA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "AÑO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "telefono",
+      "jsType": "TELEFONO",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (telefono)."
+    }
+  ],
+  "sample": [
+    {
+      "a_o": "2019",
+      "departamento": "Caquetá",
+      "secretaria": "CAQUETA",
+      "cod_dane_municipio": "18150",
+      "municipio": "Cartagena del Chairá",
+      "codigo_dane": "218150000578",
+      "est_id": "2117",
+      "nombre_establecimiento": "I. E. R. MONSERRATE",
+      "cte_id_sector": "OFICIAL",
+      "cte_id_calendario": "A",
+      "sede_id": "43451",
+      "codigo_dane_sede": "218150001809",
+      "coordenada_y_sede": "0.50",
+      "coordenada_x_sede": "-74.18",
+      "nombre_sede": "BUENAVISTA",
+      "zona": "RURAL",
+      "direccion": "VDA BUENAVISTA",
+      "principal": "N",
+      "total_matricula": "12"
+    },
+    {
+      "a_o": "2019",
+      "departamento": "Caquetá",
+      "secretaria": "CAQUETA",
+      "cod_dane_municipio": "18150",
+      "municipio": "Cartagena del Chairá",
+      "codigo_dane": "218150000578",
+      "est_id": "2117",
+      "nombre_establecimiento": "I. E. R. MONSERRATE",
+      "cte_id_sector": "OFICIAL",
+      "cte_id_calendario": "A",
+      "sede_id": "43452",
+      "codigo_dane_sede": "218150001884",
+      "coordenada_y_sede": "1.28",
+      "coordenada_x_sede": "-74.66",
+      "nombre_sede": "SANTA ELENA",
+      "zona": "RURAL",
+      "direccion": "VDA SANTA  ELENA",
+      "principal": "N",
+      "total_matricula": "12"
+    },
+    {
+      "a_o": "2019",
+      "departamento": "Caquetá",
+      "secretaria": "CAQUETA",
+      "cod_dane_municipio": "18150",
+      "municipio": "Cartagena del Chairá",
+      "codigo_dane": "218150000578",
+      "est_id": "2117",
+      "nombre_establecimiento": "I. E. R. MONSERRATE",
+      "cte_id_sector": "OFICIAL",
+      "cte_id_calendario": "A",
+      "sede_id": "43453",
+      "codigo_dane_sede": "218150002015",
+      "coordenada_y_sede": "0.41",
+      "coordenada_x_sede": "-74.29",
+      "nombre_sede": "CAÑO NEGRO",
+      "zona": "RURAL",
+      "direccion": "VDA CAÑO NEGRO",
+      "principal": "N",
+      "total_matricula": "4"
+    },
+    {
+      "a_o": "2019",
+      "departamento": "Caquetá",
+      "secretaria": "CAQUETA",
+      "cod_dane_municipio": "18150",
+      "municipio": "Cartagena del Chairá",
+      "codigo_dane": "218150000578",
+      "est_id": "2117",
+      "nombre_establecimiento": "I. E. R. MONSERRATE",
+      "cte_id_sector": "OFICIAL",
+      "cte_id_calendario": "A",
+      "sede_id": "43454",
+      "codigo_dane_sede": "218150002031",
+      "coordenada_y_sede": "0.26",
+      "coordenada_x_sede": "-74.07",
+      "nombre_sede": "CAÑO SANTO DOMINGO",
+      "zona": "RURAL",
+      "direccion": "VDA CAÑO SANTO DOMINGO",
+      "principal": "N",
+      "total_matricula": "8"
+    },
+    {
+      "a_o": "2019",
+      "departamento": "Caquetá",
+      "secretaria": "CAQUETA",
+      "cod_dane_municipio": "18150",
+      "municipio": "Cartagena del Chairá",
+      "codigo_dane": "218150000578",
+      "est_id": "2117",
+      "nombre_establecimiento": "I. E. R. MONSERRATE",
+      "cte_id_sector": "OFICIAL",
+      "cte_id_calendario": "A",
+      "sede_id": "43456",
+      "codigo_dane_sede": "218150002104",
+      "coordenada_y_sede": "0.47",
+      "coordenada_x_sede": "-74.17",
+      "nombre_sede": "SIMON BOLIVAR",
+      "zona": "RURAL",
+      "direccion": "VDA NAPOLES",
+      "principal": "N",
+      "total_matricula": "17"
+    }
+  ],
+  "piiDroppedColumns": [
+    "email",
+    "fax",
+    "telefono"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:29.657Z"
+}

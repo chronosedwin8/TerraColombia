@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "c4qb-ek68",
+  "name": "INDICADORES EDUCATIVOS DEL DEPARTAMENTO DEL MAGDALENA POR MUNICIPIOS 2018 - 2024",
+  "description": "Esta base presenta indicadores de la educación del Magdalena en los municipios, como la tasa de cobertura neta y bruta, tasas de deserción, aprobación repitencia y aprobación",
+  "publisher": "Gobernación de Magdalena, Magdalena",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "indicadores",
+    "educación",
+    "indicadores educativos"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Magdalena, Magdalena",
+  "dataUri": "https://www.datos.gov.co/resource/c4qb-ek68",
+  "webUri": "https://www.datos.gov.co/d/c4qb-ek68",
+  "homepage": null,
+  "createdAt": "2020-11-26T15:13:26+0000",
+  "dataUpdatedAt": "2026-03-03T20:19:56+0000",
+  "cutDate": "2026-03-03",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "municipios",
+      "jsType": "municipios",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tasa_de_reprobaci_n",
+      "jsType": "tasa de reprobación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tasa_de_deserci_n",
+      "jsType": "tasa de deserción",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tasa_de_repitencia",
+      "jsType": "tasa de repitencia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "año",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tasa_de_aprobaci_n",
+      "jsType": "tasa de aprobación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tasa_cobertura_bruta",
+      "jsType": "tasa cobertura bruta",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tasa_de_matr_cula",
+      "jsType": "tasa de matrícula",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_mero_de_habitantes",
+      "jsType": "número de habitantes",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tasa_cobertura_neta",
+      "jsType": "tasa cobertura neta",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "subregi_n",
+      "jsType": "Subregión",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:46.086Z"
+}

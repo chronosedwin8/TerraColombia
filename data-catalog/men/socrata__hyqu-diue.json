@@ -1,0 +1,234 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "hyqu-diue",
+  "name": "Exámenes médico legales por presunto delito sexual. Colombia, años 2015 a 2024. Cifras definitivas",
+  "description": "Contiene información de los exámenes médico legales por presunto delito sexual practicados, y cuyos hechos ocurrieron en Colombia en el periodo de tiempo comprendido entre los años 2015 y 2024, de los cuales tiene conocimiento y son registrados por el Instituto Nacional de Medicina Legal y Ciencias Forenses.\nSu opinión es muy importante para nosotros, ya que nos ayuda a mejorar los servicios que brindamos; por tal motivo, le agradecemos responder la siguiente encuesta relacionada con la satisfacción de consulta de datos abiertos: https://forms.office.com/r/CGD4hDTEX8.\n\nObservaciones Generales:\n1.\tEn concordancia con el quehacer misional del INMLCF, de acuerdo con lo establecido en el Artículo 35 de la Ley 938 de 2004, la entidad provee cifras estadísticas obtenidas de la práctica forense, esto con el objetivo de que puedan ser consultadas por el público en general, y también para que sean utilizadas como insumo para generar políticas públicas y toma de decisiones en cuanto a la mitigación y prevención de las lesiones de causa externa que ocurren en el territorio nacional colombiano.\n2.\tCuando se clasifica un caso en una de las categorías solicitadas, no se tipifica un delito, tampoco se hacen juicios de responsabilidad y no se determina la legalidad o ilegalidad de hecho, toda vez que estas actividades corresponden a las autoridades competentes. La clasificación, de carácter forense, se genera en el contexto de la información aportada por la autoridad, los hallazgos durante el procedimiento de necropsia y del relato de la víctima, dependiendo del contexto de violencia.\n3.\tDe conformidad con el párrafo que antecede, las cifras que aporta la entidad, se entregan a manera de presunción, por cuanto, únicamente mediante las investigaciones a cargo de las diligencias de cada caso, se puede establecer con certeza las circunstancias en las que ocurrieron los hechos.\n4.\tLa información reportada por el Instituto, corresponde solo a los casos abordados por el Instituto Nacional de Medicina Legal y Ciencias Forenses y los incluidos en los sistemas de información del Instituto por el sector salud; dicha aclaración es necesaria dado que, no todos los casos realizados por el sector salud son reportados al sistema medicolegal o no todos los casos investigados por las autoridades judiciales son conocidos por el sistema medicolegal.\n5.\tLos criterios de inclusión contemplan la exigencia que la fecha del hecho se haya dado dentro del periodo solicitado, y que además se presente como un caso que haya sido conocido por el sistema médico forense colombiano mediante solicitud de la autoridad competente. Por lo tanto, son excluidos del análisis los casos conocidos por el Instituto, cuyos hechos hayan ocurrido en un periodo de tiempo diferente.\n\nObservación para exámenes medicolegales por presunto delito sexual: \n6. En lo relacionado con la violencia sexual, el INMLCF realiza exámenes médico legales por presunto delito sexual. Este proceso constituye un eslabón en la cadena de atención que debe brindarse a las víctimas de delitos sexuales, el cual se debe articular y coordinar con todos los demás procedimientos de otras instancias que lo anteceden y que lo siguen, desde el conocimiento o la sospecha de la comisión de un delito, hasta la atención de la víctima y el juzgamiento.",
+  "publisher": "Instituto Nacional de Medicina Legal y Ciencias Forenses, Bogotá D.C.",
+  "category": "Justicia y Derecho",
+  "theme": null,
+  "tags": [
+    "lesiones no fatales",
+    "medicina legal"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Instituto Nacional de Medicina Legal y Ciencias Forenses, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/hyqu-diue",
+  "webUri": "https://www.datos.gov.co/d/hyqu-diue",
+  "homepage": null,
+  "createdAt": "2021-03-11T22:35:00+0000",
+  "dataUpdatedAt": "2025-09-19T17:09:27+0000",
+  "cutDate": "2025-09-19",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "codigo_dane_departamento",
+      "jsType": "Código Dane Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciclo_vital",
+      "jsType": "Ciclo Vital",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "orientacion_sexual",
+      "jsType": "Orientación Sexual",
+      "pii": true,
+      "piiReason": "Dato sensible de la persona (Ley 1581/2012, art. 5)."
+    },
+    {
+      "name": "actividad_durante_el_hecho",
+      "jsType": "Actividad Durante el Hecho",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "circunstancia_del_hecho_detallada",
+      "jsType": "Circunstancia del Hecho Detallada",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o_del_hecho",
+      "jsType": "Año del hecho",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id",
+      "jsType": "ID",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grupo_de_edad_judicial",
+      "jsType": "Grupo de Edad judicial",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rango_de_hora_del_hecho_x_3_horas",
+      "jsType": "Rango de Hora del Hecho X 3 Horas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pais_de_nacimiento",
+      "jsType": "País de Nacimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento_del_hecho_dane",
+      "jsType": "Departamento del hecho DANE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "localidad_del_hecho",
+      "jsType": "Localidad del Hecho",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio_del_hecho_dane",
+      "jsType": "Municipio del hecho DANE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sexo_de_la_victima",
+      "jsType": "Sexo de la victima",
+      "pii": true,
+      "piiReason": "Dato sensible de la persona (Ley 1581/2012, art. 5)."
+    },
+    {
+      "name": "transgenero",
+      "jsType": "Transgénero",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sexo_del_agresor",
+      "jsType": "Sexo del Agresor",
+      "pii": true,
+      "piiReason": "Dato sensible de la persona (Ley 1581/2012, art. 5)."
+    },
+    {
+      "name": "pertenencia_etnica",
+      "jsType": "Pertenencia Étnica",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dia_del_hecho",
+      "jsType": "Dia del hecho",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "mes_del_hecho",
+      "jsType": "Mes del hecho",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grupo_de_edad_quinquenal",
+      "jsType": "Grupo de Edad Quinquenal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "escenario_del_hecho",
+      "jsType": "Escenario del Hecho",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pertenencia_grupal",
+      "jsType": "Pertenencia Grupal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grupo_mayor_menor_de_edad",
+      "jsType": "Grupo Mayor Menor de Edad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "escolaridad",
+      "jsType": "Escolaridad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona_del_hecho",
+      "jsType": "Zona del Hecho",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_civil",
+      "jsType": "Estado Civil",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (estado_civil)."
+    },
+    {
+      "name": "presunto_agresor_detallado",
+      "jsType": "Presunto Agresor Detallado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_dane_municipio",
+      "jsType": "Código Dane Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_de_discapacidad",
+      "jsType": "Tipo de Discapacidad",
+      "pii": true,
+      "piiReason": "Dato sensible de la persona (Ley 1581/2012, art. 5)."
+    },
+    {
+      "name": "identidad_de_genero",
+      "jsType": "Identidad de Género",
+      "pii": true,
+      "piiReason": "Dato sensible de la persona (Ley 1581/2012, art. 5)."
+    },
+    {
+      "name": "pueblo_indigena",
+      "jsType": "Pueblo Indígena",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "contexto_del_hecho",
+      "jsType": "Contexto del Hecho",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "orientacion_sexual",
+    "sexo_de_la_victima",
+    "sexo_del_agresor",
+    "estado_civil",
+    "tipo_de_discapacidad",
+    "identidad_de_genero"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:33.712Z"
+}

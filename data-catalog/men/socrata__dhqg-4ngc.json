@@ -1,0 +1,431 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "dhqg-4ngc",
+  "name": "MATRÍCULA POR INSTITUCIONES EDUCATIVAS DEPARTAMENTO DE SANTANDER",
+  "description": "Matrícula por Instituciones Educativas Oficiales y Privadas correspondiente a los 82 municipios no certificados del Departamento de Santander.",
+  "publisher": "Gobernación de Santander, Santander",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "matrícula",
+    "estudiantes"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Santander, Santander",
+  "dataUri": "https://www.datos.gov.co/resource/dhqg-4ngc",
+  "webUri": "https://www.datos.gov.co/d/dhqg-4ngc",
+  "homepage": null,
+  "createdAt": "2017-04-04T21:10:58+0000",
+  "dataUpdatedAt": "2025-06-11T14:00:27+0000",
+  "cutDate": "2025-06-11",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "grado_1",
+      "jsType": "grado_1",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "prim_inf",
+      "jsType": "prim_inf",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total",
+      "jsType": "total",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "jardin",
+      "jsType": "jardin",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_9",
+      "jsType": "rgrado_9",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_10",
+      "jsType": "grado_10",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_0",
+      "jsType": "rgrado_0",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_4",
+      "jsType": "rgrado_4",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_8",
+      "jsType": "rgrado_8",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sede",
+      "jsType": "sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_25",
+      "jsType": "rgrado_25",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dane_act",
+      "jsType": "dane_act",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "prejardin",
+      "jsType": "prejardin",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dane_ant",
+      "jsType": "dane_ant",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_12",
+      "jsType": "rgrado_12",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_23",
+      "jsType": "rgrado_23",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_6",
+      "jsType": "grado_6",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipi",
+      "jsType": "municipi",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_5",
+      "jsType": "rgrado_5",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_22",
+      "jsType": "grado_22",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_9",
+      "jsType": "grado_9",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_20",
+      "jsType": "grado_20",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_7",
+      "jsType": "grado_7",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_22",
+      "jsType": "rgrado_22",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_11",
+      "jsType": "grado_11",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codi_dan",
+      "jsType": "codi_dan",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_43",
+      "jsType": "grado_43",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "provincia",
+      "jsType": "provincia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_2",
+      "jsType": "grado_2",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_21",
+      "jsType": "grado_21",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_45",
+      "jsType": "grado_45",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_25",
+      "jsType": "grado_25",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_26",
+      "jsType": "rgrado_26",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_99",
+      "jsType": "grado_99",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codi_mun",
+      "jsType": "codi_mun",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_1",
+      "jsType": "rgrado_1",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_26",
+      "jsType": "grado_26",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_0",
+      "jsType": "grado_0",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_44",
+      "jsType": "grado_44",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_10",
+      "jsType": "rgrado_10",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_2",
+      "jsType": "rgrado_2",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombsect",
+      "jsType": "nombsect",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_6",
+      "jsType": "rgrado_6",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_5",
+      "jsType": "grado_5",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_13",
+      "jsType": "rgrado_13",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_7",
+      "jsType": "rgrado_7",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "zona",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_21",
+      "jsType": "rgrado_21",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_12",
+      "jsType": "grado_12",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "especia",
+      "jsType": "especia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rjardin",
+      "jsType": "rjardin",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ano",
+      "jsType": "ano",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_23",
+      "jsType": "grado_23",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_24",
+      "jsType": "rgrado_24",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_41",
+      "jsType": "grado_41",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_42",
+      "jsType": "grado_42",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_24",
+      "jsType": "grado_24",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_3",
+      "jsType": "rgrado_3",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sedes",
+      "jsType": "sedes",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rgrado_11",
+      "jsType": "rgrado_11",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rprejardin",
+      "jsType": "rprejardin",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_13",
+      "jsType": "grado_13",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_4",
+      "jsType": "grado_4",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rprim_inf",
+      "jsType": "rprim_inf",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_8",
+      "jsType": "grado_8",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "grado_3",
+      "jsType": "grado_3",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:38.845Z"
+}

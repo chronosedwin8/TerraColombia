@@ -1,0 +1,305 @@
+{
+  "schemaVersion": 1,
+  "source": "igac",
+  "connector": "arcgis-rest",
+  "name": "actividadquimicanacional",
+  "folder": "agrologia",
+  "serviceType": "MapServer",
+  "url": "https://mapas.igac.gov.co/server/rest/services/agrologia/actividadquimicanacional/MapServer",
+  "description": "<DIV STYLE=\"text-align:Left;font-size:12pt\"><P><SPAN>El Mapa Actividad Química, se relaciona con su capacidad de retención de elementos químicos, entre estos, los denominados nutrientes. Esta última, a su vez, se deriva de la propiedad química conocida como intercambio catiónico. Así, la capacidad de intercambio catiónico se constituye en un indicador de la actividad química, este mapa, es un producto es generado por la Subdirección de Agrología del Instituto Geográfico Agustín Codazzi  - IGAC, para el territorio nacional, el cual fue publicado en la obra Suelos y Tierras de Colombia 2016. Escala 1:100.000.</SPAN></P></DIV>",
+  "copyrightText": "Instituto Geográfico Agustín Codazzi - IGAC",
+  "currentVersion": 11.3,
+  "capabilities": [
+    "map",
+    "query",
+    "data"
+  ],
+  "supportedQueryFormats": [
+    "json",
+    "geojson",
+    "pbf"
+  ],
+  "maxRecordCount": 2000,
+  "supportedExtensions": [
+    "WFSServer",
+    "WMSServer"
+  ],
+  "spatialReferenceWkid": 9377,
+  "fullExtent": {
+    "xmin": 4047822.4583,
+    "ymin": 1090251.2372999992,
+    "xmax": 5685522.116,
+    "ymax": 3053706.706599999,
+    "wkid": 9377
+  },
+  "layers": [
+    {
+      "id": 0,
+      "name": "Actividad",
+      "type": "Feature Layer",
+      "description": null,
+      "geometryType": "esriGeometryPolygon",
+      "url": "https://mapas.igac.gov.co/server/rest/services/agrologia/actividadquimicanacional/MapServer/0",
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "crsLabel": "MAGNA-SIRGAS / Origen-Nacional",
+      "maxRecordCount": 2000,
+      "capabilities": [
+        "map",
+        "query",
+        "data"
+      ],
+      "supportedQueryFormats": [
+        "json",
+        "geojson",
+        "pbf"
+      ],
+      "supportsPagination": true,
+      "supportsStatistics": true,
+      "supportsOrderBy": true,
+      "objectIdField": "OBJECTID",
+      "displayField": "UCSuelo",
+      "count": null,
+      "extent": {
+        "xmin": 4047822.4583,
+        "ymin": 1090251.2372999992,
+        "xmax": 5685522.116,
+        "ymax": 3053706.706599999,
+        "wkid": 9377
+      },
+      "fields": [
+        {
+          "name": "OBJECTID",
+          "alias": "OBJECTID",
+          "type": "esriFieldTypeOID",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Shape",
+          "alias": "Shape",
+          "type": "esriFieldTypeGeometry",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "UCSuelo",
+          "alias": "UCSuelo",
+          "type": "esriFieldTypeString",
+          "length": 10,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "CLIMA_1",
+          "alias": "CLIMA_1",
+          "type": "esriFieldTypeString",
+          "length": 254,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "PAISAJE",
+          "alias": "PAISAJE",
+          "type": "esriFieldTypeString",
+          "length": 254,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "TIPO_RELIE",
+          "alias": "TIPO_RELIE",
+          "type": "esriFieldTypeString",
+          "length": 254,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "MATERIAL_P",
+          "alias": "MATERIAL_P",
+          "type": "esriFieldTypeString",
+          "length": 254,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SUBGRUPO",
+          "alias": "SUBGRUPO",
+          "type": "esriFieldTypeString",
+          "length": 254,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "PERFILES",
+          "alias": "PERFILES",
+          "type": "esriFieldTypeString",
+          "length": 254,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "PORCENTAJE",
+          "alias": "PORCENTAJE",
+          "type": "esriFieldTypeString",
+          "length": 254,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "AREA_HA",
+          "alias": "AREA_HA",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "DEPARTAMEN",
+          "alias": "DEPARTAMEN",
+          "type": "esriFieldTypeString",
+          "length": 50,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "UCS",
+          "alias": "UCS",
+          "type": "esriFieldTypeString",
+          "length": 250,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "COD",
+          "alias": "COD",
+          "type": "esriFieldTypeString",
+          "length": 250,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "COD_1",
+          "alias": "COD_1",
+          "type": "esriFieldTypeString",
+          "length": 254,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "ACTIVIDAD",
+          "alias": "ACTIVIDAD",
+          "type": "esriFieldTypeString",
+          "length": 255,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Shape_Length",
+          "alias": "Shape_Length",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Shape_Area",
+          "alias": "Shape_Area",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        }
+      ],
+      "sample": [],
+      "sampleRequested": 5,
+      "sampleReturned": 0,
+      "piiDroppedColumns": [],
+      "piiRedactedColumns": [],
+      "notes": [
+        "El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.",
+        "No se pudo traer la muestra: Se agotaron los 2 intentos contra https://mapas.igac.gov.co/server/rest/services/agrologia/actividadquimicanacional/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=false&f=geojson&resultOffset=0&resultRecordCount=5&orderByFields=OBJECTID: This operation was aborted"
+      ],
+      "error": null
+    }
+  ],
+  "tables": [],
+  "inspectedAt": "2026-09-21T15:40:07.621Z",
+  "durationMs": 106469,
+  "notes": [],
+  "error": null
+}

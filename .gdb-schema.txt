@@ -1,0 +1,965 @@
+INFO: Open of `data/downloads/igac/08_ATLANTICO/08.gdb'
+      using driver `OpenFileGDB' successful.
+
+Layer name: R_VEREDA
+Geometry: Multi Polygon
+Feature Count: 50
+Extent: (4754014.907946, 2691632.264474) - (4811739.968388, 2770870.899900)
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = SHAPE
+CODIGO: String (17.0) NOT NULL
+SECTOR_CODIGO: String (9.0)
+NOMBRE: String (100.0) NOT NULL
+CODIGO_ANTERIOR: String (13.0)
+GLOBALID: String (0.0) NOT NULL
+SHAPE_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+SHAPE_Area: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_AREA
+codigo_municipio: String (5.0)
+CODIGO_DEPARTAMENTO: String (2.0)
+
+Layer name: R_TERRENO
+Geometry: Multi Polygon
+Feature Count: 18951
+Extent: (4754014.907976, 2692051.452953) - (4811739.968388, 2770870.899900)
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = SHAPE
+CODIGO: String (30.0) NOT NULL
+VEREDA_CODIGO: String (17.0)
+NUMERO_SUBTERRANEOS: Integer (0.0) NOT NULL DEFAULT 0
+CODIGO_ANTERIOR: String (20.0)
+GLOBALID: String (0.0) NOT NULL
+SHAPE_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+SHAPE_Area: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_AREA
+codigo_municipio: String (5.0)
+CODIGO_DEPARTAMENTO: String (2.0)
+
+Layer name: R_SECTOR
+Geometry: Multi Polygon
+Feature Count: 40
+Extent: (4754014.907976, 2691632.264474) - (4811739.968388, 2770870.899900)
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = SHAPE
+CODIGO: String (9.0) NOT NULL
+GLOBALID: String (0.0) NOT NULL
+SHAPE_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+SHAPE_Area: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_AREA
+codigo_municipio: String (5.0)
+CODIGO_DEPARTAMENTO: String (2.0)
+
+Layer name: R_NOMENCLATURA_VIAL
+Geometry: Multi Line String
+Feature Count: 14
+Extent: (4756730.253158, 2731773.872738) - (4798817.161320, 2749326.681966)
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = SHAPE
+TEXTO: String (600.0)
+GLOBALID: String (0.0) NOT NULL
+SHAPE_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+codigo_municipio: String (5.0)
+CODIGO_DEPARTAMENTO: String (2.0)
+
+Layer name: R_NOMENCLATURA_DOMICILIARIA
+Geometry: Multi Line String
+Feature Count: 11856
+Extent: (4754617.147642, 2692799.945646) - (4810924.775500, 2770852.627300)
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = SHAPE
+TEXTO: String (600.0)
+TERRENO_CODIGO: String (30.0) NOT NULL
+GLOBALID: String (0.0) NOT NULL
+SHAPE_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+codigo_municipio: String (5.0)
+CODIGO_DEPARTAMENTO: String (2.0)
+
+Layer name: R_CONSTRUCCION
+Geometry: Multi Polygon
+Feature Count: 18310
+Extent: (4755312.881300, 2692164.391804) - (4810890.069000, 2770717.072041)
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = SHAPE
+CODIGO: String (30.0) NOT NULL
+TERRENO_CODIGO: String (30.0)
+TIPO_CONSTRUCCION: String (20.0) NOT NULL DEFAULT 'CONVENCIONAL', domain name=domTipoConstruccion
+TIPO_DOMINIO: String (20.0) NOT NULL DEFAULT 'PRIVADO', domain name=domTipoDominio
+NUMERO_PISOS: Integer (0.0) NOT NULL DEFAULT 0
+NUMERO_SOTANOS: Integer (0.0) NOT NULL DEFAULT 0
+NUMERO_MEZANINES: Integer (0.0) NOT NULL DEFAULT 0
+NUMERO_SEMISOTANOS: Integer (0.0) NOT NULL
+ETIQUETA: String (50.0)
+IDENTIFICADOR: String (20.0) NOT NULL DEFAULT 'A'
+CODIGO_EDIFICACION: Integer (0.0)
+CODIGO_ANTERIOR: String (20.0)
+GLOBALID: String (0.0) NOT NULL
+SHAPE_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+SHAPE_Area: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_AREA
+codigo_municipio: String (5.0)
+CODIGO_DEPARTAMENTO: String (2.0)
+
+Layer name: U_BARRIO
+Geometry: Multi Polygon
+Feature Count: 33
+Extent: (4756694.907700, 2698774.028966) - (4811561.930169, 2753441.305154)
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = SHAPE
+CODIGO: String (13.0) NOT NULL
+SECTOR_CODIGO: String (9.0)
+NOMBRE: String (100.0) NOT NULL
+GLOBALID: String (0.0) NOT NULL
+SHAPE_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+SHAPE_Area: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_AREA
+codigo_municipio: String (5.0)
+
+Layer name: U_TERRENO
+Geometry: Multi Polygon
+Feature Count: 67925
+Extent: (4756713.125600, 2698834.175422) - (4811558.985870, 2765810.499000)
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = SHAPE
+CODIGO: String (30.0) NOT NULL
+MANZANA_CODIGO: String (17.0)
+NUMERO_SUBTERRANEOS: Integer (0.0) NOT NULL DEFAULT 0
+CODIGO_ANTERIOR: String (20.0)
+GLOBALID: String (0.0) NOT NULL
+SHAPE_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+SHAPE_Area: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_AREA
+codigo_municipio: String (5.0)
+CODIGO_DEPARTAMENTO: String (2.0)
+
+Layer name: U_CONSTRUCCION
+Geometry: Multi Polygon
+Feature Count: 89697
+Extent: (4756730.353300, 2698861.941496) - (4811545.278281, 2765799.072041)
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = SHAPE
+CODIGO: String (30.0) NOT NULL
+TERRENO_CODIGO: String (30.0)
+TIPO_CONSTRUCCION: String (20.0) NOT NULL DEFAULT 'CONVENCIONAL', domain name=domTipoConstruccion
+TIPO_DOMINIO: String (20.0) NOT NULL DEFAULT 'PRIVADO', domain name=domTipoDominio
+NUMERO_PISOS: Integer (0.0) NOT NULL DEFAULT 0
+NUMERO_SOTANOS: Integer (0.0) NOT NULL DEFAULT 0
+NUMERO_MEZANINES: Integer (0.0) NOT NULL DEFAULT 0
+NUMERO_SEMISOTANOS: Integer (0.0) NOT NULL DEFAULT 0
+ETIQUETA: String (50.0)
+IDENTIFICADOR: String (20.0) DEFAULT 'A'
+CODIGO_EDIFICACION: Integer (0.0)
+CODIGO_ANTERIOR: String (30.0)
+GLOBALID: String (0.0) NOT NULL
+SHAPE_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+SHAPE_Area: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_AREA
+codigo_municipio: String (5.0)
+CODIGO_DEPARTAMENTO: String (2.0)
+
+Layer name: U_NOMENCLATURA_VIAL
+Geometry: Multi Line String
+Feature Count: 4280
+Extent: (4756902.377607, 2698765.350319) - (4811564.237904, 2753442.938761)
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = SHAPE
+TEXTO: String (600.0) NOT NULL
+GLOBALID: String (0.0) NOT NULL
+SHAPE_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+codigo_municipio: String (5.0)
+CODIGO_DEPARTAMENTO: String (2.0)
+
+Layer name: U_NOMENCLATURA_DOMICILIARIA
+Geometry: Multi Line String
+Feature Count: 73215
+Extent: (4756722.684269, 2698856.095452) - (4811529.875890, 2765771.250800)
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = SHAPE
+TEXTO: String (600.0) NOT NULL
+TERRENO_CODIGO: String (30.0)
+GLOBALID: String (0.0) NOT NULL
+SHAPE_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+codigo_municipio: String (5.0)
+CODIGO_DEPARTAMENTO: String (2.0)
+
+Layer name: U_PERIMETRO
+Geometry: Multi Polygon
+Feature Count: 29
+Extent: (4757532.485498, 2698774.028966) - (4811558.985870, 2765810.499000)
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = SHAPE
+DEPARTAMENTO_CODIGO: String (2.0)
+MUNICIPIO_CODIGO: String (5.0)
+TIPO_AVALUO: String (30.0)
+NOMBRE_GEOGRAFICO: String (50.0)
+CODIGO_NOMBRE: String (255.0), domain name=domAdministrativo
+GLOBALID: String (0.0) NOT NULL
+SHAPE_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+SHAPE_Area: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_AREA
+codigo_municipio: String (5.0)
+CODIGO_DEPARTAMENTO: String (2.0)
+
+Layer name: U_SECTOR
+Geometry: Multi Polygon
+Feature Count: 38
+Extent: (4756694.907700, 2698774.028966) - (4811561.930169, 2765810.499000)
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = SHAPE
+CODIGO: String (9.0) NOT NULL
+GLOBALID: String (0.0) NOT NULL
+SHAPE_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+SHAPE_Area: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_AREA
+codigo_municipio: String (5.0)
+CODIGO_DEPARTAMENTO: String (2.0)
+
+Layer name: U_MANZANA
+Geometry: Multi Polygon
+Feature Count: 5164
+Extent: (4756694.907700, 2698834.175422) - (4811558.985870, 2765810.499000)
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = SHAPE
+CODIGO: String (17.0) NOT NULL
+BARRIO_CODIGO: String (13.0)
+CODIGO_ANTERIOR: String (255.0)
+GLOBALID: String (0.0) NOT NULL
+SHAPE_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+SHAPE_Area: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_AREA
+codigo_municipio: String (5.0)
+CODIGO_DEPARTAMENTO: String (2.0)
+
+Layer name: R_CONSTRUCCION_INFORMAL
+Geometry: Multi Polygon
+Feature Count: 0
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = Shape
+CODIGO: String (30.0) NOT NULL
+TERRENO_CODIGO: String (30.0)
+TIPO_CONSTRUCCION: String (20.0) NOT NULL DEFAULT 'CONVENCIONAL', domain name=domTipoConstruccion
+NUMERO_PISOS: Integer (0.0) NOT NULL DEFAULT 0
+NUMERO_SOTANOS: Integer (0.0) NOT NULL DEFAULT 0
+NUMERO_MEZANINES: Integer (0.0) NOT NULL DEFAULT 0
+NUMERO_SEMISOTANOS: Integer (0.0) NOT NULL
+ETIQUETA: String (50.0)
+IDENTIFICADOR: String (20.0) NOT NULL DEFAULT 'A'
+CODIGO_ANTERIOR: String (20.0)
+GLOBALID: String (0.0) NOT NULL
+CODIGO_MUNICIPIO: String (5.0)
+Shape_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+Shape_Area: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_AREA
+CODIGO_DEPARTAMENTO: String (2.0)
+
+Layer name: R_TERRENO_INFORMAL
+Geometry: Multi Polygon
+Feature Count: 0
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = Shape
+CODIGO: String (30.0) NOT NULL
+CODIGO_ANTERIOR: String (20.0)
+GLOBALID: String (0.0) NOT NULL
+Shape_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+Shape_Area: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_AREA
+CODIGO_DEPARTAMENTO: String (2.0)
+CODIGO_MUNICIPIO: String (5.0)
+
+Layer name: U_TERRENO_INFORMAL
+Geometry: Multi Polygon
+Feature Count: 0
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = Shape
+CODIGO: String (30.0) NOT NULL
+CODIGO_ANTERIOR: String (20.0)
+GLOBALID: String (0.0) NOT NULL
+Shape_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+Shape_Area: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_AREA
+CODIGO_DEPARTAMENTO: String (2.0)
+CODIGO_MUNICIPIO: String (5.0)
+
+Layer name: U_CONSTRUCCION_INFORMAL
+Geometry: Multi Polygon
+Feature Count: 0
+Layer SRS WKT:
+PROJCRS["MAGNA CTM12",
+    BASEGEOGCRS["MAGNA-SIRGAS",
+        DATUM["Marco Geocentrico Nacional de Referencia",
+            ELLIPSOID["GRS 1980",6378137,298.257222101,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6686]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",-73,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.9992,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",5000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",2000000,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+Data axis to CRS axis mapping: 1,2
+FID Column = OBJECTID
+Geometry Column = Shape
+CODIGO: String (30.0) NOT NULL
+TERRENO_CODIGO: String (30.0)
+TIPO_CONSTRUCCION: String (20.0) NOT NULL DEFAULT 'CONVENCIONAL', domain name=domTipoConstruccion
+NUMERO_PISOS: Integer (0.0) NOT NULL DEFAULT 0
+NUMERO_SOTANOS: Integer (0.0) NOT NULL DEFAULT 0
+NUMERO_MEZANINES: Integer (0.0) NOT NULL DEFAULT 0
+ETIQUETA: String (50.0)
+IDENTIFICADOR: String (20.0) NOT NULL DEFAULT 'A'
+CODIGO_ANTERIOR: String (20.0)
+GLOBALID: String (0.0) NOT NULL
+NUMERO_SEMISOTANOS: Integer (0.0) NOT NULL DEFAULT 0
+Shape_Length: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_LENGTH
+Shape_Area: Real (0.0) DEFAULT FILEGEODATABASE_SHAPE_AREA
+CODIGO_DEPARTAMENTO: String (2.0)
+CODIGO_MUNICIPIO: String (5.0)
+
+Relationship: R_SECTOR_VEREDA
+  Type: Association
+  Related table type: features
+  Cardinality: OneToMany
+  Left table name: R_SECTOR
+  Right table name: R_VEREDA
+  Left table fields: Codigo
+  Right table fields: Sector_Codigo
+  Forward path label: Veredas
+  Backward path label: Sector

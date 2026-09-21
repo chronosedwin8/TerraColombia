@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "e4hn-mr8d",
+  "name": "Resumen de Estrategias\tSecretaría Educacion - Santander",
+  "description": "Compilado de número de estudiantes beneficiados con Transporte Escolar y PAE entre otros.",
+  "publisher": "Gobernación de Santander, Santander",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "gobernación de santander",
+    "estrategias"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Santander, Santander",
+  "dataUri": "https://www.datos.gov.co/resource/e4hn-mr8d",
+  "webUri": "https://www.datos.gov.co/d/e4hn-mr8d",
+  "homepage": null,
+  "createdAt": "2024-06-19T16:01:03+0000",
+  "dataUpdatedAt": "2025-06-05T13:40:04+0000",
+  "cutDate": "2025-06-05",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "de_nombzona",
+      "jsType": "de_nombzona",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "refrigerio",
+      "jsType": "refrigerio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_alimentacion",
+      "jsType": "Total Alimentacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_sede",
+      "jsType": "de_sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona_pae",
+      "jsType": "zona_pae",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "transporte",
+      "jsType": "transporte",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "compleme",
+      "jsType": "compleme",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "almuerzo",
+      "jsType": "almuerzo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dane_act",
+      "jsType": "dane_act",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "matricula",
+      "jsType": "matricula",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_nombmuni",
+      "jsType": "de_nombmuni",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "jornadasc",
+      "jsType": "jornadasc",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_nombsede",
+      "jsType": "de_nombsede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "faltantes_en_pae",
+      "jsType": "Faltantes en Pae",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "faccion",
+      "jsType": "faccion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_institu",
+      "jsType": "de_institu",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "provincia",
+      "jsType": "provincia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "de_muni",
+      "jsType": "de_muni",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dane_ant",
+      "jsType": "dane_ant",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:37.818Z"
+}

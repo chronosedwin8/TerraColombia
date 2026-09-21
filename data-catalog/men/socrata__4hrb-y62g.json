@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "4hrb-y62g",
+  "name": "MEN_ESTADISTICAS DE MATRICULA POR DEPARTAMENTOS_ES",
+  "description": "Matricula de educación superior correspondiente al corte estadístico desde el 2005 hasta el 2024.",
+  "publisher": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "category": "Educación",
+  "theme": null,
+  "tags": [],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/4hrb-y62g",
+  "webUri": "https://www.datos.gov.co/d/4hrb-y62g",
+  "homepage": null,
+  "createdAt": "2020-11-17T16:51:16+0000",
+  "dataUpdatedAt": "2025-10-28T21:01:07+0000",
+  "cutDate": "2025-10-28",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "doctorado",
+      "jsType": "DOCTORADO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tecnologica",
+      "jsType": "TECNOLOGICA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "AÑO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "c_digo_deldepartamento",
+      "jsType": "Código delDepartamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "universitaria",
+      "jsType": "UNIVERSITARIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_del_departamento",
+      "jsType": "Nombre del Departamento",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "especializacion",
+      "jsType": "ESPECIALIZACION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "maestria",
+      "jsType": "MAESTRIA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ies_con_oferta",
+      "jsType": "IES CON OFERTA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tecnica_profesional",
+      "jsType": "TECNICA PROFESIONAL",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nombre_del_departamento"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:42.971Z"
+}

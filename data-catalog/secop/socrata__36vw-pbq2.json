@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "36vw-pbq2",
+  "name": "SECOP I - Modificaciones a Procesos",
+  "description": "Todas las modificaciones a Procesos del SECOP I",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "secop i"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/36vw-pbq2",
+  "webUri": "https://www.datos.gov.co/d/36vw-pbq2",
+  "homepage": null,
+  "createdAt": "2020-11-10T03:14:37+0000",
+  "dataUpdatedAt": "2026-09-19T06:00:21+0000",
+  "cutDate": "2026-09-19",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "id_modificacion",
+      "jsType": "ID Modificacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_proceso",
+      "jsType": "ID Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_nuevo",
+      "jsType": "Valor Nuevo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_modificacion",
+      "jsType": "Fecha Modificacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_anterior",
+      "jsType": "Valor Anterior",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "campo_modificado",
+      "jsType": "Campo Modificado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "justificacion_cambio",
+      "jsType": "Justificacion Cambio",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:04.841Z"
+}

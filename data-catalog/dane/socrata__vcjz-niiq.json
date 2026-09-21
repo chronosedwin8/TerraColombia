@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "source": "dane",
+  "connector": "socrata",
+  "id": "vcjz-niiq",
+  "name": "DIVIPOLA- Códigos departamentos",
+  "description": "Código de la división Político Administrativa del país, Actualización a corte 30 diciembre 2024.",
+  "publisher": "Departamento Administrativo Nacional de Estadísticas - DANE, Bogotá D.C.",
+  "category": "Mapas Nacionales",
+  "theme": null,
+  "tags": [
+    "departamento",
+    "divipola",
+    "codigo"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Departamento Administrativo Nacional de Estadísticas - DANE, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/vcjz-niiq",
+  "webUri": "https://www.datos.gov.co/d/vcjz-niiq",
+  "homepage": null,
+  "createdAt": "2020-06-12T13:11:24+0000",
+  "dataUpdatedAt": "2025-01-23T21:56:46+0000",
+  "cutDate": "2025-01-23",
+  "geographicCoverage": null,
+  "rowCount": 33,
+  "columns": [
+    {
+      "name": "codigo_departamento",
+      "jsType": "Código Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "longitud",
+      "jsType": "longitud",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "latitud",
+      "jsType": "Latitud",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_departamento",
+      "jsType": "Nombre Departamento",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "codigo_departamento": "05",
+      "nombre_departamento": "ANTIOQUIA",
+      "longitud": "-75,504557037",
+      "latitud": "6,702032125"
+    },
+    {
+      "codigo_departamento": "08",
+      "nombre_departamento": "ATLÁNTICO",
+      "longitud": "-74,965219492",
+      "latitud": "10,677009534"
+    },
+    {
+      "codigo_departamento": "11",
+      "nombre_departamento": "BOGOTÁ, D.C.",
+      "longitud": "-74,181072702",
+      "latitud": "4,316107698"
+    },
+    {
+      "codigo_departamento": "13",
+      "nombre_departamento": "BOLÍVAR",
+      "longitud": "-74,235148136",
+      "latitud": "8,079796863"
+    },
+    {
+      "codigo_departamento": "15",
+      "nombre_departamento": "BOYACÁ",
+      "longitud": "-72,627880544",
+      "latitud": "5,891672889"
+    }
+  ],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:11.595Z"
+}

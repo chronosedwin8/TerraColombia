@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "j8bh-xk3n",
+  "name": "Base de Prestadores de Servicios Turísticos \"SITUR\" - DEPARTAMENTO DE BOYACÁ",
+  "description": "Prestadores de Servicios Turísticos y hoteleros con Registro Nacional de Turismo - RNT discriminados por las diferentes categorías con corte al 20 de mayo de 2024. SITUR BOYACÁ",
+  "publisher": "Gobernación de Boyacá, Boyacá",
+  "category": "Comercio, Industria y Turismo",
+  "theme": null,
+  "tags": [
+    "siitur",
+    "turismo",
+    "hoteles",
+    "hostal",
+    "agencia de viajes"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Boyacá, Boyacá",
+  "dataUri": "https://www.datos.gov.co/resource/j8bh-xk3n",
+  "webUri": "https://www.datos.gov.co/d/j8bh-xk3n",
+  "homepage": null,
+  "createdAt": "2017-06-30T20:59:20+0000",
+  "dataUpdatedAt": "2023-06-21T18:54:29+0000",
+  "cutDate": "2023-06-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "correo_electronico",
+      "jsType": "Correo Electronico",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (correo_electronico)."
+    },
+    {
+      "name": "nombre_comercial",
+      "jsType": "Nombre Comercial",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "estado",
+      "jsType": "Estado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion_comercial",
+      "jsType": "Direccion Comercial",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "subcategoria",
+      "jsType": "Subcategoria",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_gerente",
+      "jsType": "Nombre Gerente",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "emp",
+      "jsType": "Empleados",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "categoria",
+      "jsType": "Categoria",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_del_rnt",
+      "jsType": "Numero del RNT",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "hab",
+      "jsType": "Habitaciones",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cam",
+      "jsType": "Camas",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "camara_de_comercio_establecimiento",
+      "jsType": "Camara de Comercio Establecimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "Departamento",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "correo_electronico",
+    "nombre_comercial",
+    "nombre_gerente"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:47.327Z"
+}

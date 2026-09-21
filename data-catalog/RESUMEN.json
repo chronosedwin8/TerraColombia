@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-09-21T15:34:59.945Z",
+  "finishedAt": "2026-09-21T15:42:08.315Z",
+  "durationMs": 428370,
+  "sources": [
+    "igac-socrata",
+    "dane-socrata",
+    "men-socrata",
+    "minsalud-socrata",
+    "secop-socrata"
+  ],
+  "counts": {
+    "servicesDiscovered": 0,
+    "servicesInspected": 0,
+    "servicesFailed": 0,
+    "layersCatalogued": 0,
+    "layersWithSample": 0,
+    "socrataDatasets": 138,
+    "manualDescriptors": 0,
+    "piiColumnsDropped": 310,
+    "piiValuesRedacted": 11
+  },
+  "http": {
+    "requests": 217,
+    "cacheHits": 2,
+    "retries": 0,
+    "errors": 0,
+    "bytes": 7795587
+  },
+  "gdal": {
+    "available": true,
+    "path": "C:\\Program Files\\PostgreSQL\\17\\bin\\ogr2ogr.exe",
+    "version": "GDAL 3.9.2, released 2024/08/13"
+  },
+  "notes": [
+    "GDAL: ogr2ogr no está en el PATH; se encontró en C:\\Program Files\\PostgreSQL\\17\\bin\\ogr2ogr.exe. Conviene fijar GDAL_OGR2OGR en .env."
+  ]
+}

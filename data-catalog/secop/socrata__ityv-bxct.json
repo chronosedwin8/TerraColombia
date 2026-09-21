@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "ityv-bxct",
+  "name": "SECOP - Convenios Interadministrativos Historico",
+  "description": "Publicación de los contratos, que corresponden a Convenios Interadministrativos en las dos plataformas SECOPI y SECOPII hasta el 31 de Diciembre de 2018",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "contratos",
+    "convenios interadministrativos"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/ityv-bxct",
+  "webUri": "https://www.datos.gov.co/d/ityv-bxct",
+  "homepage": null,
+  "createdAt": "2025-06-30T05:48:38+0000",
+  "dataUpdatedAt": "2026-09-21T06:50:04+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "nombre_entidad",
+      "jsType": "Nombre Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "link",
+      "jsType": "Link",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_entidad",
+      "jsType": "ID Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_firma",
+      "jsType": "Fecha Firma",
+      "pii": true,
+      "piiReason": "Dato biométrico o imagen de la persona."
+    },
+    {
+      "name": "tipo_de_contrato",
+      "jsType": "Tipo de Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "anno_cargue",
+      "jsType": "Anno cargue",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "orden",
+      "jsType": "Orden",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "objeto_contractual",
+      "jsType": "Objeto contractual",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_cargue",
+      "jsType": "Fecha cargue",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "contratista",
+      "jsType": "Contratista",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_inicio_del_contrato",
+      "jsType": "Fecha Inicio del Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "justificacion_modalidad",
+      "jsType": "Justificacion modalidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_fin_del_contrato",
+      "jsType": "Fecha Fin del Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_de_contrato",
+      "jsType": "Numero de Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "identificacion_contratista",
+      "jsType": "Identificacion Contratista",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "anno_firma",
+      "jsType": "Anno firma",
+      "pii": true,
+      "piiReason": "Dato biométrico o imagen de la persona."
+    },
+    {
+      "name": "id_contrato",
+      "jsType": "ID Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_contrato",
+      "jsType": "Estado contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "modalidad_contratacion",
+      "jsType": "Modalidad Contratacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fuente",
+      "jsType": "Fuente",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_proceso",
+      "jsType": "ID Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "origen_de_los_recursos",
+      "jsType": "Origen de los recursos",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "unspsc_id_clase",
+      "jsType": "UNSPSC ID Clase",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_con_adiciones",
+      "jsType": "Valor con adiciones",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_contratista",
+      "jsType": "Tipo Contratista",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "fecha_firma",
+    "identificacion_contratista",
+    "anno_firma"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:03.703Z"
+}

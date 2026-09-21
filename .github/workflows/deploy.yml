@@ -1,0 +1,377 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — despliegue a CapRover
+#
+#   develop → staging     (automático al fusionar)
+#   main    → producción   (requiere aprobación manual)
+#
+# La aprobación de producción NO se implementa con un `if` ni con una entrada
+# del workflow: se implementa con un *environment* de GitHub
+# (`Settings → Environments → produccion`) que tiene "Required reviewers".
+# GitHub detiene el job antes de ejecutar un solo paso y espera la aprobación de
+# una persona autorizada. Un `if` lo puede saltar cualquiera con permiso de
+# escritura; un environment protegido, no.
+#
+# No se construye nada aquí: se despliegan las imágenes que `build-images.yml`
+# ya publicó en GHCR para ese commit. Así lo que se despliega es bit a bit lo
+# que pasó CI.
+#
+# ─── Secretos necesarios (Settings → Secrets → Actions) ─────────────────────
+#   CAPROVER_URL_STAGING          https://captain.staging.terracolombia.co
+#   CAPROVER_PASSWORD_STAGING     contraseña del panel de CapRover de staging
+#   CAPROVER_URL_PROD             https://captain.terracolombia.co
+#   CAPROVER_PASSWORD_PROD        contraseña del panel de CapRover de producción
+#   GHCR_PULL_TOKEN               PAT con `read:packages`, para que CapRover
+#                                 pueda descargar imágenes privadas de GHCR
+#
+# ─── Variables de repositorio (Settings → Variables) ────────────────────────
+#   CAPROVER_APP_PREFIX           por defecto `terracolombia`
+#   MIGRAR_AL_DESPLEGAR           `true` para aplicar migraciones en el despliegue
+# ═════════════════════════════════════════════════════════════════════════════
+
+name: Desplegar
+
+on:
+  push:
+    branches: [main, develop]
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - 'data-catalog/**'
+  workflow_dispatch:
+    inputs:
+      entorno:
+        description: 'Entorno de destino'
+        required: true
+        type: choice
+        options: [staging, produccion]
+      etiqueta:
+        description: 'Etiqueta de imagen a desplegar (vacío = la del commit actual)'
+        required: false
+        type: string
+
+# Un despliegue a la vez por entorno. `cancel-in-progress: false` a propósito:
+# cancelar un despliegue a medias deja aplicaciones en versiones distintas.
+concurrency:
+  group: desplegar-${{ github.ref_name }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Decide entorno y etiqueta. Nada de lógica de ramas repetida en cada job.
+  # ═══════════════════════════════════════════════════════════════════════════
+  decidir:
+    name: Decidir entorno
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      entorno: ${{ steps.calcular.outputs.entorno }}
+      etiqueta: ${{ steps.calcular.outputs.etiqueta }}
+      sufijo: ${{ steps.calcular.outputs.sufijo }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: calcular
+        run: |
+          set -euo pipefail
+
+          if [ "${{ github.event_name }}" = 'workflow_dispatch' ]; then
+            entorno='${{ github.event.inputs.entorno }}'
+          elif [ "$GITHUB_REF_NAME" = 'main' ]; then
+            entorno='produccion'
+          elif [ "$GITHUB_REF_NAME" = 'develop' ]; then
+            entorno='staging'
+          else
+            echo "::error::La rama '$GITHUB_REF_NAME' no tiene entorno de despliegue asignado."
+            exit 1
+          fi
+
+          etiqueta='${{ github.event.inputs.etiqueta }}'
+          if [ -z "$etiqueta" ]; then
+            etiqueta="${GITHUB_REF_NAME//\//-}-$(git rev-parse --short HEAD)"
+          fi
+
+          # En CapRover, staging usa apps con sufijo: terracolombia-api-staging.
+          if [ "$entorno" = 'staging' ]; then sufijo='-staging'; else sufijo=''; fi
+
+          {
+            echo "entorno=$entorno"
+            echo "etiqueta=$etiqueta"
+            echo "sufijo=$sufijo"
+          } >> "$GITHUB_OUTPUT"
+
+          {
+            echo "## Despliegue"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Entorno | \`$entorno\` |"
+            echo "| Etiqueta | \`$etiqueta\` |"
+            echo "| Commit | \`${{ github.sha }}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Las imágenes tienen que existir antes de pedir la aprobación: no tiene
+  # sentido despertar a nadie para aprobar un despliegue que va a fallar.
+  # ═══════════════════════════════════════════════════════════════════════════
+  verificar-imagenes:
+    name: Verificar imágenes en GHCR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [decidir]
+    steps:
+      - name: Autenticarse en GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comprobar que existen las cuatro imágenes
+        run: |
+          set -euo pipefail
+          faltan=()
+          for app in api web worker docs-site; do
+            imagen="ghcr.io/${{ github.repository_owner }}/terracolombia-$app:${{ needs.decidir.outputs.etiqueta }}"
+            if docker manifest inspect "$imagen" > /dev/null 2>&1; then
+              echo "OK    $imagen"
+            else
+              echo "FALTA $imagen"
+              faltan+=("$app")
+            fi
+          done
+          if [ ${#faltan[@]} -gt 0 ]; then
+            echo "::error::No están publicadas las imágenes de: ${faltan[*]}. Espere a que termine 'Construir imágenes' para este commit."
+            exit 1
+          fi
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Despliegue. El `environment` es lo que impone la aprobación manual en
+  # producción y lo que da acceso a los secretos del entorno.
+  # ═══════════════════════════════════════════════════════════════════════════
+  desplegar:
+    name: Desplegar a ${{ needs.decidir.outputs.entorno }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [decidir, verificar-imagenes]
+    environment:
+      name: ${{ needs.decidir.outputs.entorno }}
+      url: ${{ needs.decidir.outputs.entorno == 'produccion' && 'https://terracolombia.co' || 'https://staging.terracolombia.co' }}
+
+    env:
+      PREFIJO: ${{ vars.CAPROVER_APP_PREFIX || 'terracolombia' }}
+      SUFIJO: ${{ needs.decidir.outputs.sufijo }}
+      ETIQUETA: ${{ needs.decidir.outputs.etiqueta }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar la CLI de CapRover
+        run: npm install --global caprover@2
+
+      - name: Seleccionar credenciales del entorno
+        id: credenciales
+        env:
+          URL_STAGING: ${{ secrets.CAPROVER_URL_STAGING }}
+          URL_PROD: ${{ secrets.CAPROVER_URL_PROD }}
+        run: |
+          set -euo pipefail
+          if [ "${{ needs.decidir.outputs.entorno }}" = 'produccion' ]; then
+            url="$URL_PROD"
+          else
+            url="$URL_STAGING"
+          fi
+          if [ -z "$url" ]; then
+            echo "::error::Falta el secreto con la URL de CapRover para el entorno ${{ needs.decidir.outputs.entorno }}."
+            exit 1
+          fi
+          # La URL no es un secreto, pero la contraseña sí: esa se pasa por
+          # variable de entorno en cada paso, nunca por `outputs`.
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      # ─── Migraciones ───────────────────────────────────────────────────────
+      # Se aplican ANTES de cambiar las imágenes y desde la imagen del worker
+      # (que lleva psql y el código de migraciones), no desde el runner: así la
+      # versión de las migraciones es exactamente la del despliegue.
+      #
+      # Regla de compatibilidad: toda migración debe ser aplicable con la
+      # versión ANTERIOR del código todavía corriendo (añadir columnas antes de
+      # usarlas, borrarlas un despliegue después). Ver docs/OPERACION.md.
+      - name: Aplicar migraciones
+        if: vars.MIGRAR_AL_DESPLEGAR == 'true'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "${DATABASE_URL:-}" ]; then
+            echo "::error::MIGRAR_AL_DESPLEGAR está activo pero falta el secreto DATABASE_URL del entorno."
+            exit 1
+          fi
+          echo "Aplicando migraciones desde la imagen del worker…"
+          docker run --rm \
+            -e DATABASE_URL \
+            "ghcr.io/${{ github.repository_owner }}/terracolombia-worker:${ETIQUETA}" \
+            node dist/migrate.js
+          echo "Migraciones aplicadas."
+
+      # ─── Despliegue de las cuatro aplicaciones ─────────────────────────────
+      # Orden deliberado:
+      #   1. worker  — que la cola esté lista antes de que la API cree trabajos
+      #   2. api     — el backend antes que el frontend que lo consume
+      #   3. web, docs — lo último, para que ningún usuario vea un frontend
+      #      nuevo pidiendo un endpoint que todavía no existe
+      - name: Desplegar worker
+        env:
+          CAPROVER_PASSWORD: ${{ needs.decidir.outputs.entorno == 'produccion' && secrets.CAPROVER_PASSWORD_PROD || secrets.CAPROVER_PASSWORD_STAGING }}
+        run: |
+          caprover deploy \
+            --caproverUrl "${{ steps.credenciales.outputs.url }}" \
+            --caproverPassword "$CAPROVER_PASSWORD" \
+            --caproverApp "${PREFIJO}-worker${SUFIJO}" \
+            --imageName "ghcr.io/${{ github.repository_owner }}/terracolombia-worker:${ETIQUETA}"
+
+      - name: Desplegar api
+        env:
+          CAPROVER_PASSWORD: ${{ needs.decidir.outputs.entorno == 'produccion' && secrets.CAPROVER_PASSWORD_PROD || secrets.CAPROVER_PASSWORD_STAGING }}
+        run: |
+          caprover deploy \
+            --caproverUrl "${{ steps.credenciales.outputs.url }}" \
+            --caproverPassword "$CAPROVER_PASSWORD" \
+            --caproverApp "${PREFIJO}-api${SUFIJO}" \
+            --imageName "ghcr.io/${{ github.repository_owner }}/terracolombia-api:${ETIQUETA}"
+
+      - name: Esperar a que la API esté lista
+        env:
+          BASE: ${{ needs.decidir.outputs.entorno == 'produccion' && 'https://api.terracolombia.co' || 'https://api.staging.terracolombia.co' }}
+        run: |
+          set -euo pipefail
+          echo "Esperando $BASE/ready …"
+          for i in $(seq 1 60); do
+            if curl -fsS --max-time 5 "$BASE/ready" > /dev/null 2>&1; then
+              echo "OK: la API responde y ve sus dependencias."
+              curl -fsS "$BASE/ready" || true
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::La API no respondió a /ready en 5 minutos. El despliegue quedó a medias: revise los registros en CapRover."
+          exit 1
+
+      - name: Desplegar web
+        env:
+          CAPROVER_PASSWORD: ${{ needs.decidir.outputs.entorno == 'produccion' && secrets.CAPROVER_PASSWORD_PROD || secrets.CAPROVER_PASSWORD_STAGING }}
+        run: |
+          caprover deploy \
+            --caproverUrl "${{ steps.credenciales.outputs.url }}" \
+            --caproverPassword "$CAPROVER_PASSWORD" \
+            --caproverApp "${PREFIJO}-web${SUFIJO}" \
+            --imageName "ghcr.io/${{ github.repository_owner }}/terracolombia-web:${ETIQUETA}"
+
+      - name: Desplegar docs-site
+        env:
+          CAPROVER_PASSWORD: ${{ needs.decidir.outputs.entorno == 'produccion' && secrets.CAPROVER_PASSWORD_PROD || secrets.CAPROVER_PASSWORD_STAGING }}
+        run: |
+          caprover deploy \
+            --caproverUrl "${{ steps.credenciales.outputs.url }}" \
+            --caproverPassword "$CAPROVER_PASSWORD" \
+            --caproverApp "${PREFIJO}-docs${SUFIJO}" \
+            --imageName "ghcr.io/${{ github.repository_owner }}/terracolombia-docs-site:${ETIQUETA}"
+
+      # ─── Comprobaciones posteriores al despliegue ──────────────────────────
+      - name: Verificación de humo
+        env:
+          API: ${{ needs.decidir.outputs.entorno == 'produccion' && 'https://api.terracolombia.co' || 'https://api.staging.terracolombia.co' }}
+          WEB: ${{ needs.decidir.outputs.entorno == 'produccion' && 'https://terracolombia.co' || 'https://staging.terracolombia.co' }}
+        run: |
+          set -euo pipefail
+          fallos=0
+
+          echo "── La web carga"
+          curl -fsS --max-time 10 "$WEB/" > /dev/null || { echo "::error::La web no responde."; fallos=1; }
+
+          echo "── La API está lista"
+          curl -fsS --max-time 10 "$API/ready" > /dev/null || { echo "::error::/ready falla."; fallos=1; }
+
+          echo "── El catálogo de capas responde con procedencia"
+          # Regla 4 de CLAUDE.md verificada en producción: toda respuesta con
+          # datos tiene que traer el bloque `meta` con fuentes y licencia.
+          respuesta="$(curl -fsS --max-time 10 "$API/api/v1/layers" || echo '')"
+          if [ -z "$respuesta" ]; then
+            echo "::error::/api/v1/layers no responde."
+            fallos=1
+          elif ! echo "$respuesta" | grep -q 'license'; then
+            echo "::error::/api/v1/layers responde sin información de licencia. Sin procedencia no se muestra (CLAUDE.md regla 4)."
+            fallos=1
+          fi
+
+          echo "── Cabeceras de seguridad en la web"
+          cabeceras="$(curl -fsSI --max-time 10 "$WEB/" || echo '')"
+          for c in 'content-security-policy' 'x-content-type-options' 'strict-transport-security'; do
+            echo "$cabeceras" | tr 'A-Z' 'a-z' | grep -q "^$c" \
+              || { echo "::warning::Falta la cabecera $c en la web."; }
+          done
+
+          [ "$fallos" -eq 0 ] || exit 1
+          echo "Verificación de humo superada."
+
+      - name: Resumen del despliegue
+        if: always()
+        run: |
+          {
+            echo "## Despliegue a ${{ needs.decidir.outputs.entorno }}"
+            echo ""
+            echo "- Resultado: **${{ job.status }}**"
+            echo "- Etiqueta: \`${ETIQUETA}\`"
+            echo "- Aplicaciones: \`${PREFIJO}-{worker,api,web,docs}${SUFIJO}\`"
+            echo ""
+            if [ "${{ job.status }}" != 'success' ]; then
+              echo "### Reversión"
+              echo ""
+              echo "En CapRover: App → Deployment → *Versions* → seleccionar la versión anterior → **Rollback**."
+              echo "Si el fallo viene de una migración, ver \`docs/OPERACION.md\` §Reversión de migraciones."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Aviso si el despliegue de producción falló: no se puede depender de que
+  # alguien mire la pestaña Actions.
+  # ═══════════════════════════════════════════════════════════════════════════
+  avisar-fallo:
+    name: Avisar de un fallo en producción
+    runs-on: ubuntu-latest
+    needs: [decidir, desplegar]
+    if: failure() && needs.decidir.outputs.entorno == 'produccion'
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Abrir una incidencia
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const titulo = `Falló el despliegue a producción (${context.sha.substring(0, 7)})`;
+            const cuerpo = [
+              '## Falló el despliegue a producción',
+              '',
+              `- Commit: ${context.sha}`,
+              `- Corrida: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              `- Etiqueta: \`${{ needs.decidir.outputs.etiqueta }}\``,
+              '',
+              '### Qué hacer',
+              '',
+              '1. Revisar los registros de la corrida y los de CapRover.',
+              '2. Si el servicio está degradado, revertir desde CapRover',
+              '   (App → Deployment → Versions → Rollback).',
+              '3. Si el fallo viene de una migración, ver `docs/OPERACION.md`',
+              '   §Reversión de migraciones.',
+            ].join('\n');
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: titulo,
+              body: cuerpo,
+              labels: ['incidente', 'despliegue', 'prioridad-alta'],
+            });

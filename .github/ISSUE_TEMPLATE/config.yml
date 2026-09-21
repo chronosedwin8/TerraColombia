@@ -1,0 +1,33 @@
+# ═════════════════════════════════════════════════════════════════════════════
+# TerraColombia — configuración del selector de plantillas de incidencia
+# ═════════════════════════════════════════════════════════════════════════════
+
+# Obliga a usar una de las plantillas: una incidencia en blanco casi nunca trae
+# la información necesaria para actuar.
+blank_issues_enabled: false
+
+contact_links:
+  - name: Pregunta sobre un dato o una cifra
+    url: https://github.com/terracolombia/terracolombia/discussions
+    about: >-
+      Si la duda es "¿de dónde sale este número?" o "¿por qué mi municipio no
+      aparece?", pregúntelo en Discussions. Toda cifra del sistema lleva su
+      fuente, dataset, fecha de corte y licencia: mírelas primero en la sección
+      "Fuentes" de la ficha o del informe.
+
+  - name: Reportar un problema de seguridad
+    url: https://github.com/terracolombia/terracolombia/security/advisories/new
+    about: >-
+      NO abra una incidencia pública para un fallo de seguridad. Use un aviso
+      de seguridad privado. El procedimiento está en docs/SEGURIDAD.md.
+
+  - name: Datos personales expuestos
+    url: mailto:privacidad@terracolombia.co
+    about: >-
+      Si encontró cualquier dato que identifique a una persona (nombre de
+      propietario, documento, teléfono), escríbanos de inmediato y en privado.
+      Es la regla más importante del proyecto y lo tratamos como incidente.
+
+  - name: Documentación de la API
+    url: https://docs.terracolombia.co
+    about: Referencia de la GeoAPI pública, ejemplos y cuotas por plan.

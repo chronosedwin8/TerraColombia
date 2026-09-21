@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "source": "minsalud",
+  "connector": "socrata",
+  "id": "n4dj-8r7k",
+  "name": "Clicsalud - Termómetro de Precios de Medicamentos",
+  "description": "Permite comparar los precios equivalentes por tableta o cápsula de diferentes alternativas en el mercado, para un mismo medicamento. Los precios observados corresponden al año 2024.\nDiligencia la Encuesta de Satisfacción:\nhttps://tramites.minsalud.gov.co/FormularioInscripcion/EncuestaSatisfaccion.aspx",
+  "publisher": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "medicamentos",
+    "salud",
+    "colombia",
+    "precios de referencia"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Salud y Protección Social - MinSalud, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/n4dj-8r7k",
+  "webUri": "https://www.datos.gov.co/d/n4dj-8r7k",
+  "homepage": null,
+  "createdAt": "2016-07-14T22:38:47+0000",
+  "dataUpdatedAt": "2024-10-18T00:20:36+0000",
+  "cutDate": "2024-10-18",
+  "geographicCoverage": null,
+  "rowCount": 12534,
+  "columns": [
+    {
+      "name": "fabricante",
+      "jsType": "fabricante",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "canal",
+      "jsType": "canal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "expediente_invima",
+      "jsType": "Expediente_INVIMA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_comercial",
+      "jsType": "nombre_comercial",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "factoresprecio",
+      "jsType": "factoresprecio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "precio_por_tableta",
+      "jsType": "precio_por_tableta",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "unidad_base",
+      "jsType": "unidad_base",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "principio_activo",
+      "jsType": "principio_activo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "medicamento",
+      "jsType": "medicamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numerofactor",
+      "jsType": "numerofactor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "unidad_de_dispensacion",
+      "jsType": "unidad_de_dispensacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "concentracion",
+      "jsType": "concentracion",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "expediente_invima": "[REDACTADO:co_cedula]",
+      "principio_activo": "Midazolam",
+      "concentracion": "Midazolam 15 mg",
+      "unidad_base": "ml",
+      "unidad_de_dispensacion": "Ampolla",
+      "fabricante": "Siegfried",
+      "medicamento": "Dormicum (Siegfried) - Ampolla 3 ml - Cada 3 ml contiene: Midazolam 15 mg",
+      "canal": "Institucional",
+      "precio_por_tableta": "11199.8",
+      "factoresprecio": "Alto",
+      "numerofactor": "3"
+    },
+    {
+      "expediente_invima": "[REDACTADO:co_cedula]",
+      "principio_activo": "Acido Valproico",
+      "concentracion": "Divalproato Sodico 500 mg",
+      "unidad_base": "mg",
+      "unidad_de_dispensacion": "Tableta",
+      "fabricante": "Lafrancol",
+      "medicamento": "Valcote (Lafrancol) - Cada Tableta contiene: Divalproato Sodico 500 mg",
+      "canal": "Comercial",
+      "precio_por_tableta": "3752.866667",
+      "factoresprecio": "Medio",
+      "numerofactor": "2"
+    },
+    {
+      "expediente_invima": "[REDACTADO:co_cedula]",
+      "principio_activo": "Acido Valproico",
+      "concentracion": "Divalproato Sodico 500 mg",
+      "unidad_base": "mg",
+      "unidad_de_dispensacion": "Tableta",
+      "fabricante": "Lafrancol",
+      "medicamento": "Valcote (Lafrancol) - Cada Tableta contiene: Divalproato Sodico 500 mg",
+      "canal": "Institucional",
+      "precio_por_tableta": "1777.266522",
+      "factoresprecio": "Medio",
+      "numerofactor": "2"
+    },
+    {
+      "expediente_invima": "10815",
+      "principio_activo": "Fluoxetina",
+      "concentracion": "Fluoxetina 20 mg",
+      "unidad_base": "mg",
+      "unidad_de_dispensacion": "Capsula",
+      "fabricante": "Genfar",
+      "medicamento": "Fluoxetina (Genfar) - Cada Capsula contiene: Fluoxetina 20 mg",
+      "canal": "Comercial",
+      "precio_por_tableta": "329.295281",
+      "factoresprecio": "Medio",
+      "numerofactor": "2"
+    },
+    {
+      "expediente_invima": "[REDACTADO:co_cedula]",
+      "principio_activo": "Proximetacaina",
+      "concentracion": "Proximetacaina 5 mg",
+      "unidad_base": "ml",
+      "unidad_de_dispensacion": "Frasco",
+      "fabricante": "Alcon",
+      "medicamento": "Alcaine (Alcon) - Frasco 15 ml - Cada 1 ml contiene: Proximetacaina 5 mg",
+      "canal": "Comercial",
+      "precio_por_tableta": "64184.74576",
+      "factoresprecio": "Medio",
+      "numerofactor": "2"
+    }
+  ],
+  "piiDroppedColumns": [
+    "nombre_comercial"
+  ],
+  "piiRedactedColumns": [
+    "expediente_invima"
+  ],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:38:07.188Z"
+}

@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "qpq9-e4ne",
+  "name": "Matrícula Instituciones Educativas oficiales y no oficiales - DEPARTAMENTO DE BOYACÁ",
+  "description": "Matrículas de Instituciones Educativas correspondientes a los municipios no certificados del Departamento de Boyacá, oficiales y no oficiales de la vigencia 2022 - 2023, datos proporcionados por la Secretaría de Educación de Boyacá.",
+  "publisher": "Gobernación de Boyacá, Boyacá",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "matricula",
+    "instituciones educativas"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Boyacá, Boyacá",
+  "dataUri": "https://www.datos.gov.co/resource/qpq9-e4ne",
+  "webUri": "https://www.datos.gov.co/d/qpq9-e4ne",
+  "homepage": null,
+  "createdAt": "2022-09-14T22:47:02+0000",
+  "dataUpdatedAt": "2023-11-08T22:33:07+0000",
+  "cutDate": "2023-11-08",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "prescolar_1",
+      "jsType": "Prescolar 1",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dane_sede",
+      "jsType": "CÓDIGO DANE SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "segundo",
+      "jsType": "Segundo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "institucion",
+      "jsType": "INSTITUCION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pfc_2",
+      "jsType": "pfc 2",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pfc_1",
+      "jsType": "pfc 1",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciclo_iv",
+      "jsType": "ciclo iv",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pfc_3",
+      "jsType": "pfc 3",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "año",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "intr",
+      "jsType": "intr",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "noveno",
+      "jsType": "Noveno",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "total_ie",
+      "jsType": "Total IE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pfc_4",
+      "jsType": "pfc 4",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "ZONA",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "once",
+      "jsType": "Once",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciclo_ii",
+      "jsType": "ciclo ii",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciclo_i",
+      "jsType": "ciclo i",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sector",
+      "jsType": "SECTOR",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "primero",
+      "jsType": "Primero",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tercero",
+      "jsType": "Tercero",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sede",
+      "jsType": "SEDE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cuarto",
+      "jsType": "Cuarto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "quinto",
+      "jsType": "Quinto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sexto",
+      "jsType": "Sexto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "s_ptimo",
+      "jsType": "Séptimo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "d_cimo",
+      "jsType": "Décimo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciclo_v",
+      "jsType": "ciclo v",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciclo_iii",
+      "jsType": "ciclo iii",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dane",
+      "jsType": "CÓDIGO DANE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciclo_vi",
+      "jsType": "ciclo vi",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "octavo",
+      "jsType": "Octavo",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:34.986Z"
+}

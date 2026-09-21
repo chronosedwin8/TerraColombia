@@ -1,0 +1,313 @@
+{
+  "uid": "tc-etl",
+  "title": "TerraColombia · ETL y linaje de datos",
+  "description": "Estado de cada dataset: qué corte está publicado, cuándo se cargó, cuántas filas trae y qué validaciones fallaron. Regla 4 de CLAUDE.md: toda cifra lleva procedencia, así que este tablero es la trazabilidad operativa de esa promesa.",
+  "tags": ["terracolombia", "etl", "datos", "linaje"],
+  "timezone": "America/Bogota",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": false,
+  "refresh": "1m",
+  "time": { "from": "now-30d", "to": "now" },
+  "graphTooltip": 1,
+  "templating": {
+    "list": [
+      {
+        "name": "dataset",
+        "label": "Dataset",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+        "query": "label_values(tc_snapshot_age_days, dataset)",
+        "includeAll": true,
+        "multi": true,
+        "current": { "text": "Todos", "value": "$__all" },
+        "refresh": 2,
+        "sort": 1
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "row",
+      "title": "Salud de los datos publicados",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "PII detectada (24 h)",
+      "description": "Regla 3 de CLAUDE.md: cero datos personales. Cualquier valor distinto de 0 es un incidente de cumplimiento, no una métrica de rendimiento. Ver docs/SEGURIDAD.md §Respuesta ante incidentes.",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 5, "w": 5, "x": 0, "y": 1 },
+      "targets": [{ "refId": "A", "expr": "sum(increase(tc_pii_detected_total[24h])) or vector(0)", "legendFormat": "columnas bloqueadas" }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 1 }] },
+          "mappings": [{ "type": "value", "options": { "0": { "text": "0 · correcto", "color": "green", "index": 0 } } }]
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "colorMode": "background", "graphMode": "none", "textMode": "auto" }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Edad del corte catastral activo",
+      "description": "La base catastral del IGAC es mensual. Por encima de 45 días se perdió un corte.",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 5, "w": 5, "x": 5, "y": 1 },
+      "targets": [{ "refId": "A", "expr": "max(tc_snapshot_age_days{dataset=~\"igac-catastro.*\"})", "legendFormat": "días" }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "d",
+          "decimals": 0,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 35 }, { "color": "red", "value": 45 }] }
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "colorMode": "background", "graphMode": "area", "textMode": "auto" }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Datasets con snapshot activo",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 5, "w": 5, "x": 10, "y": 1 },
+      "targets": [
+        { "refId": "A", "expr": "count(tc_snapshot_age_days >= 0)", "legendFormat": "publicados" },
+        { "refId": "B", "expr": "count(tc_snapshot_age_days < 0) or vector(0)", "legendFormat": "sin publicar" }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "short", "decimals": 0, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "sin publicar" }, "properties": [{ "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 1 }] } }] }
+        ]
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "colorMode": "value", "graphMode": "none", "textMode": "value_and_name", "orientation": "horizontal" }
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Snapshots sintéticos activos",
+      "description": "ADR-006: los datos de demostración nunca se sirven como reales. En producción esto debe ser siempre 0.",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 5, "w": 4, "x": 15, "y": 1 },
+      "targets": [{ "refId": "A", "expr": "sum(tc_active_snapshot_synthetic) or vector(0)", "legendFormat": "sintéticos" }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 1 }] }
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "colorMode": "background", "graphMode": "none", "textMode": "auto" }
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Corridas fallidas (24 h)",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 5, "w": 5, "x": 19, "y": 1 },
+      "targets": [{ "refId": "A", "expr": "sum(increase(tc_etl_runs_total{status=\"failed\"}[24h])) or vector(0)", "legendFormat": "fallidas" }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 1 }, { "color": "red", "value": 3 }] }
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "colorMode": "background", "graphMode": "area", "textMode": "auto" }
+    },
+    {
+      "id": 10,
+      "type": "row",
+      "title": "Linaje: qué corte está publicado de cada fuente",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 6 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 11,
+      "type": "table",
+      "title": "Estado de los snapshots activos",
+      "description": "Leído directamente de meta.dataset / meta.snapshot por el postgres_exporter. Es la misma información que el panel de administración muestra al equipo.",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 11, "w": 14, "x": 0, "y": 7 },
+      "targets": [
+        { "refId": "A", "expr": "tc_snapshot_edad_dias", "format": "table", "instant": true },
+        { "refId": "B", "expr": "tc_snapshot_filas", "format": "table", "instant": true }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "short" },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Edad (días)" },
+            "properties": [
+              { "id": "unit", "value": "d" },
+              { "id": "decimals", "value": 0 },
+              { "id": "custom.cellOptions", "value": { "type": "color-background", "mode": "gradient" } },
+              { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 45 }, { "color": "red", "value": 400 }] } }
+            ]
+          },
+          { "matcher": { "id": "byName", "options": "Filas" }, "properties": [{ "id": "unit", "value": "short" }, { "id": "decimals", "value": 0 }] }
+        ]
+      },
+      "options": { "showHeader": true, "sortBy": [{ "displayName": "Edad (días)", "desc": true }] },
+      "transformations": [
+        { "id": "joinByField", "options": { "byField": "dataset", "mode": "outer" } },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": { "Time": true, "Time 1": true, "Time 2": true, "__name__": true, "__name__ 1": true, "__name__ 2": true, "job": true, "job 1": true, "job 2": true, "instance": true, "instance 1": true, "instance 2": true, "servicio": true, "servicio 1": true, "servicio 2": true, "proyecto": true, "proyecto 1": true, "proyecto 2": true, "entorno": true, "entorno 1": true, "entorno 2": true, "fuente 2": true, "estado 2": true },
+            "renameByName": { "dataset": "Dataset", "fuente": "Fuente", "fuente 1": "Fuente", "estado": "Estado", "estado 1": "Estado", "Value #A": "Edad (días)", "Value #B": "Filas" }
+          }
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "bargauge",
+      "title": "Filas cargadas por dataset (último corte)",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 11, "w": 10, "x": 14, "y": 7 },
+      "targets": [{ "refId": "A", "expr": "sum by (dataset) (tc_etl_rows_loaded{dataset=~\"$dataset\"})", "legendFormat": "{{dataset}}", "instant": true }],
+      "fieldConfig": {
+        "defaults": { "unit": "short", "decimals": 0, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "displayMode": "gradient", "orientation": "horizontal", "showUnfilled": true }
+    },
+    {
+      "id": 20,
+      "type": "row",
+      "title": "Corridas del pipeline",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 18 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 21,
+      "type": "timeseries",
+      "title": "Duración por paso del pipeline (p95)",
+      "description": "Pasos: discover → download → stage → validate → transform → index → aggregate → tiles → publish → diff (PLAN §8).",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 19 },
+      "targets": [
+        { "refId": "A", "expr": "histogram_quantile(0.95, sum by (le, step) (rate(tc_etl_run_duration_seconds_bucket{dataset=~\"$dataset\"}[$__rate_interval])))", "legendFormat": "{{step}}" }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "s", "custom": { "drawStyle": "bars", "lineWidth": 1, "fillOpacity": 60, "stacking": { "mode": "normal" }, "showPoints": "never" } },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "table", "placement": "right", "showLegend": true, "calcs": ["max", "mean"] }, "tooltip": { "mode": "multi", "sort": "desc" } }
+    },
+    {
+      "id": 22,
+      "type": "timeseries",
+      "title": "Corridas: correctas vs. fallidas",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 19 },
+      "targets": [
+        { "refId": "A", "expr": "sum by (status) (increase(tc_etl_runs_total{dataset=~\"$dataset\"}[1h]))", "legendFormat": "{{status}}" }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "short", "decimals": 0, "custom": { "drawStyle": "bars", "lineWidth": 1, "fillOpacity": 70, "stacking": { "mode": "normal" }, "showPoints": "never" } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "failed" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }, { "id": "displayName", "value": "fallidas" }] },
+          { "matcher": { "id": "byName", "options": "ok" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "green" } }, { "id": "displayName", "value": "correctas" }] }
+        ]
+      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } }
+    },
+    {
+      "id": 30,
+      "type": "row",
+      "title": "Validaciones de calidad (PLAN §8)",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 28 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 31,
+      "type": "timeseries",
+      "title": "Variación de filas frente al corte anterior",
+      "description": "El PLAN §8 fija ±10 % como umbral de alerta: por encima, el snapshot NO se publica sin revisión manual. Puede ser real (un municipio que entra a la base abierta) o una descarga truncada.",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 29 },
+      "targets": [{ "refId": "A", "expr": "tc_etl_row_count_delta_ratio{dataset=~\"$dataset\"}", "legendFormat": "{{dataset}}" }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "custom": { "drawStyle": "points", "pointSize": 8, "lineWidth": 0, "fillOpacity": 0, "thresholdsStyle": { "mode": "line" } },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 0.1 }] },
+          "min": -0.5,
+          "max": 0.5
+        },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "table", "placement": "right", "showLegend": true, "calcs": ["lastNotNull"] }, "tooltip": { "mode": "multi", "sort": "desc" } }
+    },
+    {
+      "id": 32,
+      "type": "timeseries",
+      "title": "Fallos de validación por tipo",
+      "description": "Geometrías inválidas que ni ST_MakeValid arregla, NPN que packages/geo/npn.ts no puede descomponer, duplicados y áreas cero.",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 29 },
+      "targets": [
+        { "refId": "A", "expr": "sum by (check) (increase(tc_etl_validation_failures_total{dataset=~\"$dataset\"}[1h]))", "legendFormat": "{{check}}" },
+        { "refId": "B", "expr": "sum(increase(tc_geometry_invalid_total{dataset=~\"$dataset\"}[1h]))", "legendFormat": "geometrías inválidas" },
+        { "refId": "C", "expr": "sum(increase(tc_npn_malformed_total{dataset=~\"$dataset\"}[1h]))", "legendFormat": "NPN mal formados" }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "short", "decimals": 0, "custom": { "drawStyle": "bars", "lineWidth": 1, "fillOpacity": 60, "stacking": { "mode": "normal" }, "showPoints": "never" } },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "table", "placement": "right", "showLegend": true, "calcs": ["sum"] }, "tooltip": { "mode": "multi", "sort": "desc" } }
+    },
+    {
+      "id": 40,
+      "type": "row",
+      "title": "Cola de trabajos y almacenamiento",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 38 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 41,
+      "type": "timeseries",
+      "title": "Estado de las colas BullMQ",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 39 },
+      "targets": [{ "refId": "A", "expr": "sum by (queue, state) (tc_queue_jobs)", "legendFormat": "{{queue}} · {{state}}" }],
+      "fieldConfig": {
+        "defaults": { "unit": "short", "decimals": 0, "custom": { "drawStyle": "line", "lineWidth": 1, "fillOpacity": 20, "showPoints": "never" } },
+        "overrides": [
+          { "matcher": { "id": "byRegexp", "options": ".*failed.*" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }] }
+        ]
+      },
+      "options": { "legend": { "displayMode": "table", "placement": "right", "showLegend": true, "calcs": ["lastNotNull", "max"] }, "tooltip": { "mode": "multi", "sort": "desc" } }
+    },
+    {
+      "id": 42,
+      "type": "timeseries",
+      "title": "Tamaño de las particiones de core.parcel",
+      "description": "Una partición por departamento (PLAN §13). Sirve para dimensionar el disco antes de cada carga mensual.",
+      "datasource": { "type": "prometheus", "uid": "prometheus-tc" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 39 },
+      "targets": [{ "refId": "A", "expr": "topk(15, tc_parcel_partition_bytes)", "legendFormat": "{{particion}}" }],
+      "fieldConfig": {
+        "defaults": { "unit": "bytes", "custom": { "drawStyle": "line", "lineWidth": 1, "fillOpacity": 25, "stacking": { "mode": "normal" }, "showPoints": "never" } },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "table", "placement": "right", "showLegend": true, "calcs": ["lastNotNull"] }, "tooltip": { "mode": "multi", "sort": "desc" } }
+    }
+  ]
+}

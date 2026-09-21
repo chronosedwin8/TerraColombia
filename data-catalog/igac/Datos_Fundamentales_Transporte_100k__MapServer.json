@@ -1,0 +1,1034 @@
+{
+  "schemaVersion": 1,
+  "source": "igac",
+  "connector": "arcgis-rest",
+  "name": "Datos_Fundamentales_Transporte_100k",
+  "folder": "",
+  "serviceType": "MapServer",
+  "url": "https://mapas.igac.gov.co/server/rest/services/Datos_Fundamentales_Transporte_100k/MapServer",
+  "description": null,
+  "copyrightText": null,
+  "currentVersion": 11.3,
+  "capabilities": [
+    "map",
+    "query",
+    "data"
+  ],
+  "supportedQueryFormats": [
+    "json",
+    "geojson",
+    "pbf"
+  ],
+  "maxRecordCount": 2000,
+  "supportedExtensions": [
+    "WFSServer",
+    "WMSServer"
+  ],
+  "spatialReferenceWkid": 9377,
+  "fullExtent": {
+    "xmin": -618514.06253367,
+    "ymin": -8435913.625158427,
+    "xmax": 10618514.062533671,
+    "ymax": 11552012.688130872,
+    "wkid": 9377
+  },
+  "layers": [
+    {
+      "id": 0,
+      "name": "Limite_Via_100k",
+      "type": "Feature Layer",
+      "description": null,
+      "geometryType": "esriGeometryPolyline",
+      "url": "https://mapas.igac.gov.co/server/rest/services/Datos_Fundamentales_Transporte_100k/MapServer/0",
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "crsLabel": "MAGNA-SIRGAS / Origen-Nacional",
+      "maxRecordCount": 2000,
+      "capabilities": [
+        "map",
+        "query",
+        "data"
+      ],
+      "supportedQueryFormats": [
+        "json",
+        "geojson",
+        "pbf"
+      ],
+      "supportsPagination": false,
+      "supportsStatistics": false,
+      "supportsOrderBy": false,
+      "objectIdField": "FID",
+      "displayField": "LVIdentif",
+      "count": null,
+      "extent": {
+        "xmin": 4761930.118,
+        "ymin": 2031887.4462000001,
+        "xmax": 5059245.8608,
+        "ymax": 2717007.729400001,
+        "wkid": 9377
+      },
+      "fields": [
+        {
+          "name": "FID",
+          "alias": "FID",
+          "type": "esriFieldTypeOID",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Shape",
+          "alias": "Shape",
+          "type": "esriFieldTypeGeometry",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "LVIdentif",
+          "alias": "LVIdentif",
+          "type": "esriFieldTypeString",
+          "length": 50,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "LVTipo",
+          "alias": "LVTipo",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SHAPE_Leng",
+          "alias": "SHAPE_Leng",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "RuleID",
+          "alias": "RuleID",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        }
+      ],
+      "sample": [
+        {
+          "FID": 0,
+          "LVIdentif": " ",
+          "LVTipo": 2,
+          "SHAPE_Leng": 579.331038831,
+          "RuleID": 2
+        },
+        {
+          "FID": 1,
+          "LVIdentif": " ",
+          "LVTipo": 2,
+          "SHAPE_Leng": 933.913148689,
+          "RuleID": 2
+        },
+        {
+          "FID": 2,
+          "LVIdentif": " ",
+          "LVTipo": 1,
+          "SHAPE_Leng": 3644.89464153,
+          "RuleID": 1
+        },
+        {
+          "FID": 3,
+          "LVIdentif": " ",
+          "LVTipo": 1,
+          "SHAPE_Leng": 776.62777487,
+          "RuleID": 1
+        },
+        {
+          "FID": 4,
+          "LVIdentif": " ",
+          "LVTipo": 1,
+          "SHAPE_Leng": 1078.04170504,
+          "RuleID": 1
+        }
+      ],
+      "sampleRequested": 5,
+      "sampleReturned": 5,
+      "piiDroppedColumns": [],
+      "piiRedactedColumns": [],
+      "notes": [
+        "La capa declara `supportsPagination: false`: `resultOffset` no funciona y hay que paginar por ventanas de OBJECTID.",
+        "La capa declara `supportsStatistics: false`: no se pueden pedir agregados al servicio.",
+        "El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.",
+        "La capa declara supportsPagination=false; se pagina por ventanas de FID. Tampoco soporta orderByFields: el orden de las ventanas no está garantizado.",
+        "No se envía resultRecordCount: el servicio lo rechaza con \"Pagination is not supported.\" El tamaño de página se acota con un rango de FID."
+      ],
+      "error": null
+    },
+    {
+      "id": 1,
+      "name": "Puente_L_100k",
+      "type": "Feature Layer",
+      "description": null,
+      "geometryType": "esriGeometryPolyline",
+      "url": "https://mapas.igac.gov.co/server/rest/services/Datos_Fundamentales_Transporte_100k/MapServer/1",
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "crsLabel": "MAGNA-SIRGAS / Origen-Nacional",
+      "maxRecordCount": 2000,
+      "capabilities": [
+        "map",
+        "query",
+        "data"
+      ],
+      "supportedQueryFormats": [
+        "json",
+        "geojson",
+        "pbf"
+      ],
+      "supportsPagination": false,
+      "supportsStatistics": false,
+      "supportsOrderBy": false,
+      "objectIdField": "FID",
+      "displayField": "PuIdentif",
+      "count": null,
+      "extent": {
+        "xmin": 4356199.4596,
+        "ymin": 1596343.8100000005,
+        "xmax": 5593340.4665,
+        "ymax": 2903769.8743999996,
+        "wkid": 9377
+      },
+      "fields": [
+        {
+          "name": "FID",
+          "alias": "FID",
+          "type": "esriFieldTypeOID",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Shape",
+          "alias": "Shape",
+          "type": "esriFieldTypeGeometry",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "PuIdentif",
+          "alias": "PuIdentif",
+          "type": "esriFieldTypeString",
+          "length": 50,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "PuFuncion",
+          "alias": "PuFuncion",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "PuRotacion",
+          "alias": "PuRotacion",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SHAPE_Leng",
+          "alias": "SHAPE_Leng",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "RuleID",
+          "alias": "RuleID",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        }
+      ],
+      "sample": [],
+      "sampleRequested": 5,
+      "sampleReturned": 0,
+      "piiDroppedColumns": [],
+      "piiRedactedColumns": [],
+      "notes": [
+        "La capa declara `supportsPagination: false`: `resultOffset` no funciona y hay que paginar por ventanas de OBJECTID.",
+        "La capa declara `supportsStatistics: false`: no se pueden pedir agregados al servicio.",
+        "El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.",
+        "La capa declara supportsPagination=false; se pagina por ventanas de FID. Tampoco soporta orderByFields: el orden de las ventanas no está garantizado.",
+        "No se envía resultRecordCount: el servicio lo rechaza con \"Pagination is not supported.\" El tamaño de página se acota con un rango de FID.",
+        "No se pudo traer la muestra: Se agotaron los 2 intentos contra https://mapas.igac.gov.co/server/rest/services/Datos_Fundamentales_Transporte_100k/MapServer/1/query?where=%281%3D1%29+AND+FID+%3E+-1+AND+FID+%3C%3D+4&outFields=*&returnGeometry=false&f=geojson: This operation was aborted"
+      ],
+      "error": null
+    },
+    {
+      "id": 2,
+      "name": "Puente_P_100k",
+      "type": "Feature Layer",
+      "description": null,
+      "geometryType": "esriGeometryPoint",
+      "url": "https://mapas.igac.gov.co/server/rest/services/Datos_Fundamentales_Transporte_100k/MapServer/2",
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "crsLabel": "MAGNA-SIRGAS / Origen-Nacional",
+      "maxRecordCount": 2000,
+      "capabilities": [
+        "map",
+        "query",
+        "data"
+      ],
+      "supportedQueryFormats": [
+        "json",
+        "geojson",
+        "pbf"
+      ],
+      "supportsPagination": false,
+      "supportsStatistics": false,
+      "supportsOrderBy": false,
+      "objectIdField": "FID",
+      "displayField": "PuIdentif",
+      "count": null,
+      "extent": {
+        "xmin": 4427425.8439,
+        "ymin": 1597728.5075000003,
+        "xmax": 5211981.6276,
+        "ymax": 2901363.5856999997,
+        "wkid": 9377
+      },
+      "fields": [
+        {
+          "name": "FID",
+          "alias": "FID",
+          "type": "esriFieldTypeOID",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Shape",
+          "alias": "Shape",
+          "type": "esriFieldTypeGeometry",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "PuIdentif",
+          "alias": "PuIdentif",
+          "type": "esriFieldTypeString",
+          "length": 50,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "PuFuncion",
+          "alias": "PuFuncion",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "PuRotacion",
+          "alias": "PuRotacion",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "RuleID",
+          "alias": "RuleID",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        }
+      ],
+      "sample": [
+        {
+          "FID": 0,
+          "PuIdentif": " ",
+          "PuFuncion": 3,
+          "PuRotacion": 0,
+          "RuleID": 3
+        },
+        {
+          "FID": 1,
+          "PuIdentif": " ",
+          "PuFuncion": 3,
+          "PuRotacion": 77.9213406,
+          "RuleID": 3
+        },
+        {
+          "FID": 2,
+          "PuIdentif": " ",
+          "PuFuncion": 3,
+          "PuRotacion": 324.69006059,
+          "RuleID": 3
+        },
+        {
+          "FID": 3,
+          "PuIdentif": " ",
+          "PuFuncion": 3,
+          "PuRotacion": -35,
+          "RuleID": 3
+        },
+        {
+          "FID": 4,
+          "PuIdentif": " ",
+          "PuFuncion": 3,
+          "PuRotacion": 15,
+          "RuleID": 3
+        }
+      ],
+      "sampleRequested": 5,
+      "sampleReturned": 5,
+      "piiDroppedColumns": [],
+      "piiRedactedColumns": [],
+      "notes": [
+        "La capa declara `supportsPagination: false`: `resultOffset` no funciona y hay que paginar por ventanas de OBJECTID.",
+        "La capa declara `supportsStatistics: false`: no se pueden pedir agregados al servicio.",
+        "El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.",
+        "La capa declara supportsPagination=false; se pagina por ventanas de FID. Tampoco soporta orderByFields: el orden de las ventanas no está garantizado.",
+        "No se envía resultRecordCount: el servicio lo rechaza con \"Pagination is not supported.\" El tamaño de página se acota con un rango de FID."
+      ],
+      "error": null
+    },
+    {
+      "id": 3,
+      "name": "Separador_Vial_100k",
+      "type": "Feature Layer",
+      "description": null,
+      "geometryType": "esriGeometryPolyline",
+      "url": "https://mapas.igac.gov.co/server/rest/services/Datos_Fundamentales_Transporte_100k/MapServer/3",
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "crsLabel": "MAGNA-SIRGAS / Origen-Nacional",
+      "maxRecordCount": 2000,
+      "capabilities": [
+        "map",
+        "query",
+        "data"
+      ],
+      "supportedQueryFormats": [
+        "json",
+        "geojson",
+        "pbf"
+      ],
+      "supportsPagination": false,
+      "supportsStatistics": false,
+      "supportsOrderBy": false,
+      "objectIdField": "FID",
+      "displayField": "SVIdentif",
+      "count": null,
+      "extent": {
+        "xmin": -618514.06253367,
+        "ymin": -8435913.625158427,
+        "xmax": 10618514.062533671,
+        "ymax": 11552012.688130872,
+        "wkid": 9377
+      },
+      "fields": [
+        {
+          "name": "FID",
+          "alias": "FID",
+          "type": "esriFieldTypeOID",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Shape",
+          "alias": "Shape",
+          "type": "esriFieldTypeGeometry",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SVIdentif",
+          "alias": "SVIdentif",
+          "type": "esriFieldTypeString",
+          "length": 50,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SHAPE_Leng",
+          "alias": "SHAPE_Leng",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "RuleID",
+          "alias": "RuleID",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        }
+      ],
+      "sample": [],
+      "sampleRequested": 5,
+      "sampleReturned": 0,
+      "piiDroppedColumns": [],
+      "piiRedactedColumns": [],
+      "notes": [
+        "La capa declara `supportsPagination: false`: `resultOffset` no funciona y hay que paginar por ventanas de OBJECTID.",
+        "La capa declara `supportsStatistics: false`: no se pueden pedir agregados al servicio.",
+        "El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.",
+        "La capa declara supportsPagination=false; se pagina por ventanas de FID. Tampoco soporta orderByFields: el orden de las ventanas no está garantizado.",
+        "No se envía resultRecordCount: el servicio lo rechaza con \"Pagination is not supported.\" El tamaño de página se acota con un rango de FID.",
+        "No se pudo traer la muestra: Respuesta no es JSON válido (<HTML>\r\n\t<HEAD>\n<base href=\"/\" />\n<script type=\"text/javascript\">\n  var _event_transid='2244335405';\n  var _event_client…): Unexpected token '<', \"<HTML>\r\n\t<\"... is not valid JSON"
+      ],
+      "error": null
+    },
+    {
+      "id": 4,
+      "name": "Tunel_100k",
+      "type": "Feature Layer",
+      "description": null,
+      "geometryType": "esriGeometryPolyline",
+      "url": "https://mapas.igac.gov.co/server/rest/services/Datos_Fundamentales_Transporte_100k/MapServer/4",
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "crsLabel": "MAGNA-SIRGAS / Origen-Nacional",
+      "maxRecordCount": 2000,
+      "capabilities": [
+        "map",
+        "query",
+        "data"
+      ],
+      "supportedQueryFormats": [
+        "json",
+        "geojson",
+        "pbf"
+      ],
+      "supportsPagination": false,
+      "supportsStatistics": false,
+      "supportsOrderBy": false,
+      "objectIdField": "FID",
+      "displayField": "TIdentif",
+      "count": null,
+      "extent": {
+        "xmin": 4518151.1631,
+        "ymin": 1722106.9671,
+        "xmax": 4966294.3345,
+        "ymax": 2334791.748,
+        "wkid": 9377
+      },
+      "fields": [
+        {
+          "name": "FID",
+          "alias": "FID",
+          "type": "esriFieldTypeOID",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Shape",
+          "alias": "Shape",
+          "type": "esriFieldTypeGeometry",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "TIdentif",
+          "alias": "TIdentif",
+          "type": "esriFieldTypeString",
+          "length": 50,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SHAPE_Leng",
+          "alias": "SHAPE_Leng",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "RuleID",
+          "alias": "RuleID",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        }
+      ],
+      "sample": [],
+      "sampleRequested": 5,
+      "sampleReturned": 0,
+      "piiDroppedColumns": [],
+      "piiRedactedColumns": [],
+      "notes": [
+        "La capa declara `supportsPagination: false`: `resultOffset` no funciona y hay que paginar por ventanas de OBJECTID.",
+        "La capa declara `supportsStatistics: false`: no se pueden pedir agregados al servicio.",
+        "El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.",
+        "La capa declara supportsPagination=false; se pagina por ventanas de FID. Tampoco soporta orderByFields: el orden de las ventanas no está garantizado.",
+        "No se envía resultRecordCount: el servicio lo rechaza con \"Pagination is not supported.\" El tamaño de página se acota con un rango de FID.",
+        "No se pudo traer la muestra: Se agotaron los 2 intentos contra https://mapas.igac.gov.co/server/rest/services/Datos_Fundamentales_Transporte_100k/MapServer/4/query?where=%281%3D1%29+AND+FID+%3E+-1+AND+FID+%3C%3D+4&outFields=*&returnGeometry=false&f=geojson: This operation was aborted"
+      ],
+      "error": null
+    },
+    {
+      "id": 5,
+      "name": "Via Ferrea_100k ",
+      "type": "Feature Layer",
+      "description": null,
+      "geometryType": "esriGeometryPolyline",
+      "url": "https://mapas.igac.gov.co/server/rest/services/Datos_Fundamentales_Transporte_100k/MapServer/5",
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "crsLabel": "MAGNA-SIRGAS / Origen-Nacional",
+      "maxRecordCount": 2000,
+      "capabilities": [
+        "map",
+        "query",
+        "data"
+      ],
+      "supportedQueryFormats": [
+        "json",
+        "geojson",
+        "pbf"
+      ],
+      "supportsPagination": false,
+      "supportsStatistics": false,
+      "supportsOrderBy": false,
+      "objectIdField": "FID",
+      "displayField": "VFIdentif",
+      "count": null,
+      "extent": {
+        "xmin": 4547650.0279,
+        "ymin": 1830556.1866999995,
+        "xmax": 5112348.4865,
+        "ymax": 2911586.4944000007,
+        "wkid": 9377
+      },
+      "fields": [
+        {
+          "name": "FID",
+          "alias": "FID",
+          "type": "esriFieldTypeOID",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Shape",
+          "alias": "Shape",
+          "type": "esriFieldTypeGeometry",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "VFIdentif",
+          "alias": "VFIdentif",
+          "type": "esriFieldTypeString",
+          "length": 50,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "VFTipo",
+          "alias": "VFTipo",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SHAPE_Leng",
+          "alias": "SHAPE_Leng",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "RuleID",
+          "alias": "RuleID",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        }
+      ],
+      "sample": [
+        {
+          "FID": 0,
+          "VFIdentif": " ",
+          "VFTipo": 1,
+          "SHAPE_Leng": 102489.877625,
+          "RuleID": 1
+        },
+        {
+          "FID": 1,
+          "VFIdentif": "[REDACTADO:person_full_name]",
+          "VFTipo": 1,
+          "SHAPE_Leng": 13103.5630063,
+          "RuleID": 1
+        },
+        {
+          "FID": 2,
+          "VFIdentif": "Ferrocarriles Nacionales",
+          "VFTipo": 1,
+          "SHAPE_Leng": 4510.65644384,
+          "RuleID": 1
+        },
+        {
+          "FID": 3,
+          "VFIdentif": "Ferrocarriles Nacionales",
+          "VFTipo": 1,
+          "SHAPE_Leng": 908.822299273,
+          "RuleID": 1
+        },
+        {
+          "FID": 4,
+          "VFIdentif": "Ferrocarriles Nacionales",
+          "VFTipo": 1,
+          "SHAPE_Leng": 2728.60084499,
+          "RuleID": 1
+        }
+      ],
+      "sampleRequested": 5,
+      "sampleReturned": 5,
+      "piiDroppedColumns": [],
+      "piiRedactedColumns": [
+        "VFIdentif"
+      ],
+      "notes": [
+        "La capa declara `supportsPagination: false`: `resultOffset` no funciona y hay que paginar por ventanas de OBJECTID.",
+        "La capa declara `supportsStatistics: false`: no se pueden pedir agregados al servicio.",
+        "El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.",
+        "La capa declara supportsPagination=false; se pagina por ventanas de FID. Tampoco soporta orderByFields: el orden de las ventanas no está garantizado.",
+        "No se envía resultRecordCount: el servicio lo rechaza con \"Pagination is not supported.\" El tamaño de página se acota con un rango de FID."
+      ],
+      "error": null
+    },
+    {
+      "id": 6,
+      "name": "Via_100k",
+      "type": "Feature Layer",
+      "description": null,
+      "geometryType": "esriGeometryPolyline",
+      "url": "https://mapas.igac.gov.co/server/rest/services/Datos_Fundamentales_Transporte_100k/MapServer/6",
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "crsLabel": "MAGNA-SIRGAS / Origen-Nacional",
+      "maxRecordCount": 2000,
+      "capabilities": [
+        "map",
+        "query",
+        "data"
+      ],
+      "supportedQueryFormats": [
+        "json",
+        "geojson",
+        "pbf"
+      ],
+      "supportsPagination": false,
+      "supportsStatistics": false,
+      "supportsOrderBy": false,
+      "objectIdField": "FID",
+      "displayField": "VIdentifi",
+      "count": null,
+      "extent": {
+        "xmin": 4047890.8120999997,
+        "ymin": 1093106.4942000005,
+        "xmax": 5632492.2316000005,
+        "ymax": 3052243.9970999993,
+        "wkid": 9377
+      },
+      "fields": [
+        {
+          "name": "FID",
+          "alias": "FID",
+          "type": "esriFieldTypeOID",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "Shape",
+          "alias": "Shape",
+          "type": "esriFieldTypeGeometry",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "VIdentifi",
+          "alias": "VIdentifi",
+          "type": "esriFieldTypeString",
+          "length": 50,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "VTipo",
+          "alias": "VTipo",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "VEstado",
+          "alias": "VEstado",
+          "type": "esriFieldTypeString",
+          "length": 50,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "VCarril",
+          "alias": "VCarril",
+          "type": "esriFieldTypeString",
+          "length": 50,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "VAcceso",
+          "alias": "VAcceso",
+          "type": "esriFieldTypeString",
+          "length": 50,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "SHAPE_Leng",
+          "alias": "SHAPE_Leng",
+          "type": "esriFieldTypeDouble",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        },
+        {
+          "name": "RuleID",
+          "alias": "RuleID",
+          "type": "esriFieldTypeInteger",
+          "length": null,
+          "nullable": null,
+          "domain": null,
+          "pii": false,
+          "piiRuleId": null,
+          "piiReason": null,
+          "piiAdjacent": false
+        }
+      ],
+      "sample": [],
+      "sampleRequested": 5,
+      "sampleReturned": 0,
+      "piiDroppedColumns": [],
+      "piiRedactedColumns": [],
+      "notes": [
+        "La capa declara `supportsPagination: false`: `resultOffset` no funciona y hay que paginar por ventanas de OBJECTID.",
+        "La capa declara `supportsStatistics: false`: no se pueden pedir agregados al servicio.",
+        "El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.",
+        "La capa declara supportsPagination=false; se pagina por ventanas de FID. Tampoco soporta orderByFields: el orden de las ventanas no está garantizado.",
+        "No se envía resultRecordCount: el servicio lo rechaza con \"Pagination is not supported.\" El tamaño de página se acota con un rango de FID.",
+        "No se pudo traer la muestra: Se agotaron los 2 intentos contra https://mapas.igac.gov.co/server/rest/services/Datos_Fundamentales_Transporte_100k/MapServer/6/query?where=%281%3D1%29+AND+FID+%3E+-1+AND+FID+%3C%3D+4&outFields=*&returnGeometry=false&f=geojson: This operation was aborted"
+      ],
+      "error": null
+    }
+  ],
+  "tables": [],
+  "inspectedAt": "2026-09-21T15:29:47.272Z",
+  "durationMs": 620345,
+  "notes": [],
+  "error": null
+}

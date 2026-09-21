@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "source": "minsalud",
+  "connector": "socrata",
+  "id": "vf5x-ngeg",
+  "name": "Reporte de prescripción de tecnologías en salud no financiadas con recursos de la UPC o servicios complementarios - MIPRES",
+  "description": "Reporte de prescripción de tecnologías en salud no financiadas con recursos de la UPC o servicios complementarios - MIPRES\nDiligencia la Encuesta de Satisfacción:\nhttps://tramites.minsalud.gov.co/FormularioInscripcion/EncuestaSatisfaccion.aspx",
+  "publisher": "Ministerio de Salud y Protección Social Minsalud, Bogotá D.C",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "reporte de prescripción",
+    "prescripción de tecnologías en salud",
+    "tecnologías en salud no financiadas",
+    "recursos de la upc",
+    "servicios complementarios",
+    "mipres"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Salud y Protección Social Minsalud, Bogotá D.C",
+  "dataUri": "https://www.datos.gov.co/resource/vf5x-ngeg",
+  "webUri": "https://www.datos.gov.co/d/vf5x-ngeg",
+  "homepage": null,
+  "createdAt": "2022-06-01T15:50:06+0000",
+  "dataUpdatedAt": "2022-06-02T20:35:30+0000",
+  "cutDate": "2022-06-02",
+  "geographicCoverage": null,
+  "rowCount": 5970562,
+  "columns": [
+    {
+      "name": "soportenutricional",
+      "jsType": "SoporteNutricional",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "serviciocomplementario",
+      "jsType": "ServicioComplementario",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "diagnosticoprincipal",
+      "jsType": "DiagnosticoPrincipal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "productonutricional",
+      "jsType": "ProductoNutricional",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dispositivomedico",
+      "jsType": "DispositivoMedico",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numeroprescripciones",
+      "jsType": "NumeroPrescripciones",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ambitoatencion",
+      "jsType": "AmbitoAtencion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "medicamento",
+      "jsType": "Medicamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "procedimiento",
+      "jsType": "Procedimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ips",
+      "jsType": "IPS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "eps",
+      "jsType": "EPS",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "a_o",
+      "jsType": "Año",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "a_o": "2018",
+      "eps": "EPS037 - NUEVA EPS",
+      "ips": "170010109601 - ONCOLOGOS DEL OCCIDENTE S.A.S.",
+      "departamento": "17 - CALDAS",
+      "municipio": "17001 - MANIZALES",
+      "ambitoatencion": "AMBULATORIO - PRIORIZADO",
+      "diagnosticoprincipal": "K590 - CONSTIPACION",
+      "soportenutricional": "NO",
+      "medicamento": "SI",
+      "procedimiento": "NO",
+      "dispositivomedico": "NO",
+      "productonutricional": "NO",
+      "serviciocomplementario": "NO",
+      "numeroprescripciones": "2"
+    },
+    {
+      "a_o": "2018",
+      "eps": "EPS037 - NUEVA EPS",
+      "ips": "190010617001 - REHABILITAR SAS",
+      "departamento": "19 - CAUCA",
+      "municipio": "19001 - POPAYÁN",
+      "ambitoatencion": "AMBULATORIO - NO PRIORIZADO",
+      "diagnosticoprincipal": "G570 - LESION DEL NERVIO CIATICO",
+      "soportenutricional": "NO",
+      "medicamento": "SI",
+      "procedimiento": "NO",
+      "dispositivomedico": "NO",
+      "productonutricional": "NO",
+      "serviciocomplementario": "NO",
+      "numeroprescripciones": "1"
+    },
+    {
+      "a_o": "2018",
+      "eps": "EPS037 - NUEVA EPS",
+      "ips": "190010617001 - REHABILITAR SAS",
+      "departamento": "19 - CAUCA",
+      "municipio": "19001 - POPAYÁN",
+      "ambitoatencion": "AMBULATORIO - NO PRIORIZADO",
+      "diagnosticoprincipal": "G571 - MERALGIA PARESTESICA",
+      "soportenutricional": "NO",
+      "medicamento": "SI",
+      "procedimiento": "NO",
+      "dispositivomedico": "NO",
+      "productonutricional": "NO",
+      "serviciocomplementario": "NO",
+      "numeroprescripciones": "1"
+    },
+    {
+      "a_o": "2018",
+      "eps": "EPS037 - NUEVA EPS",
+      "ips": "190010617001 - REHABILITAR SAS",
+      "departamento": "19 - CAUCA",
+      "municipio": "19001 - POPAYÁN",
+      "ambitoatencion": "AMBULATORIO - PRIORIZADO",
+      "diagnosticoprincipal": "J459 - ASMA, NO ESPECIFICADA",
+      "soportenutricional": "NO",
+      "medicamento": "SI",
+      "procedimiento": "NO",
+      "dispositivomedico": "NO",
+      "productonutricional": "NO",
+      "serviciocomplementario": "NO",
+      "numeroprescripciones": "5"
+    },
+    {
+      "a_o": "2018",
+      "eps": "EPS037 - NUEVA EPS",
+      "ips": "190010617001 - REHABILITAR SAS",
+      "departamento": "19 - CAUCA",
+      "municipio": "19001 - POPAYÁN",
+      "ambitoatencion": "AMBULATORIO - PRIORIZADO",
+      "diagnosticoprincipal": "J459 - ASMA, NO ESPECIFICADA",
+      "soportenutricional": "NO",
+      "medicamento": "SI",
+      "procedimiento": "NO",
+      "dispositivomedico": "NO",
+      "productonutricional": "NO",
+      "serviciocomplementario": "NO",
+      "numeroprescripciones": "7"
+    }
+  ],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:38:08.549Z"
+}

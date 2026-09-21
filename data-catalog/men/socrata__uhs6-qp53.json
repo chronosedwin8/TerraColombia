@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "uhs6-qp53",
+  "name": "ESTABLECIMIENTOS VIGILADOS POR EL INVIMA EN LA DISCIPLINA DE ALIMENTOS",
+  "description": "Contiene la relación de establecimientos a nivel Nacional, que actualmente son sujetos de actividades de inspección, vigilancia y con-trol por parte del Invima, de acuerdo con lo reportado en el censo de establecimientos de alimentos y bebidas de la entidad, cuya publicación fue solicitada por el Ministerio de Tecnologías de la Información y las Comunicaciones, mediante oficios con radicado de entrada 20201002544 y 20201014668. Con corte a Diciembre de 2020.\n\nEstos datos se han establecido a corte a Enero 2020 y son cambian-tes dependiendo de sus visitas posteriores, por lo tanto es responsabilidad del usuario verificar directamente con la empresa.",
+  "publisher": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "invima"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Instituto Nacional de Vigilancia de Medicamentos y Alimentos - INVIMA, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/uhs6-qp53",
+  "webUri": "https://www.datos.gov.co/d/uhs6-qp53",
+  "homepage": null,
+  "createdAt": "2020-05-19T17:57:51+0000",
+  "dataUpdatedAt": "2025-05-27T16:14:37+0000",
+  "cutDate": "2025-05-27",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "linea_subcateggoria_de",
+      "jsType": "LINEA SUBCATEGGORIA DE ALIMENTOS\n(Productos elaborados o Procesados)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_del_establecimiento",
+      "jsType": "ESTADO DEL ESTABLECIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "razon_social",
+      "jsType": "RAZON SOCIAL",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (razon_social)."
+    },
+    {
+      "name": "n_unico_consecutivo_de",
+      "jsType": "N° UNICO CONSECUTIVO DE IDENTIFICACION",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "representante_legal",
+      "jsType": "REPRESENTANTE LEGAL",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direccion_o_ubicacion_del",
+      "jsType": "DIRECCION O UBICACION DEL ESTABLECIMIENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "concepto_sanitario_vigente",
+      "jsType": "CONCEPTO SANITARIO VIGENTE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit",
+      "jsType": "NIT",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (nit)."
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "razon_social",
+    "nit"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:46.311Z"
+}

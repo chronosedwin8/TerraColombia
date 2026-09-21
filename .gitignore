@@ -1,0 +1,27 @@
+node_modules/
+dist/
+.output/
+.turbo/
+coverage/
+*.tsbuildinfo
+
+.env
+.env.local
+.env.*.local
+
+# Datos descargados y caché de crawler (no versionar volúmenes grandes)
+data/
+.cache/
+data-catalog/**/raw-cache/
+storage/
+*.gdb/
+*.gpkg
+*.zip
+*.pbf
+*.tif
+
+# Salidas de informes
+apps/api/reports-out/
+
+# Generado por `pnpm --filter @terracolombia/docs-site glossary` desde packages/shared
+apps/docs-site/guia/glosario.md

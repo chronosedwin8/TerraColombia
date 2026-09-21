@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "source": "dane",
+  "connector": "file-download",
+  "id": "dane-geoportal",
+  "name": "Geoportal DANE — descargas del Marco Geoestadístico Nacional",
+  "description": "Portal de descarga del MGN (departamentos, municipios, sectores y secciones urbanas y rurales, manzanas) y de los resultados del CNPV 2018 agregados a esas unidades. Es la fuente de `ctx.census_block` y de los límites administrativos oficiales.",
+  "url": "https://geoportal.dane.gov.co/",
+  "httpStatus": 200,
+  "format": "SHP / GPKG / CSV dentro de ZIP",
+  "license": "NO_VERIFICADO — el portal no declara licencia en la página de entrada",
+  "attribution": "Fuente: DANE, Marco Geoestadístico Nacional",
+  "frequency": "Anual (MGN) / decenal (CNPV)",
+  "pending": [
+    "Obtener la URL directa y estable del ZIP del MGN del año en curso (el portal usa descargas por formulario).",
+    "Confirmar la licencia de uso y la atribución exigida.",
+    "Verificar el CRS de entrega (se espera EPSG:4686) y la codificación de los CSV."
+  ],
+  "notes": [
+    "Verificado por el usuario: la raíz del geoportal responde 200.",
+    "No se catalogan capas porque el portal no expone un índice de descargas legible por máquina."
+  ],
+  "inspectedAt": "2026-09-21T15:30:23.384Z"
+}

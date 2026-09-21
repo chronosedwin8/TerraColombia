@@ -1,0 +1,254 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "rpmr-utcd",
+  "name": "SECOP Integrado",
+  "description": "Información integrada de los procesos de compra pública que se han registrado en las plataformas SECOP I y II, que han finalizado con un contrato.",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "secop",
+    "compra pública",
+    "e-procurement"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/rpmr-utcd",
+  "webUri": "https://www.datos.gov.co/d/rpmr-utcd",
+  "homepage": null,
+  "createdAt": "2019-01-08T18:20:53+0000",
+  "dataUpdatedAt": "2026-09-21T13:12:18+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": 22670028,
+  "columns": [
+    {
+      "name": "origen",
+      "jsType": "Origen",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_documento_proveedor",
+      "jsType": "Tipo Documento Proveedor",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "url_contrato",
+      "jsType": "URL Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "documento_proveedor",
+      "jsType": "Documento Proveedor",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "nom_raz_social_contratista",
+      "jsType": "Nom Raz Social Contratista",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "objeto_a_contratar",
+      "jsType": "Objeto del contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_de_la_entidad",
+      "jsType": "Nombre de la Entidad",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "tipo_de_contrato",
+      "jsType": "Tipo de Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio_entidad",
+      "jsType": "Municipio Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "modalidad_de_contrataci_n",
+      "jsType": "Modalidad de Contratación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nivel_entidad",
+      "jsType": "Nivel Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "objeto_del_proceso",
+      "jsType": "Objeto del proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_de_la_entidad",
+      "jsType": "NIT de la Entidad",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "fecha_de_firma_del_contrato",
+      "jsType": "Fecha de Firma del Contrato",
+      "pii": true,
+      "piiReason": "Dato biométrico o imagen de la persona."
+    },
+    {
+      "name": "valor_contrato",
+      "jsType": "Valor Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento_entidad",
+      "jsType": "Departamento Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_inicio_ejecuci_n",
+      "jsType": "Fecha inicio ejecución",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_entidad_en_secop",
+      "jsType": "Codigo Entidad en SECOP",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_fin_ejecuci_n",
+      "jsType": "Fecha fin ejecución",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_del_proceso",
+      "jsType": "Estado del Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_del_contrato",
+      "jsType": "ID Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_de_proceso",
+      "jsType": "ID Proceso",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "nivel_entidad": "TERRITORIAL",
+      "codigo_entidad_en_secop": "270000001",
+      "departamento_entidad": "Sucre",
+      "municipio_entidad": "Sincelejo",
+      "estado_del_proceso": "Convocado",
+      "modalidad_de_contrataci_n": "Contratación Directa (Ley 1150 de 2007)",
+      "objeto_a_contratar": "NO DEFINIDO",
+      "objeto_del_proceso": "PRESTACION DE SERVICIOS PROFESIONALES DE\nPSICOLOGIA PARA APOYAR LA IMPLEMENTACIoN DEL\nPROGRAMA DE ATENCIoN PSICOSOCIAL Y ATENCIoN\nINTEGRAL EN SALUD - PAPSIVI - COMPONENTE DE\nATENCIoN PSICOSOCIAL EN LA MODALIDAD INDIVIDUAL\nFAMILIAR Y COMUNITARIA EN EL DEPARTAMENTO DE\nSUCRE.",
+      "tipo_de_contrato": "Prestación de Servicios",
+      "numero_del_contrato": "15-12-3617206",
+      "numero_de_proceso": "CP-417-2014",
+      "valor_contrato": "12000000",
+      "url_contrato": "https://www.contratos.gov.co/consultas/detalleProceso.do?numConstancia=15-12-3617206",
+      "origen": "SECOPI"
+    },
+    {
+      "nivel_entidad": "TERRITORIAL",
+      "codigo_entidad_en_secop": "270000001",
+      "departamento_entidad": "Sucre",
+      "municipio_entidad": "Sincelejo",
+      "estado_del_proceso": "Convocado",
+      "modalidad_de_contrataci_n": "Contratación Directa (Ley 1150 de 2007)",
+      "objeto_a_contratar": "NO DEFINIDO",
+      "objeto_del_proceso": "PRESTACION DE SERVICIOS PROFESIONALES DE\nPSICOLOGIA PARA APOYAR LA IMPLEMENTACIoN DEL\nPROGRAMA DE ATENCIoNPSICOSOCIAL Y ATENCIoN\nINTEGRAL EN SALUD - PAPSIVI - COMPONENTE DE\nATENCIoN PSICOSOCIAL EN LA MODALIDAD INDIVIDUAL\nFAMILIAR Y COMUNITARIA EN EL DEPARTAMENTO DE\nSUCRE.",
+      "tipo_de_contrato": "Prestación de Servicios",
+      "numero_del_contrato": "15-12-3623547",
+      "numero_de_proceso": "CP-458-2014",
+      "valor_contrato": "8666666",
+      "url_contrato": "https://www.contratos.gov.co/consultas/detalleProceso.do?numConstancia=15-12-3623547",
+      "origen": "SECOPI"
+    },
+    {
+      "nivel_entidad": "TERRITORIAL",
+      "codigo_entidad_en_secop": "270000001",
+      "departamento_entidad": "Sucre",
+      "municipio_entidad": "Sincelejo",
+      "estado_del_proceso": "Convocado",
+      "modalidad_de_contrataci_n": "Contratación Directa (Ley 1150 de 2007)",
+      "objeto_a_contratar": "NO DEFINIDO",
+      "objeto_del_proceso": "PRESTACION DE SERVICIOS PROFESIONALES DE\nPSICOLOGO PARA APOYAR LA IMPLEMENTACIoN DEL\nPROGRAMA DE ATENCIoN PSICOSOCIAL Y ATENCIoN\nINTEGRAL EN SALUD - PAPSIVI - COMPONENTE DE\nATENCIoN PSICOSOCIAL EN LA MODALIDAD INDIVIDUAL\nFAMILIAR Y COMUNITARIA EN EL DEPARTAMENTO DE\nSUCRE",
+      "tipo_de_contrato": "Prestación de Servicios",
+      "numero_del_contrato": "15-12-3612570",
+      "numero_de_proceso": "CP-405-2014",
+      "valor_contrato": "12000000",
+      "url_contrato": "https://www.contratos.gov.co/consultas/detalleProceso.do?numConstancia=15-12-3612570",
+      "origen": "SECOPI"
+    },
+    {
+      "nivel_entidad": "TERRITORIAL",
+      "codigo_entidad_en_secop": "270000001",
+      "departamento_entidad": "Sucre",
+      "municipio_entidad": "Sincelejo",
+      "estado_del_proceso": "Convocado",
+      "modalidad_de_contrataci_n": "Contratación Directa (Ley 1150 de 2007)",
+      "objeto_a_contratar": "NO DEFINIDO",
+      "objeto_del_proceso": "PRESTACION DE SERVICIOS PROFESIONALES DE\nTRABAJADORA SOCIAL PARA APOYAR LA IMPLEMENTACIoN\nDEL PROGRAMA DE ATENCIoN PSICOSOCIAL Y ATENCI9N\nINTEGRAL EN SALUD - PAPSIVI - COMPONENTE DE\nATENCIoN PSICOSOCIAL EN LA MODALIDAD INDIVIDUAL\nFAMILIAR Y COMUNITARIA EN EL DEPARTAMENTO DE\nSUCRE.",
+      "tipo_de_contrato": "Prestación de Servicios",
+      "numero_del_contrato": "15-12-3613758",
+      "numero_de_proceso": "CP-437-2014",
+      "valor_contrato": "12000000",
+      "url_contrato": "https://www.contratos.gov.co/consultas/detalleProceso.do?numConstancia=15-12-3613758",
+      "origen": "SECOPI"
+    },
+    {
+      "nivel_entidad": "TERRITORIAL",
+      "codigo_entidad_en_secop": "270000001",
+      "departamento_entidad": "Sucre",
+      "municipio_entidad": "Sincelejo",
+      "estado_del_proceso": "Convocado",
+      "modalidad_de_contrataci_n": "Contratación Directa (Ley 1150 de 2007)",
+      "objeto_a_contratar": "NO DEFINIDO",
+      "objeto_del_proceso": "PRESTACION DE SERVICIOS PROFESIONALES DE\nTRABAJADORA SOCIAL PARA APOYAR LA IMPLEMENTACIoN\nDEL PROGRAMA DE ATENCIoN PSICOSOCIAL Y ATENCIoN\nINTEGRAL EN SALUD - PAPSIVI - COMPONENTE DE\nATENCIoN PSICOSOCIAL EN LA MODALIDAD INDIVIDUAL\nFAMILIAR Y COMUNITARIA EN EL DEPARTAMENTO DE\nSUCRE",
+      "tipo_de_contrato": "Prestación de Servicios",
+      "numero_del_contrato": "15-12-3613534",
+      "numero_de_proceso": "CP-418-2014",
+      "valor_contrato": "12000000",
+      "url_contrato": "https://www.contratos.gov.co/consultas/detalleProceso.do?numConstancia=15-12-3613534",
+      "origen": "SECOPI"
+    }
+  ],
+  "piiDroppedColumns": [
+    "documento_proveedor",
+    "fecha_de_firma_del_contrato",
+    "nit_de_la_entidad",
+    "nom_raz_social_contratista",
+    "nombre_de_la_entidad",
+    "tipo_documento_proveedor"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:39:10.437Z"
+}

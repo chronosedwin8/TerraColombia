@@ -1,0 +1,245 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "ceth-n4bn",
+  "name": "Grupos de Proveedores - SECOP II",
+  "description": "Registra la información de las uniones temporales o grupos creados por proveedores para postularse en conjunto a procesos de compra pública",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "grupos",
+    "unión temporal",
+    "consorcio"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/ceth-n4bn",
+  "webUri": "https://www.datos.gov.co/d/ceth-n4bn",
+  "homepage": null,
+  "createdAt": "2019-07-30T19:02:40+0000",
+  "dataUpdatedAt": "2026-09-21T11:38:04+0000",
+  "cutDate": "2026-09-21",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "fecha_creaci_n_participante",
+      "jsType": "Fecha Creación Participante",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sitio_web_grupo",
+      "jsType": "Sitio web grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento_grupo",
+      "jsType": "Departamento grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_participante",
+      "jsType": "Nombre Participante",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "nit_participante",
+      "jsType": "NIT Participante",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "codigo_grupo",
+      "jsType": "Codigo grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_doc_representante_legal_grupo",
+      "jsType": "Numero doc representante legal grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "correo_representante_legal_grupo",
+      "jsType": "Correo representante legal grupo",
+      "pii": true,
+      "piiReason": "Correo electrónico."
+    },
+    {
+      "name": "participacion",
+      "jsType": "Participacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "minucipio",
+      "jsType": "Minucipio grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "correo_electronico_grupo",
+      "jsType": "Correo electronico grupo",
+      "pii": true,
+      "piiReason": "Correo electrónico."
+    },
+    {
+      "name": "ubicaci_n_grupo",
+      "jsType": "Ubicación Grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_representante_legal_grupo",
+      "jsType": "Nombre representante legal grupo",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "numero_tel_fono_grupo",
+      "jsType": "Numero teléfono grupo",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "telefono_representante_legal_grupo",
+      "jsType": "Telefono representante legal grupo",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "es_mipyme",
+      "jsType": "Es Mipyme",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_fax",
+      "jsType": "Numero fax grupo",
+      "pii": true,
+      "piiReason": "Teléfono o celular de contacto."
+    },
+    {
+      "name": "codigo_participante",
+      "jsType": "Codigo participante",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direcci_n_grupo",
+      "jsType": "Dirección grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_empresa_participante",
+      "jsType": "Tipo Empresa Participante",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_grupo",
+      "jsType": "NIT Grupo",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "esta_activo",
+      "jsType": "Esta activo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_grupo",
+      "jsType": "Nombre Grupo",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "fecha_creaci_n_grupo",
+      "jsType": "Fecha Creación Grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_categor_a_principal_grupo",
+      "jsType": "Codigo categoría principal grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pais_grupo",
+      "jsType": "Pais grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ubicaci_n_participante",
+      "jsType": "Ubicación Participante",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "es_proveedor",
+      "jsType": "Es proveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "descripci_n_c_digo_categor_a_principal_grupo",
+      "jsType": "Descripción código categoría principal grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "es_lider_del_grupo",
+      "jsType": "Es Lider del Grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_empresa_grupo",
+      "jsType": "Tipo Empresa Grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_doc_representante_legal_grupo",
+      "jsType": "Tipo doc representante legal grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "es_entidad",
+      "jsType": "Es Entidad",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "nombre_participante",
+    "nit_participante",
+    "correo_representante_legal_grupo",
+    "correo_electronico_grupo",
+    "nombre_representante_legal_grupo",
+    "numero_tel_fono_grupo",
+    "telefono_representante_legal_grupo",
+    "numero_fax",
+    "nit_grupo",
+    "nombre_grupo"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:42:04.988Z"
+}

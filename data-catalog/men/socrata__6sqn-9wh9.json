@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "6sqn-9wh9",
+  "name": "MEN_INDICADORES_GENERACION_E",
+  "description": "Contiene información estadística del progragama de Generación E  relacionada con el número de beneficiarios",
+  "publisher": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "category": "Educación",
+  "theme": null,
+  "tags": [
+    "educación",
+    "estudiantes"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Ministerio de Educación Nacional - MinEducación, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/6sqn-9wh9",
+  "webUri": "https://www.datos.gov.co/d/6sqn-9wh9",
+  "homepage": null,
+  "createdAt": "2021-07-27T03:55:34+0000",
+  "dataUpdatedAt": "2022-01-18T16:50:52+0000",
+  "cutDate": "2022-01-18",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "departamento",
+      "jsType": "NOMBRE_DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "NOMBRE_MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "divipola_depto",
+      "jsType": "COD_DANE_DEPARTAMENTO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "divipola_municipio",
+      "jsType": "COD_DANE_MUNICIPIO",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "indicador_1_beneficiarios_ge",
+      "jsType": "INDICADOR 1. BENEFICIARIOS_GE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_corte",
+      "jsType": "FECHA_CORTE",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_evento",
+      "jsType": "FECHA",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:45.351Z"
+}

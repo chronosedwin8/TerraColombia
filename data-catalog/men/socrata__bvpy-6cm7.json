@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "source": "men",
+  "connector": "socrata",
+  "id": "bvpy-6cm7",
+  "name": "Entidades de salud en el Departamento de Risaralda",
+  "description": "Información Básica de, Entidad Social de Estado - ESE (IPS) y Entidades Promotoras de Plan de Beneficio - EAPB (EPS) en el Departamento de Risaralda",
+  "publisher": "Gobernación de Risaralda, Risaralda",
+  "category": "Salud y Protección Social",
+  "theme": null,
+  "tags": [
+    "ese",
+    "hospital",
+    "departamento de risaralda"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Gobernación de Risaralda, Risaralda",
+  "dataUri": "https://www.datos.gov.co/resource/bvpy-6cm7",
+  "webUri": "https://www.datos.gov.co/d/bvpy-6cm7",
+  "homepage": null,
+  "createdAt": "2016-07-14T01:52:06+0000",
+  "dataUpdatedAt": "2026-05-20T17:32:59+0000",
+  "cutDate": "2026-05-20",
+  "geographicCoverage": null,
+  "rowCount": null,
+  "columns": [
+    {
+      "name": "sedeppal",
+      "jsType": "sedeppal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "barrio",
+      "jsType": "barrio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zona",
+      "jsType": "zona",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "email",
+      "jsType": "email",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (email)."
+    },
+    {
+      "name": "telefono",
+      "jsType": "telefono",
+      "pii": true,
+      "piiReason": "Columna en la lista negra exacta (telefono)."
+    },
+    {
+      "name": "direccion",
+      "jsType": "direccion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo",
+      "jsType": "codigo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dpto",
+      "jsType": "dpto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "gerente",
+      "jsType": "gerente",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "mpio",
+      "jsType": "mpio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_sede",
+      "jsType": "nombre_sede",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "prestador",
+      "jsType": "prestador",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "numero_sede",
+      "jsType": "numero_sede",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [],
+  "piiDroppedColumns": [
+    "email",
+    "telefono"
+  ],
+  "piiRedactedColumns": [],
+  "notes": [
+    "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
+  ],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:37:38.583Z"
+}

@@ -1,0 +1,76 @@
+Fase 0 — recorriendo: igac-socrata, dane-socrata, men-socrata, minsalud-socrata, secop-socrata
+Muestras: 5 filas por capa
+
+GDAL detectado: GDAL 3.9.2, released 2024/08/13 en C:\Program Files\PostgreSQL\17\bin\ogr2ogr.exe (vía known-location).
+[igac-socrata] "IGAC catastro": 2 datasets (acumulado 2).
+[igac-socrata] "base catastral": 90 datasets (acumulado 91).
+[igac-socrata] "zonas homogeneas geoeconomicas": 4 datasets (acumulado 95).
+[igac-socrata] "suelos capacidad de uso": 115 datasets (acumulado 209).
+[igac-socrata] "nombres geograficos Colombia": 9 datasets (acumulado 218).
+[igac-socrata] "gestores catastrales": 5 datasets (acumulado 220).
+[igac-socrata] 220 datasets hallados, 5 del publicador, 5 a catalogar.
+[igac-socrata] Inspeccionando bhcx-bx97 — Gestores Catastrales de Colombia
+[igac-socrata] Inspeccionando ch4u-f3i5 — Resultados de Análisis de Laboratorio Suelos en Colombia
+[igac-socrata] Inspeccionando 6arb-d547 — Alimentos del trópico para alimentación animal - AlimenTro
+[igac-socrata] Inspeccionando wmwx-9aap — Áreas potenciales para adecuación de tierras con fines de irrigación
+[igac-socrata] Inspeccionando 7y2j-43cv — Registro de transacciones inmobiliarias en Colombia IGAC
+[igac-socrata] Terminado: 5 datasets catalogados, 5 inspeccionados a fondo, 0 fallidos.
+[dane-socrata] "DIVIPOLA": 80 datasets (acumulado 80).
+[dane-socrata] "proyecciones de poblacion municipios DANE": 80 datasets (acumulado 156).
+[dane-socrata] "censo nacional de poblacion y vivienda": 80 datasets (acumulado 209).
+[dane-socrata] 209 datasets hallados, 4 del publicador, 4 a catalogar.
+[dane-socrata] Inspeccionando vcjz-niiq — DIVIPOLA- Códigos departamentos
+[dane-socrata] Inspeccionando xaxy-8nri — DIVIPOLA - Códigos cabeceras - Centros poblados
+[dane-socrata] Inspeccionando dmvp-9swj — Base catastral Municipio Quebradanegra
+[dane-socrata] Inspeccionando stc8-i9y9 — PROYECCIÓN DE POBLACIÓN MUNICIPAL DE CHIQUINQUIRÁ 2018 A 2035 CNPV 201
+[dane-socrata] Terminado: 4 datasets catalogados, 4 inspeccionados a fondo, 0 fallidos.
+[men-socrata] "establecimientos educativos": 59 datasets (acumulado 59).
+[men-socrata] "sedes educativas DANE codigo": 80 datasets (acumulado 109).
+[men-socrata] "matricula estadisticas en educacion": 80 datasets (acumulado 178).
+[men-socrata] "directorio unico de establecimientos": 80 datasets (acumulado 239).
+[men-socrata] 239 datasets hallados, 82 del publicador, 80 a catalogar.
+[men-socrata] Inspeccionando tgsp-kujm — Sedes de los Establecimientos Educativos del Departamento de Antioquia
+[men-socrata] Inspeccionando emd6-ef7x — Establecimientos Educativos del sector oficial y no oficial por munici
+[men-socrata] Inspeccionando 7g6s-xche — Listado de sedes de los Establecimientos Educativos Oficiales (municip
+[men-socrata] Inspeccionando m6wg-s96s — Listado de los Establecimientos Educativos No Oficiales del Departamen
+[men-socrata] Inspeccionando cfw5-qzt5 — MEN_ESTABLECIMIENTOS_EDUCATIVOS_PREESCOLAR_BÁSICA_Y_MEDIA
+[men-socrata] Inspeccionando 4e5t-9b6q — NIÑOS, NIÑAS Y ADOLESCENTES DE ESTABLECIMIENTOS EDUCATIVOS DEL MUNICIP
+[men-socrata] Inspeccionando 3ncw-3qwq — MEN_INDICADORES_INFRAESTRUCTURA
+[men-socrata] Inspeccionando spve-848d — CONECTIVIDAD EN SEDES EDUCATIVAS OFICIALES DE LOS MUNICIPIOS NO CERTIF
+[men-socrata] Inspeccionando x5ay-984n — MEN_SEDES_EDUCATIVAS_PREESCOLAR_BÁSICA_Y_MEDIA
+[men-socrata] Inspeccionando g53n-xypy — Cobertura del Programa de Alimentación Escolar (PAE) en el departament
+[men-socrata] Terminado: 80 datasets catalogados, 10 inspeccionados a fondo, 0 fallidos.
+[minsalud-socrata] "REPS prestadores": 12 datasets (acumulado 12).
+[minsalud-socrata] "registro especial de prestadores de servicios de salud": 60 datasets (acumulado 64).
+[minsalud-socrata] "IPS sedes habilitadas": 0 datasets (acumulado 64).
+[minsalud-socrata] 64 datasets hallados, 9 del publicador, 9 a catalogar.
+[minsalud-socrata] Inspeccionando s2ru-bqt6 — Relación de IPS públicas y privadas según el nivel de atención y capac
+[minsalud-socrata] Inspeccionando c36g-9fc2 — Registro Especial de Prestadores y Sedes de Servicios de Salud
+[minsalud-socrata] Inspeccionando kjjp-kasm — Número de prestadores de servicios de salud por departamento, clase de
+[minsalud-socrata] Inspeccionando 4k9h-8qiu — Registros Individuales de Prestación de Servicios de Salud – RIPS
+[minsalud-socrata] Inspeccionando 9vau-g3q7 — Sedes de prestadores con servicio de vacunación
+[minsalud-socrata] Inspeccionando n4dj-8r7k — Clicsalud - Termómetro de Precios de Medicamentos
+[minsalud-socrata] Inspeccionando vf5x-ngeg — Reporte de prescripción de tecnologías en salud no financiadas con rec
+[minsalud-socrata] Inspeccionando my8c-6xkk — Registro Único Nacional del Talento Humano en Salud​ - Rethus
+[minsalud-socrata] Terminado: 9 datasets catalogados, 8 inspeccionados a fondo, 0 fallidos.
+[secop-socrata] "SECOP II contratos electronicos": 40 datasets (acumulado 40).
+[secop-socrata] "SECOP procesos de contratacion": 40 datasets (acumulado 51).
+[secop-socrata] 51 datasets hallados, 41 del publicador, 40 a catalogar.
+[secop-socrata] Inspeccionando jbjy-vk9h — SECOP II - Contratos Electrónicos
+[secop-socrata] Inspeccionando rpmr-utcd — SECOP Integrado
+[secop-socrata] Inspeccionando qmzu-gj57 — SECOP II - Proveedores Registrados
+[secop-socrata] Inspeccionando gra4-pcp2 — SECOP II - Ubicaciones ejecucion contratos
+[secop-socrata] Terminado: 40 datasets catalogados, 4 inspeccionados a fondo, 0 fallidos.
+
+────────────────────────────────────────────────────────────────────────
+Corrida terminada en 428.4 s
+  Servicios ArcGIS descubiertos : 0
+  Servicios inspeccionados      : 0 (fallidos: 0)
+  Capas y tablas catalogadas    : 0 (con muestra: 0)
+  Datasets de datos.gov.co      : 138
+  Descriptores manuales         : 0
+  Columnas PII descartadas      : 310
+  Valores PII redactados        : 11
+  HTTP: 217 peticiones, 2 de caché, 0 reintentos, 0 errores, 7.4 MB
+
+Escrito en data-catalog/: CATALOGO.md, SELECCION.md, RIESGOS.md, PII_DESCARTES.md, RESUMEN.json

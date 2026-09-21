@@ -1,0 +1,400 @@
+{
+  "schemaVersion": 1,
+  "source": "igac",
+  "connector": "socrata",
+  "id": "ch4u-f3i5",
+  "name": "Resultados de Análisis de Laboratorio Suelos en Colombia",
+  "description": "Resultados del Servicio de Análisis de Suelos que el Laboratorio de Química y Física de Suelos de AGROSAVIA, presta al sector agropecuario, se enfoca en la EVALUACIÓN de la Fertilidad del Suelo, de la Salinidad y parámetros que Sirven como herramienta para la realización de planes de fertilización, Aplicación de enmiendas y adecuación de los terrenos para lograr producciones rentables.",
+  "publisher": "Corporación Colombiana de Investigación Agropecuaria - AGROSAVIA, Bogotá D.C.",
+  "category": "Agricultura y Desarrollo Rural",
+  "theme": null,
+  "tags": [
+    "análisis",
+    "suelos",
+    "colombia",
+    "servicios",
+    "agricultura",
+    "agrosavia"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Corporación Colombiana de Investigación Agropecuaria - AGROSAVIA, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/ch4u-f3i5",
+  "webUri": "https://www.datos.gov.co/d/ch4u-f3i5",
+  "homepage": null,
+  "createdAt": "2017-05-23T13:54:27+0000",
+  "dataUpdatedAt": "2025-10-03T21:05:14+0000",
+  "cutDate": "2025-10-03",
+  "geographicCoverage": null,
+  "rowCount": 92738,
+  "columns": [
+    {
+      "name": "zinc_disponible_olsen",
+      "jsType": "Zinc disponible Olsen",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "acidez_kcl",
+      "jsType": "Acidez Intercambiable",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "boro_disponible",
+      "jsType": "Boro disponible",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "potasio_intercambiable",
+      "jsType": "Potasio intercambiable",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "azufre_fosfato_monocalcico",
+      "jsType": "Azufre Fosfato monocalcico",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tiempo_de_establecimiento",
+      "jsType": "Tiempo de establecimiento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cultivo",
+      "jsType": "Cultivo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fertilizantes_aplicados",
+      "jsType": "Fertilizantes aplicados",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "zinc_disponible_doble_acido",
+      "jsType": "Zinc disponible doble  acido",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "magnesio_intercambiable",
+      "jsType": "Magnesio intercambiable",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "capacidad_de_intercambio_cationico",
+      "jsType": "capacidad de intercambio cationico",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cobre_disponible_doble_acido",
+      "jsType": "Cobre disponible doble acido",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fosforo_bray_ii",
+      "jsType": "Fósforo Bray II",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "secuencial",
+      "jsType": "Secuencial",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_an_lisis",
+      "jsType": "Fecha de Análisis",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "municipio",
+      "jsType": "Municipio",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "riego",
+      "jsType": "Riego",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ph_agua_suelo",
+      "jsType": "pH agua:suelo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "materia_organica",
+      "jsType": "Materia organica",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "aluminio_intercambiable",
+      "jsType": "Aluminio intercambiable",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "drenaje",
+      "jsType": "Drenaje",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "manganeso_disponible_olsen",
+      "jsType": "Manganeso disponible Olsen",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "hierro_disponible_doble_acido",
+      "jsType": "Hierro disponible doble acido",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "manganeso_disponible_doble_acido",
+      "jsType": "Manganeso disponible doble acido",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "hierro_disponible_olsen",
+      "jsType": "Hierro disponible olsen",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "cobre_disponible",
+      "jsType": "Cobre disponible",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "topografia",
+      "jsType": "Topografia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "conductividad_electrica",
+      "jsType": "Conductividad electrica",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sodio_intercambiable",
+      "jsType": "Sodio intercambiable",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado",
+      "jsType": "Estado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "calcio_intercambiable",
+      "jsType": "Calcio intercambiable",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "secuencial": "1",
+      "fecha_de_an_lisis": "7/01/2014",
+      "departamento": "NARIÑO",
+      "municipio": "SAN ANDRÉS DE TUMACO",
+      "cultivo": "No Indica",
+      "estado": "No indica",
+      "tiempo_de_establecimiento": "No indica",
+      "topografia": "No indica",
+      "drenaje": "No indica",
+      "riego": "No indica",
+      "fertilizantes_aplicados": "No indica",
+      "ph_agua_suelo": "5.64",
+      "materia_organica": "3.889",
+      "fosforo_bray_ii": "6.482",
+      "azufre_fosfato_monocalcico": "8.384",
+      "acidez_kcl": "ND",
+      "aluminio_intercambiable": "ND",
+      "calcio_intercambiable": "1.541",
+      "magnesio_intercambiable": "0.380",
+      "potasio_intercambiable": "0.118",
+      "sodio_intercambiable": "0.054",
+      "capacidad_de_intercambio_cationico": "2.094",
+      "conductividad_electrica": "0.133",
+      "hierro_disponible_olsen": "66.39",
+      "cobre_disponible": "1.700",
+      "manganeso_disponible_olsen": "1.700",
+      "zinc_disponible_olsen": "1.5",
+      "boro_disponible": "0.187",
+      "hierro_disponible_doble_acido": "ND",
+      "cobre_disponible_doble_acido": "ND",
+      "manganeso_disponible_doble_acido": "ND",
+      "zinc_disponible_doble_acido": "ND"
+    },
+    {
+      "secuencial": "2",
+      "fecha_de_an_lisis": "21/08/2014",
+      "departamento": "HUILA",
+      "municipio": "SANTA MARÍA",
+      "cultivo": "Granadilla",
+      "estado": "Establecido",
+      "tiempo_de_establecimiento": "De 1 a 5 años",
+      "topografia": "Pendiente",
+      "drenaje": "Buen drenaje",
+      "riego": "No Tiene",
+      "fertilizantes_aplicados": "No indica",
+      "ph_agua_suelo": "4.24",
+      "materia_organica": "2.287",
+      "fosforo_bray_ii": "520.1",
+      "azufre_fosfato_monocalcico": "90.30",
+      "acidez_kcl": "2.021",
+      "aluminio_intercambiable": "1.483",
+      "calcio_intercambiable": "2.932",
+      "magnesio_intercambiable": "0.925",
+      "potasio_intercambiable": "2.131",
+      "sodio_intercambiable": "0.043",
+      "capacidad_de_intercambio_cationico": "8.054",
+      "conductividad_electrica": "2.749",
+      "hierro_disponible_olsen": "250.9",
+      "cobre_disponible": "3.7",
+      "manganeso_disponible_olsen": "29.4",
+      "zinc_disponible_olsen": "28.70",
+      "boro_disponible": "2.084",
+      "hierro_disponible_doble_acido": "ND",
+      "cobre_disponible_doble_acido": "ND",
+      "manganeso_disponible_doble_acido": "ND",
+      "zinc_disponible_doble_acido": "ND"
+    },
+    {
+      "secuencial": "3",
+      "fecha_de_an_lisis": "22/08/2014",
+      "departamento": "ANTIOQUIA",
+      "municipio": "LIBORINA",
+      "cultivo": "Café",
+      "estado": "Por establecer",
+      "tiempo_de_establecimiento": "No indica",
+      "topografia": "Pendiente",
+      "drenaje": "Mal drenaje",
+      "riego": "No Tiene",
+      "fertilizantes_aplicados": "PRODUCCION",
+      "ph_agua_suelo": "5.22",
+      "materia_organica": "2.518",
+      "fosforo_bray_ii": "58.11",
+      "azufre_fosfato_monocalcico": "2.686",
+      "acidez_kcl": "0.955",
+      "aluminio_intercambiable": "0.796",
+      "calcio_intercambiable": "3.818",
+      "magnesio_intercambiable": "1.110",
+      "potasio_intercambiable": "<0.09",
+      "sodio_intercambiable": "0.010",
+      "capacidad_de_intercambio_cationico": "5.985",
+      "conductividad_electrica": "0.328",
+      "hierro_disponible_olsen": "390",
+      "cobre_disponible": "11.10",
+      "manganeso_disponible_olsen": "8.299",
+      "zinc_disponible_olsen": "5",
+      "boro_disponible": "0.085",
+      "hierro_disponible_doble_acido": "ND",
+      "cobre_disponible_doble_acido": "ND",
+      "manganeso_disponible_doble_acido": "ND",
+      "zinc_disponible_doble_acido": "ND"
+    },
+    {
+      "secuencial": "4",
+      "fecha_de_an_lisis": "22/08/2014",
+      "departamento": "ANTIOQUIA",
+      "municipio": "LIBORINA",
+      "cultivo": "Maracuyá",
+      "estado": "Por establecer",
+      "tiempo_de_establecimiento": "No indica",
+      "topografia": "Ondulado",
+      "drenaje": "Mal drenaje",
+      "riego": "No Tiene",
+      "fertilizantes_aplicados": "No indica",
+      "ph_agua_suelo": "5.45",
+      "materia_organica": "2.841",
+      "fosforo_bray_ii": "4.583",
+      "azufre_fosfato_monocalcico": "1.782",
+      "acidez_kcl": "0",
+      "aluminio_intercambiable": "0",
+      "calcio_intercambiable": "4.754",
+      "magnesio_intercambiable": "3.577",
+      "potasio_intercambiable": "0.118",
+      "sodio_intercambiable": "0.010",
+      "capacidad_de_intercambio_cationico": "8.461",
+      "conductividad_electrica": "0.171",
+      "hierro_disponible_olsen": "200",
+      "cobre_disponible": "4.2",
+      "manganeso_disponible_olsen": "4.699",
+      "zinc_disponible_olsen": "1",
+      "boro_disponible": "0.229",
+      "hierro_disponible_doble_acido": "ND",
+      "cobre_disponible_doble_acido": "ND",
+      "manganeso_disponible_doble_acido": "ND",
+      "zinc_disponible_doble_acido": "ND"
+    },
+    {
+      "secuencial": "5",
+      "fecha_de_an_lisis": "22/08/2014",
+      "departamento": "ANTIOQUIA",
+      "municipio": "LIBORINA",
+      "cultivo": "Café",
+      "estado": "Por establecer",
+      "tiempo_de_establecimiento": "No indica",
+      "topografia": "Ondulado",
+      "drenaje": "Mal drenaje",
+      "riego": "No Tiene",
+      "fertilizantes_aplicados": "PRODUCCION",
+      "ph_agua_suelo": "5.43",
+      "materia_organica": "2.703",
+      "fosforo_bray_ii": "5.512",
+      "azufre_fosfato_monocalcico": "3.138",
+      "acidez_kcl": "0.150",
+      "aluminio_intercambiable": "0.109",
+      "calcio_intercambiable": "7.338",
+      "magnesio_intercambiable": "3.022",
+      "potasio_intercambiable": "0.096",
+      "sodio_intercambiable": "0.032",
+      "capacidad_de_intercambio_cationico": "10.64",
+      "conductividad_electrica": "0.323",
+      "hierro_disponible_olsen": "117.9",
+      "cobre_disponible": "3.8",
+      "manganeso_disponible_olsen": "4.600",
+      "zinc_disponible_olsen": "0.700",
+      "boro_disponible": "0.139",
+      "hierro_disponible_doble_acido": "ND",
+      "cobre_disponible_doble_acido": "ND",
+      "manganeso_disponible_doble_acido": "ND",
+      "zinc_disponible_doble_acido": "ND"
+    }
+  ],
+  "piiDroppedColumns": [],
+  "piiRedactedColumns": [],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:35:04.929Z"
+}

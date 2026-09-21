@@ -1,0 +1,912 @@
+{
+  "schemaVersion": 1,
+  "source": "secop",
+  "connector": "socrata",
+  "id": "jbjy-vk9h",
+  "name": "SECOP II - Contratos Electrónicos",
+  "description": "Información de los contratos registrados en SECOP II desde su lanzamiento",
+  "publisher": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "category": "Estadísticas Nacionales",
+  "theme": null,
+  "tags": [
+    "procesos de contratación",
+    "compra pública",
+    "contratos",
+    "secop"
+  ],
+  "license": "Creative Commons Attribution | Share Alike 4.0 International",
+  "attribution": "Agencia Nacional de Contratación Pública - Colombia Compra Eficiente, Bogotá D.C.",
+  "dataUri": "https://www.datos.gov.co/resource/jbjy-vk9h",
+  "webUri": "https://www.datos.gov.co/d/jbjy-vk9h",
+  "homepage": null,
+  "createdAt": "2019-10-01T04:42:13+0000",
+  "dataUpdatedAt": "2026-09-20T11:41:59+0000",
+  "cutDate": "2026-09-20",
+  "geographicCoverage": null,
+  "rowCount": 6066730,
+  "columns": [
+    {
+      "name": "n_mero_de_documento_ordenador_de_pago",
+      "jsType": "Número de documento Ordenador de Pago",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "recursos_propios_alcald_as_gobernaciones_y_resguardos_ind_genas_",
+      "jsType": "Recursos Propios (Alcaldías y Gobernaciones)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_del_banco",
+      "jsType": "Nombre del banco",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "fecha_fin_liquidacion",
+      "jsType": "Fecha Fin Liquidacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "orden",
+      "jsType": "Orden",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_de_cuenta",
+      "jsType": "Tipo de cuenta",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sector",
+      "jsType": "Sector",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "rama",
+      "jsType": "Rama",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "n_mero_de_cuenta",
+      "jsType": "Número de cuenta",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_ordenador_del_gasto",
+      "jsType": "Nombre ordenador del gasto",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "entidad_centralizada",
+      "jsType": "Entidad Centralizada",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "departamento",
+      "jsType": "Departamento",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nit_entidad",
+      "jsType": "Nit Entidad",
+      "pii": true,
+      "piiReason": "NIT/RUT: de persona natural equivale a la cédula."
+    },
+    {
+      "name": "descripcion_documentos_tipo",
+      "jsType": "Descripcion Documentos Tipo",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "documentos_tipo",
+      "jsType": "Documentos Tipo",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "valor_de_pago_adelantado",
+      "jsType": "Valor de pago adelantado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_facturado",
+      "jsType": "Valor Facturado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ciudad",
+      "jsType": "Ciudad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "localizaci_n",
+      "jsType": "Localización",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "duraci_n_del_contrato",
+      "jsType": "Duración del contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_pendiente_de_pago",
+      "jsType": "Valor Pendiente de Pago",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "el_contrato_puede_ser_prorrogado",
+      "jsType": "El contrato puede ser prorrogado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "objeto_del_contrato",
+      "jsType": "Objeto del Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_firma",
+      "jsType": "Fecha de Firma",
+      "pii": true,
+      "piiReason": "Dato biométrico o imagen de la persona."
+    },
+    {
+      "name": "g_nero_representante_legal",
+      "jsType": "Género Representante Legal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_inicio_del_contrato",
+      "jsType": "Fecha de Inicio del Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_pendiente_de_ejecucion",
+      "jsType": "Valor Pendiente de Ejecucion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "presupuesto_general_de_la_nacion_pgn",
+      "jsType": "Presupuesto General de la Nacion – PGN",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_de_fin_del_contrato",
+      "jsType": "Fecha de Fin del Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "condiciones_de_entrega",
+      "jsType": "Condiciones de Entrega",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_entidad",
+      "jsType": "Codigo Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_del_contrato",
+      "jsType": "Valor del Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipodocproveedor",
+      "jsType": "TipoDocProveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "documento_proveedor",
+      "jsType": "Documento Proveedor",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "sistema_general_de_participaciones",
+      "jsType": "Sistema General de Participaciones",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_pendiente_de",
+      "jsType": "Valor Pendiente de Amortizacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "destino_gasto",
+      "jsType": "Destino Gasto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "origen_de_los_recursos",
+      "jsType": "Origen de los Recursos",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "reversion",
+      "jsType": "Reversion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "proveedor_adjudicado",
+      "jsType": "Proveedor Adjudicado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "es_grupo",
+      "jsType": "Es Grupo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "sistema_general_de_regal_as",
+      "jsType": "Sistema General de Regalías",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "es_pyme",
+      "jsType": "Es Pyme",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "ultima_actualizacion",
+      "jsType": "Ultima Actualizacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "recursos_de_credito",
+      "jsType": "Recursos de Credito",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "habilita_pago_adelantado",
+      "jsType": "Habilita Pago Adelantado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "obligaciones_postconsumo",
+      "jsType": "Obligaciones Postconsumo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_de_documento_ordenador_de_pago",
+      "jsType": "Tipo de documento Ordenador de Pago",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "nombre_ordenador_de_pago",
+      "jsType": "Nombre Ordenador de Pago",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "n_mero_de_documento_supervisor",
+      "jsType": "Número de documento supervisor",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "recursos_propios",
+      "jsType": "Otros Recursos (Especie, Privados, Cooperación, Propios Entidades Autónomas)",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "liquidaci_n",
+      "jsType": "Liquidación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "obligaci_n_ambiental",
+      "jsType": "Obligación Ambiental",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_de_documento_supervisor",
+      "jsType": "Tipo de documento supervisor",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "nombre_supervisor",
+      "jsType": "Nombre supervisor",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "n_mero_de_documento_ordenador_del_gasto",
+      "jsType": "Número de documento Ordenador del gasto",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "tipo_de_documento_ordenador_del_gasto",
+      "jsType": "Tipo de documento Ordenador del gasto",
+      "pii": true,
+      "piiReason": "Documento de identidad."
+    },
+    {
+      "name": "fecha_de_notificaci_n_de_prorrogaci_n",
+      "jsType": "Fecha de notificación de prorrogación",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "proceso_de_compra",
+      "jsType": "Proceso de Compra",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "id_contrato",
+      "jsType": "ID Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "referencia_del_contrato",
+      "jsType": "Referencia del Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "estado_contrato",
+      "jsType": "Estado Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "espostconflicto",
+      "jsType": "EsPostConflicto",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "puntos_del_acuerdo",
+      "jsType": "Puntos del Acuerdo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "dias_adicionados",
+      "jsType": "Dias adicionados",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "direcci_n_de_ejecuci_n_del_contrato",
+      "jsType": "Dirección de ejecución del contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "pilares_del_acuerdo",
+      "jsType": "Pilares del Acuerdo",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "urlproceso",
+      "jsType": "URLProceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_representante_legal",
+      "jsType": "Nombre Representante Legal",
+      "pii": true,
+      "piiReason": "Nombre o apellido de persona."
+    },
+    {
+      "name": "nacionalidad_representante_legal",
+      "jsType": "Nacionalidad Representante Legal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "saldo_vigencia",
+      "jsType": "Saldo Vigencia",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_pagado",
+      "jsType": "Valor Pagado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "domicilio_representante_legal",
+      "jsType": "Domicilio Representante Legal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "valor_amortizado",
+      "jsType": "Valor Amortizado",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_de_identificaci_n_representante_legal",
+      "jsType": "Tipo de Identificación Representante Legal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "nombre_entidad",
+      "jsType": "Nombre Entidad",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "identificaci_n_representante_legal",
+      "jsType": "Identificación Representante Legal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "fecha_inicio_liquidacion",
+      "jsType": "Fecha Inicio Liquidacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_de_categoria_principal",
+      "jsType": "Codigo de Categoria Principal",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "descripcion_del_proceso",
+      "jsType": "Descripcion del Proceso",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "tipo_de_contrato",
+      "jsType": "Tipo de Contrato",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "codigo_proveedor",
+      "jsType": "Codigo Proveedor",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "saldo_cdp",
+      "jsType": "Saldo CDP",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "modalidad_de_contratacion",
+      "jsType": "Modalidad de Contratacion",
+      "pii": false,
+      "piiReason": null
+    },
+    {
+      "name": "justificacion_modalidad_de",
+      "jsType": "Justificacion Modalidad de Contratacion",
+      "pii": false,
+      "piiReason": null
+    }
+  ],
+  "sample": [
+    {
+      "nombre_entidad": "SANTIAGO DE CALI DISTRITO ESPECIAL - SECRETARÍA DE PAZ Y CULTURA CIUDADANA",
+      "departamento": "Valle del Cauca",
+      "ciudad": "Cali",
+      "localizaci_n": "Colombia,  Valle del Cauca ,  Cali",
+      "orden": "Territorial",
+      "sector": "No aplica/No pertenece",
+      "rama": "Ejecutivo",
+      "entidad_centralizada": "Centralizada",
+      "proceso_de_compra": "CO1.BDOS.7607842",
+      "id_contrato": "CO1.PCCNTR.7489648",
+      "referencia_del_contrato": "4164.010.26.1.273-2025",
+      "estado_contrato": "En ejecución",
+      "codigo_de_categoria_principal": "V1.80111501",
+      "descripcion_del_proceso": "Prestación de  servicios de apoyo a la gestión a la Secretaría de Paz y Cultura Ciudadana; para el desarrollo del proyecto denominado: Desarrollo de los espacios de participación y mediación para la prevención y resolución de conflictos en el Distrito Especial de Santiago de Cali.",
+      "tipo_de_contrato": "Prestación de servicios",
+      "modalidad_de_contratacion": "Contratación directa",
+      "justificacion_modalidad_de": "Servicios profesionales y apoyo a la gestión",
+      "fecha_de_inicio_del_contrato": "2025-02-19T00:00:00.000",
+      "fecha_de_fin_del_contrato": "2025-04-30T00:00:00.000",
+      "condiciones_de_entrega": "No Definido",
+      "tipodocproveedor": "Cédula de Ciudadanía",
+      "proveedor_adjudicado": "TOMAS BANGUERA",
+      "es_grupo": "No",
+      "es_pyme": "Si",
+      "habilita_pago_adelantado": "No",
+      "liquidaci_n": "No",
+      "obligaci_n_ambiental": "No",
+      "obligaciones_postconsumo": "No",
+      "reversion": "No",
+      "origen_de_los_recursos": "Distribuido",
+      "destino_gasto": "Inversión",
+      "valor_del_contrato": "8055000",
+      "valor_de_pago_adelantado": "0",
+      "valor_facturado": "0",
+      "valor_pendiente_de_pago": "8055000",
+      "valor_pagado": "0",
+      "valor_amortizado": "0",
+      "valor_pendiente_de": "0",
+      "valor_pendiente_de_ejecucion": "8055000",
+      "saldo_cdp": "0",
+      "saldo_vigencia": "0",
+      "espostconflicto": "No",
+      "dias_adicionados": "0",
+      "puntos_del_acuerdo": "No aplica",
+      "pilares_del_acuerdo": "No aplica",
+      "urlproceso": {
+        "url": "https://community.secop.gov.co/Public/Tendering/OpportunityDetail/Index?noticeUID=CO1.NTC.7629566&isFromPublicArea=True&isModal=true&asPopupView=true"
+      },
+      "nacionalidad_representante_legal": "CO",
+      "domicilio_representante_legal": "No Definido",
+      "tipo_de_identificaci_n_representante_legal": "Sin Descripcion",
+      "identificaci_n_representante_legal": "Sin Descripcion",
+      "g_nero_representante_legal": "No Definido",
+      "presupuesto_general_de_la_nacion_pgn": "0",
+      "sistema_general_de_participaciones": "0",
+      "sistema_general_de_regal_as": "0",
+      "recursos_propios_alcald_as_gobernaciones_y_resguardos_ind_genas_": "[REDACTADO:co_cedula]",
+      "recursos_de_credito": "0",
+      "recursos_propios": "0",
+      "codigo_entidad": "702364142",
+      "codigo_proveedor": "705693141",
+      "objeto_del_contrato": "Prestación de  servicios de apoyo a la gestión a la Secretaría de Paz y Cultura Ciudadana; para el desarrollo del proyecto denominado: Desarrollo de los espacios de participación y mediación para la prevención y resolución de conflictos en el Distrito Especial de Santiago de Cali.",
+      "duraci_n_del_contrato": "75 Dia(s)",
+      "tipo_de_cuenta": "No Definido",
+      "n_mero_de_cuenta": "No definido",
+      "el_contrato_puede_ser_prorrogado": "No",
+      "direcci_n_de_ejecuci_n_del_contrato": "[REDACTADO:person_full_name]"
+    },
+    {
+      "nombre_entidad": "(Secretaría Distrital de Integración Social)",
+      "departamento": "Distrito Capital de Bogotá",
+      "ciudad": "No Definido",
+      "localizaci_n": "Colombia, Bogotá, No Definido",
+      "orden": "Territorial",
+      "sector": "Inclusión Social y Reconciliación",
+      "rama": "Ejecutivo",
+      "entidad_centralizada": "Centralizada",
+      "proceso_de_compra": "CO1.BDOS.8576456",
+      "id_contrato": "CO1.PCCNTR.8194936",
+      "referencia_del_contrato": "9301-2025",
+      "estado_contrato": "Borrador",
+      "codigo_de_categoria_principal": "V1.80111500",
+      "descripcion_del_proceso": "PRESTAR SERVICIOS PROFESIONALES A LA SUBDIRECCIÓN DE ADMINISTRACIÓN DE INFORMACIÓN DE TRANSFERENCIAS PARA\nLA GESTIÓN INTEGRAL DE LA IMPLEMENTACIÓN DE PROCESOS Y PROCEDIMIENTOS; Y EL SEGUIMIENTO A LA OPERACIÓN DE LA\nESTRATEGIA DE INGRESO MÍNIMO GARANTIZADO.",
+      "tipo_de_contrato": "Prestación de servicios",
+      "modalidad_de_contratacion": "Contratación directa",
+      "justificacion_modalidad_de": "Servicios profesionales y apoyo a la gestión",
+      "fecha_de_fin_del_contrato": "2026-04-13T00:00:00.000",
+      "condiciones_de_entrega": "NXTWY.DLVY.2",
+      "tipodocproveedor": "Cédula de Ciudadanía",
+      "proveedor_adjudicado": "[REDACTADO:person_full_name]",
+      "es_grupo": "No",
+      "es_pyme": "No",
+      "habilita_pago_adelantado": "No",
+      "liquidaci_n": "No",
+      "obligaci_n_ambiental": "No",
+      "obligaciones_postconsumo": "No",
+      "reversion": "No",
+      "origen_de_los_recursos": "Distribuido",
+      "destino_gasto": "Inversión",
+      "valor_del_contrato": "37600000",
+      "valor_de_pago_adelantado": "0",
+      "valor_facturado": "0",
+      "valor_pendiente_de_pago": "37600000",
+      "valor_pagado": "0",
+      "valor_amortizado": "0",
+      "valor_pendiente_de": "0",
+      "valor_pendiente_de_ejecucion": "37600000",
+      "saldo_cdp": "0",
+      "saldo_vigencia": "0",
+      "espostconflicto": "No",
+      "dias_adicionados": "0",
+      "puntos_del_acuerdo": "No aplica",
+      "pilares_del_acuerdo": "No aplica",
+      "urlproceso": {
+        "url": "https://community.secop.gov.co/Public/Tendering/OpportunityDetail/Index?noticeUID=CO1.NTC.8599157&isFromPublicArea=True&isModal=true&asPopupView=true"
+      },
+      "nacionalidad_representante_legal": "CO",
+      "domicilio_representante_legal": "No Definido",
+      "tipo_de_identificaci_n_representante_legal": "Sin Descripcion",
+      "identificaci_n_representante_legal": "Sin Descripcion",
+      "g_nero_representante_legal": "Mujer",
+      "presupuesto_general_de_la_nacion_pgn": "0",
+      "sistema_general_de_participaciones": "0",
+      "sistema_general_de_regal_as": "0",
+      "recursos_propios_alcald_as_gobernaciones_y_resguardos_ind_genas_": "[REDACTADO:co_cedula]",
+      "recursos_de_credito": "0",
+      "recursos_propios": "0",
+      "codigo_entidad": "702271321",
+      "codigo_proveedor": "715597126",
+      "objeto_del_contrato": "PRESTAR SERVICIOS PROFESIONALES A LA SUBDIRECCIÓN DE ADMINISTRACIÓN DE INFORMACIÓN DE TRANSFERENCIAS PARA\nLA GESTIÓN INTEGRAL DE LA IMPLEMENTACIÓN DE PROCESOS Y PROCEDIMIENTOS; Y EL SEGUIMIENTO A LA OPERACIÓN DE LA\nESTRATEGIA DE INGRESO MÍNIMO GARANTIZADO.",
+      "duraci_n_del_contrato": "8 Mes(es)",
+      "tipo_de_cuenta": "No Definido",
+      "n_mero_de_cuenta": "No definido",
+      "el_contrato_puede_ser_prorrogado": "No",
+      "direcci_n_de_ejecuci_n_del_contrato": "[REDACTADO:person_full_name]"
+    },
+    {
+      "nombre_entidad": "SANTIAGO DE CALI DISTRITO ESPECIAL - SECRETARIA DEL DEPORTE Y LA RECREACIÓN",
+      "departamento": "Valle del Cauca",
+      "ciudad": "Cali",
+      "localizaci_n": "Colombia,  Valle del Cauca ,  Cali",
+      "orden": "Territorial",
+      "sector": "deportes",
+      "rama": "Ejecutivo",
+      "entidad_centralizada": "Centralizada",
+      "proceso_de_compra": "CO1.BDOS.8425086",
+      "id_contrato": "CO1.PCCNTR.8093603",
+      "referencia_del_contrato": "4162.010.26.1.2436-2025",
+      "estado_contrato": "En ejecución",
+      "codigo_de_categoria_principal": "V1.80111700",
+      "descripcion_del_proceso": "Prestación de servicios de apoyo a la gestión en la Secretaría del Deporte y la Recreación del proyecto denominado Apoyo a la iniciación y formación deportiva en Santiago de Cali BP -26005288.",
+      "tipo_de_contrato": "Prestación de servicios",
+      "modalidad_de_contratacion": "Contratación directa",
+      "justificacion_modalidad_de": "Servicios profesionales y apoyo a la gestión",
+      "fecha_de_inicio_del_contrato": "2025-07-18T00:00:00.000",
+      "fecha_de_fin_del_contrato": "2025-08-31T00:00:00.000",
+      "condiciones_de_entrega": "NXTWY.DLVY.6",
+      "tipodocproveedor": "Cédula de Ciudadanía",
+      "proveedor_adjudicado": "YENNY YULIETH HERNANDEZ",
+      "es_grupo": "No",
+      "es_pyme": "No",
+      "habilita_pago_adelantado": "No",
+      "liquidaci_n": "No",
+      "obligaci_n_ambiental": "No",
+      "obligaciones_postconsumo": "No",
+      "reversion": "No",
+      "origen_de_los_recursos": "Distribuido",
+      "destino_gasto": "Inversión",
+      "valor_del_contrato": "6828000",
+      "valor_de_pago_adelantado": "0",
+      "valor_facturado": "0",
+      "valor_pendiente_de_pago": "6828000",
+      "valor_pagado": "0",
+      "valor_amortizado": "0",
+      "valor_pendiente_de": "0",
+      "valor_pendiente_de_ejecucion": "6828000",
+      "saldo_cdp": "0",
+      "saldo_vigencia": "0",
+      "espostconflicto": "No",
+      "dias_adicionados": "0",
+      "puntos_del_acuerdo": "No aplica",
+      "pilares_del_acuerdo": "No aplica",
+      "urlproceso": {
+        "url": "https://community.secop.gov.co/Public/Tendering/OpportunityDetail/Index?noticeUID=CO1.NTC.8448642&isFromPublicArea=True&isModal=true&asPopupView=true"
+      },
+      "nacionalidad_representante_legal": "CO",
+      "domicilio_representante_legal": "No Definido",
+      "tipo_de_identificaci_n_representante_legal": "Sin Descripcion",
+      "identificaci_n_representante_legal": "Sin Descripcion",
+      "g_nero_representante_legal": "Mujer",
+      "presupuesto_general_de_la_nacion_pgn": "0",
+      "sistema_general_de_participaciones": "0",
+      "sistema_general_de_regal_as": "0",
+      "recursos_propios_alcald_as_gobernaciones_y_resguardos_ind_genas_": "[REDACTADO:co_cedula]",
+      "recursos_de_credito": "0",
+      "recursos_propios": "0",
+      "codigo_entidad": "702440603",
+      "codigo_proveedor": "711830315",
+      "objeto_del_contrato": "Prestación de servicios de apoyo a la gestión en la Secretaría del Deporte y la Recreación del proyecto denominado Apoyo a la iniciación y formación deportiva en Santiago de Cali BP -26005288.",
+      "duraci_n_del_contrato": "2 Mes(es)",
+      "tipo_de_cuenta": "No Definido",
+      "n_mero_de_cuenta": "No definido",
+      "el_contrato_puede_ser_prorrogado": "No",
+      "direcci_n_de_ejecuci_n_del_contrato": "calle 9 carrera 37 a 01\nCali\nValle del Cauca\nCOLOMBIA"
+    },
+    {
+      "nombre_entidad": "ALCALDÍA DEL DISTRITO TURÍSTICO Y CULTURAL DE CARTAGENA DE INDIAS",
+      "departamento": "Bolívar",
+      "ciudad": "Cartagena",
+      "localizaci_n": "Colombia,  Bolívar ,  Cartagena",
+      "orden": "Territorial",
+      "sector": "No aplica/No pertenece",
+      "rama": "Ejecutivo",
+      "entidad_centralizada": "Centralizada",
+      "proceso_de_compra": "CO1.BDOS.9747506",
+      "id_contrato": "CO1.PCCNTR.9133078",
+      "referencia_del_contrato": "CD-SPDS-4166-2026",
+      "estado_contrato": "En ejecución",
+      "codigo_de_categoria_principal": "V1.80111600",
+      "descripcion_del_proceso": "PRESTACIÓN DE SERVICIOS DE APOYO A LA GESTION EN LA SECRETARÍA DE PARTICIPACIÓN Y DESARROLLO SOCIAL PARA DESARROLLAR ACTIVIDADES DENTRO DEL PROYECTO DE INVERSIÓN DENOMINADO SERVICIO DE ATENCIÓN INTEGRAL A LOS ADULTOS MAYORES DEL DISTRITO DE CARTAGENA DE INDIAS.",
+      "tipo_de_contrato": "Prestación de servicios",
+      "modalidad_de_contratacion": "Contratación directa",
+      "justificacion_modalidad_de": "Servicios profesionales y apoyo a la gestión",
+      "fecha_de_inicio_del_contrato": "2026-03-27T00:00:00.000",
+      "fecha_de_fin_del_contrato": "2026-09-26T00:00:00.000",
+      "condiciones_de_entrega": "No Definido",
+      "tipodocproveedor": "Cédula de Ciudadanía",
+      "proveedor_adjudicado": "[REDACTADO:person_full_name]",
+      "es_grupo": "No",
+      "es_pyme": "No",
+      "habilita_pago_adelantado": "No",
+      "liquidaci_n": "No",
+      "obligaci_n_ambiental": "No",
+      "obligaciones_postconsumo": "No",
+      "reversion": "No",
+      "origen_de_los_recursos": "Distribuido",
+      "destino_gasto": "Inversión",
+      "valor_del_contrato": "13200000",
+      "valor_de_pago_adelantado": "0",
+      "valor_facturado": "0",
+      "valor_pendiente_de_pago": "13200000",
+      "valor_pagado": "0",
+      "valor_amortizado": "0",
+      "valor_pendiente_de": "0",
+      "valor_pendiente_de_ejecucion": "13200000",
+      "saldo_cdp": "0",
+      "saldo_vigencia": "0",
+      "espostconflicto": "No",
+      "dias_adicionados": "0",
+      "puntos_del_acuerdo": "No aplica",
+      "pilares_del_acuerdo": "No aplica",
+      "urlproceso": {
+        "url": "https://community.secop.gov.co/Public/Tendering/OpportunityDetail/Index?noticeUID=CO1.NTC.9767759&isFromPublicArea=True&isModal=true&asPopupView=true"
+      },
+      "nacionalidad_representante_legal": "CO",
+      "domicilio_representante_legal": "No Definido",
+      "tipo_de_identificaci_n_representante_legal": "Sin Descripcion",
+      "identificaci_n_representante_legal": "Sin Descripcion",
+      "g_nero_representante_legal": "Mujer",
+      "presupuesto_general_de_la_nacion_pgn": "0",
+      "sistema_general_de_participaciones": "0",
+      "sistema_general_de_regal_as": "0",
+      "recursos_propios_alcald_as_gobernaciones_y_resguardos_ind_genas_": "[REDACTADO:co_cedula]",
+      "recursos_de_credito": "0",
+      "recursos_propios": "0",
+      "codigo_entidad": "703301051",
+      "codigo_proveedor": "719103087",
+      "objeto_del_contrato": "PRESTACIÓN DE SERVICIOS DE APOYO A LA GESTION EN LA SECRETARÍA DE PARTICIPACIÓN Y DESARROLLO SOCIAL PARA DESARROLLAR ACTIVIDADES DENTRO DEL PROYECTO DE INVERSIÓN DENOMINADO SERVICIO DE ATENCIÓN INTEGRAL A LOS ADULTOS MAYORES DEL DISTRITO DE CARTAGENA DE INDIAS.",
+      "duraci_n_del_contrato": "6 Mes(es)",
+      "tipo_de_cuenta": "No Definido",
+      "n_mero_de_cuenta": "No definido",
+      "el_contrato_puede_ser_prorrogado": "No",
+      "direcci_n_de_ejecuci_n_del_contrato": "[REDACTADO:person_full_name]"
+    },
+    {
+      "nombre_entidad": "MUNICIPIO DE FLORIDA",
+      "departamento": "Valle del Cauca",
+      "ciudad": "Florida",
+      "localizaci_n": "Colombia,  Valle del Cauca ,  Florida",
+      "orden": "Territorial",
+      "sector": "No aplica/No pertenece",
+      "rama": "Ejecutivo",
+      "entidad_centralizada": "Centralizada",
+      "proceso_de_compra": "CO1.BDOS.9017712",
+      "id_contrato": "CO1.PCCNTR.8524347",
+      "referencia_del_contrato": "3-1.05.539-2025",
+      "estado_contrato": "En ejecución",
+      "codigo_de_categoria_principal": "V1.80111600",
+      "descripcion_del_proceso": "PRESTACION DE SERVICIOS PARA EL APOYO EN EL MEJORAMIENTO  DEL PATRIMONIO CULTURAL DE LA HACIENDA PERODIAS EN EL MUNICIPIO DE FLORIDA; VALLE DEL CAUCA",
+      "tipo_de_contrato": "Prestación de servicios",
+      "modalidad_de_contratacion": "Contratación directa",
+      "justificacion_modalidad_de": "Servicios profesionales y apoyo a la gestión",
+      "fecha_de_inicio_del_contrato": "2025-10-31T00:00:00.000",
+      "fecha_de_fin_del_contrato": "2025-12-31T00:00:00.000",
+      "condiciones_de_entrega": "No Definido",
+      "tipodocproveedor": "Cédula de Ciudadanía",
+      "proveedor_adjudicado": "[REDACTADO:person_full_name]",
+      "es_grupo": "No",
+      "es_pyme": "Si",
+      "habilita_pago_adelantado": "No",
+      "liquidaci_n": "No",
+      "obligaci_n_ambiental": "No",
+      "obligaciones_postconsumo": "No",
+      "reversion": "No",
+      "origen_de_los_recursos": "Distribuido",
+      "destino_gasto": "Inversión",
+      "valor_del_contrato": "7287371",
+      "valor_de_pago_adelantado": "0",
+      "valor_facturado": "0",
+      "valor_pendiente_de_pago": "7287371",
+      "valor_pagado": "0",
+      "valor_amortizado": "0",
+      "valor_pendiente_de": "0",
+      "valor_pendiente_de_ejecucion": "7287371",
+      "saldo_cdp": "0",
+      "saldo_vigencia": "0",
+      "espostconflicto": "No",
+      "dias_adicionados": "0",
+      "puntos_del_acuerdo": "No aplica",
+      "pilares_del_acuerdo": "No aplica",
+      "urlproceso": {
+        "url": "https://community.secop.gov.co/Public/Tendering/OpportunityDetail/Index?noticeUID=CO1.NTC.9042108&isFromPublicArea=True&isModal=true&asPopupView=true"
+      },
+      "nacionalidad_representante_legal": "CO",
+      "domicilio_representante_legal": "No Definido",
+      "tipo_de_identificaci_n_representante_legal": "Sin Descripcion",
+      "identificaci_n_representante_legal": "Sin Descripcion",
+      "g_nero_representante_legal": "Hombre",
+      "presupuesto_general_de_la_nacion_pgn": "0",
+      "sistema_general_de_participaciones": "[REDACTADO:co_cedula]",
+      "sistema_general_de_regal_as": "0",
+      "recursos_propios_alcald_as_gobernaciones_y_resguardos_ind_genas_": "0",
+      "recursos_de_credito": "0",
+      "recursos_propios": "0",
+      "codigo_entidad": "704259555",
+      "codigo_proveedor": "725851943",
+      "objeto_del_contrato": "PRESTACION DE SERVICIOS PARA EL APOYO EN EL MEJORAMIENTO  DEL PATRIMONIO CULTURAL DE LA HACIENDA PERODIAS EN EL MUNICIPIO DE FLORIDA; VALLE DEL CAUCA",
+      "duraci_n_del_contrato": "60 Dia(s)",
+      "tipo_de_cuenta": "No Definido",
+      "n_mero_de_cuenta": "No definido",
+      "el_contrato_puede_ser_prorrogado": "No",
+      "direcci_n_de_ejecuci_n_del_contrato": "CARRERA 20 CON CALLE 10 ESQUINA\nFlorida\nValle del Cauca\nCOLOMBIA"
+    }
+  ],
+  "piiDroppedColumns": [
+    "descripcion_documentos_tipo",
+    "documento_proveedor",
+    "documentos_tipo",
+    "fecha_de_firma",
+    "n_mero_de_documento_ordenador_de_pago",
+    "n_mero_de_documento_ordenador_del_gasto",
+    "n_mero_de_documento_supervisor",
+    "nit_entidad",
+    "nombre_del_banco",
+    "nombre_ordenador_de_pago",
+    "nombre_ordenador_del_gasto",
+    "nombre_representante_legal",
+    "nombre_supervisor",
+    "tipo_de_documento_ordenador_de_pago",
+    "tipo_de_documento_ordenador_del_gasto",
+    "tipo_de_documento_supervisor"
+  ],
+  "piiRedactedColumns": [
+    "direcci_n_de_ejecuci_n_del_contrato",
+    "proveedor_adjudicado",
+    "recursos_propios_alcald_as_gobernaciones_y_resguardos_ind_genas_",
+    "sistema_general_de_participaciones"
+  ],
+  "notes": [],
+  "error": null,
+  "inspectedAt": "2026-09-21T15:38:34.809Z"
+}
