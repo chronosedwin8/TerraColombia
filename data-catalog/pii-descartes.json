@@ -8,7 +8,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (contacto).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:35:03.185Z"
+    "detectedAt": "2026-09-21T16:02:29.008Z"
   },
   {
     "source": "igac",
@@ -19,7 +19,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:35:09.199Z"
+    "detectedAt": "2026-09-21T16:02:29.027Z"
   },
   {
     "source": "igac",
@@ -30,7 +30,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:35:09.199Z"
+    "detectedAt": "2026-09-21T16:02:29.027Z"
   },
   {
     "source": "igac",
@@ -41,7 +41,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:35:09.199Z"
+    "detectedAt": "2026-09-21T16:02:29.027Z"
   },
   {
     "source": "igac",
@@ -52,7 +52,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:35:44.078Z"
+    "detectedAt": "2026-09-21T16:02:29.041Z"
   },
   {
     "source": "igac",
@@ -63,7 +63,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:35:44.078Z"
+    "detectedAt": "2026-09-21T16:02:29.041Z"
   },
   {
     "source": "men",
@@ -74,7 +74,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:17.850Z"
+    "detectedAt": "2026-09-21T16:02:29.142Z"
   },
   {
     "source": "men",
@@ -85,7 +85,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (genero).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:19.554Z"
+    "detectedAt": "2026-09-21T16:02:29.151Z"
   },
   {
     "source": "men",
@@ -96,7 +96,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nombre).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:19.554Z"
+    "detectedAt": "2026-09-21T16:02:29.151Z"
   },
   {
     "source": "men",
@@ -107,7 +107,7 @@
     "ruleId": "email",
     "reason": "Correo electrónico.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:19.555Z"
+    "detectedAt": "2026-09-21T16:02:29.151Z"
   },
   {
     "source": "men",
@@ -118,7 +118,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:19.554Z"
+    "detectedAt": "2026-09-21T16:02:29.151Z"
   },
   {
     "source": "men",
@@ -129,7 +129,7 @@
     "ruleId": "sensitive_attribute",
     "reason": "Dato sensible de la persona (Ley 1581/2012, art. 5).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:19.555Z"
+    "detectedAt": "2026-09-21T16:02:29.151Z"
   },
   {
     "source": "men",
@@ -140,7 +140,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:19.554Z"
+    "detectedAt": "2026-09-21T16:02:29.151Z"
   },
   {
     "source": "men",
@@ -151,7 +151,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:21.875Z"
+    "detectedAt": "2026-09-21T16:02:29.158Z"
   },
   {
     "source": "men",
@@ -162,7 +162,7 @@
     "ruleId": "email",
     "reason": "Correo electrónico.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:23.375Z"
+    "detectedAt": "2026-09-21T16:02:29.165Z"
   },
   {
     "source": "men",
@@ -173,7 +173,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nombre).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:23.375Z"
+    "detectedAt": "2026-09-21T16:02:29.165Z"
   },
   {
     "source": "men",
@@ -184,7 +184,7 @@
     "ruleId": "sensitive_attribute",
     "reason": "Dato sensible de la persona (Ley 1581/2012, art. 5).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:23.375Z"
+    "detectedAt": "2026-09-21T16:02:29.165Z"
   },
   {
     "source": "men",
@@ -195,7 +195,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:23.375Z"
+    "detectedAt": "2026-09-21T16:02:29.165Z"
   },
   {
     "source": "men",
@@ -206,7 +206,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:23.375Z"
+    "detectedAt": "2026-09-21T16:02:29.165Z"
   },
   {
     "source": "men",
@@ -217,7 +217,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (genero).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:23.375Z"
+    "detectedAt": "2026-09-21T16:02:29.165Z"
   },
   {
     "source": "men",
@@ -228,7 +228,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (email).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:24.939Z"
+    "detectedAt": "2026-09-21T16:02:29.173Z"
   },
   {
     "source": "men",
@@ -239,7 +239,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (telefono).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:24.939Z"
+    "detectedAt": "2026-09-21T16:02:29.173Z"
   },
   {
     "source": "men",
@@ -250,18 +250,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (fax).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:23.720Z"
-  },
-  {
-    "source": "men",
-    "container": "https://www.datos.gov.co/resource/cfw5-qzt5",
-    "layer": "MEN_ESTABLECIMIENTOS_EDUCATIVOS_PREESCOLAR_BÁSICA_Y_MEDIA",
-    "column": "codigo_dane",
-    "detectedBy": "content-heuristic",
-    "ruleId": "co_phone",
-    "reason": "El valor parece un teléfono fijo o celular colombiano.",
-    "action": "redacted",
-    "detectedAt": "2026-09-21T15:37:24.939Z"
+    "detectedAt": "2026-09-21T16:02:29.170Z"
   },
   {
     "source": "men",
@@ -272,7 +261,7 @@
     "ruleId": "operator_user",
     "reason": "Identifica al funcionario u operario que editó el registro.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:29.279Z"
+    "detectedAt": "2026-09-21T16:02:29.187Z"
   },
   {
     "source": "men",
@@ -283,7 +272,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (email).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:29.657Z"
+    "detectedAt": "2026-09-21T16:02:29.192Z"
   },
   {
     "source": "men",
@@ -294,7 +283,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (fax).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:29.657Z"
+    "detectedAt": "2026-09-21T16:02:29.192Z"
   },
   {
     "source": "men",
@@ -305,7 +294,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (telefono).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:30.375Z"
+    "detectedAt": "2026-09-21T16:02:29.194Z"
   },
   {
     "source": "men",
@@ -316,7 +305,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (etnia).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:32.191Z"
+    "detectedAt": "2026-09-21T16:02:29.205Z"
   },
   {
     "source": "men",
@@ -327,7 +316,7 @@
     "ruleId": "sensitive_attribute",
     "reason": "Dato sensible de la persona (Ley 1581/2012, art. 5).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:32.191Z"
+    "detectedAt": "2026-09-21T16:02:29.205Z"
   },
   {
     "source": "men",
@@ -338,7 +327,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:32.959Z"
+    "detectedAt": "2026-09-21T16:02:29.210Z"
   },
   {
     "source": "men",
@@ -349,7 +338,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.196Z"
+    "detectedAt": "2026-09-21T16:02:29.211Z"
   },
   {
     "source": "men",
@@ -360,7 +349,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (genero).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.196Z"
+    "detectedAt": "2026-09-21T16:02:29.211Z"
   },
   {
     "source": "men",
@@ -371,7 +360,7 @@
     "ruleId": "sensitive_attribute",
     "reason": "Dato sensible de la persona (Ley 1581/2012, art. 5).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.196Z"
+    "detectedAt": "2026-09-21T16:02:29.211Z"
   },
   {
     "source": "men",
@@ -382,7 +371,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nombre).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.196Z"
+    "detectedAt": "2026-09-21T16:02:29.211Z"
   },
   {
     "source": "men",
@@ -393,7 +382,7 @@
     "ruleId": "email",
     "reason": "Correo electrónico.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.196Z"
+    "detectedAt": "2026-09-21T16:02:29.211Z"
   },
   {
     "source": "men",
@@ -404,7 +393,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.462Z"
+    "detectedAt": "2026-09-21T16:02:29.212Z"
   },
   {
     "source": "men",
@@ -415,7 +404,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.462Z"
+    "detectedAt": "2026-09-21T16:02:29.212Z"
   },
   {
     "source": "men",
@@ -426,7 +415,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (email).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.462Z"
+    "detectedAt": "2026-09-21T16:02:29.212Z"
   },
   {
     "source": "men",
@@ -437,7 +426,7 @@
     "ruleId": "sensitive_attribute",
     "reason": "Dato sensible de la persona (Ley 1581/2012, art. 5).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.713Z"
+    "detectedAt": "2026-09-21T16:02:29.213Z"
   },
   {
     "source": "men",
@@ -448,7 +437,7 @@
     "ruleId": "sensitive_attribute",
     "reason": "Dato sensible de la persona (Ley 1581/2012, art. 5).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.713Z"
+    "detectedAt": "2026-09-21T16:02:29.213Z"
   },
   {
     "source": "men",
@@ -459,7 +448,7 @@
     "ruleId": "sensitive_attribute",
     "reason": "Dato sensible de la persona (Ley 1581/2012, art. 5).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.713Z"
+    "detectedAt": "2026-09-21T16:02:29.213Z"
   },
   {
     "source": "men",
@@ -470,7 +459,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (estado_civil).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.713Z"
+    "detectedAt": "2026-09-21T16:02:29.213Z"
   },
   {
     "source": "men",
@@ -481,7 +470,7 @@
     "ruleId": "sensitive_attribute",
     "reason": "Dato sensible de la persona (Ley 1581/2012, art. 5).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.713Z"
+    "detectedAt": "2026-09-21T16:02:29.213Z"
   },
   {
     "source": "men",
@@ -492,7 +481,7 @@
     "ruleId": "sensitive_attribute",
     "reason": "Dato sensible de la persona (Ley 1581/2012, art. 5).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.713Z"
+    "detectedAt": "2026-09-21T16:02:29.213Z"
   },
   {
     "source": "men",
@@ -503,7 +492,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:33.963Z"
+    "detectedAt": "2026-09-21T16:02:29.214Z"
   },
   {
     "source": "men",
@@ -514,7 +503,7 @@
     "ruleId": "operator_user",
     "reason": "Identifica al funcionario u operario que editó el registro.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:34.221Z"
+    "detectedAt": "2026-09-21T16:02:29.216Z"
   },
   {
     "source": "men",
@@ -525,7 +514,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:34.494Z"
+    "detectedAt": "2026-09-21T16:02:29.218Z"
   },
   {
     "source": "men",
@@ -536,7 +525,7 @@
     "ruleId": "sensitive_attribute",
     "reason": "Dato sensible de la persona (Ley 1581/2012, art. 5).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:34.735Z"
+    "detectedAt": "2026-09-21T16:02:29.219Z"
   },
   {
     "source": "men",
@@ -547,7 +536,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (genero).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:34.735Z"
+    "detectedAt": "2026-09-21T16:02:29.219Z"
   },
   {
     "source": "men",
@@ -558,7 +547,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (genero).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:35.761Z"
+    "detectedAt": "2026-09-21T16:02:29.226Z"
   },
   {
     "source": "men",
@@ -569,7 +558,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (discapacidad).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:35.761Z"
+    "detectedAt": "2026-09-21T16:02:29.226Z"
   },
   {
     "source": "men",
@@ -580,7 +569,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (tipo_documento).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:35.761Z"
+    "detectedAt": "2026-09-21T16:02:29.226Z"
   },
   {
     "source": "men",
@@ -591,7 +580,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:35.761Z"
+    "detectedAt": "2026-09-21T16:02:29.226Z"
   },
   {
     "source": "men",
@@ -602,7 +591,7 @@
     "ruleId": "operator_user",
     "reason": "Identifica al funcionario u operario que editó el registro.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:36.316Z"
+    "detectedAt": "2026-09-21T16:02:29.228Z"
   },
   {
     "source": "men",
@@ -613,7 +602,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:36.316Z"
+    "detectedAt": "2026-09-21T16:02:29.228Z"
   },
   {
     "source": "men",
@@ -624,7 +613,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (email).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:37.059Z"
+    "detectedAt": "2026-09-21T16:02:29.234Z"
   },
   {
     "source": "men",
@@ -635,7 +624,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:37.059Z"
+    "detectedAt": "2026-09-21T16:02:29.234Z"
   },
   {
     "source": "men",
@@ -646,7 +635,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nit).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:37.059Z"
+    "detectedAt": "2026-09-21T16:02:29.234Z"
   },
   {
     "source": "men",
@@ -657,7 +646,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (telefono).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:37.059Z"
+    "detectedAt": "2026-09-21T16:02:29.234Z"
   },
   {
     "source": "men",
@@ -668,7 +657,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:38.086Z"
+    "detectedAt": "2026-09-21T16:02:29.244Z"
   },
   {
     "source": "men",
@@ -679,7 +668,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (email).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:38.086Z"
+    "detectedAt": "2026-09-21T16:02:29.244Z"
   },
   {
     "source": "men",
@@ -690,7 +679,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nit).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:38.086Z"
+    "detectedAt": "2026-09-21T16:02:29.244Z"
   },
   {
     "source": "men",
@@ -701,7 +690,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (fax).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:38.086Z"
+    "detectedAt": "2026-09-21T16:02:29.244Z"
   },
   {
     "source": "men",
@@ -712,7 +701,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (telefono).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:38.086Z"
+    "detectedAt": "2026-09-21T16:02:29.244Z"
   },
   {
     "source": "men",
@@ -723,7 +712,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:38.322Z"
+    "detectedAt": "2026-09-21T16:02:29.245Z"
   },
   {
     "source": "men",
@@ -734,7 +723,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (email).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:38.322Z"
+    "detectedAt": "2026-09-21T16:02:29.245Z"
   },
   {
     "source": "men",
@@ -745,7 +734,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:38.322Z"
+    "detectedAt": "2026-09-21T16:02:29.245Z"
   },
   {
     "source": "men",
@@ -756,7 +745,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (email).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:38.583Z"
+    "detectedAt": "2026-09-21T16:02:29.247Z"
   },
   {
     "source": "men",
@@ -767,7 +756,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (telefono).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:38.583Z"
+    "detectedAt": "2026-09-21T16:02:29.247Z"
   },
   {
     "source": "men",
@@ -778,7 +767,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:39.144Z"
+    "detectedAt": "2026-09-21T16:02:29.250Z"
   },
   {
     "source": "men",
@@ -789,7 +778,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:39.144Z"
+    "detectedAt": "2026-09-21T16:02:29.250Z"
   },
   {
     "source": "men",
@@ -800,7 +789,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (discapacidad).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:41.174Z"
+    "detectedAt": "2026-09-21T16:02:29.261Z"
   },
   {
     "source": "men",
@@ -811,7 +800,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (genero).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:41.174Z"
+    "detectedAt": "2026-09-21T16:02:29.261Z"
   },
   {
     "source": "men",
@@ -822,7 +811,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:42.971Z"
+    "detectedAt": "2026-09-21T16:02:29.264Z"
   },
   {
     "source": "men",
@@ -833,7 +822,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:44.012Z"
+    "detectedAt": "2026-09-21T16:02:29.272Z"
   },
   {
     "source": "men",
@@ -844,7 +833,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:44.532Z"
+    "detectedAt": "2026-09-21T16:02:29.275Z"
   },
   {
     "source": "men",
@@ -855,7 +844,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nit).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:44.532Z"
+    "detectedAt": "2026-09-21T16:02:29.275Z"
   },
   {
     "source": "men",
@@ -866,7 +855,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:44.532Z"
+    "detectedAt": "2026-09-21T16:02:29.275Z"
   },
   {
     "source": "men",
@@ -877,7 +866,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:44.532Z"
+    "detectedAt": "2026-09-21T16:02:29.275Z"
   },
   {
     "source": "men",
@@ -888,7 +877,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (email).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:44.532Z"
+    "detectedAt": "2026-09-21T16:02:29.275Z"
   },
   {
     "source": "men",
@@ -899,7 +888,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:44.779Z"
+    "detectedAt": "2026-09-21T16:02:29.276Z"
   },
   {
     "source": "men",
@@ -910,7 +899,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (razon_social).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:46.311Z"
+    "detectedAt": "2026-09-21T16:02:29.287Z"
   },
   {
     "source": "men",
@@ -921,7 +910,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nit).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:46.311Z"
+    "detectedAt": "2026-09-21T16:02:29.287Z"
   },
   {
     "source": "men",
@@ -932,7 +921,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (titular).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:46.555Z"
+    "detectedAt": "2026-09-21T16:02:29.288Z"
   },
   {
     "source": "men",
@@ -943,7 +932,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (titular).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:46.963Z"
+    "detectedAt": "2026-09-21T16:02:29.290Z"
   },
   {
     "source": "men",
@@ -954,7 +943,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (titular).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:47.068Z"
+    "detectedAt": "2026-09-21T16:02:29.292Z"
   },
   {
     "source": "men",
@@ -965,7 +954,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (correo_electronico).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:47.328Z"
+    "detectedAt": "2026-09-21T16:02:29.294Z"
   },
   {
     "source": "men",
@@ -976,7 +965,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:47.328Z"
+    "detectedAt": "2026-09-21T16:02:29.294Z"
   },
   {
     "source": "men",
@@ -987,7 +976,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:47.328Z"
+    "detectedAt": "2026-09-21T16:02:29.294Z"
   },
   {
     "source": "men",
@@ -998,7 +987,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nombre).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:48.103Z"
+    "detectedAt": "2026-09-21T16:02:29.300Z"
   },
   {
     "source": "men",
@@ -1009,7 +998,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:48.368Z"
+    "detectedAt": "2026-09-21T16:02:29.303Z"
   },
   {
     "source": "men",
@@ -1020,7 +1009,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (titular).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:48.620Z"
+    "detectedAt": "2026-09-21T16:02:29.305Z"
   },
   {
     "source": "men",
@@ -1031,7 +1020,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nit).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:49.134Z"
+    "detectedAt": "2026-09-21T16:02:29.309Z"
   },
   {
     "source": "men",
@@ -1042,7 +1031,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:49.643Z"
+    "detectedAt": "2026-09-21T16:02:29.311Z"
   },
   {
     "source": "men",
@@ -1053,7 +1042,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nit).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:49.924Z"
+    "detectedAt": "2026-09-21T16:02:29.313Z"
   },
   {
     "source": "men",
@@ -1064,18 +1053,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (razon_social).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:50.718Z"
-  },
-  {
-    "source": "minsalud",
-    "container": "https://www.datos.gov.co/resource/s2ru-bqt6",
-    "layer": "Relación de IPS públicas y privadas según el nivel de atención y capacidad instalada",
-    "column": "nom_grupo_capacidad",
-    "detectedBy": "column-name",
-    "ruleId": "person_name",
-    "reason": "Nombre o apellido de persona.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:52.713Z"
+    "detectedAt": "2026-09-21T16:02:29.319Z"
   },
   {
     "source": "minsalud",
@@ -1086,7 +1064,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (email).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:52.713Z"
+    "detectedAt": "2026-09-21T16:02:29.455Z"
   },
   {
     "source": "minsalud",
@@ -1097,7 +1075,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:52.713Z"
+    "detectedAt": "2026-09-21T16:02:29.455Z"
   },
   {
     "source": "minsalud",
@@ -1108,7 +1086,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:52.713Z"
+    "detectedAt": "2026-09-21T16:02:29.455Z"
   },
   {
     "source": "minsalud",
@@ -1119,7 +1097,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:52.713Z"
+    "detectedAt": "2026-09-21T16:02:29.455Z"
   },
   {
     "source": "minsalud",
@@ -1130,7 +1108,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:52.713Z"
+    "detectedAt": "2026-09-21T16:02:29.455Z"
   },
   {
     "source": "minsalud",
@@ -1141,7 +1119,7 @@
     "ruleId": "co_cedula",
     "reason": "El valor parece un número de cédula (6 a 10 dígitos).",
     "action": "redacted",
-    "detectedAt": "2026-09-21T15:37:52.713Z"
+    "detectedAt": "2026-09-21T16:02:29.455Z"
   },
   {
     "source": "minsalud",
@@ -1152,7 +1130,7 @@
     "ruleId": "co_cedula",
     "reason": "El valor parece un número de cédula (6 a 10 dígitos).",
     "action": "redacted",
-    "detectedAt": "2026-09-21T15:37:52.713Z"
+    "detectedAt": "2026-09-21T16:02:29.455Z"
   },
   {
     "source": "minsalud",
@@ -1163,7 +1141,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:53.876Z"
+    "detectedAt": "2026-09-21T16:02:29.460Z"
   },
   {
     "source": "minsalud",
@@ -1174,7 +1152,7 @@
     "ruleId": "email",
     "reason": "Correo electrónico.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:53.876Z"
+    "detectedAt": "2026-09-21T16:02:29.460Z"
   },
   {
     "source": "minsalud",
@@ -1185,7 +1163,7 @@
     "ruleId": "email",
     "reason": "Correo electrónico.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:53.876Z"
+    "detectedAt": "2026-09-21T16:02:29.460Z"
   },
   {
     "source": "minsalud",
@@ -1196,18 +1174,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:37:53.876Z"
-  },
-  {
-    "source": "minsalud",
-    "container": "https://www.datos.gov.co/resource/c36g-9fc2",
-    "layer": "Registro Especial de Prestadores y Sedes de Servicios de Salud",
-    "column": "codigoprestador",
-    "detectedBy": "content-heuristic",
-    "ruleId": "co_cedula",
-    "reason": "El valor parece un número de cédula (6 a 10 dígitos).",
-    "action": "redacted",
-    "detectedAt": "2026-09-21T15:37:53.876Z"
+    "detectedAt": "2026-09-21T16:02:29.460Z"
   },
   {
     "source": "minsalud",
@@ -1218,7 +1185,7 @@
     "ruleId": "co_phone",
     "reason": "El valor parece un teléfono fijo o celular colombiano.",
     "action": "redacted",
-    "detectedAt": "2026-09-21T15:37:53.877Z"
+    "detectedAt": "2026-09-21T16:02:29.460Z"
   },
   {
     "source": "minsalud",
@@ -1229,7 +1196,18 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nit).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:06.753Z"
+    "detectedAt": "2026-09-21T16:02:29.476Z"
+  },
+  {
+    "source": "minsalud",
+    "container": "https://www.datos.gov.co/resource/9vau-g3q7",
+    "layer": "Sedes de prestadores con servicio de vacunación",
+    "column": "habi_codigo_habilitacion",
+    "detectedBy": "content-heuristic",
+    "ruleId": "co_cedula",
+    "reason": "El valor parece un número de cédula (6 a 10 dígitos).",
+    "action": "redacted",
+    "detectedAt": "2026-09-21T16:02:29.476Z"
   },
   {
     "source": "minsalud",
@@ -1240,7 +1218,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:08.061Z"
+    "detectedAt": "2026-09-21T16:02:29.480Z"
   },
   {
     "source": "minsalud",
@@ -1251,7 +1229,7 @@
     "ruleId": "co_cedula",
     "reason": "El valor parece un número de cédula (6 a 10 dígitos).",
     "action": "redacted",
-    "detectedAt": "2026-09-21T15:38:08.061Z"
+    "detectedAt": "2026-09-21T16:02:29.480Z"
   },
   {
     "source": "secop",
@@ -1262,7 +1240,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1273,7 +1251,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1284,7 +1262,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1295,7 +1273,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.193Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1306,7 +1284,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1317,18 +1295,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/jbjy-vk9h",
-    "layer": "SECOP II - Contratos Electrónicos",
-    "column": "fecha_de_firma",
-    "detectedBy": "column-name",
-    "ruleId": "biometric",
-    "reason": "Dato biométrico o imagen de la persona.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1339,7 +1306,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1350,7 +1317,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1361,7 +1328,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1372,7 +1339,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1383,7 +1350,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1394,7 +1361,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1405,7 +1372,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1416,7 +1383,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1427,7 +1394,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1438,7 +1405,7 @@
     "ruleId": "co_cedula",
     "reason": "El valor parece un número de cédula (6 a 10 dígitos).",
     "action": "redacted",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1449,7 +1416,7 @@
     "ruleId": "person_full_name",
     "reason": "El valor parece un nombre propio de persona (3+ palabras capitalizadas).",
     "action": "redacted",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1460,7 +1427,7 @@
     "ruleId": "person_full_name",
     "reason": "El valor parece un nombre propio de persona (3+ palabras capitalizadas).",
     "action": "redacted",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1471,7 +1438,7 @@
     "ruleId": "co_cedula",
     "reason": "El valor parece un número de cédula (6 a 10 dígitos).",
     "action": "redacted",
-    "detectedAt": "2026-09-21T15:38:35.194Z"
+    "detectedAt": "2026-09-21T16:02:29.553Z"
   },
   {
     "source": "secop",
@@ -1482,7 +1449,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:39:10.792Z"
+    "detectedAt": "2026-09-21T16:02:29.561Z"
   },
   {
     "source": "secop",
@@ -1493,7 +1460,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:39:10.792Z"
+    "detectedAt": "2026-09-21T16:02:29.561Z"
   },
   {
     "source": "secop",
@@ -1504,7 +1471,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:39:10.792Z"
+    "detectedAt": "2026-09-21T16:02:29.560Z"
   },
   {
     "source": "secop",
@@ -1515,7 +1482,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:39:10.792Z"
+    "detectedAt": "2026-09-21T16:02:29.560Z"
   },
   {
     "source": "secop",
@@ -1526,18 +1493,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:39:10.792Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/rpmr-utcd",
-    "layer": "SECOP Integrado",
-    "column": "fecha_de_firma_del_contrato",
-    "detectedBy": "column-name",
-    "ruleId": "biometric",
-    "reason": "Dato biométrico o imagen de la persona.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:39:10.437Z"
+    "detectedAt": "2026-09-21T16:02:29.560Z"
   },
   {
     "source": "secop",
@@ -1548,7 +1504,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nombre).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:40:48.699Z"
+    "detectedAt": "2026-09-21T16:02:29.566Z"
   },
   {
     "source": "secop",
@@ -1559,7 +1515,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nit).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:40:48.699Z"
+    "detectedAt": "2026-09-21T16:02:29.566Z"
   },
   {
     "source": "secop",
@@ -1570,7 +1526,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:40:48.699Z"
+    "detectedAt": "2026-09-21T16:02:29.566Z"
   },
   {
     "source": "secop",
@@ -1581,7 +1537,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (telefono).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:40:48.699Z"
+    "detectedAt": "2026-09-21T16:02:29.566Z"
   },
   {
     "source": "secop",
@@ -1592,7 +1548,7 @@
     "ruleId": "email",
     "reason": "Correo electrónico.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:40:48.699Z"
+    "detectedAt": "2026-09-21T16:02:29.566Z"
   },
   {
     "source": "secop",
@@ -1603,7 +1559,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:40:48.699Z"
+    "detectedAt": "2026-09-21T16:02:29.566Z"
   },
   {
     "source": "secop",
@@ -1614,7 +1570,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (fax).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:40:48.699Z"
+    "detectedAt": "2026-09-21T16:02:29.566Z"
   },
   {
     "source": "secop",
@@ -1625,7 +1581,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (correo).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:40:48.699Z"
+    "detectedAt": "2026-09-21T16:02:29.566Z"
   },
   {
     "source": "secop",
@@ -1636,7 +1592,7 @@
     "ruleId": "co_cedula",
     "reason": "El valor parece un número de cédula (6 a 10 dígitos).",
     "action": "redacted",
-    "detectedAt": "2026-09-21T15:40:48.699Z"
+    "detectedAt": "2026-09-21T16:02:29.566Z"
   },
   {
     "source": "secop",
@@ -1647,7 +1603,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:40:56.914Z"
+    "detectedAt": "2026-09-21T16:02:29.572Z"
   },
   {
     "source": "secop",
@@ -1658,7 +1614,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:40:56.914Z"
+    "detectedAt": "2026-09-21T16:02:29.572Z"
   },
   {
     "source": "secop",
@@ -1669,7 +1625,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:41:58.515Z"
+    "detectedAt": "2026-09-21T16:02:29.577Z"
   },
   {
     "source": "secop",
@@ -1680,7 +1636,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nombre).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:41:59.039Z"
+    "detectedAt": "2026-09-21T16:02:29.579Z"
   },
   {
     "source": "secop",
@@ -1691,7 +1647,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (nit).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:41:59.797Z"
+    "detectedAt": "2026-09-21T16:02:29.583Z"
   },
   {
     "source": "secop",
@@ -1702,7 +1658,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:41:59.797Z"
+    "detectedAt": "2026-09-21T16:02:29.583Z"
   },
   {
     "source": "secop",
@@ -1713,18 +1669,7 @@
     "ruleId": "biometric",
     "reason": "Dato biométrico o imagen de la persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.086Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/s484-c9k3",
-    "layer": "SECOP - Convenios Interadministrativos",
-    "column": "fecha_firma",
-    "detectedBy": "column-name",
-    "ruleId": "biometric",
-    "reason": "Dato biométrico o imagen de la persona.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.086Z"
+    "detectedAt": "2026-09-21T16:02:29.585Z"
   },
   {
     "source": "secop",
@@ -1735,7 +1680,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.086Z"
+    "detectedAt": "2026-09-21T16:02:29.585Z"
   },
   {
     "source": "secop",
@@ -1746,18 +1691,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.329Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/f789-7hwg",
-    "layer": "SECOP I - Procesos de Compra Pública",
-    "column": "fecha_de_firma_del_contrato",
-    "detectedBy": "column-name",
-    "ruleId": "biometric",
-    "reason": "Dato biométrico o imagen de la persona.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.329Z"
+    "detectedAt": "2026-09-21T16:02:29.587Z"
   },
   {
     "source": "secop",
@@ -1768,7 +1702,7 @@
     "ruleId": "sensitive_attribute",
     "reason": "Dato sensible de la persona (Ley 1581/2012, art. 5).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.329Z"
+    "detectedAt": "2026-09-21T16:02:29.587Z"
   },
   {
     "source": "secop",
@@ -1779,18 +1713,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.329Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/f789-7hwg",
-    "layer": "SECOP I - Procesos de Compra Pública",
-    "column": "nombre_grupo",
-    "detectedBy": "column-name",
-    "ruleId": "person_name",
-    "reason": "Nombre o apellido de persona.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.329Z"
+    "detectedAt": "2026-09-21T16:02:29.587Z"
   },
   {
     "source": "secop",
@@ -1801,7 +1724,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.329Z"
+    "detectedAt": "2026-09-21T16:02:29.587Z"
   },
   {
     "source": "secop",
@@ -1812,7 +1735,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.329Z"
+    "detectedAt": "2026-09-21T16:02:29.587Z"
   },
   {
     "source": "secop",
@@ -1823,7 +1746,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.329Z"
+    "detectedAt": "2026-09-21T16:02:29.587Z"
   },
   {
     "source": "secop",
@@ -1834,7 +1757,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.329Z"
+    "detectedAt": "2026-09-21T16:02:29.587Z"
   },
   {
     "source": "secop",
@@ -1845,7 +1768,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.329Z"
+    "detectedAt": "2026-09-21T16:02:29.587Z"
   },
   {
     "source": "secop",
@@ -1856,7 +1779,7 @@
     "ruleId": "biometric",
     "reason": "Dato biométrico o imagen de la persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.329Z"
+    "detectedAt": "2026-09-21T16:02:29.587Z"
   },
   {
     "source": "secop",
@@ -1867,7 +1790,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.329Z"
+    "detectedAt": "2026-09-21T16:02:29.587Z"
   },
   {
     "source": "secop",
@@ -1878,18 +1801,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.853Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/dmgg-8hin",
-    "layer": "SECOP II - Archivos Descarga Desde 2025",
-    "column": "url_descarga_documento",
-    "detectedBy": "column-name",
-    "ruleId": "identity_document",
-    "reason": "Documento de identidad.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.853Z"
+    "detectedAt": "2026-09-21T16:02:29.592Z"
   },
   {
     "source": "secop",
@@ -1900,7 +1812,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:00.853Z"
+    "detectedAt": "2026-09-21T16:02:29.592Z"
   },
   {
     "source": "secop",
@@ -1911,7 +1823,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:01.097Z"
+    "detectedAt": "2026-09-21T16:02:29.594Z"
   },
   {
     "source": "secop",
@@ -1922,7 +1834,7 @@
     "ruleId": "operator_user",
     "reason": "Identifica al funcionario u operario que editó el registro.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:01.360Z"
+    "detectedAt": "2026-09-21T16:02:29.595Z"
   },
   {
     "source": "secop",
@@ -1933,7 +1845,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:01.661Z"
+    "detectedAt": "2026-09-21T16:02:29.598Z"
   },
   {
     "source": "secop",
@@ -1944,7 +1856,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:01.661Z"
+    "detectedAt": "2026-09-21T16:02:29.598Z"
   },
   {
     "source": "secop",
@@ -1955,7 +1867,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:01.661Z"
+    "detectedAt": "2026-09-21T16:02:29.598Z"
   },
   {
     "source": "secop",
@@ -1966,7 +1878,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (correo_electronico).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:01.661Z"
+    "detectedAt": "2026-09-21T16:02:29.598Z"
   },
   {
     "source": "secop",
@@ -1977,7 +1889,7 @@
     "ruleId": "email",
     "reason": "Correo electrónico.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:01.661Z"
+    "detectedAt": "2026-09-21T16:02:29.598Z"
   },
   {
     "source": "secop",
@@ -1988,7 +1900,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:01.661Z"
+    "detectedAt": "2026-09-21T16:02:29.598Z"
   },
   {
     "source": "secop",
@@ -1999,7 +1911,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:01.661Z"
+    "detectedAt": "2026-09-21T16:02:29.598Z"
   },
   {
     "source": "secop",
@@ -2010,7 +1922,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:01.900Z"
+    "detectedAt": "2026-09-21T16:02:29.600Z"
   },
   {
     "source": "secop",
@@ -2021,18 +1933,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:01.900Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/3skv-9na7",
-    "layer": "SECOP II - Archivos Descarga Historico 2023",
-    "column": "url_descarga_documento",
-    "detectedBy": "column-name",
-    "ruleId": "identity_document",
-    "reason": "Documento de identidad.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:01.900Z"
+    "detectedAt": "2026-09-21T16:02:29.600Z"
   },
   {
     "source": "secop",
@@ -2043,7 +1944,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:02.154Z"
+    "detectedAt": "2026-09-21T16:02:29.603Z"
   },
   {
     "source": "secop",
@@ -2054,7 +1955,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:02.154Z"
+    "detectedAt": "2026-09-21T16:02:29.603Z"
   },
   {
     "source": "secop",
@@ -2065,7 +1966,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:02.154Z"
+    "detectedAt": "2026-09-21T16:02:29.603Z"
   },
   {
     "source": "secop",
@@ -2076,7 +1977,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:02.485Z"
+    "detectedAt": "2026-09-21T16:02:29.606Z"
   },
   {
     "source": "secop",
@@ -2087,7 +1988,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:02.485Z"
+    "detectedAt": "2026-09-21T16:02:29.606Z"
   },
   {
     "source": "secop",
@@ -2098,7 +1999,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:02.485Z"
+    "detectedAt": "2026-09-21T16:02:29.606Z"
   },
   {
     "source": "secop",
@@ -2109,7 +2010,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:02.729Z"
+    "detectedAt": "2026-09-21T16:02:29.608Z"
   },
   {
     "source": "secop",
@@ -2120,7 +2021,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:02.729Z"
+    "detectedAt": "2026-09-21T16:02:29.608Z"
   },
   {
     "source": "secop",
@@ -2131,7 +2032,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:02.729Z"
+    "detectedAt": "2026-09-21T16:02:29.608Z"
   },
   {
     "source": "secop",
@@ -2142,7 +2043,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:02.729Z"
+    "detectedAt": "2026-09-21T16:02:29.608Z"
   },
   {
     "source": "secop",
@@ -2153,7 +2054,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:02.729Z"
+    "detectedAt": "2026-09-21T16:02:29.608Z"
   },
   {
     "source": "secop",
@@ -2164,7 +2065,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:02.729Z"
+    "detectedAt": "2026-09-21T16:02:29.608Z"
   },
   {
     "source": "secop",
@@ -2175,7 +2076,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.004Z"
+    "detectedAt": "2026-09-21T16:02:29.610Z"
   },
   {
     "source": "secop",
@@ -2186,7 +2087,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.004Z"
+    "detectedAt": "2026-09-21T16:02:29.610Z"
   },
   {
     "source": "secop",
@@ -2197,7 +2098,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.004Z"
+    "detectedAt": "2026-09-21T16:02:29.610Z"
   },
   {
     "source": "secop",
@@ -2208,7 +2109,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.004Z"
+    "detectedAt": "2026-09-21T16:02:29.610Z"
   },
   {
     "source": "secop",
@@ -2219,7 +2120,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.004Z"
+    "detectedAt": "2026-09-21T16:02:29.610Z"
   },
   {
     "source": "secop",
@@ -2230,7 +2131,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.004Z"
+    "detectedAt": "2026-09-21T16:02:29.610Z"
   },
   {
     "source": "secop",
@@ -2241,18 +2142,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.197Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/f8va-cf4m",
-    "layer": "SECOP II - Archivos Descarga Historico Hasta 2021",
-    "column": "url_descarga_documento",
-    "detectedBy": "column-name",
-    "ruleId": "identity_document",
-    "reason": "Documento de identidad.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.197Z"
+    "detectedAt": "2026-09-21T16:02:29.611Z"
   },
   {
     "source": "secop",
@@ -2263,7 +2153,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.197Z"
+    "detectedAt": "2026-09-21T16:02:29.611Z"
   },
   {
     "source": "secop",
@@ -2274,18 +2164,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.472Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/kgcd-kt7i",
-    "layer": "SECOP II - Archivos Descarga Historico 2022",
-    "column": "url_descarga_documento",
-    "detectedBy": "column-name",
-    "ruleId": "identity_document",
-    "reason": "Documento de identidad.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.472Z"
+    "detectedAt": "2026-09-21T16:02:29.613Z"
   },
   {
     "source": "secop",
@@ -2296,18 +2175,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.472Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/ityv-bxct",
-    "layer": "SECOP - Convenios Interadministrativos Historico",
-    "column": "fecha_firma",
-    "detectedBy": "column-name",
-    "ruleId": "biometric",
-    "reason": "Dato biométrico o imagen de la persona.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.703Z"
+    "detectedAt": "2026-09-21T16:02:29.613Z"
   },
   {
     "source": "secop",
@@ -2318,7 +2186,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.703Z"
+    "detectedAt": "2026-09-21T16:02:29.614Z"
   },
   {
     "source": "secop",
@@ -2329,7 +2197,7 @@
     "ruleId": "biometric",
     "reason": "Dato biométrico o imagen de la persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:03.703Z"
+    "detectedAt": "2026-09-21T16:02:29.614Z"
   },
   {
     "source": "secop",
@@ -2340,7 +2208,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.227Z"
+    "detectedAt": "2026-09-21T16:02:29.616Z"
   },
   {
     "source": "secop",
@@ -2351,7 +2219,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.227Z"
+    "detectedAt": "2026-09-21T16:02:29.616Z"
   },
   {
     "source": "secop",
@@ -2362,7 +2230,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.227Z"
+    "detectedAt": "2026-09-21T16:02:29.616Z"
   },
   {
     "source": "secop",
@@ -2373,18 +2241,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.227Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/qddk-cgux",
-    "layer": "SECOP I - Procesos de Compra Pública Historico",
-    "column": "nombre_grupo",
-    "detectedBy": "column-name",
-    "ruleId": "person_name",
-    "reason": "Nombre o apellido de persona.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.227Z"
+    "detectedAt": "2026-09-21T16:02:29.616Z"
   },
   {
     "source": "secop",
@@ -2395,7 +2252,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.227Z"
+    "detectedAt": "2026-09-21T16:02:29.616Z"
   },
   {
     "source": "secop",
@@ -2406,7 +2263,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.227Z"
+    "detectedAt": "2026-09-21T16:02:29.617Z"
   },
   {
     "source": "secop",
@@ -2417,7 +2274,7 @@
     "ruleId": "biometric",
     "reason": "Dato biométrico o imagen de la persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.227Z"
+    "detectedAt": "2026-09-21T16:02:29.617Z"
   },
   {
     "source": "secop",
@@ -2428,7 +2285,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.227Z"
+    "detectedAt": "2026-09-21T16:02:29.617Z"
   },
   {
     "source": "secop",
@@ -2439,7 +2296,7 @@
     "ruleId": "sensitive_attribute",
     "reason": "Dato sensible de la persona (Ley 1581/2012, art. 5).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.227Z"
+    "detectedAt": "2026-09-21T16:02:29.617Z"
   },
   {
     "source": "secop",
@@ -2450,18 +2307,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.227Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/qddk-cgux",
-    "layer": "SECOP I - Procesos de Compra Pública Historico",
-    "column": "fecha_de_firma_del_contrato",
-    "detectedBy": "column-name",
-    "ruleId": "biometric",
-    "reason": "Dato biométrico o imagen de la persona.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.227Z"
+    "detectedAt": "2026-09-21T16:02:29.617Z"
   },
   {
     "source": "secop",
@@ -2472,18 +2318,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.469Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/nbae-kzan",
-    "layer": "SECOP II - Archivos Descarga Historico 2024",
-    "column": "url_descarga_documento",
-    "detectedBy": "column-name",
-    "ruleId": "identity_document",
-    "reason": "Documento de identidad.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.469Z"
+    "detectedAt": "2026-09-21T16:02:29.618Z"
   },
   {
     "source": "secop",
@@ -2494,7 +2329,7 @@
     "ruleId": "identity_document",
     "reason": "Documento de identidad.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.469Z"
+    "detectedAt": "2026-09-21T16:02:29.618Z"
   },
   {
     "source": "secop",
@@ -2505,7 +2340,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.989Z"
+    "detectedAt": "2026-09-21T16:02:29.620Z"
   },
   {
     "source": "secop",
@@ -2516,7 +2351,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.989Z"
+    "detectedAt": "2026-09-21T16:02:29.620Z"
   },
   {
     "source": "secop",
@@ -2527,7 +2362,7 @@
     "ruleId": "email",
     "reason": "Correo electrónico.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.989Z"
+    "detectedAt": "2026-09-21T16:02:29.620Z"
   },
   {
     "source": "secop",
@@ -2538,7 +2373,7 @@
     "ruleId": "email",
     "reason": "Correo electrónico.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.989Z"
+    "detectedAt": "2026-09-21T16:02:29.620Z"
   },
   {
     "source": "secop",
@@ -2549,7 +2384,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.989Z"
+    "detectedAt": "2026-09-21T16:02:29.620Z"
   },
   {
     "source": "secop",
@@ -2560,7 +2395,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.989Z"
+    "detectedAt": "2026-09-21T16:02:29.620Z"
   },
   {
     "source": "secop",
@@ -2571,7 +2406,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.989Z"
+    "detectedAt": "2026-09-21T16:02:29.620Z"
   },
   {
     "source": "secop",
@@ -2582,7 +2417,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.989Z"
+    "detectedAt": "2026-09-21T16:02:29.620Z"
   },
   {
     "source": "secop",
@@ -2593,29 +2428,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.989Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/ceth-n4bn",
-    "layer": "Grupos de Proveedores - SECOP II",
-    "column": "nombre_grupo",
-    "detectedBy": "column-name",
-    "ruleId": "person_name",
-    "reason": "Nombre o apellido de persona.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:04.989Z"
-  },
-  {
-    "source": "secop",
-    "container": "https://www.datos.gov.co/resource/7fix-nd37",
-    "layer": "SECOP I - Adiciones",
-    "column": "fecha_firma",
-    "detectedBy": "column-name",
-    "ruleId": "biometric",
-    "reason": "Dato biométrico o imagen de la persona.",
-    "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:05.495Z"
+    "detectedAt": "2026-09-21T16:02:29.620Z"
   },
   {
     "source": "secop",
@@ -2626,7 +2439,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:05.784Z"
+    "detectedAt": "2026-09-21T16:02:29.624Z"
   },
   {
     "source": "secop",
@@ -2637,7 +2450,7 @@
     "ruleId": "operator_user",
     "reason": "Identifica al funcionario u operario que editó el registro.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:06.007Z"
+    "detectedAt": "2026-09-21T16:02:29.625Z"
   },
   {
     "source": "secop",
@@ -2648,7 +2461,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:06.255Z"
+    "detectedAt": "2026-09-21T16:02:29.627Z"
   },
   {
     "source": "secop",
@@ -2659,7 +2472,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:06.255Z"
+    "detectedAt": "2026-09-21T16:02:29.627Z"
   },
   {
     "source": "secop",
@@ -2670,7 +2483,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:06.255Z"
+    "detectedAt": "2026-09-21T16:02:29.627Z"
   },
   {
     "source": "secop",
@@ -2681,7 +2494,7 @@
     "ruleId": "email",
     "reason": "Correo electrónico.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:06.582Z"
+    "detectedAt": "2026-09-21T16:02:29.629Z"
   },
   {
     "source": "secop",
@@ -2692,7 +2505,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:06.582Z"
+    "detectedAt": "2026-09-21T16:02:29.629Z"
   },
   {
     "source": "secop",
@@ -2703,7 +2516,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:06.582Z"
+    "detectedAt": "2026-09-21T16:02:29.629Z"
   },
   {
     "source": "secop",
@@ -2714,7 +2527,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:06.582Z"
+    "detectedAt": "2026-09-21T16:02:29.629Z"
   },
   {
     "source": "secop",
@@ -2725,7 +2538,7 @@
     "ruleId": "phone",
     "reason": "Teléfono o celular de contacto.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:06.813Z"
+    "detectedAt": "2026-09-21T16:02:29.630Z"
   },
   {
     "source": "secop",
@@ -2736,7 +2549,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:06.813Z"
+    "detectedAt": "2026-09-21T16:02:29.630Z"
   },
   {
     "source": "secop",
@@ -2747,7 +2560,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:07.017Z"
+    "detectedAt": "2026-09-21T16:02:29.632Z"
   },
   {
     "source": "secop",
@@ -2758,7 +2571,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:07.017Z"
+    "detectedAt": "2026-09-21T16:02:29.632Z"
   },
   {
     "source": "secop",
@@ -2769,7 +2582,7 @@
     "ruleId": "exact",
     "reason": "Columna en la lista negra exacta (solicitante).",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:07.017Z"
+    "detectedAt": "2026-09-21T16:02:29.632Z"
   },
   {
     "source": "secop",
@@ -2780,7 +2593,7 @@
     "ruleId": "person_name",
     "reason": "Nombre o apellido de persona.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:07.292Z"
+    "detectedAt": "2026-09-21T16:02:29.633Z"
   },
   {
     "source": "secop",
@@ -2791,7 +2604,7 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:07.292Z"
+    "detectedAt": "2026-09-21T16:02:29.633Z"
   },
   {
     "source": "secop",
@@ -2802,6 +2615,6 @@
     "ruleId": "tax_id",
     "reason": "NIT/RUT: de persona natural equivale a la cédula.",
     "action": "dropped",
-    "detectedAt": "2026-09-21T15:42:07.292Z"
+    "detectedAt": "2026-09-21T16:02:29.633Z"
   }
 ]

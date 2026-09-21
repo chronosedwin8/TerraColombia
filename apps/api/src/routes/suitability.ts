@@ -11,21 +11,7 @@ import { approxAreaKm2, radiusToPolygon } from '@terracolombia/geo';
 import { envelope, plainEnvelope, presentDatasets, recordUsage } from '../lib/envelope.js';
 import { resolveAreaScope } from '../services/area-scope.js';
 import { collectIndicatorInputs, collectParcelInputs } from '../services/indicator-inputs.js';
-import { evaluateSuitability, listUseProfiles } from '../services/scoring.js';
-
-/** Etiquetas en español de los usos objetivo. */
-const USE_LABEL: Record<string, string> = {
-  vivienda_unifamiliar: 'Vivienda unifamiliar',
-  vivienda_multifamiliar: 'Vivienda multifamiliar',
-  bodega_logistica: 'Bodega o centro logístico',
-  agricultura: 'Agricultura',
-  ganaderia: 'Ganadería',
-  colegio: 'Colegio o sede educativa',
-  comercio_local: 'Comercio de barrio',
-  industria: 'Industria',
-  turismo_rural: 'Turismo rural',
-  solar_fotovoltaico: 'Generación solar fotovoltaica',
-};
+import { evaluateSuitability, listUseProfiles, useLabels } from '../services/scoring.js';
 
 export default async function suitabilityRoutes(app: FastifyInstance): Promise<void> {
   app.get(
@@ -35,16 +21,18 @@ export default async function suitabilityRoutes(app: FastifyInstance): Promise<v
         tags: ['inteligencia'],
         summary: 'Usos objetivo disponibles y sus factores',
         description:
-          'Cada uso declara los indicadores que pesan, sus pesos por defecto y qué factores son ' +
-          'bloqueantes. Los pesos se pueden sobreescribir en la petición.',
+          'Cada uso declara los indicadores que pesan, sus pesos por defecto, los que son ' +
+          'obligatorios y los factores bloqueantes. Los pesos se pueden sobreescribir en la petición.',
       },
     },
     async () => {
-      const profiles = await listUseProfiles();
+      // Las etiquetas salen del propio motor: así no se duplican en dos sitios que se
+      // desincronizan cuando se añade un uso nuevo.
+      const [profiles, labels] = await Promise.all([listUseProfiles(), useLabels()]);
       return plainEnvelope({
         uses: TARGET_USES.map((u) => ({
           id: u,
-          label: USE_LABEL[u] ?? u,
+          label: labels[u] ?? u,
           profile: profiles[u] ?? null,
         })),
         note:
@@ -172,7 +160,7 @@ export default async function suitabilityRoutes(app: FastifyInstance): Promise<v
         {
           target: label,
           use: parsed.use,
-          useLabel: USE_LABEL[parsed.use] ?? parsed.use,
+          useLabel: result.targetUseLabel,
           areaKm2: Number(areaKm2.toFixed(4)),
           score: result.score,
           verdict: result.verdict,

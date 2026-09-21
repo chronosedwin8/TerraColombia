@@ -126,8 +126,8 @@
     {
       "name": "fecha_de_firma_del_contrato",
       "jsType": "Fecha de Firma del Contrato",
-      "pii": true,
-      "piiReason": "Dato biométrico o imagen de la persona."
+      "pii": false,
+      "piiReason": null
     },
     {
       "name": "cuantia_proceso",
@@ -192,8 +192,8 @@
     {
       "name": "nombre_grupo",
       "jsType": "Nombre Grupo",
-      "pii": true,
-      "piiReason": "Nombre o apellido de persona."
+      "pii": false,
+      "piiReason": null
     },
     {
       "name": "id_familia",
@@ -505,10 +505,8 @@
   "sample": [],
   "piiDroppedColumns": [
     "nombre_sub_unidad_ejecutora",
-    "fecha_de_firma_del_contrato",
     "sexo_replegal",
     "nombre_del_represen_legal",
-    "nombre_grupo",
     "nombre_familia",
     "nombre_rubro",
     "nom_razon_social_contratista",
@@ -522,5 +520,5 @@
     "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
   ],
   "error": null,
-  "inspectedAt": "2026-09-21T15:42:00.329Z"
+  "inspectedAt": "2026-09-21T16:02:29.586Z"
 }

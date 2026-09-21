@@ -44,8 +44,8 @@
     {
       "name": "url_descarga_documento",
       "jsType": "URL Descarga Documento",
-      "pii": true,
-      "piiReason": "Documento de identidad."
+      "pii": false,
+      "piiReason": null
     },
     {
       "name": "nombre_archivo",
@@ -93,7 +93,6 @@
   "sample": [],
   "piiDroppedColumns": [
     "nit_entidad",
-    "url_descarga_documento",
     "id_documento"
   ],
   "piiRedactedColumns": [],
@@ -101,5 +100,5 @@
     "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
   ],
   "error": null,
-  "inspectedAt": "2026-09-21T15:42:03.472Z"
+  "inspectedAt": "2026-09-21T16:02:29.613Z"
 }

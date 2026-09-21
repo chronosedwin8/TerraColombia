@@ -1,10 +1,11 @@
 import type { FastifyInstance } from 'fastify';
 import { CREDIT_COST, LocationIntelSchema } from '@terracolombia/shared';
 import { getCellsInGeometry, getCoverage, queryParcels } from '@terracolombia/db';
-import { cellCenter, cellToPolygon } from '@terracolombia/geo';
+import { cellToPolygon } from '@terracolombia/geo';
 import { envelope, plainEnvelope, presentDatasets, recordUsage } from '../lib/envelope.js';
 import { resolveAreaScope } from '../services/area-scope.js';
 import { listTemplates, scoreCells, topZones } from '../services/scoring.js';
+import { cellRowToInputs } from '../services/cell-inputs.js';
 
 export default async function locationIntelRoutes(app: FastifyInstance): Promise<void> {
   app.get(
@@ -14,14 +15,28 @@ export default async function locationIntelRoutes(app: FastifyInstance): Promise
         tags: ['inteligencia'],
         summary: 'Plantillas de localización de negocio',
         description:
-          'Cada plantilla trae los indicadores que combina y sus pesos por defecto. Los pesos son ' +
-          'editables: el usuario fija sus criterios y el mapa de calor se recalcula.',
+          'Cada plantilla trae los indicadores que combina, sus pesos por defecto, sus filtros ' +
+          'duros y la resolución H3 recomendada. Los pesos son editables: el usuario fija sus ' +
+          'criterios y el mapa de calor se recalcula.',
       },
     },
     async () => {
       const templates = await listTemplates();
       return plainEnvelope({
-        templates,
+        templates: templates.map((t) => ({
+          id: t.id,
+          name: t.name,
+          description: t.description,
+          audience: t.audience,
+          recommendedResolution: t.recommendedResolution,
+          indicators: t.indicators,
+          hardFilters: t.hardFilters.map((f) => ({
+            id: f.id,
+            label: f.label,
+            description: f.description,
+            indicators: f.indicators,
+          })),
+        })),
         note:
           'Las plantillas son un punto de partida, no una recomendación cerrada. Ajusta los pesos a ' +
           'tu negocio y revisa siempre el desglose por factor de cada zona.',
@@ -39,7 +54,7 @@ export default async function locationIntelRoutes(app: FastifyInstance): Promise
         description:
           'Puntúa las celdas H3 del ámbito según la plantilla y los pesos indicados, y devuelve las ' +
           'mejores zonas con su desglose por factor. Cada celda incluye su geometría para pintar el ' +
-          'mapa de calor.',
+          'mapa de calor, y las celdas descartadas dicen qué filtro las excluyó.',
         body: {
           type: 'object',
           required: ['templateId', 'scope'],
@@ -70,27 +85,48 @@ export default async function locationIntelRoutes(app: FastifyInstance): Promise
         );
       }
 
-      const cells = await getCellsInGeometry(resolved.geometry, parsed.resolution, parsed.limit);
+      const cellRows = await getCellsInGeometry(resolved.geometry, parsed.resolution, parsed.limit);
       const warnings = [...resolved.warnings];
 
-      if (cells.length === 0) {
+      if (cellRows.length === 0) {
         warnings.push(
           'No hay celdas de análisis calculadas para esta zona. Los agregados por celda se generan en el ' +
-            'paso de agregación del ETL, después de cargar catastro y contexto del municipio.',
+            'paso de agregación del ETL, después de cargar catastro y contexto del municipio ' +
+            '(`pnpm etl -- aggregate <muniCode>`).',
+        );
+        const datasets = await presentDatasets(['cadastre', 'admin']);
+        return envelope(
+          {
+            templateId: parsed.templateId,
+            resolution: parsed.resolution,
+            areaKm2: Number(resolved.areaKm2.toFixed(3)),
+            cellsEvaluated: 0,
+            cellsExcluded: 0,
+            cells: [],
+            topZones: [],
+            weightsApplied: null,
+            explanation: null,
+            emptyReason:
+              'No hay celdas de análisis para esta zona todavía. Hay que calcular los agregados por celda.',
+          },
+          datasets,
+          { coverage: resolved.muniCode ? await getCoverage(resolved.muniCode) : null, warnings },
         );
       }
 
-      const scored = cells.length > 0
-        ? await scoreCells(
-            cells as unknown as Array<Record<string, unknown>>,
-            parsed.templateId,
-            parsed.weights,
-            parsed.thresholds,
-          )
-        : [];
+      const result = await scoreCells(
+        cellRows.map((row) => ({
+          h3: row.h3,
+          muniCode: row.muni_code,
+          inputs: cellRowToInputs(row, parsed.resolution),
+        })),
+        parsed.templateId,
+        parsed.weights,
+        parsed.thresholds,
+        parsed.limit,
+      );
 
-      const zones = scored.length > 0 ? await topZones(scored, 10) : [];
-
+      const zones = await topZones(result.cells, 10);
       const coverage = resolved.muniCode ? await getCoverage(resolved.muniCode) : null;
       const datasets = await presentDatasets([
         'cadastre',
@@ -106,34 +142,43 @@ export default async function locationIntelRoutes(app: FastifyInstance): Promise
 
       recordUsage(req, 'location_intel', started, {
         credits: CREDIT_COST.location_intel,
-        units: scored.length,
+        units: result.evaluatedCount,
         detail: { templateId: parsed.templateId, resolution: parsed.resolution },
       });
 
       return envelope(
         {
-          templateId: parsed.templateId,
-          resolution: parsed.resolution,
+          templateId: result.templateId,
+          templateName: result.templateName,
+          resolution: result.resolution ?? parsed.resolution,
           areaKm2: Number(resolved.areaKm2.toFixed(3)),
-          cellsEvaluated: scored.length,
+          cellsEvaluated: result.evaluatedCount,
+          cellsExcluded: result.excludedCount,
           /** Celdas con su geometría, listas para pintar el mapa de calor. */
-          cells: scored.map((c) => ({
+          cells: result.cells.map((c) => ({
             h3: c.h3,
             score: c.score,
             confidence: c.confidence,
-            center: c.h3 ? cellCenter(c.h3) : null,
-            geometry: c.h3 ? cellToPolygon(c.h3) : null,
+            rank: c.rank,
+            center: c.center,
+            geometry: cellToPolygon(c.h3),
+            excluded: c.excluded,
+            /** Qué filtro descartó la celda, si se descartó. */
+            exclusions: c.exclusions,
+            missing: c.missing,
             /** Desglose completo por factor: el motor nunca entrega solo el puntaje. */
             factors: c.factors,
           })),
           topZones: zones,
-          weightsApplied: parsed.weights ?? null,
+          weightsApplied: result.weights,
+          explanation: result.explanation,
+          disclaimer: result.disclaimer,
           note:
             'El puntaje compara celdas entre sí dentro del ámbito consultado. No es una recomendación: ' +
             'revisa el desglose por factor y ajusta los pesos a tu caso.',
         },
-        datasets,
-        { coverage, warnings },
+        [...new Set([...datasets, ...result.sourceDatasetIds])],
+        { coverage, warnings: [...warnings, ...result.warnings] },
       );
     },
   );

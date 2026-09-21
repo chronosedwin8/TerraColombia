@@ -340,7 +340,16 @@ const ADJACENT_SET = new Set<string>(PII_ADJACENT_COLUMNS.map(normalizeColumnNam
 export const PII_ALLOWLIST_PATTERNS: readonly RegExp[] = [
   /^(nombre|nom|nmbr)_?(geografico|geo|toponimo|topon|lugar|sitio|entidad_territorial)/,
   /^(nombre|nom)_?(departamento|dpto|depto|municipio|mpio|mun|corregimiento|vereda|barrio|comuna|localidad|sector|manzana|centro_poblado|cpoblado|region|pais|zona|subzona|cuenca|subcuenca|parque|area_protegida|resguardo|consejo_comunitario)/,
-  /^(nombre|nom)_?(via|vial|calle|carrera|predio|inmueble|proyecto|obra|capa|layer|campo|archivo|fuente|dataset|servicio|tabla|clase|categoria|tipo|unidad|suelo|paisaje|cultivo|especie|institucion|establecimiento|sede|colegio|ips|hospital|empresa|entidad|gestor|gestor_catastral|oficina|direccion_territorial|estacion|embalse|rio|quebrada|humedal)/,
+  /^(nombre|nom)_?(via|vial|calle|carrera|predio|inmueble|proyecto|obra|capa|layer|campo|archivo|fuente|dataset|servicio|tabla|clase|categoria|tipo|unidad|suelo|paisaje|cultivo|especie|institucion|establecimiento|sede|colegio|ips|hospital|empresa|entidad|gestor|gestor_catastral|oficina|direccion_territorial|estacion|embalse|rio|quebrada|humedal|grupo|lote|item|programa|contrato|proceso|producto|medicamento|banco|fondo|plan|actividad|indicador|variable)/,
+  // Una URL o un enlace no es un dato personal por su nombre. Observado en la
+  // Fase 0: `url_descarga_documento` de SECOP se descartaba por contener
+  // "documento". Si el valor trae PII, lo atrapa la heurística de contenido.
+  /^(url|uri|enlace|link|ruta|path)(_|$)/,
+  /_(url|uri|link|enlace)$/,
+  // La FECHA de una firma es una fecha, no un dato biométrico. Observado en
+  // `fecha_de_firma_del_contrato` y `fecha_firma` de SECOP.
+  /^fecha_?(de_)?firma/,
+  /^firma_?(del?_)?(contrato|acta|convenio|documento|proceso)/,
   /^(departamento|dpto|depto|municipio|mpio)_nombre$/,
   /_(geografico|toponimo)$/,
   /^nombre_?(1|2|3)?_?(oficial|comun|alterno|anterior)$/,

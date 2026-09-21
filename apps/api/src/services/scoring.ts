@@ -1,27 +1,37 @@
-import { AppError, DISCLAIMERS, getLogger } from '@terracolombia/shared';
-import type { FactorScore, SuitabilityResult, TargetUse } from '@terracolombia/shared';
-import type { IndicatorInputs } from './indicator-inputs.js';
+import { AppError, getLogger } from '@terracolombia/shared';
+import type { IndicatorInputs as ApiIndicatorInputs } from './indicator-inputs.js';
+import type {
+  BusinessTemplate,
+  IndicatorDefinition,
+  IndicatorInputs,
+  LocationIntelResult,
+  ScoredCell,
+  UseProfile,
+  Zone,
+} from '@terracolombia/scoring';
+// `SuitabilityResult`, `TargetUse` y `NumericRange` son contratos compartidos: los declara
+// `packages/shared` y el motor los consume, así que se importan de su origen.
+import type { NumericRange, SuitabilityResult, TargetUse } from '@terracolombia/shared';
 
 /**
- * Adaptador sobre `packages/scoring`. El motor es lógica pura; aquí solo se carga y se
- * adapta su salida al contrato de la API.
+ * Adaptador sobre `packages/scoring`. El motor es lógica pura y no toca la base: esta capa
+ * lo carga de forma diferida y traduce entre sus tipos y lo que devuelve la API.
  *
  * Si el paquete no está disponible, las rutas de inteligencia devuelven un error explícito
  * en vez de un puntaje improvisado: un semáforo sin motor sería peor que no dar semáforo.
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-let scoringModule: any = null;
+type ScoringModule = typeof import('@terracolombia/scoring');
+
+let cached: ScoringModule | null = null;
 let loadError: string | null = null;
 
-async function loadScoring(): Promise<any> {
-  if (scoringModule) return scoringModule;
-  if (loadError) {
-    throw new AppError('UPSTREAM_UNAVAILABLE', loadError, {});
-  }
+async function loadScoring(): Promise<ScoringModule> {
+  if (cached) return cached;
+  if (loadError) throw new AppError('UPSTREAM_UNAVAILABLE', loadError, {});
   try {
-    scoringModule = await import('@terracolombia/scoring');
-    return scoringModule;
+    cached = await import('@terracolombia/scoring');
+    return cached;
   } catch (err) {
     loadError =
       'El motor de puntuación no está disponible en este despliegue. ' +
@@ -32,129 +42,104 @@ async function loadScoring(): Promise<any> {
   }
 }
 
+/**
+ * Los nombres de indicador que recolecta la API son los mismos que declara el motor, así
+ * que la conversión es directa. El `as` está aislado aquí para que, si un nombre cambia en
+ * el motor, el error salga en un solo sitio y no en cada ruta.
+ */
+function toEngineInputs(inputs: ApiIndicatorInputs): IndicatorInputs {
+  return inputs as unknown as IndicatorInputs;
+}
+
 export async function evaluateSuitability(
   use: TargetUse,
-  inputs: IndicatorInputs,
+  inputs: ApiIndicatorInputs,
   weights?: Record<string, number>,
 ): Promise<SuitabilityResult> {
   const mod = await loadScoring();
-  if (typeof mod.evaluateSuitability !== 'function') {
-    throw new AppError(
-      'UPSTREAM_UNAVAILABLE',
-      '@terracolombia/scoring no expone evaluateSuitability.',
-      {},
-    );
-  }
-  const result = mod.evaluateSuitability(use, inputs, weights);
-  return normalizeSuitability(use, result);
+  return mod.evaluateSuitability(use, toEngineInputs(inputs), weights);
 }
 
-export async function listUseProfiles(): Promise<Record<string, unknown>> {
+/** Perfiles de uso con sus pesos y factores, para `GET /suitability/uses`. */
+export async function listUseProfiles(): Promise<Record<string, UseProfile>> {
   const mod = await loadScoring();
-  return (mod.USE_PROFILES ?? mod.useProfiles ?? {}) as Record<string, unknown>;
+  return mod.USE_PROFILES;
 }
 
-export async function listTemplates(): Promise<unknown[]> {
+/** Plantillas de localización de negocio, para `GET /location-intel/templates`. */
+export async function listTemplates(): Promise<readonly BusinessTemplate[]> {
   const mod = await loadScoring();
-  const templates = mod.TEMPLATES ?? mod.templates ?? mod.LOCATION_TEMPLATES;
-  if (!templates) return [];
-  return Array.isArray(templates) ? templates : Object.values(templates);
+  return mod.TEMPLATE_LIST;
 }
 
-export async function getTemplate(id: string): Promise<any | null> {
-  const templates = await listTemplates();
-  return (
-    (templates as Array<{ id?: string }>).find((t) => t.id === id) ?? null
-  );
+export async function getTemplate(id: string): Promise<BusinessTemplate | null> {
+  const mod = await loadScoring();
+  return mod.getTemplate(id) ?? null;
 }
 
-export interface ScoredCell {
+export interface CellWithInputs {
   h3: string;
-  score: number | null;
-  confidence: number;
-  factors: FactorScore[];
+  muniCode?: string | null;
+  inputs: ApiIndicatorInputs;
 }
 
+/**
+ * Puntúa celdas H3 con una plantilla. Devuelve el resultado completo del motor, que incluye
+ * el desglose por factor de cada celda, los pesos aplicados y la explicación del orden: la
+ * API nunca entrega solo el puntaje.
+ */
 export async function scoreCells(
-  cells: Array<Record<string, unknown>>,
+  cells: CellWithInputs[],
   templateId: string,
   weights?: Record<string, number>,
-  thresholds?: Record<string, unknown>,
-): Promise<ScoredCell[]> {
+  thresholds?: Record<string, NumericRange>,
+  limit?: number,
+): Promise<LocationIntelResult> {
   const mod = await loadScoring();
-  const template = await getTemplate(templateId);
+  const template = mod.getTemplate(templateId);
   if (!template) {
     throw new AppError(
       'NOT_FOUND',
-      `No existe la plantilla "${templateId}". Consulta GET /location-intel/templates.`,
-      {},
+      `No existe la plantilla "${templateId}". Consulta GET /location-intel/templates para ver las disponibles.`,
+      { available: mod.TEMPLATE_IDS },
     );
   }
-  if (typeof mod.scoreCells !== 'function') {
-    throw new AppError('UPSTREAM_UNAVAILABLE', '@terracolombia/scoring no expone scoreCells.', {});
-  }
-  const scored = mod.scoreCells(cells, template, weights, thresholds);
-  return (scored as Array<Record<string, unknown>>).map((c) => ({
-    h3: String(c.h3 ?? ''),
-    score: typeof c.score === 'number' ? c.score : null,
-    confidence: typeof c.confidence === 'number' ? c.confidence : 0,
-    factors: Array.isArray(c.factors) ? (c.factors as FactorScore[]) : [],
-  }));
+  return mod.scoreCells(
+    cells.map((c) => ({
+      h3: c.h3,
+      muniCode: c.muniCode ?? null,
+      inputs: toEngineInputs(c.inputs),
+    })),
+    template,
+    weights,
+    thresholds,
+    limit !== undefined ? { limit } : {},
+  );
 }
 
-export async function topZones(scored: ScoredCell[], limit: number): Promise<unknown[]> {
+/** Agrupa las celdas con mejor puntaje en zonas contiguas. */
+export async function topZones(
+  cells: readonly ScoredCell[],
+  limit: number,
+): Promise<Zone[]> {
   const mod = await loadScoring();
-  if (typeof mod.topZones === 'function') {
-    return mod.topZones(scored, limit) as unknown[];
-  }
-  // Respaldo: las mejores celdas sueltas, sin agrupar en zonas contiguas.
-  return scored
-    .filter((c) => c.score !== null)
-    .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
-    .slice(0, limit)
-    .map((c) => ({ cells: [c.h3], score: c.score, confidence: c.confidence, grouped: false }));
+  return mod.topZones(cells, { limit });
 }
 
-export async function listIndicators(): Promise<unknown[]> {
+export async function listIndicators(): Promise<readonly IndicatorDefinition[]> {
   const mod = await loadScoring();
-  const indicators = mod.INDICATORS ?? mod.indicators;
-  if (!indicators) return [];
-  return Array.isArray(indicators) ? indicators : Object.values(indicators);
+  return mod.INDICATOR_LIST;
 }
 
-export async function explainIndicator(id: string): Promise<unknown | null> {
-  const indicators = (await listIndicators()) as Array<{ id?: string }>;
-  return indicators.find((i) => i.id === id) ?? null;
+/** Ficha de un indicador: su fórmula, unidad, dirección y fuentes. Alimenta "Explícame esto". */
+export async function explainIndicator(id: string): Promise<IndicatorDefinition | null> {
+  const mod = await loadScoring();
+  const found = mod.INDICATOR_LIST.find((i) => i.id === id);
+  return found ?? null;
 }
 
-/** Garantiza la forma del resultado aunque el motor devuelva campos de más o de menos. */
-function normalizeSuitability(use: string, raw: unknown): SuitabilityResult {
-  const r = (raw ?? {}) as Partial<SuitabilityResult> & Record<string, unknown>;
-  const verdict = (
-    ['favorable', 'condicionado', 'desfavorable', 'sin_datos'].includes(String(r.verdict))
-      ? r.verdict
-      : 'sin_datos'
-  ) as SuitabilityResult['verdict'];
-
-  const VERDICT_LABEL: Record<SuitabilityResult['verdict'], string> = {
-    favorable: 'Favorable',
-    condicionado: 'Favorable con condiciones',
-    desfavorable: 'Desfavorable',
-    sin_datos: 'Sin datos suficientes',
-  };
-
-  return {
-    targetUse: String(r.targetUse ?? use),
-    targetUseLabel: String(r.targetUseLabel ?? use),
-    score: typeof r.score === 'number' ? r.score : null,
-    verdict,
-    verdictLabel: String(r.verdictLabel ?? VERDICT_LABEL[verdict]),
-    factors: Array.isArray(r.factors) ? r.factors : [],
-    blockers: Array.isArray(r.blockers) ? r.blockers : [],
-    cautions: Array.isArray(r.cautions) ? r.cautions : [],
-    missing: Array.isArray(r.missing) ? r.missing : [],
-    disclaimer: String(
-      r.disclaimer ?? `${DISCLAIMERS.notUrbanNorm} ${DISCLAIMERS.hazardScale}`,
-    ),
-  };
+/** Etiquetas en español de los usos objetivo, tomadas del propio motor. */
+export async function useLabels(): Promise<Record<string, string>> {
+  const mod = await loadScoring();
+  return mod.TARGET_USE_LABELS;
 }

@@ -39,8 +39,8 @@
     {
       "name": "nom_grupo_capacidad",
       "jsType": "nom grupo capacidad ",
-      "pii": true,
-      "piiReason": "Nombre o apellido de persona."
+      "pii": false,
+      "piiReason": null
     },
     {
       "name": "gerente",
@@ -157,6 +157,7 @@
       "nom_sede_ips": "URAMEDICOS",
       "gerente": "CLAUDIA CECILIA TRUJILLO GOMEZ",
       "direcci_n": "KR 98 # 103-29/37",
+      "nom_grupo_capacidad": "SALAS",
       "num_cantidad_capacidad_instalada": "1",
       "fecha_corte": "Fecha corte REPS: Nov  5 2022  1:37PM",
       "fuente": "Base de datos Registro Especial de Prestadores de Servicios de Salud - REPS."
@@ -173,6 +174,7 @@
       "nom_sede_ips": "E.S.E. HOSPITAL SAN JOSE",
       "gerente": "CESAR AUGUSTO PARDO ROSAS",
       "direcci_n": "CL 32A # 33-04",
+      "nom_grupo_capacidad": "CAMAS",
       "num_cantidad_capacidad_instalada": "2",
       "fecha_corte": "Fecha corte REPS: Nov  5 2022  1:37PM",
       "fuente": "Base de datos Registro Especial de Prestadores de Servicios de Salud - REPS."
@@ -189,6 +191,7 @@
       "nom_sede_ips": "CENTRO DE SALUD SAN RAFAEL - E.S.E HOSPITAL SAN RAFAEL DE LETICIA",
       "gerente": "SAIDA VIVIANA HERREÑO PRIETO",
       "direcci_n": "CORREGIMIENTO DEL ENCANTO",
+      "nom_grupo_capacidad": "CAMAS",
       "num_cantidad_capacidad_instalada": "3",
       "fecha_corte": "Fecha corte REPS: Nov  5 2022  1:37PM",
       "fuente": "Base de datos Registro Especial de Prestadores de Servicios de Salud - REPS."
@@ -205,6 +208,7 @@
       "nom_sede_ips": "CENTRO DE SALUD SAN RAFAEL - E.S.E HOSPITAL SAN RAFAEL DE LETICIA",
       "gerente": "SAIDA VIVIANA HERREÑO PRIETO",
       "direcci_n": "CORREGIMIENTO DEL ENCANTO",
+      "nom_grupo_capacidad": "CAMAS",
       "num_cantidad_capacidad_instalada": "4",
       "fecha_corte": "Fecha corte REPS: Nov  5 2022  1:37PM",
       "fuente": "Base de datos Registro Especial de Prestadores de Servicios de Salud - REPS."
@@ -221,6 +225,7 @@
       "nom_sede_ips": "CENTRO DE SALUD SAN RAFAEL - E.S.E HOSPITAL SAN RAFAEL DE LETICIA",
       "gerente": "SAIDA VIVIANA HERREÑO PRIETO",
       "direcci_n": "CORREGIMIENTO DEL ENCANTO",
+      "nom_grupo_capacidad": "CAMAS",
       "num_cantidad_capacidad_instalada": "1",
       "fecha_corte": "Fecha corte REPS: Nov  5 2022  1:37PM",
       "fuente": "Base de datos Registro Especial de Prestadores de Servicios de Salud - REPS."
@@ -230,7 +235,6 @@
     "email",
     "nit_ips",
     "nom_descripcion_capacidad",
-    "nom_grupo_capacidad",
     "nombre_prestador",
     "tel_fono"
   ],
@@ -240,5 +244,5 @@
   ],
   "notes": [],
   "error": null,
-  "inspectedAt": "2026-09-21T15:37:51.673Z"
+  "inspectedAt": "2026-09-21T16:02:29.453Z"
 }

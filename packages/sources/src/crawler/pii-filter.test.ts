@@ -6,7 +6,7 @@ import {
   normalizeColumnName,
   redactValue,
   sanitizeRecord,
-} from '../../../../etl/config/pii-blocklist.js';
+} from '@terracolombia/etl-config';
 import { findPiiAdjacentColumns, PiiLog, sanitizeSample } from './pii-filter.js';
 
 const ctx = { source: 'igac' as const, container: 'svc/MapServer', layer: 'R_TERRENO' };
@@ -91,6 +91,15 @@ describe('isPiiColumn — falsos positivos que NO deben descartarse', () => {
     'DESTINO_ECONOMICO',
     'POBLACION_TOTAL',
     'MATRICULA_INMOBILIARIA',
+    // Falsos positivos reales detectados en la corrida de Fase 0 sobre SECOP
+    'url_descarga_documento',
+    'urlproceso',
+    'fecha_de_firma_del_contrato',
+    'fecha_firma',
+    'firma_del_contrato',
+    'nombre_grupo',
+    'nombre_lote',
+    'nombre_medicamento',
   ];
   for (const name of negatives) {
     it(`conserva ${name}`, () => {

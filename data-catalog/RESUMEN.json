@@ -1,14 +1,10 @@
 {
   "schemaVersion": 1,
-  "startedAt": "2026-09-21T15:34:59.945Z",
-  "finishedAt": "2026-09-21T15:42:08.315Z",
-  "durationMs": 428370,
+  "startedAt": "2026-09-21T16:03:59.467Z",
+  "finishedAt": "2026-09-21T16:04:01.484Z",
+  "durationMs": 2017,
   "sources": [
-    "igac-socrata",
-    "dane-socrata",
-    "men-socrata",
-    "minsalud-socrata",
-    "secop-socrata"
+    "manual"
   ],
   "counts": {
     "servicesDiscovered": 0,
@@ -16,17 +12,17 @@
     "servicesFailed": 0,
     "layersCatalogued": 0,
     "layersWithSample": 0,
-    "socrataDatasets": 138,
-    "manualDescriptors": 0,
-    "piiColumnsDropped": 310,
-    "piiValuesRedacted": 11
+    "socrataDatasets": 0,
+    "manualDescriptors": 4,
+    "piiColumnsDropped": 0,
+    "piiValuesRedacted": 0
   },
   "http": {
-    "requests": 217,
-    "cacheHits": 2,
+    "requests": 0,
+    "cacheHits": 0,
     "retries": 0,
     "errors": 0,
-    "bytes": 7795587
+    "bytes": 0
   },
   "gdal": {
     "available": true,

@@ -1,17 +1,17 @@
 # Descartes de datos personales — Fase 0
 
 > Regla 3 de CLAUDE.md: toda columna con datos personales se descarta en la ingesta y queda registrada aquí. No existe ni existirá la ruta predio → persona.
-> Generado el 2026-09-21 15:42:08 UTC por `pnpm catalog:report`.
+> Generado el 2026-09-21 16:04:01 UTC por `pnpm catalog:report`.
 > Esquema de catálogo v1.
 
 ## Resumen
 
 | Concepto | Valor |
 |---|---|
-| Columnas descartadas por nombre | 244 |
-| Valores redactados por heurística de contenido | 11 |
-| Columnas distintas afectadas | 142 |
-| Capas/datasets afectados | 79 |
+| Columnas descartadas por nombre | 228 |
+| Valores redactados por heurística de contenido | 10 |
+| Columnas distintas afectadas | 135 |
+| Capas/datasets afectados | 78 |
 
 ## Columnas descartadas por nombre
 
@@ -25,7 +25,6 @@
 | `telefono` | exact | Columna en la lista negra exacta (telefono). | 6 | https://www.datos.gov.co/resource/cfw5-qzt5→MEN_ESTABLECIMIENTOS_EDUCATIVOS_PREESCOLAR_BÁSICA_Y_MEDIA; https://www.datos.gov.co/resource/x5… |
 | `tel_fono` | phone | Teléfono o celular de contacto. | 5 | https://www.datos.gov.co/resource/tgsp-kujm→Sedes de los Establecimientos Educativos del Departamento de Antioquia; https://www.datos.gov.c… |
 | `id_documento` | identity_document | Documento de identidad. | 5 | https://www.datos.gov.co/resource/dmgg-8hin→SECOP II - Archivos Descarga Desde 2025; https://www.datos.gov.co/resource/3skv-9na7→SECOP II -… |
-| `url_descarga_documento` | identity_document | Documento de identidad. | 5 | https://www.datos.gov.co/resource/dmgg-8hin→SECOP II - Archivos Descarga Desde 2025; https://www.datos.gov.co/resource/3skv-9na7→SECOP II -… |
 | `fax` | exact | Columna en la lista negra exacta (fax). | 4 | https://www.datos.gov.co/resource/cfw5-qzt5→MEN_ESTABLECIMIENTOS_EDUCATIVOS_PREESCOLAR_BÁSICA_Y_MEDIA; https://www.datos.gov.co/resource/x5… |
 | `titular` | exact | Columna en la lista negra exacta (titular). | 4 | https://www.datos.gov.co/resource/vwwf-4ftk→CÓDIGO ÚNICO DE MEDICAMENTOS VENCIDOS; https://www.datos.gov.co/resource/i7cb-raxc→CÓDIGO ÚNICO… |
 | `documento_proveedor` | identity_document | Documento de identidad. | 4 | https://www.datos.gov.co/resource/jbjy-vk9h→SECOP II - Contratos Electrónicos; https://www.datos.gov.co/resource/rpmr-utcd→SECOP Integrado;… |
@@ -34,10 +33,7 @@
 | `nombre_rector` | person_name | Nombre o apellido de persona. | 3 | https://www.datos.gov.co/resource/emd6-ef7x→Establecimientos Educativos del sector oficial y no oficial por municipio - DEPARTAMENTO DE BOY… |
 | `nombre_representante_legal` | person_name | Nombre o apellido de persona. | 3 | https://www.datos.gov.co/resource/jbjy-vk9h→SECOP II - Contratos Electrónicos; https://www.datos.gov.co/resource/qmzu-gj57→SECOP II - Prove… |
 | `nit_de_la_entidad` | tax_id | NIT/RUT: de persona natural equivale a la cédula. | 3 | https://www.datos.gov.co/resource/rpmr-utcd→SECOP Integrado; https://www.datos.gov.co/resource/f789-7hwg→SECOP I - Procesos de Compra Públi… |
-| `fecha_de_firma_del_contrato` | biometric | Dato biométrico o imagen de la persona. | 3 | https://www.datos.gov.co/resource/rpmr-utcd→SECOP Integrado; https://www.datos.gov.co/resource/f789-7hwg→SECOP I - Procesos de Compra Públi… |
 | `nit_proveedor` | tax_id | NIT/RUT: de persona natural equivale a la cédula. | 3 | https://www.datos.gov.co/resource/a86w-fh92→SECOP II - Solicitudes CDPs; https://www.datos.gov.co/resource/hgi6-6wh3→Proponentes por Proces… |
-| `fecha_firma` | biometric | Dato biométrico o imagen de la persona. | 3 | https://www.datos.gov.co/resource/s484-c9k3→SECOP - Convenios Interadministrativos; https://www.datos.gov.co/resource/ityv-bxct→SECOP - Con… |
-| `nombre_grupo` | person_name | Nombre o apellido de persona. | 3 | https://www.datos.gov.co/resource/f789-7hwg→SECOP I - Procesos de Compra Pública; https://www.datos.gov.co/resource/qddk-cgux→SECOP I - Pro… |
 | `nombre_proveedor` | person_name | Nombre o apellido de persona. | 3 | https://www.datos.gov.co/resource/uymx-8p3j→SECOP II - Plan de pagos; https://www.datos.gov.co/resource/wi7w-2nvm→SECOPII - Ofertas Por Pro… |
 | `nombre_ee` | person_name | Nombre o apellido de persona. | 2 | https://www.datos.gov.co/resource/7g6s-xche→Listado de sedes de los Establecimientos Educativos Oficiales (municipios no certificados) del … |
 | `nombre_del_establecimiento` | person_name | Nombre o apellido de persona. | 2 | https://www.datos.gov.co/resource/vqup-4isj→Listado de instituciones y centros educativos públicos del departamento de Casanare; https://ww… |
@@ -95,7 +91,6 @@
 | `nombre_gerente` | person_name | Nombre o apellido de persona. | 1 | https://www.datos.gov.co/resource/j8bh-xk3n→Base de Prestadores de Servicios Turísticos "SITUR" - DEPARTAMENTO DE BOYACÁ |
 | `numero_celular_cuadrante` | phone | Teléfono o celular de contacto. | 1 | https://www.datos.gov.co/resource/jwvi-unqh→Directorio de cuadrantes de Metropolitanas y Departamentos de Policía |
 | `nombre_o_razon_social` | person_name | Nombre o apellido de persona. | 1 | https://www.datos.gov.co/resource/gc4x-u4iy→ESTABLECIMIENTOS INSCRITOS PARA EL MANEJO DE MEDICAMENTOS DE CONTROL ESPECIAL |
-| `nom_grupo_capacidad` | person_name | Nombre o apellido de persona. | 1 | https://www.datos.gov.co/resource/s2ru-bqt6→Relación de IPS públicas y privadas según el nivel de atención y capacidad instalada |
 | `nombre_prestador` | person_name | Nombre o apellido de persona. | 1 | https://www.datos.gov.co/resource/s2ru-bqt6→Relación de IPS públicas y privadas según el nivel de atención y capacidad instalada |
 | `nom_descripcion_capacidad` | person_name | Nombre o apellido de persona. | 1 | https://www.datos.gov.co/resource/s2ru-bqt6→Relación de IPS públicas y privadas según el nivel de atención y capacidad instalada |
 | `nit_ips` | tax_id | NIT/RUT: de persona natural equivale a la cédula. | 1 | https://www.datos.gov.co/resource/s2ru-bqt6→Relación de IPS públicas y privadas según el nivel de atención y capacidad instalada |
@@ -108,7 +103,6 @@
 | `nombre_ordenador_del_gasto` | person_name | Nombre o apellido de persona. | 1 | https://www.datos.gov.co/resource/jbjy-vk9h→SECOP II - Contratos Electrónicos |
 | `descripcion_documentos_tipo` | identity_document | Documento de identidad. | 1 | https://www.datos.gov.co/resource/jbjy-vk9h→SECOP II - Contratos Electrónicos |
 | `documentos_tipo` | identity_document | Documento de identidad. | 1 | https://www.datos.gov.co/resource/jbjy-vk9h→SECOP II - Contratos Electrónicos |
-| `fecha_de_firma` | biometric | Dato biométrico o imagen de la persona. | 1 | https://www.datos.gov.co/resource/jbjy-vk9h→SECOP II - Contratos Electrónicos |
 | `tipo_de_documento_ordenador_de_pago` | identity_document | Documento de identidad. | 1 | https://www.datos.gov.co/resource/jbjy-vk9h→SECOP II - Contratos Electrónicos |
 | `nombre_ordenador_de_pago` | person_name | Nombre o apellido de persona. | 1 | https://www.datos.gov.co/resource/jbjy-vk9h→SECOP II - Contratos Electrónicos |
 | `n_mero_de_documento_supervisor` | identity_document | Documento de identidad. | 1 | https://www.datos.gov.co/resource/jbjy-vk9h→SECOP II - Contratos Electrónicos |
@@ -155,11 +149,10 @@ Columnas cuyo nombre no está en la lista negra pero cuyo contenido coincidió c
 
 | Columna | Patrón | Motivo | Fuente | Contenedor | Capa |
 |---|---|---|---|---|---|
-| `codigo_dane` | co_phone | El valor parece un teléfono fijo o celular colombiano. | men | https://www.datos.gov.co/resource/cfw5-qzt5 | MEN_ESTABLECIMIENTOS_EDUCATIVOS_PREESCOLAR_BÁSICA_Y_MEDIA |
 | `c_digo_prestador` | co_cedula | El valor parece un número de cédula (6 a 10 dígitos). | minsalud | https://www.datos.gov.co/resource/s2ru-bqt6 | Relación de IPS públicas y privadas según el nivel de atención y capacidad instalada |
 | `c_digo_sede` | co_cedula | El valor parece un número de cédula (6 a 10 dígitos). | minsalud | https://www.datos.gov.co/resource/s2ru-bqt6 | Relación de IPS públicas y privadas según el nivel de atención y capacidad instalada |
-| `codigoprestador` | co_cedula | El valor parece un número de cédula (6 a 10 dígitos). | minsalud | https://www.datos.gov.co/resource/c36g-9fc2 | Registro Especial de Prestadores y Sedes de Servicios de Salud |
 | `t_lefonosede` | co_phone | El valor parece un teléfono fijo o celular colombiano. | minsalud | https://www.datos.gov.co/resource/c36g-9fc2 | Registro Especial de Prestadores y Sedes de Servicios de Salud |
+| `habi_codigo_habilitacion` | co_cedula | El valor parece un número de cédula (6 a 10 dígitos). | minsalud | https://www.datos.gov.co/resource/9vau-g3q7 | Sedes de prestadores con servicio de vacunación |
 | `expediente_invima` | co_cedula | El valor parece un número de cédula (6 a 10 dígitos). | minsalud | https://www.datos.gov.co/resource/n4dj-8r7k | Clicsalud - Termómetro de Precios de Medicamentos |
 | `recursos_propios_alcald_as_gobernaciones_y_resguardos_ind_genas_` | co_cedula | El valor parece un número de cédula (6 a 10 dígitos). | secop | https://www.datos.gov.co/resource/jbjy-vk9h | SECOP II - Contratos Electrónicos |
 | `direcci_n_de_ejecuci_n_del_contrato` | person_full_name | El valor parece un nombre propio de persona (3+ palabras capitalizadas). | secop | https://www.datos.gov.co/resource/jbjy-vk9h | SECOP II - Contratos Electrónicos |

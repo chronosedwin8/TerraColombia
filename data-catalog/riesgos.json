@@ -679,7 +679,7 @@
     "source": "minsalud",
     "target": "https://www.datos.gov.co/d/s2ru-bqt6",
     "title": "Dataset con columnas de datos personales: Relación de IPS públicas y privadas según el nivel de atención y capacidad instalada",
-    "detail": "Columnas descartadas por la lista negra: nom_grupo_capacidad, email, nombre_prestador, nom_descripcion_capacidad, tel_fono, nit_ips.",
+    "detail": "Columnas descartadas por la lista negra: email, nombre_prestador, nom_descripcion_capacidad, tel_fono, nit_ips.",
     "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
     "modules": [
       "M2",
@@ -735,7 +735,7 @@
     "source": "secop",
     "target": "https://www.datos.gov.co/d/jbjy-vk9h",
     "title": "Dataset con columnas de datos personales: SECOP II - Contratos Electrónicos",
-    "detail": "Columnas descartadas por la lista negra: n_mero_de_documento_ordenador_de_pago, nombre_del_banco, nombre_ordenador_del_gasto, nit_entidad, descripcion_documentos_tipo, documentos_tipo, fecha_de_firma, documento_proveedor, tipo_de_documento_ordenador_de_pago, nombre_ordenador_de_pago, n_mero_de_documento_supervisor, tipo_de_documento_supervisor, nombre_supervisor, n_mero_de_documento_ordenador_del_gasto, tipo_de_documento_ordenador_del_gasto, nombre_representante_legal.",
+    "detail": "Columnas descartadas por la lista negra: n_mero_de_documento_ordenador_de_pago, nombre_del_banco, nombre_ordenador_del_gasto, nit_entidad, descripcion_documentos_tipo, documentos_tipo, documento_proveedor, tipo_de_documento_ordenador_de_pago, nombre_ordenador_de_pago, n_mero_de_documento_supervisor, tipo_de_documento_supervisor, nombre_supervisor, n_mero_de_documento_ordenador_del_gasto, tipo_de_documento_ordenador_del_gasto, nombre_representante_legal.",
     "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
     "modules": [
       "M2",
@@ -749,7 +749,7 @@
     "source": "secop",
     "target": "https://www.datos.gov.co/d/rpmr-utcd",
     "title": "Dataset con columnas de datos personales: SECOP Integrado",
-    "detail": "Columnas descartadas por la lista negra: tipo_documento_proveedor, documento_proveedor, nom_raz_social_contratista, nombre_de_la_entidad, nit_de_la_entidad, fecha_de_firma_del_contrato.",
+    "detail": "Columnas descartadas por la lista negra: tipo_documento_proveedor, documento_proveedor, nom_raz_social_contratista, nombre_de_la_entidad, nit_de_la_entidad.",
     "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
     "modules": [
       "M2",
@@ -833,7 +833,7 @@
     "source": "secop",
     "target": "https://www.datos.gov.co/d/s484-c9k3",
     "title": "Dataset con columnas de datos personales: SECOP - Convenios Interadministrativos",
-    "detail": "Columnas descartadas por la lista negra: anno_firma, fecha_firma, identificacion_contratista.",
+    "detail": "Columnas descartadas por la lista negra: anno_firma, identificacion_contratista.",
     "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
     "modules": [
       "M2",
@@ -847,7 +847,7 @@
     "source": "secop",
     "target": "https://www.datos.gov.co/d/f789-7hwg",
     "title": "Dataset con columnas de datos personales: SECOP I - Procesos de Compra Pública",
-    "detail": "Columnas descartadas por la lista negra: nombre_sub_unidad_ejecutora, fecha_de_firma_del_contrato, sexo_replegal, nombre_del_represen_legal, nombre_grupo, nombre_familia, nombre_rubro, nom_razon_social_contratista, identificacion_del_contratista, nombre_regimen_de_contratacion, anno_firma_contrato, nit_de_la_entidad.",
+    "detail": "Columnas descartadas por la lista negra: nombre_sub_unidad_ejecutora, sexo_replegal, nombre_del_represen_legal, nombre_familia, nombre_rubro, nom_razon_social_contratista, identificacion_del_contratista, nombre_regimen_de_contratacion, anno_firma_contrato, nit_de_la_entidad.",
     "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
     "modules": [
       "M2",
@@ -861,7 +861,7 @@
     "source": "secop",
     "target": "https://www.datos.gov.co/d/dmgg-8hin",
     "title": "Dataset con columnas de datos personales: SECOP II - Archivos Descarga Desde 2025",
-    "detail": "Columnas descartadas por la lista negra: id_documento, url_descarga_documento, nit_entidad.",
+    "detail": "Columnas descartadas por la lista negra: id_documento, nit_entidad.",
     "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
     "modules": [
       "M2",
@@ -917,7 +917,7 @@
     "source": "secop",
     "target": "https://www.datos.gov.co/d/3skv-9na7",
     "title": "Dataset con columnas de datos personales: SECOP II - Archivos Descarga Historico 2023",
-    "detail": "Columnas descartadas por la lista negra: id_documento, nit_entidad, url_descarga_documento.",
+    "detail": "Columnas descartadas por la lista negra: id_documento, nit_entidad.",
     "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
     "modules": [
       "M2",
@@ -987,7 +987,7 @@
     "source": "secop",
     "target": "https://www.datos.gov.co/d/f8va-cf4m",
     "title": "Dataset con columnas de datos personales: SECOP II - Archivos Descarga Historico Hasta 2021",
-    "detail": "Columnas descartadas por la lista negra: id_documento, url_descarga_documento, nit_entidad.",
+    "detail": "Columnas descartadas por la lista negra: id_documento, nit_entidad.",
     "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
     "modules": [
       "M2",
@@ -1001,7 +1001,7 @@
     "source": "secop",
     "target": "https://www.datos.gov.co/d/kgcd-kt7i",
     "title": "Dataset con columnas de datos personales: SECOP II - Archivos Descarga Historico 2022",
-    "detail": "Columnas descartadas por la lista negra: nit_entidad, url_descarga_documento, id_documento.",
+    "detail": "Columnas descartadas por la lista negra: nit_entidad, id_documento.",
     "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
     "modules": [
       "M2",
@@ -1015,7 +1015,7 @@
     "source": "secop",
     "target": "https://www.datos.gov.co/d/ityv-bxct",
     "title": "Dataset con columnas de datos personales: SECOP - Convenios Interadministrativos Historico",
-    "detail": "Columnas descartadas por la lista negra: fecha_firma, identificacion_contratista, anno_firma.",
+    "detail": "Columnas descartadas por la lista negra: identificacion_contratista, anno_firma.",
     "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
     "modules": [
       "M2",
@@ -1029,7 +1029,7 @@
     "source": "secop",
     "target": "https://www.datos.gov.co/d/qddk-cgux",
     "title": "Dataset con columnas de datos personales: SECOP I - Procesos de Compra Pública Historico",
-    "detail": "Columnas descartadas por la lista negra: nombre_familia, nombre_rubro, nom_razon_social_contratista, identificacion_del_contratista, nombre_grupo, nombre_del_represen_legal, nombre_sub_unidad_ejecutora, anno_firma_contrato, nombre_regimen_de_contratacion, sexo_replegal, nit_de_la_entidad, fecha_de_firma_del_contrato.",
+    "detail": "Columnas descartadas por la lista negra: nombre_familia, nombre_rubro, nom_razon_social_contratista, identificacion_del_contratista, nombre_del_represen_legal, nombre_sub_unidad_ejecutora, anno_firma_contrato, nombre_regimen_de_contratacion, sexo_replegal, nit_de_la_entidad.",
     "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
     "modules": [
       "M2",
@@ -1043,7 +1043,7 @@
     "source": "secop",
     "target": "https://www.datos.gov.co/d/nbae-kzan",
     "title": "Dataset con columnas de datos personales: SECOP II - Archivos Descarga Historico 2024",
-    "detail": "Columnas descartadas por la lista negra: nit_entidad, url_descarga_documento, id_documento.",
+    "detail": "Columnas descartadas por la lista negra: nit_entidad, id_documento.",
     "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
     "modules": [
       "M2",
@@ -1057,7 +1057,7 @@
     "source": "secop",
     "target": "https://www.datos.gov.co/d/ceth-n4bn",
     "title": "Dataset con columnas de datos personales: Grupos de Proveedores - SECOP II",
-    "detail": "Columnas descartadas por la lista negra: nombre_participante, nit_participante, correo_representante_legal_grupo, correo_electronico_grupo, nombre_representante_legal_grupo, numero_tel_fono_grupo, telefono_representante_legal_grupo, numero_fax, nit_grupo, nombre_grupo.",
+    "detail": "Columnas descartadas por la lista negra: nombre_participante, nit_participante, correo_representante_legal_grupo, correo_electronico_grupo, nombre_representante_legal_grupo, numero_tel_fono_grupo, telefono_representante_legal_grupo, numero_fax, nit_grupo.",
     "mitigation": "Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.",
     "modules": [
       "M2",
@@ -1175,6 +1175,54 @@
       "M2",
       "M4",
       "M7"
+    ]
+  },
+  {
+    "id": "manual-pending-igac-datos-abiertos-hub-averiguar-si-los-registr",
+    "severity": "media",
+    "source": "igac",
+    "target": "https://datos-abiertos-igac-igac-oit.hub.arcgis.com/",
+    "title": "Pendiente de verificar en IGAC — portal de datos abiertos (ArcGIS Hub)",
+    "detail": "Averiguar si los Registros 1 y 2 (avalúo, destino económico, áreas reportadas) se entregan por solicitud formal: NO están en el paquete público.",
+    "mitigation": "Resolver antes de declarar el dataset en `etl/config/datasets`.",
+    "modules": [
+      "M1"
+    ]
+  },
+  {
+    "id": "manual-pending-igac-datos-abiertos-hub-confirmar-si-el-alcance-",
+    "severity": "media",
+    "source": "igac",
+    "target": "https://datos-abiertos-igac-igac-oit.hub.arcgis.com/",
+    "title": "Pendiente de verificar en IGAC — portal de datos abiertos (ArcGIS Hub)",
+    "detail": "Confirmar si el alcance de la cláusula ShareAlike («nuevos productos y SERVICIOS derivados») cubre una API comercial.",
+    "mitigation": "Resolver antes de declarar el dataset en `etl/config/datasets`.",
+    "modules": [
+      "M1"
+    ]
+  },
+  {
+    "id": "manual-pending-igac-base-catastral-atlantico-programar-la-descarga-me",
+    "severity": "media",
+    "source": "igac",
+    "target": "https://www.arcgis.com/sharing/rest/content/items/b4c2079287ee40bdb159a412fb5bdfad/data",
+    "title": "Pendiente de verificar en Base Catastral Pública — departamento piloto Atlántico (08)",
+    "detail": "Programar la descarga mensual con archivo histórico: el ítem se sobrescribe en cada corte y sin archivo propio M8 (cambio territorial) no tendrá con qué comparar.",
+    "mitigation": "Resolver antes de declarar el dataset en `etl/config/datasets`.",
+    "modules": [
+      "M1"
+    ]
+  },
+  {
+    "id": "manual-pending-igac-base-catastral-atlantico-verificar-los-mismos-hal",
+    "severity": "media",
+    "source": "igac",
+    "target": "https://www.arcgis.com/sharing/rest/content/items/b4c2079287ee40bdb159a412fb5bdfad/data",
+    "title": "Pendiente de verificar en Base Catastral Pública — departamento piloto Atlántico (08)",
+    "detail": "Verificar los mismos hallazgos en un segundo departamento (Boyacá, ítem 723e946e9ede418a95a6eefd28439626) antes de tratarlos como nacionales.",
+    "mitigation": "Resolver antes de declarar el dataset en `etl/config/datasets`.",
+    "modules": [
+      "M1"
     ]
   }
 ]

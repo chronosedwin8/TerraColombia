@@ -1,7 +1,7 @@
 # Riesgos de datos — Fase 0
 
 > Lo que puede romper el producto o impedir una promesa comercial. Sale de la inspección real, no de suposiciones.
-> Generado el 2026-09-21 15:42:08 UTC por `pnpm catalog:report`.
+> Generado el 2026-09-21 16:04:01 UTC por `pnpm catalog:report`.
 > Esquema de catálogo v1.
 
 ## Severidad alta (79)
@@ -574,7 +574,7 @@
 | Afecta a | https://www.datos.gov.co/d/s2ru-bqt6 |
 | Módulos | M2, M4, M7 |
 
-**Qué pasa.** Columnas descartadas por la lista negra: nom_grupo_capacidad, email, nombre_prestador, nom_descripcion_capacidad, tel_fono, nit_ips.
+**Qué pasa.** Columnas descartadas por la lista negra: email, nombre_prestador, nom_descripcion_capacidad, tel_fono, nit_ips.
 
 **Qué hacemos.** Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.
 
@@ -626,7 +626,7 @@
 | Afecta a | https://www.datos.gov.co/d/jbjy-vk9h |
 | Módulos | M2, M4, M7 |
 
-**Qué pasa.** Columnas descartadas por la lista negra: n_mero_de_documento_ordenador_de_pago, nombre_del_banco, nombre_ordenador_del_gasto, nit_entidad, descripcion_documentos_tipo, documentos_tipo, fecha_de_firma, documento_proveedor, tipo_de_documento_ordenador_de_pago, nombre_ordenador_de_pago, n_mero_de_documento_supervisor, tipo_de_documento_supervisor, nombre_supervisor, n_mero_de_documento_ordenador_del_gasto, tipo_de_documento_ordenador_del_gasto, nombre_representante_legal.
+**Qué pasa.** Columnas descartadas por la lista negra: n_mero_de_documento_ordenador_de_pago, nombre_del_banco, nombre_ordenador_del_gasto, nit_entidad, descripcion_documentos_tipo, documentos_tipo, documento_proveedor, tipo_de_documento_ordenador_de_pago, nombre_ordenador_de_pago, n_mero_de_documento_supervisor, tipo_de_documento_supervisor, nombre_supervisor, n_mero_de_documento_ordenador_del_gasto, tipo_de_documento_ordenador_del_gasto, nombre_representante_legal.
 
 **Qué hacemos.** Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.
 
@@ -639,7 +639,7 @@
 | Afecta a | https://www.datos.gov.co/d/rpmr-utcd |
 | Módulos | M2, M4, M7 |
 
-**Qué pasa.** Columnas descartadas por la lista negra: tipo_documento_proveedor, documento_proveedor, nom_raz_social_contratista, nombre_de_la_entidad, nit_de_la_entidad, fecha_de_firma_del_contrato.
+**Qué pasa.** Columnas descartadas por la lista negra: tipo_documento_proveedor, documento_proveedor, nom_raz_social_contratista, nombre_de_la_entidad, nit_de_la_entidad.
 
 **Qué hacemos.** Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.
 
@@ -717,7 +717,7 @@
 | Afecta a | https://www.datos.gov.co/d/s484-c9k3 |
 | Módulos | M2, M4, M7 |
 
-**Qué pasa.** Columnas descartadas por la lista negra: anno_firma, fecha_firma, identificacion_contratista.
+**Qué pasa.** Columnas descartadas por la lista negra: anno_firma, identificacion_contratista.
 
 **Qué hacemos.** Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.
 
@@ -730,7 +730,7 @@
 | Afecta a | https://www.datos.gov.co/d/f789-7hwg |
 | Módulos | M2, M4, M7 |
 
-**Qué pasa.** Columnas descartadas por la lista negra: nombre_sub_unidad_ejecutora, fecha_de_firma_del_contrato, sexo_replegal, nombre_del_represen_legal, nombre_grupo, nombre_familia, nombre_rubro, nom_razon_social_contratista, identificacion_del_contratista, nombre_regimen_de_contratacion, anno_firma_contrato, nit_de_la_entidad.
+**Qué pasa.** Columnas descartadas por la lista negra: nombre_sub_unidad_ejecutora, sexo_replegal, nombre_del_represen_legal, nombre_familia, nombre_rubro, nom_razon_social_contratista, identificacion_del_contratista, nombre_regimen_de_contratacion, anno_firma_contrato, nit_de_la_entidad.
 
 **Qué hacemos.** Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.
 
@@ -743,7 +743,7 @@
 | Afecta a | https://www.datos.gov.co/d/dmgg-8hin |
 | Módulos | M2, M4, M7 |
 
-**Qué pasa.** Columnas descartadas por la lista negra: id_documento, url_descarga_documento, nit_entidad.
+**Qué pasa.** Columnas descartadas por la lista negra: id_documento, nit_entidad.
 
 **Qué hacemos.** Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.
 
@@ -795,7 +795,7 @@
 | Afecta a | https://www.datos.gov.co/d/3skv-9na7 |
 | Módulos | M2, M4, M7 |
 
-**Qué pasa.** Columnas descartadas por la lista negra: id_documento, nit_entidad, url_descarga_documento.
+**Qué pasa.** Columnas descartadas por la lista negra: id_documento, nit_entidad.
 
 **Qué hacemos.** Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.
 
@@ -860,7 +860,7 @@
 | Afecta a | https://www.datos.gov.co/d/f8va-cf4m |
 | Módulos | M2, M4, M7 |
 
-**Qué pasa.** Columnas descartadas por la lista negra: id_documento, url_descarga_documento, nit_entidad.
+**Qué pasa.** Columnas descartadas por la lista negra: id_documento, nit_entidad.
 
 **Qué hacemos.** Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.
 
@@ -873,7 +873,7 @@
 | Afecta a | https://www.datos.gov.co/d/kgcd-kt7i |
 | Módulos | M2, M4, M7 |
 
-**Qué pasa.** Columnas descartadas por la lista negra: nit_entidad, url_descarga_documento, id_documento.
+**Qué pasa.** Columnas descartadas por la lista negra: nit_entidad, id_documento.
 
 **Qué hacemos.** Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.
 
@@ -886,7 +886,7 @@
 | Afecta a | https://www.datos.gov.co/d/ityv-bxct |
 | Módulos | M2, M4, M7 |
 
-**Qué pasa.** Columnas descartadas por la lista negra: fecha_firma, identificacion_contratista, anno_firma.
+**Qué pasa.** Columnas descartadas por la lista negra: identificacion_contratista, anno_firma.
 
 **Qué hacemos.** Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.
 
@@ -899,7 +899,7 @@
 | Afecta a | https://www.datos.gov.co/d/qddk-cgux |
 | Módulos | M2, M4, M7 |
 
-**Qué pasa.** Columnas descartadas por la lista negra: nombre_familia, nombre_rubro, nom_razon_social_contratista, identificacion_del_contratista, nombre_grupo, nombre_del_represen_legal, nombre_sub_unidad_ejecutora, anno_firma_contrato, nombre_regimen_de_contratacion, sexo_replegal, nit_de_la_entidad, fecha_de_firma_del_contrato.
+**Qué pasa.** Columnas descartadas por la lista negra: nombre_familia, nombre_rubro, nom_razon_social_contratista, identificacion_del_contratista, nombre_del_represen_legal, nombre_sub_unidad_ejecutora, anno_firma_contrato, nombre_regimen_de_contratacion, sexo_replegal, nit_de_la_entidad.
 
 **Qué hacemos.** Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.
 
@@ -912,7 +912,7 @@
 | Afecta a | https://www.datos.gov.co/d/nbae-kzan |
 | Módulos | M2, M4, M7 |
 
-**Qué pasa.** Columnas descartadas por la lista negra: nit_entidad, url_descarga_documento, id_documento.
+**Qué pasa.** Columnas descartadas por la lista negra: nit_entidad, id_documento.
 
 **Qué hacemos.** Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.
 
@@ -925,7 +925,7 @@
 | Afecta a | https://www.datos.gov.co/d/ceth-n4bn |
 | Módulos | M2, M4, M7 |
 
-**Qué pasa.** Columnas descartadas por la lista negra: nombre_participante, nit_participante, correo_representante_legal_grupo, correo_electronico_grupo, nombre_representante_legal_grupo, numero_tel_fono_grupo, telefono_representante_legal_grupo, numero_fax, nit_grupo, nombre_grupo.
+**Qué pasa.** Columnas descartadas por la lista negra: nombre_participante, nit_participante, correo_representante_legal_grupo, correo_electronico_grupo, nombre_representante_legal_grupo, numero_tel_fono_grupo, telefono_representante_legal_grupo, numero_fax, nit_grupo.
 
 **Qué hacemos.** Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.
 
@@ -1033,7 +1033,7 @@
 
 **Qué hacemos.** Ingerir solo con proyección explícita de columnas (`$select`), nunca `SELECT *`, y declararlas en `piiBlocklist` del dataset de ETL.
 
-## Severidad media (6)
+## Severidad media (10)
 
 ### Pendiente de verificar en Geoportal DANE — descargas del Marco Geoestadístico Nacional
 
@@ -1110,6 +1110,58 @@
 | Módulos | M1 |
 
 **Qué pasa.** Decidir el subconjunto de etiquetas a ingerir (osm2pgsql style) para no cargar todo el país.
+
+**Qué hacemos.** Resolver antes de declarar el dataset en `etl/config/datasets`.
+
+### Pendiente de verificar en IGAC — portal de datos abiertos (ArcGIS Hub)
+
+| Campo | Valor |
+|---|---|
+| Id | `manual-pending-igac-datos-abiertos-hub-averiguar-si-los-registr` |
+| Fuente | igac |
+| Afecta a | https://datos-abiertos-igac-igac-oit.hub.arcgis.com/ |
+| Módulos | M1 |
+
+**Qué pasa.** Averiguar si los Registros 1 y 2 (avalúo, destino económico, áreas reportadas) se entregan por solicitud formal: NO están en el paquete público.
+
+**Qué hacemos.** Resolver antes de declarar el dataset en `etl/config/datasets`.
+
+### Pendiente de verificar en IGAC — portal de datos abiertos (ArcGIS Hub)
+
+| Campo | Valor |
+|---|---|
+| Id | `manual-pending-igac-datos-abiertos-hub-confirmar-si-el-alcance-` |
+| Fuente | igac |
+| Afecta a | https://datos-abiertos-igac-igac-oit.hub.arcgis.com/ |
+| Módulos | M1 |
+
+**Qué pasa.** Confirmar si el alcance de la cláusula ShareAlike («nuevos productos y SERVICIOS derivados») cubre una API comercial.
+
+**Qué hacemos.** Resolver antes de declarar el dataset en `etl/config/datasets`.
+
+### Pendiente de verificar en Base Catastral Pública — departamento piloto Atlántico (08)
+
+| Campo | Valor |
+|---|---|
+| Id | `manual-pending-igac-base-catastral-atlantico-programar-la-descarga-me` |
+| Fuente | igac |
+| Afecta a | https://www.arcgis.com/sharing/rest/content/items/b4c2079287ee40bdb159a412fb5bdfad/data |
+| Módulos | M1 |
+
+**Qué pasa.** Programar la descarga mensual con archivo histórico: el ítem se sobrescribe en cada corte y sin archivo propio M8 (cambio territorial) no tendrá con qué comparar.
+
+**Qué hacemos.** Resolver antes de declarar el dataset en `etl/config/datasets`.
+
+### Pendiente de verificar en Base Catastral Pública — departamento piloto Atlántico (08)
+
+| Campo | Valor |
+|---|---|
+| Id | `manual-pending-igac-base-catastral-atlantico-verificar-los-mismos-hal` |
+| Fuente | igac |
+| Afecta a | https://www.arcgis.com/sharing/rest/content/items/b4c2079287ee40bdb159a412fb5bdfad/data |
+| Módulos | M1 |
+
+**Qué pasa.** Verificar los mismos hallazgos en un segundo departamento (Boyacá, ítem 723e946e9ede418a95a6eefd28439626) antes de tratarlos como nacionales.
 
 **Qué hacemos.** Resolver antes de declarar el dataset en `etl/config/datasets`.
 

@@ -773,7 +773,7 @@ export async function* iterateFeatures(
       // servidor puede resolverla por índice.
       const upper = oidCursor + take;
       params.where = `(${baseParams.where ?? '1=1'}) AND ${oidField} > ${oidCursor} AND ${oidField} <= ${upper}`;
-      if (adv.supportsOrderBy !== false && paginationParamsAllowed) {
+      if (oidField !== null && adv.supportsOrderBy !== false && paginationParamsAllowed) {
         params.orderByFields = oidField;
       }
     }

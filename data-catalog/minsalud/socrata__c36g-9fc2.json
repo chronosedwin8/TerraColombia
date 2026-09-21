@@ -158,7 +158,7 @@
   ],
   "sample": [
     {
-      "codigoprestador": "[REDACTADO:co_cedula]",
+      "codigoprestador": "9100100017",
       "nombreprestador": "MANUEL DE JESUS LUBO OROZCO",
       "codigohabilitacionsede": "910010001701",
       "nombresede": "MANUEL DE JESUS LUBO OROZCO",
@@ -178,7 +178,7 @@
       "fecha_corte_reps": "Fecha corte REPS: Mar 12 2026  3:11PM"
     },
     {
-      "codigoprestador": "[REDACTADO:co_cedula]",
+      "codigoprestador": "9100100019",
       "nombreprestador": "E.S.E. HOSPITAL SAN RAFAEL DE LETICIA",
       "codigohabilitacionsede": "910010001901",
       "nombresede": "E.S.E. HOSPITAL SAN RAFAEL",
@@ -197,7 +197,7 @@
       "fecha_corte_reps": "Fecha corte REPS: Mar 12 2026  3:11PM"
     },
     {
-      "codigoprestador": "[REDACTADO:co_cedula]",
+      "codigoprestador": "9100100019",
       "nombreprestador": "E.S.E. HOSPITAL SAN RAFAEL DE LETICIA",
       "codigohabilitacionsede": "912630001911",
       "nombresede": "CENTRO DE SALUD SAN RAFAEL - E.S.E HOSPITAL SAN RAFAEL DE LETICIA",
@@ -217,7 +217,7 @@
       "fecha_corte_reps": "Fecha corte REPS: Mar 12 2026  3:11PM"
     },
     {
-      "codigoprestador": "[REDACTADO:co_cedula]",
+      "codigoprestador": "9100100019",
       "nombreprestador": "E.S.E. HOSPITAL SAN RAFAEL DE LETICIA",
       "codigohabilitacionsede": "914050001914",
       "nombresede": "CENTRO DE SALUD DE LA CHORRERA- E.S.E HOSPITAL SAN RAFAEL DE LETICIA",
@@ -237,7 +237,7 @@
       "fecha_corte_reps": "Fecha corte REPS: Mar 12 2026  3:11PM"
     },
     {
-      "codigoprestador": "[REDACTADO:co_cedula]",
+      "codigoprestador": "9100100019",
       "nombreprestador": "E.S.E. HOSPITAL SAN RAFAEL DE LETICIA",
       "codigohabilitacionsede": "914070001915",
       "nombresede": "CENTRO DE SALUD DE LA PEDRERA - E.S.E HOSPITAL SAN RAFAEL DE LETICIA",
@@ -264,10 +264,9 @@
     "telefonoprestador"
   ],
   "piiRedactedColumns": [
-    "codigoprestador",
     "t_lefonosede"
   ],
   "notes": [],
   "error": null,
-  "inspectedAt": "2026-09-21T15:37:53.512Z"
+  "inspectedAt": "2026-09-21T16:02:29.458Z"
 }

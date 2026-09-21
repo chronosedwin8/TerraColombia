@@ -4,19 +4,20 @@
   "connector": "manual",
   "id": "igac-datos-abiertos-hub",
   "name": "IGAC — portal de datos abiertos (ArcGIS Hub)",
-  "description": "Portal ArcGIS Hub del IGAC. Es el punto de entrada a la Base Catastral Pública por departamento (GDB/GPKG + Registros 1 y 2) y a los históricos mensuales citados en PLAN.md §5.1.",
+  "description": "Portal ArcGIS Hub del IGAC. Es la cara pública de la organización de ArcGIS Online `RVvWzU3lgJISqdke` (usuario `IGAC-Admin`), donde se publican la Base Catastral Pública por departamento y el resto de los productos.",
   "url": "https://datos-abiertos-igac-igac-oit.hub.arcgis.com/",
   "httpStatus": 200,
   "format": "Portal HTML + descargas",
-  "license": "CC BY 4.0 / CC BY-SA 4.0 según el producto — verificar por dataset",
+  "license": "CC BY-SA 4.0 para la Base Catastral (verificado en el `licenseInfo` del ítem)",
   "attribution": "Fuente: IGAC",
   "frequency": "Mensual (base catastral)",
   "pending": [
-    "Localizar la URL directa del paquete departamental de la Base Catastral Pública del corte vigente.",
-    "Confirmar si la licencia del paquete catastral es CC BY-SA 4.0 (como asume PLAN.md §2) o CC BY 4.0 (como declaran los datasets espejados en datos.gov.co)."
+    "Averiguar si los Registros 1 y 2 (avalúo, destino económico, áreas reportadas) se entregan por solicitud formal: NO están en el paquete público.",
+    "Confirmar si el alcance de la cláusula ShareAlike («nuevos productos y SERVICIOS derivados») cubre una API comercial."
   ],
   "notes": [
+    "RESUELTO en la Fase 0: los paquetes departamentales se listan con la API de búsqueda de ArcGIS Online (`q=owner:IGAC-Admin AND type:\"File Geodatabase\"`) → 31 departamentos, y se descargan con `https://www.arcgis.com/sharing/rest/content/items/{itemId}/data`.",
     "La URL aparece citada en `customFields[\"Common Core\"].Homepage` de los datasets del IGAC en datos.gov.co, lo que confirma que es el portal oficial."
   ],
-  "inspectedAt": "2026-09-21T15:30:23.645Z"
+  "inspectedAt": "2026-09-21T16:04:00.468Z"
 }

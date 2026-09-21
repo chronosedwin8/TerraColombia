@@ -177,7 +177,7 @@
       "secretaria": "CARTAGENA",
       "cod_dane_municipio": "13001",
       "municipio": "Cartagena",
-      "codigo_dane": "[REDACTADO:co_phone]",
+      "codigo_dane": "313001029922",
       "nombre_establecimiento": "INSTITUTO EDUCATIVO NISSI",
       "cod_sector": "1002",
       "sector": "NO_OFICIAL",
@@ -280,10 +280,8 @@
     "fax",
     "telefono"
   ],
-  "piiRedactedColumns": [
-    "codigo_dane"
-  ],
+  "piiRedactedColumns": [],
   "notes": [],
   "error": null,
-  "inspectedAt": "2026-09-21T15:37:23.720Z"
+  "inspectedAt": "2026-09-21T16:02:29.170Z"
 }

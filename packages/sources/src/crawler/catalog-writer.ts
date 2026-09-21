@@ -700,6 +700,11 @@ export function renderSelectionMarkdown(datasets: readonly SelectionDataset[]): 
 
   const inspected = datasets.filter((d) => d.inspection === 'inspeccionado');
   const notInspected = datasets.filter((d) => d.inspection !== 'inspeccionado');
+  // PLAN.md §6.5 pide proponer entre 15 y 25 datasets para el MVP. El MVP son las
+  // fases 0–6 (§14), así que el corte es prioridad 1–2; el resto queda declarado
+  // para fases posteriores sin inflar el compromiso del MVP.
+  const mvp = datasets.filter((d) => d.priority <= 2);
+  const later = datasets.filter((d) => d.priority > 2);
 
   parts.push('## Resumen');
   parts.push('');
@@ -707,13 +712,19 @@ export function renderSelectionMarkdown(datasets: readonly SelectionDataset[]): 
     table(
       ['Concepto', 'Valor'],
       [
-        ['Datasets propuestos', datasets.length],
+        ['**Datasets del MVP (prioridad 1–2)**', `**${mvp.length}**`],
+        ['Declarados para fases posteriores (prioridad 3)', later.length],
+        ['Total declarado', datasets.length],
         ['Con campos inspeccionados (mapeo real)', inspected.length],
         ['Sin inspeccionar (`fieldMapping: NO_INSPECCIONADO`)', notInspected.length],
         ['Prioridad 1 (imprescindibles)', datasets.filter((d) => d.priority === 1).length],
         ['Fuentes distintas', new Set(datasets.map((d) => d.source)).size],
       ],
     ),
+  );
+  parts.push('');
+  parts.push(
+    `> **La propuesta del MVP son los ${mvp.length} datasets de prioridad 1 y 2** (PLAN.md §6.5 pide entre 15 y 25). Los ${later.length} de prioridad 3 quedan declarados, con su evidencia, para las fases posteriores: están aquí para no perder el trabajo de descubrimiento, no como compromiso del MVP.`,
   );
   parts.push('');
   parts.push(

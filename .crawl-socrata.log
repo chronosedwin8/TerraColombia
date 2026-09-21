@@ -1,4 +1,4 @@
-Fase 0 — recorriendo: igac-socrata, dane-socrata, men-socrata, minsalud-socrata, secop-socrata
+Fase 0 — recorriendo: igac-socrata, dane-socrata, men-socrata, minsalud-socrata, secop-socrata, osm, manual
 Muestras: 5 filas por capa
 
 GDAL detectado: GDAL 3.9.2, released 2024/08/13 en C:\Program Files\PostgreSQL\17\bin\ogr2ogr.exe (vía known-location).
@@ -61,16 +61,21 @@ GDAL detectado: GDAL 3.9.2, released 2024/08/13 en C:\Program Files\PostgreSQL\1
 [secop-socrata] Inspeccionando qmzu-gj57 — SECOP II - Proveedores Registrados
 [secop-socrata] Inspeccionando gra4-pcp2 — SECOP II - Ubicaciones ejecucion contratos
 [secop-socrata] Terminado: 40 datasets catalogados, 4 inspeccionados a fondo, 0 fallidos.
+[osm] Localizando el extracto de Colombia en Geofabrik…
+[osm] Extracto 2026-09-20: 3 archivos.
+[manual] Verificando dane-geoportal → https://geoportal.dane.gov.co/
+[manual] Verificando igac-datos-abiertos-hub → https://datos-abiertos-igac-igac-oit.hub.arcgis.com/
+[manual] Verificando osm-geofabrik-colombia → https://download.geofabrik.de/south-america/colombia.html
 
 ────────────────────────────────────────────────────────────────────────
-Corrida terminada en 428.4 s
+Corrida terminada en 7.4 s
   Servicios ArcGIS descubiertos : 0
   Servicios inspeccionados      : 0 (fallidos: 0)
   Capas y tablas catalogadas    : 0 (con muestra: 0)
   Datasets de datos.gov.co      : 138
-  Descriptores manuales         : 0
-  Columnas PII descartadas      : 310
-  Valores PII redactados        : 11
-  HTTP: 217 peticiones, 2 de caché, 0 reintentos, 0 errores, 7.4 MB
+  Descriptores manuales         : 3
+  Columnas PII descartadas      : 292
+  Valores PII redactados        : 10
+  HTTP: 2 peticiones, 221 de caché, 0 reintentos, 2 errores, 0.0 MB
 
 Escrito en data-catalog/: CATALOGO.md, SELECCION.md, RIESGOS.md, PII_DESCARTES.md, RESUMEN.json

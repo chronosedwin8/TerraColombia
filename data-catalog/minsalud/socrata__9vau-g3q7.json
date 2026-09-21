@@ -121,7 +121,7 @@
       "departamento_divipola_sede": "05",
       "municipio": "APARTADÓ",
       "municipio_divipola_sede": "05045",
-      "habi_codigo_habilitacion": "500109099",
+      "habi_codigo_habilitacion": "[REDACTADO:co_cedula]",
       "codigo_habilitacion": "504509099",
       "numero_sede": "39",
       "nombresedeprestador": "PROMEDAN IPS ALFONSO LÓPEZ APARTADÓ",
@@ -137,7 +137,7 @@
       "departamento_divipola_sede": "05",
       "municipio": "CAUCASIA",
       "municipio_divipola_sede": "05154",
-      "habi_codigo_habilitacion": "500109099",
+      "habi_codigo_habilitacion": "[REDACTADO:co_cedula]",
       "codigo_habilitacion": "515409099",
       "numero_sede": "30",
       "nombresedeprestador": "PROMEDAN IPS CAUCASIA",
@@ -153,7 +153,7 @@
       "departamento_divipola_sede": "05",
       "municipio": "ENVIGADO",
       "municipio_divipola_sede": "05266",
-      "habi_codigo_habilitacion": "500109509",
+      "habi_codigo_habilitacion": "[REDACTADO:co_cedula]",
       "codigo_habilitacion": "526609509",
       "numero_sede": "2",
       "nombresedeprestador": "ASESORIAS Y SOLUCIONES INTEGRALES EN SALUD A&S S.A.",
@@ -169,7 +169,7 @@
       "departamento_divipola_sede": "05",
       "municipio": "MEDELLÍN",
       "municipio_divipola_sede": "05001",
-      "habi_codigo_habilitacion": "500118050",
+      "habi_codigo_habilitacion": "[REDACTADO:co_cedula]",
       "codigo_habilitacion": "500118050",
       "numero_sede": "1",
       "nombresedeprestador": "SALUD OCUPACIONAL DE LOS ANDES LTDA",
@@ -185,7 +185,7 @@
       "departamento_divipola_sede": "05",
       "municipio": "MEDELLÍN",
       "municipio_divipola_sede": "05001",
-      "habi_codigo_habilitacion": "500118128",
+      "habi_codigo_habilitacion": "[REDACTADO:co_cedula]",
       "codigo_habilitacion": "500118128",
       "numero_sede": "1",
       "nombresedeprestador": "fundacion integral de servicios medicos (fismedic)",
@@ -200,8 +200,10 @@
   "piiDroppedColumns": [
     "nit"
   ],
-  "piiRedactedColumns": [],
+  "piiRedactedColumns": [
+    "habi_codigo_habilitacion"
+  ],
   "notes": [],
   "error": null,
-  "inspectedAt": "2026-09-21T15:38:05.953Z"
+  "inspectedAt": "2026-09-21T16:02:29.475Z"
 }

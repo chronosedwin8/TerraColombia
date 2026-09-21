@@ -162,8 +162,8 @@
     {
       "name": "nombre_grupo",
       "jsType": "Nombre Grupo",
-      "pii": true,
-      "piiReason": "Nombre o apellido de persona."
+      "pii": false,
+      "piiReason": null
     },
     {
       "name": "identific_representante_legal",
@@ -426,8 +426,8 @@
     {
       "name": "fecha_de_firma_del_contrato",
       "jsType": "Fecha de Firma del Contrato",
-      "pii": true,
-      "piiReason": "Dato biométrico o imagen de la persona."
+      "pii": false,
+      "piiReason": null
     },
     {
       "name": "tiempo_adiciones_en_meses",
@@ -508,19 +508,17 @@
     "nombre_rubro",
     "nom_razon_social_contratista",
     "identificacion_del_contratista",
-    "nombre_grupo",
     "nombre_del_represen_legal",
     "nombre_sub_unidad_ejecutora",
     "anno_firma_contrato",
     "nombre_regimen_de_contratacion",
     "sexo_replegal",
-    "nit_de_la_entidad",
-    "fecha_de_firma_del_contrato"
+    "nit_de_la_entidad"
   ],
   "piiRedactedColumns": [],
   "notes": [
     "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
   ],
   "error": null,
-  "inspectedAt": "2026-09-21T15:42:04.226Z"
+  "inspectedAt": "2026-09-21T16:02:29.616Z"
 }

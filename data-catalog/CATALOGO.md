@@ -1,20 +1,20 @@
 # Catálogo de fuentes — Fase 0
 
 > Inventario de lo que cada fuente expone realmente. Todo lo de aquí sale de una inspección hecha por el crawler; lo no verificado va marcado.
-> Generado el 2026-09-21 15:42:08 UTC por `pnpm catalog:report`.
+> Generado el 2026-09-21 16:04:01 UTC por `pnpm catalog:report`.
 > Esquema de catálogo v1.
 
 ## Resumen
 
 | Concepto | Valor |
 |---|---|
-| Servicios ArcGIS inspeccionados | 5 |
+| Servicios ArcGIS inspeccionados | 9 |
 | Servicios ArcGIS fallidos | 0 |
-| Capas y tablas catalogadas | 21 |
-| Capas con muestra de registros | 13 |
+| Capas y tablas catalogadas | 28 |
+| Capas con muestra de registros | 15 |
 | Datasets de datos.gov.co catalogados | 138 |
 | Datasets de datos.gov.co con columnas inspeccionadas | 138 |
-| Descriptores manuales | 3 |
+| Descriptores manuales | 4 |
 | Extracto OSM | 3 archivos, corte 2026-09-20 |
 
 ## IGAC — ArcGIS REST
@@ -24,6 +24,10 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | Carpeta | Servicio | Tipo | Capas | Tablas | CRS | maxRecordCount | Capacidades | Extensiones |
 |---|---|---|---|---|---|---|---|---|
 | agrologia | [actividadquimicanacional](https://mapas.igac.gov.co/server/rest/services/agrologia/actividadquimicanacional/MapServer) | MapServer | 1 | 0 | 9377 | 2000 | map, query, data | WFSServer, WMSServer |
+| agrologia | [areashomogeneasdetierra05360itagui](https://mapas.igac.gov.co/server/rest/services/agrologia/areashomogeneasdetierra05360itagui/MapServer) | MapServer | 1 | 0 | 9377 | 2000 | map, query, data | WFSServer, WMSServer |
+| agrologia | [capacidaddeusodelastierrasbordenortebogota2011](https://mapas.igac.gov.co/server/rest/services/agrologia/capacidaddeusodelastierrasbordenortebogota2011/MapServer) | MapServer | 1 | 0 | 9377 | 2000 | map, query, data | WFSServer, WMSServer |
+| agrologia | [capacidaddeusodelastierrascvc2023](https://mapas.igac.gov.co/server/rest/services/agrologia/capacidaddeusodelastierrascvc2023/MapServer) | MapServer | 1 | 0 | 9377 | 2000 | map, query, data | WFSServer, WMSServer |
+| ambiente | [areasafectadasinundacionnina](https://mapas.igac.gov.co/server/rest/services/ambiente/areasafectadasinundacionnina/MapServer) | MapServer | 4 | 0 | 4686 | 2000 | map, query, data | WFSServer, WMSServer |
 | (raíz) | [Dato_Fundamental_Catastro](https://mapas.igac.gov.co/server/rest/services/Dato_Fundamental_Catastro/MapServer) | MapServer | 5 | 0 | 4686 | 2000 | query, map, data | WFSServer, WMSServer |
 | (raíz) | [Dato_Fundamental_Cuerpos_de_Agua_500k](https://mapas.igac.gov.co/server/rest/services/Dato_Fundamental_Cuerpos_de_Agua_500k/MapServer) | MapServer | 7 | 0 | 9377 | 2000 | query, map, data | — |
 | (raíz) | [Dato_Fundamental_Curvas_de_nivel_500k](https://mapas.igac.gov.co/server/rest/services/Dato_Fundamental_Curvas_de_nivel_500k/MapServer) | MapServer | 1 | 0 | 9377 | 2000 | map, query, data | WFSServer, WMSServer |
@@ -34,6 +38,13 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | Servicio | Id | Capa | Geometría | CRS | Campos | Registros | maxRecordCount | Paginación | Formatos | Muestra |
 |---|---|---|---|---|---|---|---|---|---|---|
 | agrologia/actividadquimicanacional | 0 | [Actividad](https://mapas.igac.gov.co/server/rest/services/agrologia/actividadquimicanacional/MapServer/0) | Polygon | 9377 | 18 | — | 2000 | sí | json, geojson, pbf | — |
+| agrologia/areashomogeneasdetierra05360itagui | 0 | [AREA_HOMOGENEA_TIERRA](https://mapas.igac.gov.co/server/rest/services/agrologia/areashomogeneasdetierra05360itagui/MapServer/0) | Polygon | 9377 | 35 | — | 2000 | sí | json, geojson, pbf | — |
+| agrologia/capacidaddeusodelastierrasbordenortebogota2011 | 0 | [CUT_BordeNorte_2011_10K](https://mapas.igac.gov.co/server/rest/services/agrologia/capacidaddeusodelastierrasbordenortebogota2011/MapServer/0) | Polygon | 9377 | 17 | — | 2000 | sí | json, geojson, pbf | — |
+| agrologia/capacidaddeusodelastierrascvc2023 | 0 | [CUT_CVC_2023_25K](https://mapas.igac.gov.co/server/rest/services/agrologia/capacidaddeusodelastierrascvc2023/MapServer/0) | Polygon | 9377 | 14 | — | 2000 | sí | json, geojson, pbf | — |
+| ambiente/areasafectadasinundacionnina | 0 | [Inundacion_Nina_100k_1988](https://mapas.igac.gov.co/server/rest/services/ambiente/areasafectadasinundacionnina/MapServer/0) | Polygon | 4686 | 7 | — | 2000 | NO | json, geojson, pbf | — |
+| ambiente/areasafectadasinundacionnina | 1 | [Inundacion_Nina_100k_2000](https://mapas.igac.gov.co/server/rest/services/ambiente/areasafectadasinundacionnina/MapServer/1) | Polygon | 4686 | 7 | — | 2000 | NO | json, geojson, pbf | 5 filas |
+| ambiente/areasafectadasinundacionnina | 2 | [Inundacion_Nina_100k_2011](https://mapas.igac.gov.co/server/rest/services/ambiente/areasafectadasinundacionnina/MapServer/2) | Polygon | 4686 | 7 | — | 2000 | NO | json, geojson, pbf | — |
+| ambiente/areasafectadasinundacionnina | 3 | [Inundacion_Nina_100k_2012](https://mapas.igac.gov.co/server/rest/services/ambiente/areasafectadasinundacionnina/MapServer/3) | Polygon | 4686 | 7 | — | 2000 | NO | json, geojson, pbf | 5 filas |
 | (raíz)/Dato_Fundamental_Catastro | 0 | [R_CONSTRUCCION](https://mapas.igac.gov.co/server/rest/services/Dato_Fundamental_Catastro/MapServer/0) | Polygon | 4686 | 21 | 393507 | 2000 | NO | json, geojson, pbf | 5 filas |
 | (raíz)/Dato_Fundamental_Catastro | 1 | [R_TERRENO](https://mapas.igac.gov.co/server/rest/services/Dato_Fundamental_Catastro/MapServer/1) | Polygon | 4686 | 10 | 3146345 | 2000 | NO | json, geojson, pbf | 5 filas |
 | (raíz)/Dato_Fundamental_Catastro | 2 | [U_CONSTRUCCION](https://mapas.igac.gov.co/server/rest/services/Dato_Fundamental_Catastro/MapServer/2) | Polygon | 4686 | 18 | 4790310 | 2000 | NO | json, geojson, pbf | 5 filas |
@@ -82,6 +93,272 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 
 - El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.
 - No se pudo traer la muestra: Se agotaron los 2 intentos contra https://mapas.igac.gov.co/server/rest/services/agrologia/actividadquimicanacional/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=false&f=geojson&resultOffset=0&resultRecordCount=5&orderByFields=OBJECTID: This operation was aborted
+
+#### `agrologia/areashomogeneasdetierra05360itagui` → AREA_HOMOGENEA_TIERRA (id 0)
+
+| Campo | Alias | Tipo | Long. | Dominio | PII |
+|---|---|---|---|---|---|
+| `OBJECTID` | — | OID | — | — | — |
+| `Shape` | — | Geometry | — | — | — |
+| `Divipola` | Código Divipola | String | 5 | — | — |
+| `SIMBOLO` | Símbolo | String | 25 | — | — |
+| `UCSuelo` | Unidades Cartográficas de Suelo | String | 24 | — | — |
+| `CLASE` | Clase de AHT | Integer | — | codedValue: 0=Sin dato; 14=ZU; 16=CA; 2=02; 3=03; 4=04; 5=05; 6=06; 7=07; 8=08; 10=10; 11=11; 12=12; 13=13; 1=01; 9=09 | — |
+| `UClimatica` | Unidad climática | Integer | — | codedValue: 0=Sin Dato; 1=CA - Cálido Arido; 2=CM - Cálido muy Seco; 3=CS - Cálido seco; 4=CH - Cálido Húmedo; 5=CU - Cálido muy Hú… | — |
+| `PENDIENTE` | Pendiente | Integer | — | codedValue: 0=Sin Dato; 1=a; 2=b; 3=c; 4=d; 5=e; 6=f; 7=g | — |
+| `FPendiente` | Forma de la pendiente | Integer | — | codedValue: 0=Sin Dato; 1=Ligeramente plano (Forma Simple); 2=Ligeramente inclinada (Forma Simple); 3=Moderadamente inclinada (Form… | — |
+| `EHidrica` | Erosión hídrica | Integer | — | codedValue: 0=No hay; 2=2 - Moderada; 3=3 - Severa; 1=1 - Ligera | — |
+| `EEolica` | Erosión eólica | Integer | — | codedValue: 0=No hay; 1=k2 - Moderada; 2=k3 - Severa; 3=k1 - Ligera | — |
+| `ERemosion` | Erosión por remoción en masa | Integer | — | codedValue: 0=No hay; 1=m2 - Moderada; 2=m3 - Severa; 3=m1 - Ligera | — |
+| `INUNDACION` | Fase por Inundación | Integer | — | codedValue: 0=No se presenta; 1=i - Inundaciones | — |
+| `Encharcami` | Fase por Encharcamiento | Integer | — | codedValue: 0=No se presenta; 1=E - Encharcamiento | — |
+| `FNFreatico` | Fluctuación del nivel freático | Integer | — | codedValue: 0=No se presenta; 1=h - Fluctuación del nivel freático | — |
+| `PEfectiva` | Profundidad efectiva | Integer | — | codedValue: 0=No se presenta; 1=s - Limitante de la profundidad efectiva (excepto por h-n) | — |
+| `HDensicos` | Horizontes densicos | Integer | — | codedValue: 0=No se presenta; 1=D - Presenta horizontes densicos | — |
+| `FGPerfil` | Fragmentos gruesos en el perfil | Integer | — | codedValue: 0=No se presenta; 1=q - Presencia de fragmentos gruesos en el perfil | — |
+| `PSuperfici` | Pedregosidad superficial | Integer | — | codedValue: 0=No se presenta; 1=p - Piedras en superficie | — |
+| `LRocosidad` | Limitante por Rocosidad | Integer | — | codedValue: 0=No se presenta; 1=r - Rocas en superficie | — |
+| `LSodicidad` | Limitante por Sodicidad | Integer | — | codedValue: 0=No se presenta; 1=n - Con sodicidad | — |
+| `LSalinidad` | Limitante por Salinidad | Integer | — | codedValue: 0=No se presenta; 1=z - Con salinidad | — |
+| `CYeso` | Contenido de yeso | Integer | — | codedValue: 0=No se presenta; 1=y - Con yeso | — |
+| `DArtificia` | Drenaje artificial | Integer | — | codedValue: 0=No se presenta; 1=v- Drenaje artificial; 2=No aplica por metodología | — |
+| `AIntercamb` | Acidez intercambiable | Integer | — | codedValue: 0=No se presenta; 2=No aplica por metodología; 1=L - Acidez intercambiable (Al) | — |
+| `Miscelaneo` | Misceláneos y otros | Integer | — | codedValue: 0=No se presenta; 1=MR - Misceláneo Rocoso; 2=ME - Misceláneo Erosionado; 3=BA - Bancos de Arena; 5=PN - Pantanos; 6=ZM… | — |
+| `VPotencial` | Valor potencial | Integer | — | codedValue: 0=Sin Dato; 1=92; 2=80; 3=73; 4=67; 5=61; 6=55; 7=49; 8=44; 9=38; 10=30; 11=23; 12=17; 13=6 | — |
+| `Observacio` | Observaciones | String | 2147483647 | — | — |
+| `Fecha` | Fecha actualización | String | 4 | — | — |
+| `TRelieve` | Tipo de relieve | String | 2147483647 | codedValue: Sa=Sa - Anticlinal; Sar=Sar - Artesa; Sb=Sb - Barras monoclinales; Sc=Sc - Cumbres andinas; Scl=Scl - Colada de Lava (y… | — |
+| `MParental` | Material parental | String | 2147483647 | codedValue: Ifc=Ifc - Ígneas Plutónicas - Granitos, Cuarzomonzonita, Granodiorita, Cuarzoarenitas; Ii=Ii - Ígneas Plutónicas - Monz… | — |
+| `CSimbolo` | Simbolo Correlación Suelos | String | 50 | — | — |
+| `Shape_Length` | — | Double | — | — | — |
+| `Shape_Area` | — | Double | — | — | — |
+| `AREA_HA` | — | Double | — | — | — |
+
+- El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.
+- No se pudo traer la muestra: Se agotaron los 2 intentos contra https://mapas.igac.gov.co/server/rest/services/agrologia/areashomogeneasdetierra05360itagui/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=false&f=geojson&resultOffset=0&resultRecordCount=5&orderByFields=OBJECTID: This operation was aborted
+
+#### `agrologia/capacidaddeusodelastierrasbordenortebogota2011` → CUT_BordeNorte_2011_10K (id 0)
+
+<DIV STYLE="text-align:Left;"><DIV><DIV><P><SPAN>Mapa temático que representa la clasificación por Capacidad de Uso en las áreas planas situadas al norte de Bogotá, Departamento de Cundinamarca, en una extensión de 1600 ha. a escala 1:10.000, publicado en el año 2011. Suministra información importante acerca del recurso suelo, a través de la determinación de las potencialidades y limitaciones de uso de las tierras a partir del análisis de las características de los suelos. Se definen las unidades cartográficas de capacidad de uso de la tierra con sus respectivos componentes: Clase, Subclase, Grupo de manejo, Principales limitantes y Prácticas de manejo.</SPAN></P><P><SPAN>Este producto es generado por la Subdirección de Agrología del Instituto Geográfico Agustín Codazzi - IGAC, dentro del convenio interadministrativo No 4177 entre el Instituto de Estudios Urbanos (IEU) de la Universidad Nacional de Colombia y el Instituto Geográfico Agustín Codazzi IGAC</SPAN></P></DIV></DIV></DIV>
+
+| Campo | Alias | Tipo | Long. | Dominio | PII |
+|---|---|---|---|---|---|
+| `OBJECTID` | — | OID | — | — | — |
+| `SHAPE` | — | Geometry | — | — | — |
+| `SHAPE_Length` | — | Double | — | — | — |
+| `SHAPE_Area` | — | Double | — | — | — |
+| `UCP` | — | String | 20 | — | — |
+| `CLASE` | — | String | 20 | — | — |
+| `SUBCLASE` | — | String | 20 | — | — |
+| `GRUPO_MANEJO` | — | String | 20 | — | — |
+| `UCS` | — | String | 1200 | — | — |
+| `CARACTERISTICAS` | — | String | 500 | — | — |
+| `LIMITANTES_USO` | — | String | 500 | — | — |
+| `USOS_RECOMENDADOS` | — | String | 1000 | — | — |
+| `PRACTICAS_MANEJO` | — | String | 2000 | — | — |
+| `AREA_ha` | — | Double | — | — | — |
+| `ESTUDIO` | — | String | 10000000 | — | — |
+| `ESCALA` | — | String | 10000000 | — | — |
+| `AÑO` | — | String | 10000000 | — | — |
+
+- El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.
+- No se pudo traer la muestra: Se agotaron los 2 intentos contra https://mapas.igac.gov.co/server/rest/services/agrologia/capacidaddeusodelastierrasbordenortebogota2011/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=false&f=geojson&resultOffset=0&resultRecordCount=5&orderByFields=OBJECTID: This operation was aborted
+
+#### `agrologia/capacidaddeusodelastierrascvc2023` → CUT_CVC_2023_25K (id 0)
+
+<DIV STYLE="text-align:Left;"><DIV><DIV><P><SPAN><SPAN>Realizar el estudio de capacidad de uso de las tierras a escala 1:25.000 para los suelos de la zona de estudio priorizada por la Corporación Autónoma Regional del Valle del Cauca - CVC, con el fin de contribuir a su ordenamiento territorial, integrando en una base de datos espacial la información temática.</SPAN></SPAN></P><P><SPAN /></P></DIV></DIV></DIV>
+
+| Campo | Alias | Tipo | Long. | Dominio | PII |
+|---|---|---|---|---|---|
+| `OBJECTID` | — | OID | — | — | — |
+| `SHAPE` | — | Geometry | — | — | — |
+| `UCP` | — | String | 20 | — | — |
+| `CLASE` | — | String | 20 | — | — |
+| `SUBCLASE` | — | String | 20 | — | — |
+| `GRUPO_MANEJO` | — | String | 20 | — | — |
+| `UCS` | — | String | 1200 | — | — |
+| `CARACTERISTICAS` | — | String | 500 | — | — |
+| `LIMITANTES_USO` | — | String | 500 | — | — |
+| `USOS_RECOMENDADOS` | — | String | 1000 | — | — |
+| `PRACTICAS_MANEJO` | — | String | 2000 | — | — |
+| `AREA_ha` | — | Double | — | — | — |
+| `SHAPE_Length` | — | Double | — | — | — |
+| `SHAPE_Area` | — | Double | — | — | — |
+
+- El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.
+- No se pudo traer la muestra: Se agotaron los 2 intentos contra https://mapas.igac.gov.co/server/rest/services/agrologia/capacidaddeusodelastierrascvc2023/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=false&f=geojson&resultOffset=0&resultRecordCount=5&orderByFields=OBJECTID: This operation was aborted
+
+#### `ambiente/areasafectadasinundacionnina` → Inundacion_Nina_100k_1988 (id 0)
+
+| Campo | Alias | Tipo | Long. | Dominio | PII |
+|---|---|---|---|---|---|
+| `FID` | — | OID | — | — | — |
+| `Shape` | — | Geometry | — | — | — |
+| `EMERGENCIA` | — | String | 30 | — | — |
+| `AREA_HA` | — | Double | — | — | — |
+| `SHAPE_Leng` | — | Double | — | — | — |
+| `SHAPE_Area` | — | Double | — | — | — |
+| `RULEID` | — | Integer | — | — | — |
+
+- La capa declara `supportsPagination: false`: `resultOffset` no funciona y hay que paginar por ventanas de OBJECTID.
+- La capa declara `supportsStatistics: false`: no se pueden pedir agregados al servicio.
+- El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.
+- La capa declara supportsPagination=false; se pagina por ventanas de FID. Tampoco soporta orderByFields: el orden de las ventanas no está garantizado.
+- No se envía resultRecordCount: el servicio lo rechaza con "Pagination is not supported." El tamaño de página se acota con un rango de FID.
+- No se pudo traer la muestra: Se agotaron los 2 intentos contra https://mapas.igac.gov.co/server/rest/services/ambiente/areasafectadasinundacionnina/MapServer/0/query?where=%281%3D1%29+AND+FID+%3E+-1+AND+FID+%3C%3D+4&outFields=*&returnGeometry=false&f=geojson: This operation was aborted
+
+#### `ambiente/areasafectadasinundacionnina` → Inundacion_Nina_100k_2000 (id 1)
+
+| Campo | Alias | Tipo | Long. | Dominio | PII |
+|---|---|---|---|---|---|
+| `FID` | — | OID | — | — | — |
+| `Shape` | — | Geometry | — | — | — |
+| `EMERGENCIA` | — | String | 30 | — | — |
+| `AREA_HA` | — | Double | — | — | — |
+| `SHAPE_Leng` | — | Double | — | — | — |
+| `SHAPE_Area` | — | Double | — | — | — |
+| `RULEID` | — | Integer | — | — | — |
+
+- La capa declara `supportsPagination: false`: `resultOffset` no funciona y hay que paginar por ventanas de OBJECTID.
+- La capa declara `supportsStatistics: false`: no se pueden pedir agregados al servicio.
+- El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.
+- La capa declara supportsPagination=false; se pagina por ventanas de FID. Tampoco soporta orderByFields: el orden de las ventanas no está garantizado.
+- No se envía resultRecordCount: el servicio lo rechaza con "Pagination is not supported." El tamaño de página se acota con un rango de FID.
+
+<details><summary>Muestra (sin columnas de PII)</summary>
+
+```json
+[
+  {
+    "FID": 0,
+    "EMERGENCIA": "Inundación",
+    "AREA_HA": 84.6579107934,
+    "SHAPE_Leng": 0.0512248670276,
+    "SHAPE_Area": 0.0000687697504566,
+    "RULEID": 1
+  },
+  {
+    "FID": 1,
+    "EMERGENCIA": "Inundación",
+    "AREA_HA": 68.2748234411,
+    "SHAPE_Leng": 0.0358383249635,
+    "SHAPE_Area": 0.0000554652746121,
+    "RULEID": 1
+  },
+  {
+    "FID": 2,
+    "EMERGENCIA": "Inundación",
+    "AREA_HA": 66.6323152243,
+    "SHAPE_Leng": 0.0416038582746,
+    "SHAPE_Area": 0.0000541270172292,
+    "RULEID": 1
+  },
+  {
+    "FID": 3,
+    "EMERGENCIA": "Inundación",
+    "AREA_HA": 1009.47993021,
+    "SHAPE_Leng": 0.795964354754,
+    "SHAPE_Area": 0.00082012302227,
+    "RULEID": 1
+  },
+  {
+    "FID": 4,
+    "EMERGENCIA": "Inundación",
+    "AREA_HA": 50.2507001458,
+    "SHAPE_Leng": 0.0343292100398,
+    "SHAPE_Area": 0.0000408231859667,
+    "RULEID": 1
+  }
+]
+```
+
+</details>
+
+#### `ambiente/areasafectadasinundacionnina` → Inundacion_Nina_100k_2011 (id 2)
+
+| Campo | Alias | Tipo | Long. | Dominio | PII |
+|---|---|---|---|---|---|
+| `FID` | — | OID | — | — | — |
+| `Shape` | — | Geometry | — | — | — |
+| `EMERGENCIA` | — | String | 30 | — | — |
+| `AREA_HA` | — | Double | — | — | — |
+| `SHAPE_Leng` | — | Double | — | — | — |
+| `SHAPE_Area` | — | Double | — | — | — |
+| `RULEID` | — | Integer | — | — | — |
+
+- La capa declara `supportsPagination: false`: `resultOffset` no funciona y hay que paginar por ventanas de OBJECTID.
+- La capa declara `supportsStatistics: false`: no se pueden pedir agregados al servicio.
+- El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.
+- La capa declara supportsPagination=false; se pagina por ventanas de FID. Tampoco soporta orderByFields: el orden de las ventanas no está garantizado.
+- No se envía resultRecordCount: el servicio lo rechaza con "Pagination is not supported." El tamaño de página se acota con un rango de FID.
+- No se pudo traer la muestra: Se agotaron los 2 intentos contra https://mapas.igac.gov.co/server/rest/services/ambiente/areasafectadasinundacionnina/MapServer/2/query?where=%281%3D1%29+AND+FID+%3E+-1+AND+FID+%3C%3D+4&outFields=*&returnGeometry=false&f=geojson: This operation was aborted
+
+#### `ambiente/areasafectadasinundacionnina` → Inundacion_Nina_100k_2012 (id 3)
+
+| Campo | Alias | Tipo | Long. | Dominio | PII |
+|---|---|---|---|---|---|
+| `FID` | — | OID | — | — | — |
+| `Shape` | — | Geometry | — | — | — |
+| `EMERGENCIA` | — | String | 30 | — | — |
+| `AREA_HA` | — | Double | — | — | — |
+| `SHAPE_Leng` | — | Double | — | — | — |
+| `SHAPE_Area` | — | Double | — | — | — |
+| `RULEID` | — | Integer | — | — | — |
+
+- La capa declara `supportsPagination: false`: `resultOffset` no funciona y hay que paginar por ventanas de OBJECTID.
+- La capa declara `supportsStatistics: false`: no se pueden pedir agregados al servicio.
+- El servicio no respondió a `returnCountOnly`: el número de registros queda desconocido.
+- La capa declara supportsPagination=false; se pagina por ventanas de FID. Tampoco soporta orderByFields: el orden de las ventanas no está garantizado.
+- No se envía resultRecordCount: el servicio lo rechaza con "Pagination is not supported." El tamaño de página se acota con un rango de FID.
+
+<details><summary>Muestra (sin columnas de PII)</summary>
+
+```json
+[
+  {
+    "FID": 0,
+    "EMERGENCIA": "Inundación",
+    "AREA_HA": 34.9650546875,
+    "SHAPE_Leng": 0.0616613942397,
+    "SHAPE_Area": 0.0000290224404969,
+    "RULEID": 1
+  },
+  {
+    "FID": 1,
+    "EMERGENCIA": "Inundación",
+    "AREA_HA": 33.8826765625,
+    "SHAPE_Leng": 0.0660203174098,
+    "SHAPE_Area": 0.0000281220466038,
+    "RULEID": 1
+  },
+  {
+    "FID": 2,
+    "EMERGENCIA": "Inundación",
+    "AREA_HA": 69.1998,
+    "SHAPE_Leng": 0.0455966258326,
+    "SHAPE_Area": 0.0000574257237226,
+    "RULEID": 1
+  },
+  {
+    "FID": 3,
+    "EMERGENCIA": "Inundación",
+    "AREA_HA": 50.6739710937,
+    "SHAPE_Leng": 0.0903000607067,
+    "SHAPE_Area": 0.0000420587341763,
+    "RULEID": 1
+  },
+  {
+    "FID": 4,
+    "EMERGENCIA": "Inundación",
+    "AREA_HA": 42.0004195313,
+    "SHAPE_Leng": 0.0848130518085,
+    "SHAPE_Area": 0.000034856301827,
+    "RULEID": 1
+  }
+]
+```
+
+</details>
 
 #### `(raíz)/Dato_Fundamental_Catastro` → R_CONSTRUCCION (id 0)
 
@@ -3697,7 +3974,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 |---|---|---|
 | `naturaleza` | naturaleza | — |
 | `fuente` | Fuente | — |
-| `nom_grupo_capacidad` | nom grupo capacidad  | **descartada** |
+| `nom_grupo_capacidad` | nom grupo capacidad  | — |
 | `gerente` | Gerente | — |
 | `direcci_n` | Dirección | — |
 | `c_digo_prestador` | Código prestador | — |
@@ -3832,7 +4109,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | `nit_entidad` | NIT Entidad | **descartada** |
 | `tamanno_archivo` | Tamaño Documento | — |
 | `n_mero_de_contrato` | Número de Contrato | — |
-| `url_descarga_documento` | URL Descarga Documento | **descartada** |
+| `url_descarga_documento` | URL Descarga Documento | — |
 | `extensi_n` | Extensión | — |
 | `descripci_n` | Descripción | — |
 | `fecha_carga` | Fecha Carga | — |
@@ -3896,7 +4173,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | Columna | Tipo observado | PII |
 |---|---|---|
 | `id_adjudicacion` | Id_Adjudicacion | — |
-| `fecha_firma` | Fecha Firma | **descartada** |
+| `fecha_firma` | Fecha Firma | — |
 | `adicion_en_valor` | Adicion En Valor | — |
 | `adicion_en_meses` | Adicion en Meses | — |
 | `adicion_en_dias` | Adicion en Dias | — |
@@ -4069,7 +4346,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | `tipo_empresa_participante` | Tipo Empresa Participante | — |
 | `nit_grupo` | NIT Grupo | **descartada** |
 | `esta_activo` | Esta activo | — |
-| `nombre_grupo` | Nombre Grupo | **descartada** |
+| `nombre_grupo` | Nombre Grupo | — |
 | `fecha_creaci_n_grupo` | Fecha Creación Grupo | — |
 | `codigo_categor_a_principal_grupo` | Codigo categoría principal grupo | — |
 | `pais_grupo` | Pais grupo | — |
@@ -4121,7 +4398,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | `extensi_n` | Extensión | — |
 | `proceso` | Proceso | — |
 | `fecha_carga` | Fecha Carga | — |
-| `url_descarga_documento` | URL Descarga Documento | **descartada** |
+| `url_descarga_documento` | URL Descarga Documento | — |
 | `descripci_n` | Descripción | — |
 | `nombre_archivo` | Nombre Documento | — |
 | `n_mero_de_contrato` | Número de Contrato | — |
@@ -4164,7 +4441,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | `numero_de_proceso` | Numero de Proceso | — |
 | `rango_de_ejec_del_contrato` | Rango de Ejec del Contrato | — |
 | `numero_de_contrato` | Numero de Contrato | — |
-| `fecha_de_firma_del_contrato` | Fecha de Firma del Contrato | **descartada** |
+| `fecha_de_firma_del_contrato` | Fecha de Firma del Contrato | — |
 | `cuantia_proceso` | Cuantia Proceso | — |
 | `sexo_replegal` | Sexo RepLegal | **descartada** |
 | `valor_rubro` | Valor Rubro | — |
@@ -4175,7 +4452,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | `identific_representante_legal` | Identific Representante Legal | — |
 | `id_grupo` | ID Grupo | — |
 | `plazo_de_ejec_del_contrato` | Plazo de Ejec del Contrato | — |
-| `nombre_grupo` | Nombre Grupo | **descartada** |
+| `nombre_grupo` | Nombre Grupo | — |
 | `id_familia` | ID Familia | — |
 | `nombre_familia` | Nombre Familia | **descartada** |
 | `tipo_identifi_del_contratista` | Tipo Identifi del Contratista | — |
@@ -4236,7 +4513,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 |---|---|---|
 | `id_documento` | ID Documento | **descartada** |
 | `entidad` | Entidad | — |
-| `url_descarga_documento` | URL Descarga Documento | **descartada** |
+| `url_descarga_documento` | URL Descarga Documento | — |
 | `proceso` | Proceso | — |
 | `tamanno_archivo` | Tamaño Documento | — |
 | `fecha_carga` | Fecha Carga | — |
@@ -4334,7 +4611,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | `nombre_entidad` | Nombre Entidad | — |
 | `link` | Link | — |
 | `id_entidad` | ID Entidad | — |
-| `fecha_firma` | Fecha Firma | **descartada** |
+| `fecha_firma` | Fecha Firma | — |
 | `tipo_de_contrato` | Tipo de Contrato | — |
 | `anno_cargue` | Anno cargue | — |
 | `orden` | Orden | — |
@@ -4388,7 +4665,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | `valor_pendiente_de_pago` | Valor Pendiente de Pago | — |
 | `el_contrato_puede_ser_prorrogado` | El contrato puede ser prorrogado | — |
 | `objeto_del_contrato` | Objeto del Contrato | — |
-| `fecha_de_firma` | Fecha de Firma | **descartada** |
+| `fecha_de_firma` | Fecha de Firma | — |
 | `g_nero_representante_legal` | Género Representante Legal | — |
 | `fecha_de_inicio_del_contrato` | Fecha de Inicio del Contrato | — |
 | `valor_pendiente_de_ejecucion` | Valor Pendiente de Ejecucion | — |
@@ -4460,7 +4737,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | `nit_entidad` | NIT Entidad | **descartada** |
 | `fecha_carga` | Fecha Carga | — |
 | `entidad` | Entidad | — |
-| `url_descarga_documento` | URL Descarga Documento | **descartada** |
+| `url_descarga_documento` | URL Descarga Documento | — |
 | `nombre_archivo` | Nombre Documento | — |
 | `descripci_n` | Descripción | — |
 | `id_documento` | ID Documento | **descartada** |
@@ -4503,7 +4780,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | `entidad` | Entidad | — |
 | `extensi_n` | Extensión | — |
 | `nombre_archivo` | Nombre Documento | — |
-| `url_descarga_documento` | URL Descarga Documento | **descartada** |
+| `url_descarga_documento` | URL Descarga Documento | — |
 | `n_mero_de_contrato` | Número de Contrato | — |
 | `descripci_n` | Descripción | — |
 | `tamanno_archivo` | Tamaño Documento | — |
@@ -4630,7 +4907,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | `valor_rubro` | Valor Rubro | — |
 | `nom_razon_social_contratista` | Nom Razon Social Contratista | **descartada** |
 | `identificacion_del_contratista` | Identificacion del Contratista | **descartada** |
-| `nombre_grupo` | Nombre Grupo | **descartada** |
+| `nombre_grupo` | Nombre Grupo | — |
 | `identific_representante_legal` | Identific Representante Legal | — |
 | `cuantia_contrato` | Cuantia Contrato | — |
 | `tiempo_adiciones_en_dias` | Tiempo Adiciones en Dias | — |
@@ -4674,7 +4951,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | `es_postconflicto` | Es PostConflicto | — |
 | `posicion_rubro` | Posicion Rubro | — |
 | `cuantia_proceso` | Cuantia Proceso | — |
-| `fecha_de_firma_del_contrato` | Fecha de Firma del Contrato | **descartada** |
+| `fecha_de_firma_del_contrato` | Fecha de Firma del Contrato | — |
 | `tiempo_adiciones_en_meses` | Tiempo Adiciones en Meses | — |
 | `nombre_clase` | Nombre Clase | — |
 | `codigo_bpin` | Codigo BPIN | — |
@@ -4769,7 +5046,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | `nivel_entidad` | Nivel Entidad | — |
 | `objeto_del_proceso` | Objeto del proceso | — |
 | `nit_de_la_entidad` | NIT de la Entidad | **descartada** |
-| `fecha_de_firma_del_contrato` | Fecha de Firma del Contrato | **descartada** |
+| `fecha_de_firma_del_contrato` | Fecha de Firma del Contrato | — |
 | `valor_contrato` | Valor Contrato | — |
 | `departamento_entidad` | Departamento Entidad | — |
 | `fecha_inicio_ejecuci_n` | Fecha inicio ejecución | — |
@@ -4793,7 +5070,7 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | `anno_firma` | Anno firma | **descartada** |
 | `origen_de_los_recursos` | Origen de los recursos | — |
 | `tipo_contratista` | Tipo Contratista | — |
-| `fecha_firma` | Fecha Firma | **descartada** |
+| `fecha_firma` | Fecha Firma | — |
 | `fecha_fin_del_contrato` | Fecha Fin del Contrato | — |
 | `fuente` | Fuente | — |
 | `modalidad_contratacion` | Modalidad Contratacion | — |
@@ -4996,7 +5273,8 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 | Id | Nombre | URL | HTTP | Formato | Licencia | Frecuencia |
 |---|---|---|---|---|---|---|
 | dane-geoportal | Geoportal DANE — descargas del Marco Geoestadístico Nacional | [enlace](https://geoportal.dane.gov.co/) | 200 | SHP / GPKG / CSV dentro de ZIP | NO_VERIFICADO — el portal no declara licenci… | Anual (MGN) / decenal (CNPV) |
-| igac-datos-abiertos-hub | IGAC — portal de datos abiertos (ArcGIS Hub) | [enlace](https://datos-abiertos-igac-igac-oit.hub.arcgis.com/) | 200 | Portal HTML + descargas | CC BY 4.0 / CC BY-SA 4.0 según el producto —… | Mensual (base catastral) |
+| igac-base-catastral-atlantico | Base Catastral Pública — departamento piloto Atlántico (08) | [enlace](https://www.arcgis.com/sharing/rest/content/items/b4c2079287ee40bdb159a412fb5bdfad/data) | 200 | ZIP con File Geodatabase (08.gdb), 56 609 544 bytes | CC BY-SA 4.0 | Mensual (el ítem se REEMPLAZA, no se archiva) |
+| igac-datos-abiertos-hub | IGAC — portal de datos abiertos (ArcGIS Hub) | [enlace](https://datos-abiertos-igac-igac-oit.hub.arcgis.com/) | 200 | Portal HTML + descargas | CC BY-SA 4.0 para la Base Catastral (verific… | Mensual (base catastral) |
 | osm-geofabrik-colombia | OpenStreetMap — extracto de Colombia (Geofabrik) | [enlace](https://download.geofabrik.de/south-america/colombia.html) | 200 | PBF / SHP.ZIP / GPKG.ZIP | ODbL 1.0 | Diaria |
 
 **Geoportal DANE — descargas del Marco Geoestadístico Nacional — pendiente de verificar:**
@@ -5005,10 +5283,15 @@ Raíz: `https://mapas.igac.gov.co/server/rest/services`. Un servicio por fila; l
 - Confirmar la licencia de uso y la atribución exigida.
 - Verificar el CRS de entrega (se espera EPSG:4686) y la codificación de los CSV.
 
+**Base Catastral Pública — departamento piloto Atlántico (08) — pendiente de verificar:**
+
+- Programar la descarga mensual con archivo histórico: el ítem se sobrescribe en cada corte y sin archivo propio M8 (cambio territorial) no tendrá con qué comparar.
+- Verificar los mismos hallazgos en un segundo departamento (Boyacá, ítem 723e946e9ede418a95a6eefd28439626) antes de tratarlos como nacionales.
+
 **IGAC — portal de datos abiertos (ArcGIS Hub) — pendiente de verificar:**
 
-- Localizar la URL directa del paquete departamental de la Base Catastral Pública del corte vigente.
-- Confirmar si la licencia del paquete catastral es CC BY-SA 4.0 (como asume PLAN.md §2) o CC BY 4.0 (como declaran los datasets espejados en datos.gov.co).
+- Averiguar si los Registros 1 y 2 (avalúo, destino económico, áreas reportadas) se entregan por solicitud formal: NO están en el paquete público.
+- Confirmar si el alcance de la cláusula ShareAlike («nuevos productos y SERVICIOS derivados») cubre una API comercial.
 
 **OpenStreetMap — extracto de Colombia (Geofabrik) — pendiente de verificar:**
 

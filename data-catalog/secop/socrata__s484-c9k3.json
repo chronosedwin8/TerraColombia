@@ -74,8 +74,8 @@
     {
       "name": "fecha_firma",
       "jsType": "Fecha Firma",
-      "pii": true,
-      "piiReason": "Dato biométrico o imagen de la persona."
+      "pii": false,
+      "piiReason": null
     },
     {
       "name": "fecha_fin_del_contrato",
@@ -189,7 +189,6 @@
   "sample": [],
   "piiDroppedColumns": [
     "anno_firma",
-    "fecha_firma",
     "identificacion_contratista"
   ],
   "piiRedactedColumns": [],
@@ -197,5 +196,5 @@
     "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
   ],
   "error": null,
-  "inspectedAt": "2026-09-21T15:42:00.086Z"
+  "inspectedAt": "2026-09-21T16:02:29.585Z"
 }

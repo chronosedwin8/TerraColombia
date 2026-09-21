@@ -17,5 +17,5 @@
   "notes": [
     "El descriptor completo (tamaños, fecha del corte, MD5) lo genera el conector `osm.ts` en cada corrida."
   ],
-  "inspectedAt": "2026-09-21T15:30:23.848Z"
+  "inspectedAt": "2026-09-21T16:04:01.256Z"
 }

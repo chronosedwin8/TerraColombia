@@ -247,18 +247,42 @@ export const MANUAL_SOURCES: readonly ManualSourceSpec[] = [
     connector: 'manual',
     name: 'IGAC — portal de datos abiertos (ArcGIS Hub)',
     description:
-      'Portal ArcGIS Hub del IGAC. Es el punto de entrada a la Base Catastral Pública por departamento (GDB/GPKG + Registros 1 y 2) y a los históricos mensuales citados en PLAN.md §5.1.',
+      'Portal ArcGIS Hub del IGAC. Es la cara pública de la organización de ArcGIS Online `RVvWzU3lgJISqdke` (usuario `IGAC-Admin`), donde se publican la Base Catastral Pública por departamento y el resto de los productos.',
     url: 'https://datos-abiertos-igac-igac-oit.hub.arcgis.com/',
     format: 'Portal HTML + descargas',
-    license: 'CC BY 4.0 / CC BY-SA 4.0 según el producto — verificar por dataset',
+    license: 'CC BY-SA 4.0 para la Base Catastral (verificado en el `licenseInfo` del ítem)',
     attribution: 'Fuente: IGAC',
     frequency: 'Mensual (base catastral)',
     pending: [
-      'Localizar la URL directa del paquete departamental de la Base Catastral Pública del corte vigente.',
-      'Confirmar si la licencia del paquete catastral es CC BY-SA 4.0 (como asume PLAN.md §2) o CC BY 4.0 (como declaran los datasets espejados en datos.gov.co).',
+      'Averiguar si los Registros 1 y 2 (avalúo, destino económico, áreas reportadas) se entregan por solicitud formal: NO están en el paquete público.',
+      'Confirmar si el alcance de la cláusula ShareAlike («nuevos productos y SERVICIOS derivados») cubre una API comercial.',
     ],
     notes: [
+      'RESUELTO en la Fase 0: los paquetes departamentales se listan con la API de búsqueda de ArcGIS Online (`q=owner:IGAC-Admin AND type:"File Geodatabase"`) → 31 departamentos, y se descargan con `https://www.arcgis.com/sharing/rest/content/items/{itemId}/data`.',
       'La URL aparece citada en `customFields["Common Core"].Homepage` de los datasets del IGAC en datos.gov.co, lo que confirma que es el portal oficial.',
+    ],
+  },
+  {
+    id: 'igac-base-catastral-atlantico',
+    source: 'igac',
+    connector: 'file-download',
+    name: 'Base Catastral Pública — departamento piloto Atlántico (08)',
+    description:
+      'Geodatabase del departamento piloto, descargada e inspeccionada capa por capa en la Fase 0: 18 capas, 86 876 predios (67 925 urbanos + 18 951 rurales) en 15 de los 23 municipios, EPSG:9377. El diccionario completo está en docs/DICCIONARIO_CATASTRAL.md.',
+    url: 'https://www.arcgis.com/sharing/rest/content/items/b4c2079287ee40bdb159a412fb5bdfad/data',
+    format: 'ZIP con File Geodatabase (08.gdb), 56 609 544 bytes',
+    license: 'CC BY-SA 4.0',
+    attribution: 'Fuente: IGAC, Base Catastral, corte 2026-07, CC BY-SA 4.0',
+    frequency: 'Mensual (el ítem se REEMPLAZA, no se archiva)',
+    pending: [
+      'Programar la descarga mensual con archivo histórico: el ítem se sobrescribe en cada corte y sin archivo propio M8 (cambio territorial) no tendrá con qué comparar.',
+      'Verificar los mismos hallazgos en un segundo departamento (Boyacá, ítem 723e946e9ede418a95a6eefd28439626) antes de tratarlos como nacionales.',
+    ],
+    notes: [
+      'Descarga verificada con HEAD: 200, `08_ATLANTICO.zip`, `Accept-Ranges: bytes`. SHA-256 11647eeb3dbe5db92d514c87095ae1a665cd16f4b109fa55f893dcb20519eaeb.',
+      'Corte declarado por el IGAC: 31 de julio de 2026; ítem publicado el 2026-09-03.',
+      'NO contiene Registro 1 ni Registro 2: sin avalúo, destino económico ni áreas reportadas.',
+      'Ninguna de las 18 capas tiene columna de titularidad: cero PII en la base pública.',
     ],
   },
   {

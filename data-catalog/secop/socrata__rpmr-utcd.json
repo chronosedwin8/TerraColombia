@@ -105,8 +105,8 @@
     {
       "name": "fecha_de_firma_del_contrato",
       "jsType": "Fecha de Firma del Contrato",
-      "pii": true,
-      "piiReason": "Dato biométrico o imagen de la persona."
+      "pii": false,
+      "piiReason": null
     },
     {
       "name": "valor_contrato",
@@ -241,7 +241,6 @@
   ],
   "piiDroppedColumns": [
     "documento_proveedor",
-    "fecha_de_firma_del_contrato",
     "nit_de_la_entidad",
     "nom_raz_social_contratista",
     "nombre_de_la_entidad",
@@ -250,5 +249,5 @@
   "piiRedactedColumns": [],
   "notes": [],
   "error": null,
-  "inspectedAt": "2026-09-21T15:39:10.437Z"
+  "inspectedAt": "2026-09-21T16:02:29.557Z"
 }

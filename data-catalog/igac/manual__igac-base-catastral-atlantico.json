@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "source": "igac",
+  "connector": "file-download",
+  "id": "igac-base-catastral-atlantico",
+  "name": "Base Catastral Pública — departamento piloto Atlántico (08)",
+  "description": "Geodatabase del departamento piloto, descargada e inspeccionada capa por capa en la Fase 0: 18 capas, 86 876 predios (67 925 urbanos + 18 951 rurales) en 15 de los 23 municipios, EPSG:9377. El diccionario completo está en docs/DICCIONARIO_CATASTRAL.md.",
+  "url": "https://www.arcgis.com/sharing/rest/content/items/b4c2079287ee40bdb159a412fb5bdfad/data",
+  "httpStatus": 200,
+  "format": "ZIP con File Geodatabase (08.gdb), 56 609 544 bytes",
+  "license": "CC BY-SA 4.0",
+  "attribution": "Fuente: IGAC, Base Catastral, corte 2026-07, CC BY-SA 4.0",
+  "frequency": "Mensual (el ítem se REEMPLAZA, no se archiva)",
+  "pending": [
+    "Programar la descarga mensual con archivo histórico: el ítem se sobrescribe en cada corte y sin archivo propio M8 (cambio territorial) no tendrá con qué comparar.",
+    "Verificar los mismos hallazgos en un segundo departamento (Boyacá, ítem 723e946e9ede418a95a6eefd28439626) antes de tratarlos como nacionales."
+  ],
+  "notes": [
+    "Descarga verificada con HEAD: 200, `08_ATLANTICO.zip`, `Accept-Ranges: bytes`. SHA-256 11647eeb3dbe5db92d514c87095ae1a665cd16f4b109fa55f893dcb20519eaeb.",
+    "Corte declarado por el IGAC: 31 de julio de 2026; ítem publicado el 2026-09-03.",
+    "NO contiene Registro 1 ni Registro 2: sin avalúo, destino económico ni áreas reportadas.",
+    "Ninguna de las 18 capas tiene columna de titularidad: cero PII en la base pública."
+  ],
+  "inspectedAt": "2026-09-21T16:04:00.744Z"
+}

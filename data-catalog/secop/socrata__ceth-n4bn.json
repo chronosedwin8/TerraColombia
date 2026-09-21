@@ -159,8 +159,8 @@
     {
       "name": "nombre_grupo",
       "jsType": "Nombre Grupo",
-      "pii": true,
-      "piiReason": "Nombre o apellido de persona."
+      "pii": false,
+      "piiReason": null
     },
     {
       "name": "fecha_creaci_n_grupo",
@@ -233,13 +233,12 @@
     "numero_tel_fono_grupo",
     "telefono_representante_legal_grupo",
     "numero_fax",
-    "nit_grupo",
-    "nombre_grupo"
+    "nit_grupo"
   ],
   "piiRedactedColumns": [],
   "notes": [
     "Catalogado con metadatos y columnas del catálogo: la muestra de filas se limita a los primeros datasets de cada fuente (`inspectTop`)."
   ],
   "error": null,
-  "inspectedAt": "2026-09-21T15:42:04.988Z"
+  "inspectedAt": "2026-09-21T16:02:29.620Z"
 }

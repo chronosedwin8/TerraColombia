@@ -14,7 +14,7 @@ import {
   detectPiiContent,
   isPiiAdjacentColumn,
   redactValue,
-} from '../../../../etl/config/pii-blocklist.js';
+} from '@terracolombia/etl-config';
 import type { CatalogField, PiiDiscardRecord, SourceId } from './types.js';
 
 export interface PiiContext {

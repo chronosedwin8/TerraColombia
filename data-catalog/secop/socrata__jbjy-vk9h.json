@@ -166,8 +166,8 @@
     {
       "name": "fecha_de_firma",
       "jsType": "Fecha de Firma",
-      "pii": true,
-      "piiReason": "Dato biométrico o imagen de la persona."
+      "pii": false,
+      "piiReason": null
     },
     {
       "name": "g_nero_representante_legal",
@@ -555,6 +555,7 @@
       "tipo_de_contrato": "Prestación de servicios",
       "modalidad_de_contratacion": "Contratación directa",
       "justificacion_modalidad_de": "Servicios profesionales y apoyo a la gestión",
+      "fecha_de_firma": "2025-02-15T00:00:00.000",
       "fecha_de_inicio_del_contrato": "2025-02-19T00:00:00.000",
       "fecha_de_fin_del_contrato": "2025-04-30T00:00:00.000",
       "condiciones_de_entrega": "No Definido",
@@ -692,6 +693,7 @@
       "tipo_de_contrato": "Prestación de servicios",
       "modalidad_de_contratacion": "Contratación directa",
       "justificacion_modalidad_de": "Servicios profesionales y apoyo a la gestión",
+      "fecha_de_firma": "2025-07-17T00:00:00.000",
       "fecha_de_inicio_del_contrato": "2025-07-18T00:00:00.000",
       "fecha_de_fin_del_contrato": "2025-08-31T00:00:00.000",
       "condiciones_de_entrega": "NXTWY.DLVY.6",
@@ -761,6 +763,7 @@
       "tipo_de_contrato": "Prestación de servicios",
       "modalidad_de_contratacion": "Contratación directa",
       "justificacion_modalidad_de": "Servicios profesionales y apoyo a la gestión",
+      "fecha_de_firma": "2026-01-26T00:00:00.000",
       "fecha_de_inicio_del_contrato": "2026-03-27T00:00:00.000",
       "fecha_de_fin_del_contrato": "2026-09-26T00:00:00.000",
       "condiciones_de_entrega": "No Definido",
@@ -830,6 +833,7 @@
       "tipo_de_contrato": "Prestación de servicios",
       "modalidad_de_contratacion": "Contratación directa",
       "justificacion_modalidad_de": "Servicios profesionales y apoyo a la gestión",
+      "fecha_de_firma": "2025-10-31T00:00:00.000",
       "fecha_de_inicio_del_contrato": "2025-10-31T00:00:00.000",
       "fecha_de_fin_del_contrato": "2025-12-31T00:00:00.000",
       "condiciones_de_entrega": "No Definido",
@@ -886,7 +890,6 @@
     "descripcion_documentos_tipo",
     "documento_proveedor",
     "documentos_tipo",
-    "fecha_de_firma",
     "n_mero_de_documento_ordenador_de_pago",
     "n_mero_de_documento_ordenador_del_gasto",
     "n_mero_de_documento_supervisor",
@@ -908,5 +911,5 @@
   ],
   "notes": [],
   "error": null,
-  "inspectedAt": "2026-09-21T15:38:34.809Z"
+  "inspectedAt": "2026-09-21T16:02:29.548Z"
 }
