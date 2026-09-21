@@ -13,7 +13,7 @@ import {
   reliefFor,
   soilOverlaps,
 } from '@terracolombia/db';
-import type { ResolvedScope } from './area-scope.js';
+import type { ResolvedScope } from '@terracolombia/db';
 
 export type AreaSection =
   | 'parcels'

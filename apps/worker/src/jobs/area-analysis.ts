@@ -1,4 +1,5 @@
-import { getLogger } from '@terracolombia/shared';
+import { AREA_ANALYSIS_HARD_LIMIT_KM2, getLogger } from '@terracolombia/shared';
+import type { AreaScope } from '@terracolombia/shared';
 import {
   facilitiesIn,
   getCoverage,
@@ -7,19 +8,23 @@ import {
   populationIn,
   protectedAreaOverlaps,
   reliefFor,
+  resolveAreaScope,
   soilOverlaps,
 } from '@terracolombia/db';
-import { approxAreaKm2, radiusToPolygon } from '@terracolombia/geo';
+import { approxAreaKm2 } from '@terracolombia/geo';
 import { getPrisma } from '@terracolombia/db';
 import type { JobContext } from '../queue.js';
 
 const log = getLogger({ mod: 'job:area' });
 
 export interface AreaJobPayload {
-  scope: { kind: string; geometry?: unknown; center?: [number, number]; radiusM?: number; muniCode?: string };
+  /** El ámbito tal como lo validó el DSL en la API. Aquí se resuelve con el mismo código. */
+  scope: AreaScope;
   sections?: string[];
   cutDate?: string | null;
   areaKm2?: number;
+  /** Límite de área del plan con el que se encoló, para aplicar el mismo tope. */
+  maxAnalysisAreaKm2?: number;
 }
 
 /**
@@ -38,19 +43,35 @@ export async function runAreaAnalysisJob(jobId: string, ctx: JobContext): Promis
   });
 
   const payload = job.input as unknown as AreaJobPayload;
+
+  /*
+   * El ámbito se resuelve con el MISMO código que la vía síncrona (`resolveAreaScope`, en
+   * `packages/db`). Antes el worker traía su propia versión reducida que solo entendía
+   * `polygon` y `radius`, así que una petición con `kind: 'municipality'` se aceptaba con
+   * 202 y el trabajo moría diciendo que el ámbito no era utilizable: analizar un municipio
+   * completo funcionaba cuando el área era pequeña y fallaba cuando era grande, que es
+   * justo cuando hay que encolarlo.
+   */
   let geometry: unknown;
-  if (payload.scope?.kind === 'polygon' && payload.scope.geometry) {
-    geometry = payload.scope.geometry;
-  } else if (payload.scope?.kind === 'radius' && payload.scope.center && payload.scope.radiusM) {
-    geometry = radiusToPolygon(payload.scope.center, payload.scope.radiusM);
-  } else {
-    const message =
-      'El trabajo no trae un ámbito utilizable. Se esperaba un polígono o un centro con radio.';
+  let scopeWarnings: string[] = [];
+  let scopeMuniCode: string | null = null;
+  try {
+    const resolved = await resolveAreaScope(
+      payload.scope,
+      payload.maxAnalysisAreaKm2 ?? AREA_ANALYSIS_HARD_LIMIT_KM2,
+    );
+    geometry = resolved.geometry;
+    scopeWarnings = resolved.warnings;
+    scopeMuniCode = resolved.muniCode;
+  } catch (err) {
+    // El mensaje de `AppError` ya está en español y explica qué falta (por ejemplo, que no
+    // tenemos el límite del municipio). Se propaga tal cual en vez de uno genérico.
+    const message = err instanceof Error ? err.message : 'No pudimos resolver el área analizada.';
     await prisma.job.update({
       where: { id: jobId },
       data: { status: 'failed', errorMessage: message, finishedAt: new Date() },
     });
-    throw new Error(message);
+    throw err;
   }
 
   const areaKm2 = payload.areaKm2 ?? approxAreaKm2(geometry as never);
@@ -84,7 +105,10 @@ export async function runAreaAnalysisJob(jobId: string, ctx: JobContext): Promis
     }
   }
 
-  const coverage = payload.scope.muniCode ? await getCoverage(payload.scope.muniCode) : null;
+  // El municipio lo deduce el resolutor incluso para un polígono o un radio, así que el
+  // bloque de cobertura aparece también en esos ámbitos; antes solo salía si la petición
+  // traía el código explícito.
+  const coverage = scopeMuniCode ? await getCoverage(scopeMuniCode) : null;
 
   const missingSections: Array<{ section: string; reason: string }> = [];
   const parcels = results.parcels as { n_parcels?: number } | null;
@@ -118,6 +142,13 @@ export async function runAreaAnalysisJob(jobId: string, ctx: JobContext): Promis
     coverage,
     ...results,
     missingSections,
+    /*
+     * Los avisos de cómo se resolvió el ámbito tienen que llegar al usuario: el principal es
+     * que una isócrona es en realidad un círculo calculado con una velocidad media, no un
+     * alcance por red vial. La vía síncrona ya los devolvía y la encolada los perdía, así que
+     * el mismo análisis decía la verdad o se la callaba según su tamaño.
+     */
+    warnings: scopeWarnings,
     computedAt: new Date().toISOString(),
   };
 

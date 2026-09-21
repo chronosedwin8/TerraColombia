@@ -1,13 +1,20 @@
 import { AppError, AREA_ANALYSIS_HARD_LIMIT_KM2 } from '@terracolombia/shared';
 import type { AreaScope, GeoJsonGeometry } from '@terracolombia/shared';
 import { approxAreaKm2, radiusToPolygon } from '@terracolombia/geo';
-import { getMunicipalityGeoJson, query } from '@terracolombia/db';
-import { sql } from '@terracolombia/db/sql';
+import { query } from '../pool.js';
+import { sql } from '../sql.js';
+import { getMunicipalityGeoJson } from './admin.js';
 
 /**
  * Convierte cualquier `AreaScope` del DSL en una geometría concreta y valida el área contra
- * el plan del usuario. Un solo sitio decide esto, para que todas las rutas de zona apliquen
- * los mismos límites.
+ * el plan del usuario.
+ *
+ * Vive en `packages/db` y no en la API porque el worker también lo necesita. Cuando cada
+ * lado resolvía el ámbito por su cuenta, el worker solo entendía `polygon` y `radius`: una
+ * petición con `kind: 'municipality'` se aceptaba con 202 y el trabajo moría con «El
+ * trabajo no trae un ámbito utilizable». Es decir, analizar un municipio completo funcionaba
+ * si el área era pequeña —vía síncrona— y fallaba si era grande, que es justo cuando hace
+ * falta encolarlo. Un solo sitio decide esto para que las dos vías apliquen lo mismo.
  */
 export interface ResolvedScope {
   geometry: GeoJsonGeometry;

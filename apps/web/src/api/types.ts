@@ -592,8 +592,14 @@ export interface AreaAnalysisResult {
     slopeMeanPct: Maybe<number>;
     slopeMaxPct: Maybe<number>;
   } | null;
-  /** Secciones que no se pudieron calcular, con su motivo. Regla 6: cobertura honesta. */
-  missingSections: string[];
+  /**
+   * Secciones que no se pudieron calcular, con su motivo. Regla 6: cobertura honesta.
+   *
+   * Verificado contra la respuesta real: son objetos `{section, reason}`, no cadenas.
+   * Declararlo como `string[]` dejaba pasar una interpolación directa, que habría impreso
+   * «[object Object]» en la tarjeta de lo que falta.
+   */
+  missingSections: Array<{ section: string; reason: string }>;
   warnings: string[];
   // FALTA EN LA API: `id` estable para guardar/comparar zonas, y la geometría resuelta
   // del ámbito. La vista debe conservar el `scope` que envió si necesita repintarlo.

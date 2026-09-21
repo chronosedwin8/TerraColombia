@@ -6,3 +6,4 @@ export * from './context.js';
 export * from './analytics.js';
 export * from './changes.js';
 export * from './tiles.js';
+export * from './area-scope.js';

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { GeoJsonGeometrySchema, BBoxSchema } from './types.js';
-import { MAX_PAGE_SIZE } from './constants.js';
+import { MAX_PAGE_SIZE, PARCEL_CHANGE_TYPES } from './constants.js';
 
 /**
  * DSL de `/parcels/query`. Se valida aquí y se traduce a SQL parametrizado en
@@ -182,9 +182,7 @@ export const ChangeCompareSchema = z.object({
   scope: AreaScopeSchema,
   fromCutDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   toCutDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  changeTypes: z
-    .array(z.enum(['created', 'removed', 'attrs_changed', 'geometry_changed', 'building_added']))
-    .default([]),
+  changeTypes: z.array(z.enum(PARCEL_CHANGE_TYPES)).default([]),
   limit: z.number().int().positive().max(5000).default(500),
 });
 export type ChangeCompare = z.infer<typeof ChangeCompareSchema>;

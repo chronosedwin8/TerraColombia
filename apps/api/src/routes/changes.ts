@@ -2,7 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import { ChangeCompareSchema, CREDIT_COST } from '@terracolombia/shared';
 import { changeSummary, listChangesInArea, listCutDates, listDatasets } from '@terracolombia/db';
 import { envelope, presentDatasets, recordUsage } from '../lib/envelope.js';
-import { resolveAreaScope } from '../services/area-scope.js';
+import { resolveAreaScope } from '@terracolombia/db';
 
 const CHANGE_TYPE_LABEL: Record<string, string> = {
   created: 'Predios nuevos',

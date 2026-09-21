@@ -94,3 +94,22 @@ export const JOB_TERMINAL_STATUSES = ['done', 'failed', 'canceled'] as const;
 export function isJobFinished(status: string): boolean {
   return (JOB_TERMINAL_STATUSES as readonly string[]).includes(status);
 }
+
+/**
+ * Tipos de cambio predial entre dos cortes.
+ *
+ * La restricción `parcel_change_type_chk` de la migración 0004 admite estos seis y la API
+ * tiene etiqueta para los seis, pero el DSL de la petición solo aceptaba cinco: se podía
+ * detectar que una construcción desapareció y no se podía pedir ese filtro. Declararlos aquí
+ * evita que las tres listas vuelvan a separarse.
+ */
+export const PARCEL_CHANGE_TYPES = [
+  'created',
+  'removed',
+  'attrs_changed',
+  'geometry_changed',
+  'building_added',
+  'building_removed',
+] as const;
+
+export type ParcelChangeType = (typeof PARCEL_CHANGE_TYPES)[number];

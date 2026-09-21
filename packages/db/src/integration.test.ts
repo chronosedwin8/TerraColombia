@@ -341,4 +341,66 @@ d('repositorios sobre el municipio de demostración', () => {
       }
     }
   });
+
+  /**
+   * El worker traía su propia versión reducida del resolutor, que solo entendía `polygon` y
+   * `radius`. Una petición con `kind: 'municipality'` se aceptaba con 202 y el trabajo moría
+   * diciendo que el ámbito no era utilizable: analizar un municipio completo funcionaba
+   * cuando el área era pequeña y fallaba cuando era grande, que es cuando hay que encolarlo.
+   * Ahora los dos usan `resolveAreaScope`, y esta prueba comprueba que resuelve los cuatro.
+   */
+  it('resuelve los cuatro ámbitos del DSL, no solo polígono y radio', async () => {
+    const { resolveAreaScope } = await import('./repositories/area-scope.js');
+    const LIMITE = 5000;
+
+    const radio = await resolveAreaScope(
+      { kind: 'radius', center: [-74.771, 10.912], radiusM: 500 },
+      LIMITE,
+    );
+    expect(radio.areaKm2).toBeGreaterThan(0);
+
+    const poligono = await resolveAreaScope(
+      {
+        kind: 'polygon',
+        geometry: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [-74.78, 10.9],
+              [-74.76, 10.9],
+              [-74.76, 10.92],
+              [-74.78, 10.92],
+              [-74.78, 10.9],
+            ],
+          ],
+        },
+      },
+      LIMITE,
+    );
+    expect(poligono.areaKm2).toBeGreaterThan(0);
+
+    // La isócrona se aproxima por distancia y DEBE declararlo: sin ese aviso, el usuario
+    // creería que es un alcance por red vial.
+    const isocrona = await resolveAreaScope(
+      { kind: 'isochrone', center: [-74.771, 10.912], minutes: 10, mode: 'walk' },
+      LIMITE,
+    );
+    expect(isocrona.areaKm2).toBeGreaterThan(0);
+    expect(isocrona.warnings.join(' ')).toMatch(/no es una isócrona por red vial/i);
+
+    // El municipio depende de que su límite esté cargado. Si no lo está, la respuesta
+    // correcta es un error explícito de cobertura, no un ámbito vacío.
+    const tieneLimite = await queryOne<{ n: number }>(sql`
+      SELECT count(*)::int AS n FROM core.municipality WHERE code = ${DEMO_MUNI} AND geom IS NOT NULL
+    `);
+    if ((tieneLimite?.n ?? 0) > 0) {
+      const muni = await resolveAreaScope({ kind: 'municipality', muniCode: DEMO_MUNI }, LIMITE);
+      expect(muni.areaKm2).toBeGreaterThan(0);
+      expect(muni.muniCode).toBe(DEMO_MUNI);
+    } else {
+      await expect(
+        resolveAreaScope({ kind: 'municipality', muniCode: DEMO_MUNI }, LIMITE),
+      ).rejects.toThrow(/límite geográfico/i);
+    }
+  });
 });

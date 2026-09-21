@@ -3,7 +3,7 @@ import { CREDIT_COST, LocationIntelSchema } from '@terracolombia/shared';
 import { getCellsInGeometry, getCoverage, queryParcels } from '@terracolombia/db';
 import { cellToPolygon } from '@terracolombia/geo';
 import { envelope, plainEnvelope, presentDatasets, recordUsage } from '../lib/envelope.js';
-import { resolveAreaScope } from '../services/area-scope.js';
+import { resolveAreaScope } from '@terracolombia/db';
 import { listTemplates, scoreCells, topZones } from '../services/scoring.js';
 import { cellRowToInputs } from '../services/cell-inputs.js';
 

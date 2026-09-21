@@ -75,25 +75,12 @@ const ALL_TYPES: ParcelChangeType[] = [
   'building_removed',
 ];
 
-/**
- * Tipos que el **cuerpo de la petición** admite. Ojo al desajuste: la respuesta puede traer
- * `building_removed`, pero `ChangeCompareSchema.changeTypes` solo acepta estos cinco, así que
- * ese tipo no se puede usar como filtro del servidor (sí como filtro de la tabla ya cargada).
+/*
+ * Los seis tipos se pueden pedir al servidor. El DSL solo aceptaba cinco —`building_removed`
+ * quedaba fuera aunque la base lo guarda y la API lo etiqueta—, así que ese filtro existía
+ * en la tabla pero no en la consulta. Ahora la lista sale de `PARCEL_CHANGE_TYPES`, que es la
+ * misma que valida el DSL.
  */
-type RequestableChangeType = ChangeCompare['changeTypes'][number];
-
-const REQUESTABLE_TYPES: RequestableChangeType[] = [
-  'created',
-  'removed',
-  'attrs_changed',
-  'geometry_changed',
-  'building_added',
-];
-
-function isRequestableType(type: string): type is RequestableChangeType {
-  return (REQUESTABLE_TYPES as string[]).includes(type);
-}
-
 function isKnownType(type: string): type is ParcelChangeType {
   return (ALL_TYPES as string[]).includes(type);
 }
@@ -143,7 +130,7 @@ async function compare(): Promise<void> {
       scope: state.ambito,
       fromCutDate: state.desde,
       toCutDate: state.hasta,
-      changeTypes: state.tipos.filter(isRequestableType),
+      changeTypes: state.tipos.filter(isKnownType),
       limit: 500,
     };
     const response = await compareChanges(body);
@@ -251,7 +238,7 @@ function overlapPct(overlap: number | null): string | null {
             <fieldset>
               <legend class="tc-label mb-1.5">Tipos de cambio (ninguno = todos)</legend>
               <label
-                v-for="type in REQUESTABLE_TYPES"
+                v-for="type in ALL_TYPES"
                 :key="type"
                 class="flex items-center gap-2 py-0.5 text-sm"
               >
@@ -263,10 +250,6 @@ function overlapPct(overlap: number | null): string | null {
                 />
                 {{ CHANGE_LABELS[type] }}
               </label>
-              <p class="mt-1 text-[11px] leading-snug text-slate-500">
-                «{{ CHANGE_LABELS.building_removed }}» no se puede pedir al servidor: la consulta
-                solo admite los tipos de arriba. Si aparecen, podrás filtrarlos en la tabla.
-              </p>
             </fieldset>
 
             <p class="text-xs text-slate-600">

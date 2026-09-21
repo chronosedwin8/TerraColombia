@@ -7,7 +7,7 @@ import {
 } from '@terracolombia/shared';
 import { getPrisma } from '@terracolombia/db';
 import { envelope, presentDatasets, recordUsage } from '../lib/envelope.js';
-import { resolveAreaScope } from '../services/area-scope.js';
+import { resolveAreaScope } from '@terracolombia/db';
 import { analyzeArea } from '../services/area-analysis.js';
 
 export default async function areaRoutes(app: FastifyInstance): Promise<void> {
@@ -70,6 +70,9 @@ export default async function areaRoutes(app: FastifyInstance): Promise<void> {
               sections: parsed.sections,
               cutDate: parsed.cutDate ?? null,
               areaKm2: resolved.areaKm2,
+              // El worker resuelve el ámbito de nuevo y aplica el mismo tope: se le pasa el
+              // del plan con el que se encoló, no el que tenga la cuenta cuando arranque.
+              maxAnalysisAreaKm2: req.auth.entitlements.maxAnalysisAreaKm2,
             } as never,
           },
         });
