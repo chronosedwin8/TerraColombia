@@ -173,6 +173,14 @@ export const PII_EXACT_COLUMNS: readonly string[] = [
   'usuario',
   'usuario_creacion',
   'usuario_modificacion',
+  // `USUARIO_LOG` aparece en las geodatabases catastrales de varios departamentos
+  // (Sucre, Amazonas, Vaupés, Vichada entre otros): es el nombre de quien editó el
+  // registro en el sistema del IGAC. Identifica a una persona concreta —un funcionario—,
+  // así que se descarta en la ingesta y queda registrado en `meta.pii_discard_log` con el
+  // nombre de la columna, nunca con su contenido.
+  'usuario_log',
+  'usuario_log_creacion',
+  'usuario_edicion',
   'created_user',
   'last_edited_user',
   'editor',
