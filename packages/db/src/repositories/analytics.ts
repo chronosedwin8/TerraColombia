@@ -34,6 +34,12 @@ export interface H3CellRow {
   capability_mix: Record<string, number>;
   vocation_mix: Record<string, number>;
   source_snapshots: Record<string, number>;
+  /**
+   * Cuándo se calcularon los agregados de esta celda. `null` = la celda existe pero nunca
+   * se agregó, así que sus ceros no son mediciones. Quien lee la celda necesita poder
+   * distinguir «contamos y no hay» de «no hemos contado».
+   */
+  computed_at: string | null;
 }
 
 export async function getCellsInGeometry(

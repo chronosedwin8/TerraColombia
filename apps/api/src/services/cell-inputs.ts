@@ -12,6 +12,14 @@ import type { IndicatorInputs } from './indicator-inputs.js';
  * Regla que no se rompe: lo que la celda no tiene queda en `null`, nunca en 0. El motor
  * reporta el faltante y baja la confianza; un 0 se leería como "hay cero comercios aquí",
  * que es una afirmación distinta de "no lo sabemos".
+ *
+ * Con un matiz que faltaba y que dejaba inservible «¿Dónde abro?»: en una celda YA AGREGADA,
+ * que una categoría de POI no aparezca en el conteo SÍ significa cero. El paso `aggregate`
+ * recorre todos los POIs activos del municipio y escribe el reparto de cada celda; en
+ * Palmira, 106 de 1.263 celdas tienen comercio y las demás quedan en `{}` porque no hay
+ * ninguno, no porque nadie haya mirado. Leer ese `{}` como "no lo sabemos" hundía la
+ * confianza al 40 %, por debajo del mínimo del 50 %, y TODAS las celdas salían sin puntaje:
+ * el mapa de calor no proponía ni una sola zona. Por eso aquí se distingue con `computed_at`.
  */
 export function cellRowToInputs(row: H3CellRow, resolution: number): IndicatorInputs {
   const areaKm2 = CELL_AREA_KM2[resolution] ?? CELL_AREA_KM2[8]!;
@@ -20,11 +28,20 @@ export function cellRowToInputs(row: H3CellRow, resolution: number): IndicatorIn
   const capability = (row.capability_mix ?? {}) as Record<string, number>;
   const vocation = (row.vocation_mix ?? {}) as Record<string, number>;
 
+  /** La celda pasó por el paso `aggregate`: sus conteos son mediciones, y el cero cuenta. */
+  const counted = row.computed_at !== null;
+
   const commerce =
-    poi.comercio === undefined && poi.alimentacion === undefined && poi.servicios === undefined
-      ? null
-      : (poi.comercio ?? 0) + (poi.alimentacion ?? 0) + (poi.servicios ?? 0);
-  const poiTotal = Object.keys(poi).length > 0 ? Object.values(poi).reduce((a, b) => a + b, 0) : null;
+    counted ||
+    poi.comercio !== undefined ||
+    poi.alimentacion !== undefined ||
+    poi.servicios !== undefined
+      ? (poi.comercio ?? 0) + (poi.alimentacion ?? 0) + (poi.servicios ?? 0)
+      : null;
+  const poiTotal =
+    counted || Object.keys(poi).length > 0
+      ? Object.values(poi).reduce((a, b) => a + b, 0)
+      : null;
 
   /** Clase agrológica dominante: la de mayor fracción dentro de la celda. */
   const dominantCapability = dominantKey(capability);
@@ -69,9 +86,9 @@ export function cellRowToInputs(row: H3CellRow, resolution: number): IndicatorIn
 
     poi_commerce_count: commerce,
     poi_tourism_count:
-      poi.turismo === undefined && poi.alojamiento === undefined
-        ? null
-        : (poi.turismo ?? 0) + (poi.alojamiento ?? 0),
+      counted || poi.turismo !== undefined || poi.alojamiento !== undefined
+        ? (poi.turismo ?? 0) + (poi.alojamiento ?? 0)
+        : null,
     poi_total_count: poiTotal,
     school_count: row.n_schools,
     school_enrollment: row.school_enrollment,

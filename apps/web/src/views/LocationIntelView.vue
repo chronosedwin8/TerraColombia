@@ -26,6 +26,7 @@ import {
 } from '@/composables/useUrlState';
 import type { LocationIntelResult, ScoredCell } from '@/api/types';
 import MapView from '@/map/MapView.vue';
+import { useMapStore } from '@/stores/map';
 import JobProgress from '@/components/JobProgress.vue';
 import FactorList from '@/components/FactorList.vue';
 import BaseCard from '@/components/ui/BaseCard.vue';
@@ -41,6 +42,7 @@ import ResultActionBar from '@/components/ui/ResultActionBar.vue';
 import SyntheticDataBanner from '@/components/ui/SyntheticDataBanner.vue';
 
 const intel = useIntelStore();
+const mapStore = useMapStore();
 const job = useJob<LocationIntelResult>();
 
 /** Plantilla, pesos, resolución y ámbito: todo en la URL, todo compartible. */
@@ -86,12 +88,33 @@ function onWeightChange(key: string, value: number): void {
   if (intel.result) recalculate.run();
 }
 
+function setScope(scope: AreaScope | null): void {
+  intel.scope = scope;
+  state.ambito = scope;
+  // Un error de un intento anterior no puede seguir en pantalla cuando el usuario ya cambió
+  // el ámbito: se quedaba fijo («Tu plan no incluye esta función») aunque la causa hubiera
+  // desaparecido, y parecía que la herramienta estaba rota.
+  intel.error = null;
+}
+
 function onDrawChange(collection: GeoJsonFeatureCollection | null): void {
   const geometry = collection?.features[0]?.geometry ?? null;
   drawnGeometry.value = geometry;
-  const scope: AreaScope | null = geometry ? { kind: 'polygon', geometry } : null;
-  intel.scope = scope;
-  state.ambito = scope;
+  setScope(geometry ? { kind: 'polygon', geometry } : null);
+}
+
+/**
+ * Modo «Todo un municipio»: se toma el municipio sobre el que se hizo clic.
+ *
+ * Faltaba por completo en esta pantalla. El botón existía y se encendía, pero nada
+ * escuchaba el clic en el mapa, así que el ámbito nunca se fijaba y «Calcular el mapa de
+ * calor» se quedaba deshabilitado para siempre. El analizador de zona sí lo tenía.
+ */
+function onFeatureClick(hit: { layer: string; id: string | number } | null): void {
+  if (!hit || mapStore.drawMode !== 'municipality') return;
+  if (hit.layer !== 'municipality' || typeof hit.id !== 'string') return;
+  drawnGeometry.value = null;
+  setScope({ kind: 'municipality', muniCode: hit.id });
 }
 
 async function run(): Promise<void> {
@@ -266,7 +289,19 @@ const appliedWeights = computed<Record<string, number>>(
           </BaseButton>
 
           <p v-if="!intel.scope" class="mt-1 text-xs text-amber-800">
-            Dibuja primero la zona de búsqueda en el mapa.
+            {{
+              mapStore.drawMode === 'municipality'
+                ? 'Haz clic en el mapa sobre el municipio que quieres analizar.'
+                : 'Dibuja primero la zona de búsqueda en el mapa.'
+            }}
+          </p>
+          <p v-else class="mt-1 text-xs text-slate-600">
+            Ámbito:
+            {{
+              intel.scope.kind === 'municipality'
+                ? `municipio ${intel.scope.muniCode}`
+                : 'el polígono dibujado'
+            }}.
           </p>
 
           <p v-if="intel.error" class="mt-2 text-sm text-rose-800" role="alert">
@@ -293,6 +328,7 @@ const appliedWeights = computed<Record<string, number>>(
             :heat-cells="cells"
             :overlay="overlay"
             @draw-change="onDrawChange"
+            @feature-click="onFeatureClick"
           />
         </div>
 
