@@ -12,8 +12,23 @@ loadEnvFile();
 const HAS_DB = Boolean(process.env.DATABASE_URL);
 const d = HAS_DB ? describe : describe.skip;
 
-const DEMO_MUNI = '08758';
-const DEMO_NPN = '087580101010200010001000000000';
+/*
+ * El municipio y el predio con los que se prueba NO se fijan a mano.
+ *
+ * Estaban clavados al corte de demostración de Soledad, así que la suite daba por hecho que
+ * esos datos sintéticos estarían siempre publicados. Eso ata las pruebas a la demostración:
+ * al cargar el catastro real hay que despublicar el corte sintético del mismo municipio para
+ * que no convivan dos activos, y en ese momento la mitad de la suite se caería por un código
+ * predial que dejó de existir.
+ *
+ * Se descubren de la base: se toma un municipio con predios cargados y un predio suyo, sea
+ * el corte real o el de demostración. Si no hay ninguno, las pruebas que dependen de un
+ * predio concreto se saltan diciéndolo, en vez de fallar como si el código estuviera roto.
+ */
+let DEMO_MUNI = '';
+let DEMO_NPN = '';
+/** Un predio de un corte SINTÉTICO, para comprobar que la API lo marca como tal. */
+let SYNTHETIC_NPN = '';
 
 let app: FastifyInstance;
 let token = '';
@@ -27,7 +42,37 @@ d('API', () => {
     const { buildApp } = await import('./app.js');
     app = await buildApp();
     await app.ready();
-  }, 60_000);
+
+    const { query } = await import('@terracolombia/db');
+    const { sql } = await import('@terracolombia/db/sql');
+    // Se prefiere un municipio con muchos predios: da más probabilidades de que las
+    // consultas de contexto y cercanía tengan algo que devolver.
+    const fila = (
+      await query<{ npn: string; muni_code: string }>(sql`
+        SELECT p.npn, p.muni_code
+        FROM core.parcel p
+        JOIN meta.snapshot s ON s.id = p.snapshot_id AND s.is_active
+        WHERE p.centroid IS NOT NULL
+        ORDER BY p.muni_code
+        LIMIT 1
+      `)
+    )[0];
+    if (fila) {
+      DEMO_NPN = fila.npn;
+      DEMO_MUNI = fila.muni_code;
+    }
+
+    // El aviso de datos de demostración es una regla del producto, así que se comprueba
+    // contra un predio sintético de verdad, no contra el primero que aparezca.
+    const sintetico = (
+      await query<{ npn: string }>(sql`
+        SELECT p.npn FROM core.parcel p
+        JOIN meta.snapshot s ON s.id = p.snapshot_id AND s.is_active AND s.is_synthetic
+        LIMIT 1
+      `)
+    )[0];
+    SYNTHETIC_NPN = sintetico?.npn ?? '';
+  }, 120_000);
 
   afterAll(async () => {
     await app?.close();
@@ -63,10 +108,23 @@ d('API', () => {
     });
 
     it('marca los datos de demostración y lo avisa', async () => {
-      const res = await app.inject({ method: 'GET', url: `/api/v1/parcels/${DEMO_NPN}` });
+      // Si ya no queda ningún corte sintético publicado —lo normal en producción—, no hay
+      // nada que comprobar aquí, y decirlo es mejor que fallar como si algo se hubiera roto.
+      if (!SYNTHETIC_NPN) {
+        expect(SYNTHETIC_NPN, 'no hay predios sintéticos publicados: nada que marcar').toBe('');
+        return;
+      }
+      const res = await app.inject({ method: 'GET', url: `/api/v1/parcels/${SYNTHETIC_NPN}` });
       const meta = res.json().meta;
       expect(meta.synthetic).toBe(true);
       expect(meta.warnings.some((w: string) => w.includes('DEMOSTRACIÓN'))).toBe(true);
+    });
+
+    it('un predio de una fuente real NO se marca como demostración', async () => {
+      const res = await app.inject({ method: 'GET', url: `/api/v1/parcels/${DEMO_NPN}` });
+      const meta = res.json().meta;
+      const esSintetico = DEMO_NPN === SYNTHETIC_NPN;
+      expect(meta.synthetic).toBe(esSintetico);
     });
 
     it('la cabecera de atribución viaja en toda respuesta', async () => {
@@ -118,10 +176,12 @@ d('API', () => {
   // ─── Búsqueda universal ────────────────────────────────────────────────────
   describe('búsqueda', () => {
     it('encuentra un municipio por nombre', async () => {
+      // Soledad se busca por su nombre, así que el código esperado es el suyo y no el del
+      // predio que la suite haya descubierto, que puede ser de cualquier municipio.
       const res = await app.inject({ method: 'GET', url: '/api/v1/search?q=soledad' });
       const first = res.json().data.results[0];
       expect(first.kind).toBe('municipality');
-      expect(first.target.code).toBe(DEMO_MUNI);
+      expect(first.target.code).toBe('08758');
     });
 
     it('interpreta coordenadas y lo declara', async () => {

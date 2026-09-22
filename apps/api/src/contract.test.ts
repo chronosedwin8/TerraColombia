@@ -20,6 +20,26 @@ const d = HAS_DB ? describe : describe.skip;
 let app: FastifyInstance;
 let token = '';
 let projectId = '';
+/**
+ * Predio con el que se prueban las rutas que piden uno. Se descubre de la base en vez de
+ * fijarlo: estaba clavado al corte de demostración de Soledad, así que despublicar esos
+ * datos sintéticos —lo que hay que hacer al cargar el catastro real del mismo municipio—
+ * tumbaba la suite por un código predial que ya no existía.
+ *
+ * La tabla de rutas se construye al cargar el módulo, antes de que `beforeAll` pueda
+ * consultar la base, así que las rutas llevan el marcador `{npn}` y se sustituye al
+ * momento de la petición.
+ */
+let NPN = '';
+
+/** Sustituye el marcador `{npn}` en una ruta o en un cuerpo de petición. */
+function conNpn<T>(valor: T): T {
+  if (typeof valor === 'string') return valor.replace('{npn}', NPN) as unknown as T;
+  if (valor && typeof valor === 'object') {
+    return JSON.parse(JSON.stringify(valor).replaceAll('{npn}', NPN)) as T;
+  }
+  return valor;
+}
 
 /** Rutas que llama el frontend, con el método y si necesitan sesión. */
 const WEB_ROUTES: Array<{ method: 'GET' | 'POST' | 'PATCH' | 'DELETE'; path: string; auth: boolean; body?: unknown }> = [
@@ -27,9 +47,9 @@ const WEB_ROUTES: Array<{ method: 'GET' | 'POST' | 'PATCH' | 'DELETE'; path: str
   { method: 'GET', path: '/api/v1/layers', auth: false },
   { method: 'GET', path: '/api/v1/glossary', auth: false },
   { method: 'GET', path: '/api/v1/municipalities/08758', auth: false },
-  { method: 'GET', path: '/api/v1/parcels/087580101010200010001000000000', auth: false },
-  { method: 'GET', path: '/api/v1/parcels/087580101010200010001000000000/context', auth: false },
-  { method: 'GET', path: '/api/v1/parcels/087580101010200010001000000000/history', auth: false },
+  { method: 'GET', path: '/api/v1/parcels/{npn}', auth: false },
+  { method: 'GET', path: '/api/v1/parcels/{npn}/context', auth: false },
+  { method: 'GET', path: '/api/v1/parcels/{npn}/history', auth: false },
   { method: 'GET', path: '/api/v1/nearby?lat=10.912&lng=-74.771&radius=500', auth: false },
   { method: 'GET', path: '/api/v1/indicators/08758', auth: false },
   { method: 'GET', path: '/api/v1/location-intel/templates', auth: false },
@@ -59,7 +79,7 @@ const WEB_ROUTES: Array<{ method: 'GET' | 'POST' | 'PATCH' | 'DELETE'; path: str
     path: '/api/v1/suitability',
     auth: true,
     body: {
-      target: { kind: 'parcel', npn: '087580101010200010001000000000' },
+      target: { kind: 'parcel', npn: '{npn}' },
       use: 'vivienda_unifamiliar',
     },
   },
@@ -120,6 +140,17 @@ d('contrato entre la web y la API', () => {
     });
     token = relogin.json().data.accessToken;
 
+    const encontrado = (
+      await query<{ npn: string }>(sql`
+        SELECT p.npn FROM core.parcel p
+        JOIN meta.snapshot s ON s.id = p.snapshot_id AND s.is_active
+        WHERE p.centroid IS NOT NULL
+        ORDER BY p.muni_code
+        LIMIT 1
+      `)
+    )[0];
+    if (encontrado) NPN = encontrado.npn;
+
     const proj = await app.inject({
       method: 'POST',
       url: '/api/v1/projects',
@@ -140,9 +171,9 @@ d('contrato entre la web y la API', () => {
     it(`${route.method} ${route.path.split('?')[0]} existe`, async () => {
       const res = await app.inject({
         method: route.method,
-        url: route.path,
+        url: conNpn(route.path),
         headers: route.auth ? { authorization: `Bearer ${token}` } : {},
-        ...(route.body ? { payload: route.body } : {}),
+        ...(route.body ? { payload: conNpn(route.body) } : {}),
       });
 
       // 404 con el mensaje del manejador de "ruta no encontrada" es el fallo que se busca.
@@ -167,7 +198,7 @@ d('contrato entre la web y la API', () => {
       method: 'POST',
       url: `/api/v1/projects/${projectId}/items`,
       headers: { authorization: `Bearer ${token}` },
-      payload: { kind: 'parcel', npn: '087580101010200010001000000000', label: 'Prueba' },
+      payload: { kind: 'parcel', npn: NPN, label: 'Prueba' },
     });
     expect(res.json()?.error?.message ?? '').not.toMatch(/No existe la ruta/);
   });
@@ -267,7 +298,7 @@ d('contrato entre la web y la API', () => {
     {
       nombre: 'ficha de predio',
       method: 'GET',
-      path: '/api/v1/parcels/087580101010200010001000000000',
+      path: '/api/v1/parcels/{npn}',
       auth: false,
       pantalla: 'ParcelView',
       campos: [
@@ -280,7 +311,7 @@ d('contrato entre la web y la API', () => {
     {
       nombre: 'historial del predio',
       method: 'GET',
-      path: '/api/v1/parcels/087580101010200010001000000000/history',
+      path: '/api/v1/parcels/{npn}/history',
       auth: false,
       pantalla: 'ParcelView, sección de historial',
       campos: ['npn', 'cuts', 'changes', 'emptyReason'],
@@ -314,7 +345,7 @@ d('contrato entre la web y la API', () => {
       method: 'POST',
       path: '/api/v1/suitability',
       auth: true,
-      body: { target: { kind: 'parcel', npn: '087580101010200010001000000000' }, use: 'vivienda_unifamiliar' },
+      body: { target: { kind: 'parcel', npn: '{npn}' }, use: 'vivienda_unifamiliar' },
       pantalla: 'SuitabilityView',
       campos: ['useLabel', 'verdict', 'verdictLabel', 'score', 'factors[].indicator', 'factors[].label', 'factors[].score', 'blockers', 'cautions', 'missing', 'disclaimer'],
     },
@@ -350,9 +381,9 @@ d('contrato entre la web y la API', () => {
     it(`${caso.nombre}: trae los campos que lee ${caso.pantalla}`, async () => {
       const res = await app.inject({
         method: caso.method,
-        url: caso.path,
+        url: conNpn(caso.path),
         headers: caso.auth ? { authorization: `Bearer ${token}` } : {},
-        ...(caso.body ? { payload: caso.body } : {}),
+        ...(caso.body ? { payload: conNpn(caso.body) } : {}),
       });
       expect(res.statusCode, `${caso.path} respondió ${res.statusCode}: ${res.payload.slice(0, 200)}`)
         .toBeLessThan(400);
