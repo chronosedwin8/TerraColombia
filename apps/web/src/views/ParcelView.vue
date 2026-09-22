@@ -161,7 +161,7 @@ const rawEntries = computed(() => Object.entries(parcel.detail?.rawAttributes ??
   <div class="mx-auto flex max-w-[110rem] flex-col gap-3 p-3 lg:flex-row">
     <!-- Mapa con el predio resaltado. -->
     <div class="h-72 shrink-0 lg:sticky lg:top-3 lg:h-[calc(100dvh-5rem)] lg:w-1/2">
-      <MapView height="100%" :overlay="overlay" show-legend />
+      <MapView height="100%" :overlay="overlay" fit-overlay show-legend />
     </div>
 
     <div class="min-w-0 flex-1 space-y-3">

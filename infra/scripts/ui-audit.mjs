@@ -144,5 +144,13 @@ await browser.close();
 const agrupado = {};
 for (const p of problemas) { const k = `${p.kind} · ${p.text}`; agrupado[k] = (agrupado[k] ?? 0) + 1; }
 console.log(`\n══ ${problemas.length} problemas (${Object.keys(agrupado).length} distintos) ══`);
+const n429 = problemas.filter((p) => p.kind === 'http429').length;
+if (n429 > 0) {
+  console.log(
+    `Nota: ${n429} de ellos son 429. El recorrido abre 20 pantallas en un minuto, mas rapido`,
+  );
+  console.log('que cualquier persona, asi que agota su propia cuota. No cuenta como fallo salvo');
+  console.log('que aparezca ya en las primeras pantallas.');
+}
 for (const [k, n] of Object.entries(agrupado).sort((a, b) => b[1] - a[1])) console.log(`${String(n).padStart(3)}× ${k}`);
 writeFileSync(path.join(OUT, 'problemas.json'), JSON.stringify(problemas, null, 2));

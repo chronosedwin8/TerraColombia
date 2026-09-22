@@ -43,7 +43,14 @@ const props = withDefaults(
     heatCells?: ScoredCell[];
     /** Geometrías a resaltar: predio seleccionado, zona dibujada, cambios. */
     overlay?: GeoJsonFeatureCollection | null;
-    /** Encuadrar el mapa en `overlay` cuando cambia (ficha de predio). */
+    /**
+     * Encuadrar el mapa en `overlay` cuando cambia. Solo lo pide la ficha del predio, donde
+     * la geometría llega una vez y hay que ir a verla.
+     *
+     * NUNCA en las vistas donde el usuario dibuja: ahí el `overlay` ES la figura en curso y
+     * cambia con cada vértice, así que encuadrar sobre ella daba un zoom que se realimentaba
+     * sin fin mientras se dibujaba. Por eso viene apagado por omisión.
+     */
     fitOverlay?: boolean;
     /** Altura del contenedor. El mapa necesita altura explícita. */
     height?: string;
@@ -55,7 +62,7 @@ const props = withDefaults(
     drawModes: () => ['polygon', 'circle', 'municipality'],
     heatCells: () => [],
     overlay: null,
-    fitOverlay: true,
+    fitOverlay: false,
     height: '100%',
   },
 );
@@ -164,13 +171,18 @@ function applyOverlay(): void {
 /**
  * Encuadra el mapa en la geometría auxiliar. La ficha pintaba el predio pero dejaba la
  * vista en todo el país: un polígono de 470 m² a escala nacional es invisible, y el usuario
- * veía «el mapa no muestra mi predio». Se encuadra una vez por geometría, no en cada
- * repintado, para no pelear con quien esté navegando.
+ * veía «el mapa no muestra mi predio».
+ *
+ * Se encuadra una vez por geometría, y la identidad es su envolvente, no la referencia del
+ * objeto: las vistas envuelven la geometría en una `FeatureCollection` calculada, que es un
+ * objeto nuevo en cada repintado aunque la figura sea la misma. Comparando referencias, el
+ * mapa se reencuadraba en cada repintado y peleaba con quien estuviera navegando.
  */
-let lastFittedOverlay: GeoJsonFeatureCollection | null = null;
+let lastFittedKey: string | null = null;
 function fitToOverlay(instance: MapLibreMap, data: GeoJsonFeatureCollection): void {
-  if (!props.fitOverlay || data === lastFittedOverlay) return;
-  lastFittedOverlay = data;
+  // Mientras se dibuja, el usuario manda sobre la vista: mover la cámara bajo su cursor
+  // cambia dónde cae el siguiente vértice.
+  if (!props.fitOverlay || mapStore.drawMode !== 'none') return;
   let box: BBox | null = null;
   for (const f of data.features) {
     if (!f.geometry) continue;
@@ -180,6 +192,9 @@ function fitToOverlay(instance: MapLibreMap, data: GeoJsonFeatureCollection): vo
       : b;
   }
   if (!box) return;
+  const key = box.map((n) => n.toFixed(6)).join(',');
+  if (key === lastFittedKey) return;
+  lastFittedKey = key;
   instance.fitBounds([[box[0], box[1]], [box[2], box[3]]], { padding: 48, maxZoom: 17, duration: 600 });
 }
 

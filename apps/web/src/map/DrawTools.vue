@@ -16,6 +16,7 @@ import type { GeoJsonGeometry } from '@terracolombia/shared';
 import { approxAreaKm2 } from '@terracolombia/geo';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import type { DrawMode } from './types';
+import { pickDrawnGeometry, type DrawnFeature } from './draw-geometry';
 
 const props = withDefaults(
   defineProps<{
@@ -72,8 +73,10 @@ async function ensureDraw(): Promise<void> {
     });
 
     instance.start();
-    instance.on('finish', () => {
-      publishSnapshot(instance);
+    // `finish` dice QUÉ figura se terminó: es la única señal fiable de cuál quiere el
+    // usuario cuando hay varias en el lienzo.
+    instance.on('finish', (id: string | number) => {
+      publishSnapshot(instance, id);
     });
     instance.on('change', () => {
       publishSnapshot(instance);
@@ -86,12 +89,14 @@ async function ensureDraw(): Promise<void> {
   }
 }
 
-/** Toma la última figura dibujada y la publica como geometría GeoJSON. */
+/**
+ * Publica la figura dibujada como geometría GeoJSON. Cuál es «la figura» no es obvio: lo
+ * decide `pickDrawnGeometry`, con el porqué documentado allí.
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- el snapshot de terra-draw es un arreglo de Feature sin tipo exportado
-function publishSnapshot(instance: any): void {
-  const features: Array<{ geometry?: GeoJsonGeometry }> = instance.getSnapshot() ?? [];
-  const last = features.at(-1);
-  const geometry = last?.geometry ?? null;
+function publishSnapshot(instance: any, finishedId?: string | number): void {
+  const features: DrawnFeature[] = instance.getSnapshot() ?? [];
+  const geometry = pickDrawnGeometry(features, finishedId);
 
   if (!geometry) {
     areaKm2.value = null;
