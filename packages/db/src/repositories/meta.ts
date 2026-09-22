@@ -287,7 +287,12 @@ export async function recordPiiDiscard(input: {
   datasetId: string;
   sourceLayer: string | null;
   columnName: string;
-  reason: 'blocklist_exact' | 'blocklist_pattern' | 'content_heuristic';
+  /**
+   * `operational_audit`: dato personal de auditoría —quién editó el registro— que se
+   * descarta igual que el resto pero no detiene la publicación, porque identifica al
+   * funcionario y no al titular del predio.
+   */
+  reason: 'blocklist_exact' | 'blocklist_pattern' | 'content_heuristic' | 'operational_audit';
   occurrences: number;
 }): Promise<void> {
   await execute(sql`

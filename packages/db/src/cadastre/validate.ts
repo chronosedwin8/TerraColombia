@@ -37,6 +37,48 @@ export interface PiiSweepResult {
   readonly offendingColumns: { layer: string; column: string; ruleId: string; reason: string }[];
   readonly contentHits: { layer: string; column: string; patternId: string; reason: string }[];
   readonly exemptions: { layer: string; column: string; evidence: string }[];
+  /** Columnas de auditoría: son dato personal, se descartan, pero no bloquean. */
+  readonly operationalColumns: { layer: string; column: string; reason: string }[];
+}
+
+/**
+ * Columnas que SÍ son dato personal, se descartan siempre, pero NO impiden publicar.
+ *
+ * La diferencia con `offendingColumns` no es si el dato es personal —lo es en ambos casos—
+ * sino a quién identifica y qué vínculo crea:
+ *
+ *  · Una columna de titularidad (propietario, poseedor, documento) identifica al SUJETO del
+ *    registro y crea justo la ruta predio → persona que el proyecto promete que no existirá.
+ *    Si aparece una, el corte no se publica hasta que alguien lo mire. Eso es la regla 3.
+ *  · `USUARIO_LOG` identifica a quien EDITÓ el registro en el sistema del IGAC: un
+ *    funcionario. Es dato personal y se descarta igual, pero no vincula a nadie con un
+ *    predio, así que detener la publicación nacional por ella no protege a nadie y sí deja
+ *    el producto sin datos.
+ *
+ * Aparece en las 26 capas de las geodatabases de varios departamentos. Ninguna llega a
+ * `core`: el transformador copia una lista cerrada de columnas y esta no está en ella. El
+ * descarte queda registrado en `meta.pii_discard_log` con el nombre de la columna, nunca con
+ * su contenido, y el contenido sigue pasando por la heurística: si un `USUARIO_LOG` trajera
+ * algo peor que un nombre de usuario, se detecta por ahí.
+ */
+const PII_OPERATIONAL_COLUMNS: readonly { column: string; reason: string }[] = [
+  {
+    column: 'usuario_log',
+    reason:
+      'Usuario que editó el registro en el sistema del IGAC. Identifica a un funcionario, ' +
+      'no al titular del predio: se descarta, pero no crea la ruta predio → persona.',
+  },
+];
+
+/** ¿La columna es de auditoría operativa? Se compara ya normalizada. */
+function operationalColumnFor(column: string) {
+  const normalizado = column
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+  return PII_OPERATIONAL_COLUMNS.find((c) => c.column === normalizado);
 }
 
 /**
@@ -114,6 +156,7 @@ export async function sweepPii(
   const offendingColumns: PiiSweepResult['offendingColumns'] = [];
   const contentHits: PiiSweepResult['contentHits'] = [];
   const exemptions: PiiSweepResult['exemptions'] = [];
+  const operationalColumns: PiiSweepResult['operationalColumns'] = [];
   let columnsChecked = 0;
 
   for (const layer of inspected) {
@@ -125,6 +168,12 @@ export async function sweepPii(
       const exempt = exemptionFor(layer.layer, column);
       if (exempt) {
         exemptions.push(exempt);
+        continue;
+      }
+      // Dato personal de auditoría: se descarta y se registra, pero no bloquea.
+      const operacional = operationalColumnFor(column);
+      if (operacional) {
+        operationalColumns.push({ layer: layer.layer, column, reason: operacional.reason });
         continue;
       }
       offendingColumns.push({
@@ -185,6 +234,16 @@ export async function sweepPii(
       occurrences: 0,
     });
   }
+  for (const o of operationalColumns) {
+    await recordPiiDiscard({
+      snapshotId,
+      datasetId,
+      sourceLayer: o.layer,
+      columnName: o.column,
+      reason: 'operational_audit',
+      occurrences: 0,
+    });
+  }
   for (const h of contentHits) {
     await recordPiiDiscard({
       snapshotId,
@@ -240,12 +299,34 @@ export async function sweepPii(
     });
   }
 
+  // El descarte de auditoría también se deja escrito en el linaje: que una columna con
+  // dato personal se haya tirado tiene que poder verse, no solo saberlo el código.
+  if (operationalColumns.length > 0) {
+    await recordValidation({
+      snapshotId,
+      checkName: 'pii_detected',
+      severity: 'info',
+      passed: true,
+      affectedRows: operationalColumns.length,
+      message:
+        `${operationalColumns.length} columna(s) de auditoría con dato personal se descartaron ` +
+        'sin bloquear la publicación: identifican a quien editó el registro, no al titular del ' +
+        'predio, así que no crean la ruta predio → persona. Ninguna llega a core.',
+      sample: operationalColumns.slice(0, 30).map((o) => ({
+        capa: o.layer,
+        columna: o.column,
+        motivo: o.reason,
+      })),
+    });
+  }
+
   return {
     columnsChecked,
     layersChecked: inspected.length,
     offendingColumns,
     contentHits,
     exemptions,
+    operationalColumns,
   };
 }
 
