@@ -18,14 +18,8 @@
  * activo se anuncia al lector de pantalla.
  */
 import { computed, nextTick, ref, watch } from 'vue';
-
-export interface PlaceOption {
-  /** Código DIVIPOLA: dos dígitos para departamento, cinco para municipio. */
-  code: string;
-  name: string;
-  /** Segunda línea: el departamento del municipio, o su región. */
-  context?: string | null;
-}
+import { searchPlaces, type PlaceOption } from './place-search';
+export type { PlaceOption };
 
 const props = withDefaults(
   defineProps<{
@@ -66,22 +60,7 @@ const selected = computed(() => props.options.find((o) => o.code === props.model
  * Se busca sin tildes y sin mayúsculas: en Colombia «Chía», «Chia» y «CHIA» tienen que
  * encontrar lo mismo, y nadie escribe las tildes en un buscador.
  */
-function fold(text: string): string {
-  return text
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .trim();
-}
-
-const filtered = computed(() => {
-  const q = fold(query.value);
-  if (q === '') return props.options.slice(0, 80);
-  // También se busca por código: quien SÍ se lo sabe no tiene que escribir el nombre.
-  return props.options
-    .filter((o) => fold(o.name).includes(q) || o.code.startsWith(q))
-    .slice(0, 80);
-});
+const filtered = computed(() => searchPlaces(props.options, query.value));
 
 /** Lo que se ve en el campo cuando está cerrado: el nombre elegido, no el código. */
 const displayValue = computed(() => {

@@ -5,15 +5,19 @@
  * Indicadores agregados, puesto nacional y series por periodo. Cada indicador trae su fórmula
  * y sus datasets: un ranking sin fórmula visible es una opinión disfrazada de dato.
  */
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, shallowRef, watch } from 'vue';
 import type { EChartsOption } from 'echarts';
 import { AppError, MESSAGES, type ResponseMeta } from '@terracolombia/shared';
 import { getIndicators } from '@/api/indicators';
-import { getMunicipality } from '@/api/municipalities';
+import { getMunicipality, listDepartments, listMunicipalities } from '@/api/municipalities';
 import { emptyMeta } from '@/api/client';
 import { stringCodec, useUrlState } from '@/composables/useUrlState';
-import type { MunicipalIndicators, MunicipalityDetail, SearchResultItem } from '@/api/types';
-import SearchBox from '@/components/SearchBox.vue';
+import type {
+  MunicipalIndicators,
+  MunicipalityDetail,
+  MunicipalityListItem,
+} from '@/api/types';
+import PlaceSelect, { type PlaceOption } from '@/components/ui/PlaceSelect.vue';
 import ChartCard from '@/components/ChartCard.vue';
 import BaseCard from '@/components/ui/BaseCard.vue';
 import BaseBadge from '@/components/ui/BaseBadge.vue';
@@ -33,6 +37,19 @@ const { state, shareUrl } = useUrlState({
   municipio: { default: '', codec: stringCodec },
 });
 
+/*
+ * Las listas completas se traen una vez al abrir la pantalla: son 33 departamentos y 1.122
+ * municipios, pesan poco y permiten buscar por nombre sin ir al servidor en cada tecla.
+ *
+ * Antes aquí había un campo de texto que pedía «nombre o código DIVIPOLA». Nadie se sabe el
+ * código de su municipio, y escribir el nombre obligaba a acertar la tilde y la grafía
+ * oficial («Santa Cruz de Mompox», no «Mompós»). Ahora se elige de una lista.
+ */
+const departamentos = shallowRef<PlaceOption[]>([]);
+const municipios = shallowRef<MunicipalityListItem[]>([]);
+const errorListas = ref<string | null>(null);
+const departamentoElegido = ref('');
+
 const indicators = ref<MunicipalIndicators | null>(null);
 const indicatorsMeta = ref<ResponseMeta>(emptyMeta());
 const municipality = ref<MunicipalityDetail | null>(null);
@@ -49,6 +66,40 @@ const activeCode = computed<string | null>(() => {
   const fromPath = props.muniCode ?? '';
   if (fromPath.length === 5) return fromPath;
   return state.municipio.length === 5 ? state.municipio : null;
+});
+
+onMounted(async () => {
+  try {
+    const [deps, munis] = await Promise.all([listDepartments(), listMunicipalities()]);
+    departamentos.value = deps.data.map((d) => ({ code: d.code, name: d.name, context: d.region }));
+    municipios.value = munis.data;
+  } catch {
+    errorListas.value =
+      'No pudimos cargar la lista de municipios. Puedes abrir uno por su enlace directo.';
+  }
+});
+
+const opcionesDepartamento = computed<PlaceOption[]>(() => departamentos.value);
+
+/** Al elegir departamento, el selector de municipio se acota a los suyos. */
+const opcionesMunicipio = computed<PlaceOption[]>(() =>
+  municipios.value
+    .filter((m) => departamentoElegido.value === '' || m.deptCode === departamentoElegido.value)
+    .map((m) => ({
+      code: m.code,
+      name: m.name,
+      context: departamentoElegido.value === '' ? m.deptName : null,
+    })),
+);
+
+/** El municipio elegido manda; se escribe en la URL para que la vista sea compartible. */
+const municipioElegido = computed({
+  get: () => activeCode.value ?? '',
+  set: (code: string) => {
+    state.municipio = code;
+    // Elegir un municipio de otro departamento deja el selector de arriba coherente.
+    if (code.length === 5) departamentoElegido.value = code.slice(0, 2);
+  },
 });
 
 async function load(code: string): Promise<void> {
@@ -75,13 +126,6 @@ watch(
   },
   { immediate: true },
 );
-
-// El resultado trae un `target` discriminado, no un campo `id`: leerlo como antes dejaba
-// el código en `undefined` y elegir un municipio en el buscador no hacía nada.
-function onSelect(result: SearchResultItem): void {
-  if (result.target.type !== 'municipality') return;
-  state.municipio = result.target.code;
-}
 
 /** Serie temporal de un indicador. Los huecos se dejan como huecos, no se interpolan. */
 function seriesOption(indicator: MunicipalIndicators['indicators'][number]): EChartsOption {
@@ -124,7 +168,25 @@ function sourcesFor(indicator: MunicipalIndicators['indicators'][number]) {
     <header class="space-y-2">
       <h1 class="text-xl font-semibold">Observatorio municipal</h1>
       <div class="max-w-xl">
-        <SearchBox placeholder="Busca un municipio por nombre o código DIVIPOLA" @select="onSelect" />
+        <div class="grid gap-2 sm:grid-cols-2">
+          <PlaceSelect
+            v-model="departamentoElegido"
+            label="Departamento"
+            :options="opcionesDepartamento"
+            placeholder="Atlántico, Valle…"
+            hint="Opcional: acota la lista de municipios"
+          />
+          <PlaceSelect
+            v-model="municipioElegido"
+            label="Municipio"
+            :options="opcionesMunicipio"
+            placeholder="Soledad, Cali…"
+            :hint="
+              departamentoElegido ? 'Municipios del departamento elegido' : 'Los 1.122 del país'
+            "
+          />
+        </div>
+        <p v-if="errorListas" class="mt-1 text-xs text-amber-800">{{ errorListas }}</p>
       </div>
     </header>
 
