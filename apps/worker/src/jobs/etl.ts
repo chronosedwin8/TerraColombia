@@ -23,6 +23,7 @@ export async function runEtlJob(payload: EtlJobPayload, ctx: JobContext): Promis
   const pipeline = buildPipeline(dataset, {
     isInspected: config.isInspected,
     isPiiColumn: config.isPiiColumn,
+    detectPiiContent: config.detectPiiContent,
   });
 
   const opts: RunOptions = {

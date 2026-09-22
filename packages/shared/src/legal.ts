@@ -63,7 +63,20 @@ export type LicenseId = (typeof LICENSES)[keyof typeof LICENSES]['id'];
  * en base de datos y en cualquier exportación (PLAN.md §2).
  */
 export function isShareAlike(licenseId: string): boolean {
-  return Object.values(LICENSES).some((l) => l.id === licenseId && l.shareAlike);
+  // Los datasets del catálogo declaran la licencia en su forma legible ("CC BY-SA 4.0", que es
+  // como la publica datos.gov.co), no con el id canónico ("CC-BY-SA-4.0"). Comparando literal,
+  // `share_alike` salía false en TODOS los datasets CC BY-SA del catálogo, que es justo lo
+  // contrario de lo que exige PLAN.md §2: la cláusula de compartir-igual tiene que quedar
+  // marcada en meta.dataset para poder separar esos datos de los indicadores propios.
+  const canonical = canonicalLicenseKey(licenseId);
+  return Object.values(LICENSES).some(
+    (l) => canonicalLicenseKey(l.id) === canonical && l.shareAlike,
+  );
+}
+
+/** Clave comparable de una licencia: sin separadores, mayúsculas. `CC BY-SA 4.0` → `CCBYSA40`. */
+function canonicalLicenseKey(licenseId: string): string {
+  return licenseId.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
 }
 
 export const LEGAL_PENDING = [

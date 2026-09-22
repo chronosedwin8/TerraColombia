@@ -35,6 +35,7 @@ import {
   reliefFor,
   roadAccess,
   soilOverlaps,
+  cadastreDatasetIdsFor,
 } from '@terracolombia/db';
 import { approxAreaKm2, explainNpn, geometryBBox, radiusToPolygon } from '@terracolombia/geo';
 import type {
@@ -63,7 +64,25 @@ export interface BuiltReport {
   geometry: unknown | null;
 }
 
-const CADASTRE_DATASETS = ['igac-cadastre', 'demo-cadastre'];
+/**
+ * Respaldo cuando el ámbito no tiene ningún corte catastral cargado.
+ *
+ * Los identificadores reales del catastro son por departamento
+ * (`igac-cadastre-08`, `igac-cadastre-25`, …) y se resuelven en cada informe con
+ * `cadastreDatasetIdsFor`, contra los cortes que de verdad tienen predios en el
+ * ámbito. Una lista fija aquí haría que el informe de un predio real de Baranoa
+ * citara el corte de demostración de Soledad, que es lo que pasaba antes.
+ */
+const CADASTRE_DATASETS_FALLBACK = ['demo-cadastre'];
+
+/** Cortes catastrales que respaldan este ámbito, con respaldo si no hay ninguno. */
+async function cadastreDatasetsFor(scope: {
+  muniCode?: string | null;
+  deptCode?: string | null;
+}): Promise<string[]> {
+  const ids = await cadastreDatasetIdsFor(scope);
+  return ids.length > 0 ? ids : CADASTRE_DATASETS_FALLBACK;
+}
 const ADMIN_DATASETS = ['dane-divipola', 'dane-mgn'];
 
 function table(
@@ -193,6 +212,8 @@ async function buildParcelReport(
       `No hay un predio con el código ${npn} en los cortes cargados. No se puede emitir el informe.`,
     );
   }
+
+  const CADASTRE_DATASETS = await cadastreDatasetsFor({ muniCode: parcel.muni_code });
 
   const geometry = (await getParcelGeoJson(npn)) as never;
   const center: [number, number] | null =
@@ -354,7 +375,7 @@ async function buildParcelReport(
       'm',
       'Distancia en línea recta del centro del predio a la vía pavimentada más cercana de OpenStreetMap.',
       'Es distancia en línea recta, no de recorrido: el acceso real puede ser mayor.',
-      ['osm-colombia'],
+      ['osm-vias-colombia'],
       { own: true, format: 'distance' },
     ),
     indicator(
@@ -628,7 +649,8 @@ async function buildParcelReport(
     'anm-titulos',
     'men-establecimientos',
     'minsalud-reps',
-    'osm-colombia',
+    'osm-vias-colombia',
+    'osm-poi-colombia',
     'copernicus-dem',
     'dane-cnpv',
     'pot-municipal',
@@ -666,6 +688,8 @@ async function buildMunicipalityReport(
   const muniCode = String(subject.muniCode ?? '');
   const muni = await getMunicipality(muniCode);
   if (!muni) throw new Error(`No tenemos el municipio ${muniCode}.`);
+
+  const CADASTRE_DATASETS = await cadastreDatasetsFor({ muniCode });
 
   const [summary, coverage] = await Promise.all([getMuniSummary(muniCode), getCoverage(muniCode)]);
   const s = (summary ?? {}) as Record<string, number | null>;
@@ -771,6 +795,8 @@ async function buildAreaReport(
     throw new Error('El informe de zona necesita `subject.scope` con un polígono o un centro y un radio.');
   }
 
+  const CADASTRE_DATASETS = await cadastreDatasetsFor({});
+
   const [stats, population, facilities, soils, hazards, protectedAreas, relief] = await Promise.all([
     parcelStatsIn(geometry as never),
     populationIn(geometry as never),
@@ -873,12 +899,12 @@ async function buildAreaReport(
           { key: 'categoria', label: 'Categoría', align: 'left', width: 26 },
           { key: 'n', label: 'Puntos', align: 'right', numFmt: '#,##0', width: 12 },
         ], Object.entries(facilities?.poi_counts ?? {}).map(([categoria, n]) => ({ categoria, n })), {
-          sourceDatasetIds: ['osm-colombia', 'demo-facilities'],
+          sourceDatasetIds: ['osm-poi-colombia', 'demo-facilities'],
           emptyMessage: 'No hay puntos de interés cargados dentro de esta zona.',
           shareAlike: true,
         }),
         roads: table('vias', 'Vías', [], [], {
-          sourceDatasetIds: ['osm-colombia'],
+          sourceDatasetIds: ['osm-vias-colombia'],
           emptyMessage: 'El detalle de vías se incluye en el informe técnico.',
           shareAlike: true,
         }),
@@ -948,7 +974,7 @@ async function buildAreaReport(
     },
     datasetIds: [
       ...ADMIN_DATASETS, ...CADASTRE_DATASETS, 'dane-cnpv', 'men-establecimientos',
-      'minsalud-reps', 'osm-colombia', 'igac-suelos', 'sgc-movimientos-masa',
+      'minsalud-reps', 'osm-vias-colombia', 'osm-poi-colombia', 'igac-suelos', 'sgc-movimientos-masa',
       'runap-areas-protegidas', 'copernicus-dem', 'demo-facilities',
     ],
     sections: [

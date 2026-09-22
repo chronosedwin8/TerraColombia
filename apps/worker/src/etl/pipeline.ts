@@ -1,5 +1,6 @@
 import { getLogger } from '@terracolombia/shared';
 import {
+  clearValidations,
   createSnapshot,
   finishRun,
   getActiveSnapshot,
@@ -153,6 +154,12 @@ export async function runPipeline(
     cutDate,
     isSynthetic: pipeline.synthetic ?? false,
   });
+
+  // `createSnapshot` reutiliza el corte si ya existe (dataset + fecha de corte), así que una
+  // corrida repetida encuentra los hallazgos de la anterior. `meta.publish_snapshot` rechaza
+  // cualquier corte con una validación de error sin pasar, con lo cual un corte que falló una
+  // vez quedaba imposible de publicar aunque ya estuviera arreglado. Manda la corrida actual.
+  await clearValidations(snapshot.id);
 
   const ctx: PipelineContext = {
     datasetId: pipeline.datasetId,

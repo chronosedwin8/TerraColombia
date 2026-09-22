@@ -45,7 +45,7 @@ export const SOURCES: SourceRef[] = [
     synthetic: true,
   },
   {
-    datasetId: 'osm-colombia-vias',
+    datasetId: 'osm-vias-colombia',
     source: 'OpenStreetMap',
     name: 'Extracto de Colombia — vías',
     cutDate: '2026-08-01',
@@ -65,7 +65,7 @@ export const VERIFICATION: ReportVerification = {
     'igac-catastro-terreno': 'snap_igac_2026_07',
     'igac-catastro-construccion': 'snap_igac_2026_07',
     'dane-mgn-manzanas': 'snap_dane_2024_12',
-    'osm-colombia-vias': 'snap_osm_2026_08',
+    'osm-vias-colombia': 'snap_osm_2026_08',
   },
 };
 
@@ -292,7 +292,7 @@ export function parcelData(overrides: Partial<ParcelReportData> = {}): ParcelRep
         unit: 'puntos',
         formula: '100 − min(100, distancia_a_via_primaria_m / 10)',
         explanation: 'Mide qué tan cerca está el predio de la malla vial principal.',
-        sourceDatasetIds: ['osm-colombia-vias'],
+        sourceDatasetIds: ['osm-vias-colombia'],
         flag: 'ok',
         own: true,
       },

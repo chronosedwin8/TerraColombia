@@ -180,6 +180,31 @@ export const PII_EXACT_COLUMNS: readonly string[] = [
   'funcionario',
   'operario',
 
+  // OpenStreetMap (etiquetas reales observadas en `colombia-latest.osm.pbf`, corte
+  // 2026-09-20; conteos en `data-catalog/osm/etiquetas-observadas.json`). El nombre del
+  // comercio (`name`) NO está aquí: un rótulo comercial es dato público. Sí están los
+  // contactos, que en el comercio pequeño colombiano son los de una persona natural.
+  'operator', // 18 876 nodos + 12 486 ways
+  'operator_email',
+  'operator_phone',
+  'contact_phone', // 804
+  'contact_mobile', // 351
+  'contact_whatsapp',
+  'contact_fax',
+  'contact_instagram', // 835
+  'contact_facebook', // 536
+  'contact_twitter',
+  'contact_person',
+  // Solo los componentes de dirección que localizan una puerta concreta. `addr:city`,
+  // `addr:state`, `addr:country` y `addr:postcode` son geografía, no dato personal.
+  'addr_street', // 45 135 nodos + 54 217 ways
+  'addr_housenumber', // 19 431
+  'addr_housename',
+  'addr_unit',
+  'addr_full', // 1 830
+  'addr_flats',
+  'addr_door',
+
   // Inglés (fuentes internacionales / esquemas ArcGIS Online)
   'owner',
   'owner_name',

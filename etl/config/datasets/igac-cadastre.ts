@@ -34,6 +34,203 @@ const GDB_URL = `https://www.arcgis.com/sharing/rest/content/items/${GDB_ITEM_ID
 const GDB_SHA256 = '11647eeb3dbe5db92d514c87095ae1a665cd16f4b109fa55f893dcb20519eaeb';
 const GDB_EVIDENCE = 'docs/DICCIONARIO_CATASTRAL.md';
 
+/** Plantilla de descarga directa de un ítem de ArcGIS Online. */
+export function arcgisItemDataUrl(itemId: string): string {
+  return `https://www.arcgis.com/sharing/rest/content/items/${itemId}/data`;
+}
+
+/** Metadatos del ítem de ArcGIS Online (para leer corte, tamaño y licencia). */
+export function arcgisItemMetadataUrl(itemId: string): string {
+  return `https://www.arcgis.com/sharing/rest/content/items/${itemId}?f=json`;
+}
+
+/**
+ * Un ítem de ArcGIS Online por departamento con jurisdicción del IGAC.
+ *
+ * Los 31 identificadores se verificaron el 2026-09-21 contra
+ * `https://www.arcgis.com/sharing/rest/search?q=owner:IGAC-Admin AND title:"Base Catastral"`
+ * y, uno a uno, contra `arcgisItemMetadataUrl(itemId)`: los 31 responden 200 con
+ * `owner: IGAC-Admin`, `type: File Geodatabase` y `access: public`.
+ *
+ * `sizeBytes` y `declaredCut` son los que devolvió el ítem ese día. El cargador
+ * NO se fía de esta copia: vuelve a leer el ítem en cada corrida y usa la fecha
+ * de corte que declare la fuente en ese momento (regla 4). Se guardan aquí para
+ * poder detectar que un ítem cambió de tamaño o de corte entre corridas.
+ */
+export interface DepartmentGdbItem {
+  /** Código DIVIPOLA del departamento (clave de partición de `core.parcel`). */
+  readonly deptCode: string;
+  readonly deptName: string;
+  /** Identificador del ítem de ArcGIS Online. */
+  readonly itemId: string;
+  /** Nombre del ZIP tal como lo publica el ítem. */
+  readonly fileName: string;
+  /** Tamaño observado el 2026-09-21, en bytes. */
+  readonly sizeBytes: number;
+  /** Corte declarado por el ítem el 2026-09-21 (`snippet`/`description`). */
+  readonly declaredCut: string;
+}
+
+export const IGAC_DEPARTMENT_GDB_ITEMS: readonly DepartmentGdbItem[] = [
+  { deptCode: '08', deptName: 'Atlántico', itemId: 'b4c2079287ee40bdb159a412fb5bdfad', fileName: '08_ATLANTICO.zip', sizeBytes: 56_609_544, declaredCut: '2026-08-31' },
+  { deptCode: '13', deptName: 'Bolívar', itemId: '5b52d511fd63447ea838cbe83571e6d9', fileName: '13_BOLIVAR.zip', sizeBytes: 170_505_216, declaredCut: '2026-08-31' },
+  { deptCode: '15', deptName: 'Boyacá', itemId: '723e946e9ede418a95a6eefd28439626', fileName: '15_BOYACA.zip', sizeBytes: 360_513_536, declaredCut: '2026-08-31' },
+  { deptCode: '17', deptName: 'Caldas', itemId: 'ee8ff6e5ec1543efbbf725f9c5407bb1', fileName: '17_CALDAS.zip', sizeBytes: 140_296_192, declaredCut: '2026-08-31' },
+  { deptCode: '18', deptName: 'Caquetá', itemId: '43858ab694de4a03943b44a8dc9fe0f7', fileName: '18_CAQUETA.zip', sizeBytes: 72_982_528, declaredCut: '2026-08-31' },
+  { deptCode: '19', deptName: 'Cauca', itemId: 'e636ae42b01c41c38eb68b9dc1e7fe6d', fileName: '19_CAUCA.zip', sizeBytes: 277_667_840, declaredCut: '2026-07-31' },
+  { deptCode: '20', deptName: 'Cesar', itemId: '6ae575322bf247ef917e01928cde81e7', fileName: '20_CESAR.zip', sizeBytes: 119_014_400, declaredCut: '2026-08-31' },
+  { deptCode: '23', deptName: 'Córdoba', itemId: '34be9606b4c24f3687979e3248bec336', fileName: '23_CORDOBA.zip', sizeBytes: 141_688_832, declaredCut: '2026-08-31' },
+  { deptCode: '25', deptName: 'Cundinamarca', itemId: '013f8e1a81514861a6cc0d2fa22fd075', fileName: '25_CUNDINAMARCA.zip', sizeBytes: 171_442_176, declaredCut: '2026-08-31' },
+  { deptCode: '27', deptName: 'Chocó', itemId: 'ef867bdadca34e85a65371cb2dcf8799', fileName: '27_CHOCO.zip', sizeBytes: 29_675_520, declaredCut: '2026-08-31' },
+  { deptCode: '41', deptName: 'Huila', itemId: '9ee0cc892c1849ffb20e4ffc1b1536e4', fileName: '41_HUILA.zip', sizeBytes: 163_053_568, declaredCut: '2026-08-31' },
+  { deptCode: '44', deptName: 'La Guajira', itemId: '0b70d2b04d864929ac31063d128b8130', fileName: '44_LA_GUAJIRA.zip', sizeBytes: 63_229_952, declaredCut: '2026-08-31' },
+  { deptCode: '47', deptName: 'Magdalena', itemId: '73aa0831f4b5430ab36f9de88f3e77c8', fileName: '47_MAGDALENA.zip', sizeBytes: 113_770_496, declaredCut: '2026-08-31' },
+  { deptCode: '50', deptName: 'Meta', itemId: '7209bbf194fa4ece886bb17dd4ec0423', fileName: '50_META.zip', sizeBytes: 176_160_768, declaredCut: '2026-08-31' },
+  { deptCode: '52', deptName: 'Nariño', itemId: 'ca9cf5d0b7574a2e89b20f55c32df4d8', fileName: '52_NARIÑO.zip', sizeBytes: 224_788_480, declaredCut: '2026-08-31' },
+  { deptCode: '54', deptName: 'Norte de Santander', itemId: '6bb6dc70cbd44db1bc294e1ddca09fb7', fileName: '54_NORTE_DE_SANTANDER.zip', sizeBytes: 91_963_392, declaredCut: '2026-08-31' },
+  { deptCode: '63', deptName: 'Quindío', itemId: 'cd3d983dfda94302807af70f88cd50c8', fileName: '63_QUINDIO.zip', sizeBytes: 45_717_504, declaredCut: '2026-08-31' },
+  { deptCode: '66', deptName: 'Risaralda', itemId: '2e938e38f3f548d8b1aaae8efa52db20', fileName: '66_RISARALDA.zip', sizeBytes: 51_066_880, declaredCut: '2026-08-31' },
+  { deptCode: '68', deptName: 'Santander', itemId: 'a139cba741fc4b8fad80378a94ac9b57', fileName: '68_SANTANDER.zip', sizeBytes: 210_124_800, declaredCut: '2026-08-31' },
+  { deptCode: '70', deptName: 'Sucre', itemId: '2e2acfdaf4cc4667b61eecf3cf323939', fileName: '70_SUCRE.zip', sizeBytes: 213_495_808, declaredCut: '2026-08-31' },
+  { deptCode: '73', deptName: 'Tolima', itemId: '2236f306e7694e42bd2394a063f70052', fileName: '73_TOLIMA.zip', sizeBytes: 276_234_240, declaredCut: '2026-08-31' },
+  { deptCode: '76', deptName: 'Valle del Cauca', itemId: '82c38882bca04d77982ace710fa2f361', fileName: '76_VALLE_DEL_CAUCA.zip', sizeBytes: 177_618_944, declaredCut: '2026-08-31' },
+  { deptCode: '81', deptName: 'Arauca', itemId: 'd550dc60eabb435686eed008691f172d', fileName: '81_ARAUCA.zip', sizeBytes: 26_005_504, declaredCut: '2026-08-31' },
+  { deptCode: '85', deptName: 'Casanare', itemId: '9fc2be94ac644a3b979e822930cf9c8e', fileName: '85_CASANARE.zip', sizeBytes: 62_914_560, declaredCut: '2026-08-31' },
+  { deptCode: '86', deptName: 'Putumayo', itemId: '28b11d334b8b410b80c24699ad1c058e', fileName: '86_PUTUMAYO.zip', sizeBytes: 85_041_152, declaredCut: '2026-08-31' },
+  { deptCode: '88', deptName: 'Archipiélago de San Andrés, Providencia y Santa Catalina', itemId: 'ac2d60a10ea644ee842aa5d643f58ec4', fileName: '88_SAN_ANDRES.zip', sizeBytes: 6_396_313, declaredCut: '2026-08-31' },
+  { deptCode: '91', deptName: 'Amazonas', itemId: '19ae3d80c26c4ba3862a0f0adcc5b905', fileName: '91_AMAZONAS.zip', sizeBytes: 119_853_056, declaredCut: '2026-08-31' },
+  { deptCode: '94', deptName: 'Guainía', itemId: '98c5351a21d94a01b76841a81d9ef369', fileName: '94_GUAINIA.zip', sizeBytes: 734_003, declaredCut: '2026-08-31' },
+  { deptCode: '95', deptName: 'Guaviare', itemId: '035281b427a247eaaae07d5fedd8b74c', fileName: '95_GUAVIARE.zip', sizeBytes: 14_155_776, declaredCut: '2026-08-31' },
+  { deptCode: '97', deptName: 'Vaupés', itemId: '4263d357365c450186e345e4d977c4bc', fileName: '97_VAUPES.zip', sizeBytes: 5_347_737, declaredCut: '2026-08-31' },
+  { deptCode: '99', deptName: 'Vichada', itemId: '9823923292ed481caacba224f6c6472f', fileName: '99_VICHADA.zip', sizeBytes: 213_368_832, declaredCut: '2026-08-31' },
+] as const;
+
+/**
+ * Departamentos SIN base catastral pública del IGAC, porque su catastro lo lleva
+ * otro gestor habilitado. NO es un fallo de la carga: es cobertura real y la UI
+ * tiene que decirlo con cifras (regla 6 de CLAUDE.md).
+ *
+ * Se contrasta en cada corrida contra `core.cadastral_manager`, que sale del
+ * dataset `igac-gestores-catastrales`: ahí está el gestor municipio a municipio,
+ * que es el detalle que el usuario necesita (en Antioquia el gestor es
+ * departamental, en el resto del país hay gestores municipales sueltos).
+ */
+export const DEPARTMENTS_WITHOUT_IGAC_GDB: readonly { deptCode: string; deptName: string; reason: string }[] = [
+  {
+    deptCode: '05',
+    deptName: 'Antioquia',
+    reason:
+      'Gestor catastral propio (Catastro de Antioquia). El IGAC no publica GDB de este departamento.',
+  },
+  {
+    deptCode: '11',
+    deptName: 'Bogotá, D.C.',
+    reason:
+      'Gestor catastral propio (Unidad Administrativa Especial de Catastro Distrital). El IGAC no publica GDB de este distrito.',
+  },
+] as const;
+
+/** Identificador del dataset de un departamento. Un corte por departamento (regla 4). */
+export function cadastreDatasetId(deptCode: string): string {
+  return `igac-cadastre-${deptCode}`;
+}
+
+/** Prefijo de los datasets catastrales reales; lo usa la API para expandir la procedencia. */
+export const CADASTRE_DATASET_PREFIX = 'igac-cadastre-';
+
+/**
+ * Campos que el producto necesita y que la Base Catastral **Pública** NO trae.
+ *
+ * Verificado el 2026-09-21 con `ogrinfo -so -al` sobre las **18 capas** de
+ * `08_ATLANTICO/08.gdb`, no solo sobre las urbanas: ninguna capa —urbana, rural,
+ * formal o informal— tiene destino económico, avalúo, área registral, dirección
+ * alfanumérica, área construida, año de construcción ni uso de construcción.
+ * Tampoco hay tablas alfanuméricas en la GDB (los Registros 1 y 2 no van en el
+ * paquete público).
+ *
+ * Estas columnas quedan en NULL. **No se estiman, no se derivan y no se rellenan
+ * con un valor por defecto** (reglas 2, 4 y 5 de CLAUDE.md).
+ */
+export const CADASTRE_UNAVAILABLE_FIELDS: readonly { column: string; why: string }[] = [
+  {
+    column: 'core.parcel.economic_use',
+    why: 'No hay destino económico en ninguna de las 18 capas. Vive en el Registro 1, que no se publica.',
+  },
+  {
+    column: 'core.parcel.cadastral_value',
+    why: 'No hay avalúo catastral. Vive en el Registro 2, que no se publica.',
+  },
+  {
+    column: 'core.parcel.valuation_year',
+    why: 'Sin avalúo no hay vigencia de avalúo.',
+  },
+  {
+    column: 'core.parcel.area_reported_m2',
+    why: 'No hay área de terreno registral. Solo existe SHAPE_Area (área geométrica), que se carga en area_geom_m2.',
+  },
+  {
+    column: 'core.parcel.built_area_m2',
+    why: 'No hay área construida. Multiplicar la huella por NUMERO_PISOS sería una estimación nuestra, no un dato del IGAC.',
+  },
+  {
+    column: 'core.parcel.address',
+    why: 'No hay dirección alfanumérica del predio. Lo más cercano es el TEXTO de nomenclatura domiciliaria, que en Atlántico solo es una dirección reconocible en 18 de 73 215 registros.',
+  },
+  {
+    column: 'core.building.built_area_m2',
+    why: 'No hay área construida por construcción.',
+  },
+  {
+    column: 'core.building.built_year',
+    why: 'No hay año de construcción.',
+  },
+  {
+    column: 'core.building.use',
+    why: 'No hay uso de la construcción. TIPO_CONSTRUCCION es el TIPO (CONVENCIONAL / NO CONVENCIONAL), no el uso: se guarda en attrs y no se presenta como uso.',
+  },
+] as const;
+
+/**
+ * Inventario real de las 18 capas de la GDB y su destino.
+ *
+ * Verificado con `ogrinfo -so -al 08_ATLANTICO/08.gdb` el 2026-09-21. Los conteos
+ * son los de Atlántico. **Ninguna de las 18 capas tiene una sola columna de dato
+ * personal**: no hay propietario, titular, documento, teléfono ni dirección de
+ * correspondencia. Los únicos `NOMBRE` son topónimos (R_VEREDA, U_BARRIO) y
+ * `NOMBRE_GEOGRAFICO` (U_PERIMETRO), que la allowlist de PII ya reconoce como
+ * nombres de cosas. Regla 3 comprobada sobre la fuente completa, no solo sobre
+ * las capas que se cargan.
+ */
+export const IGAC_GDB_LAYER_INVENTORY: readonly {
+  layer: string;
+  group: 'RURAL' | 'URBANO';
+  geometry: 'MultiPolygon' | 'MultiLineString';
+  /** Tabla de `core` a la que va, o null si no se carga. */
+  target: string | null;
+  /** Filas en Atlántico el 2026-09-21. */
+  atlanticoRows: number;
+  note?: string;
+}[] = [
+  { layer: 'U_TERRENO', group: 'URBANO', geometry: 'MultiPolygon', target: 'core.parcel', atlanticoRows: 67_925 },
+  { layer: 'R_TERRENO', group: 'RURAL', geometry: 'MultiPolygon', target: 'core.parcel', atlanticoRows: 18_951 },
+  { layer: 'U_CONSTRUCCION', group: 'URBANO', geometry: 'MultiPolygon', target: 'core.building', atlanticoRows: 89_697 },
+  { layer: 'R_CONSTRUCCION', group: 'RURAL', geometry: 'MultiPolygon', target: 'core.building', atlanticoRows: 18_310 },
+  { layer: 'U_MANZANA', group: 'URBANO', geometry: 'MultiPolygon', target: 'core.block', atlanticoRows: 5_164 },
+  { layer: 'U_BARRIO', group: 'URBANO', geometry: 'MultiPolygon', target: 'core.neighborhood', atlanticoRows: 33, note: 'Es la única capa sin CODIGO_DEPARTAMENTO: el cargador no puede asumir que las 18 capas comparten esquema.' },
+  { layer: 'U_SECTOR', group: 'URBANO', geometry: 'MultiPolygon', target: 'core.sector', atlanticoRows: 38 },
+  { layer: 'R_SECTOR', group: 'RURAL', geometry: 'MultiPolygon', target: 'core.sector', atlanticoRows: 40 },
+  { layer: 'R_VEREDA', group: 'RURAL', geometry: 'MultiPolygon', target: 'core.vereda', atlanticoRows: 50 },
+  { layer: 'U_PERIMETRO', group: 'URBANO', geometry: 'MultiPolygon', target: 'core.urban_perimeter', atlanticoRows: 29 },
+  { layer: 'U_NOMENCLATURA_VIAL', group: 'URBANO', geometry: 'MultiLineString', target: 'core.street_name', atlanticoRows: 4_280 },
+  { layer: 'R_NOMENCLATURA_VIAL', group: 'RURAL', geometry: 'MultiLineString', target: 'core.street_name', atlanticoRows: 14 },
+  { layer: 'U_NOMENCLATURA_DOMICILIARIA', group: 'URBANO', geometry: 'MultiLineString', target: 'core.address_point', atlanticoRows: 73_215, note: 'Solo entran las filas cuyo TEXTO es una dirección reconocible; el resto son topónimos y "NS".' },
+  { layer: 'R_NOMENCLATURA_DOMICILIARIA', group: 'RURAL', geometry: 'MultiLineString', target: 'core.address_point', atlanticoRows: 11_856, note: 'Igual que la urbana.' },
+  { layer: 'U_TERRENO_INFORMAL', group: 'URBANO', geometry: 'MultiPolygon', target: null, atlanticoRows: 0, note: 'Ocupación informal, no predio catastral formal. Se cuenta en `raw` y se informa, pero NO entra a core.parcel: mezclarla inflaría el conteo de predios. Columnas en MAYÚSCULAS (CODIGO_MUNICIPIO, Shape_Area).' },
+  { layer: 'R_TERRENO_INFORMAL', group: 'RURAL', geometry: 'MultiPolygon', target: null, atlanticoRows: 0, note: 'Igual que la urbana. No trae VEREDA_CODIGO.' },
+  { layer: 'U_CONSTRUCCION_INFORMAL', group: 'URBANO', geometry: 'MultiPolygon', target: null, atlanticoRows: 0, note: 'No entra a core.building por el mismo motivo. No trae TIPO_DOMINIO ni CODIGO_EDIFICACION.' },
+  { layer: 'R_CONSTRUCCION_INFORMAL', group: 'RURAL', geometry: 'MultiPolygon', target: null, atlanticoRows: 0, note: 'Igual que la urbana.' },
+];
+
 /**
  * Licencia verificada en el propio ítem (`licenseInfo`):
  * «Este producto adopta la licencia pública internacional de
@@ -43,9 +240,22 @@ const GDB_EVIDENCE = 'docs/DICCIONARIO_CATASTRAL.md';
  * Confirma el supuesto de PLAN.md §2 y la cláusula ShareAlike.
  */
 const IGAC_LICENSE = 'CC BY-SA 4.0';
-const IGAC_ATTRIBUTION = 'Fuente: IGAC, Base Catastral, corte 2026-07, CC BY-SA 4.0';
-/** Corte declarado en el ítem: «a corte de 31 de julio de 2026». */
-const IGAC_CUT = '2026-07-31';
+
+/**
+ * Corte declarado por el ítem de ArcGIS Online, releído el 2026-09-21: el
+ * `snippet` de 30 de los 31 ítems dice «a corte de 31 de agosto de 2026»
+ * (Cauca sigue en «31 de julio de 2026»).
+ *
+ * NO se usa el campo `modified` del ítem como fecha de corte: el 2026-09-21 los
+ * 31 ítems tienen `modified` de ese mismo día, y Cauca —que declara un corte un
+ * mes más viejo— tiene el mismo `modified` que los demás. `modified` es la fecha
+ * en que se tocó el ítem, no la fecha a la que corresponde el dato. Confundirlas
+ * haría que la atribución mintiera (regla 4), así que el cargador lee el corte
+ * declarado en el texto del ítem y solo cae a `modified` si no lo encuentra,
+ * dejando constancia de que lo hizo.
+ */
+const IGAC_CUT = '2026-08-31';
+const IGAC_ATTRIBUTION = `Fuente: IGAC, Base Catastral, corte ${IGAC_CUT.slice(0, 7)}, CC BY-SA 4.0`;
 
 // ─── Validaciones reutilizables ───────────────────────────────────────────────
 
@@ -199,9 +409,11 @@ const GDB_URBAN_TERRAIN: DatasetDefinition = {
   phase: 2,
   notes: [
     `Descarga verificada: HEAD 200, 08_ATLANTICO.zip, 56 609 544 bytes, Accept-Ranges: bytes. SHA-256 ${GDB_SHA256}.`,
-    `Corte declarado por el IGAC: ${IGAC_CUT} (publicado el 2026-09-03).`,
-    'La GDB NO trae avalúo catastral, destino económico ni área reportada: los Registros 1 y 2 no están en el paquete público. Ver riesgo `sin-registro-1-2` en data-catalog/RIESGOS.md.',
-    'Hay un ítem por departamento: para cambiar de departamento basta cambiar el id del ítem de ArcGIS Online. Son 31 departamentos publicados.',
+    `Corte declarado por el IGAC en el texto del ítem: ${IGAC_CUT}.`,
+    'La GDB NO trae avalúo catastral, destino económico ni área reportada: los Registros 1 y 2 no están en el paquete público. Confirmado el 2026-09-21 sobre las 18 capas, no solo las urbanas: ver CADASTRE_UNAVAILABLE_FIELDS. Riesgo `sin-registro-1-2` en data-catalog/RIESGOS.md.',
+    'Hay un ítem por departamento: los 31 identificadores están en IGAC_DEPARTMENT_GDB_ITEMS, verificados uno a uno el 2026-09-21.',
+    'El NPN no es único: en Atlántico 431 NPN aparecen en 1 137 filas (hasta 33 partes para un mismo NPN). El cargador las fusiona con ST_Union, porque core.parcel.geom es MultiPolygon y un predio puede ser multiparte; el conteo de fusiones se registra en la validación `npn-duplicates`.',
+    'Dos filas de Atlántico traen una LETRA en el tramo `condicion` del NPN (08078010000000553A003900000000): 30 caracteres pero no 30 dígitos. Violan parcel_npn_digits_chk y se rechazan con registro en meta.validation, no se corrigen a mano.',
   ],
 };
 
@@ -803,36 +1015,63 @@ const CADASTRAL_MANAGERS: DatasetDefinition = {
     divipola: { target: 'attrs.divipola', sqlType: 'TEXT' },
     mpnombre: { target: 'attrs.municipio_nombre', sqlType: 'TEXT' },
     departamen: { target: 'attrs.departamento_nombre', sqlType: 'TEXT' },
-    depto: { target: 'dept_code', sqlType: 'VARCHAR(5)' },
+    depto: {
+      target: 'attrs.departamento_nombre_corto',
+      sqlType: 'VARCHAR(5)',
+      note: 'Nombre corto del departamento ("Amazonas"), NO un código. core.cadastral_manager no tiene columna dept_code: el departamento se deduce de muni_code.',
+    },
     gestor_cat: {
       target: 'manager_name',
       sqlType: 'TEXT',
-      note: 'Nombre del gestor catastral del municipio. Es el campo que decide `is_igac`.',
+      note: 'Nombre del gestor catastral del municipio. Es el campo que decide `is_igac`. Dominio medido el 2026-09-21: 46 gestores distintos, "IGAC" en 836 municipios, "CATASTRO ANTIOQUIA" en 112, "DEPARTAMENTO DE CUNDINAMARCA" en 76, "DEPARTAMENTO DEL VALLE DEL CAUCA" en 25, y 42 gestores más con 1 a 12 municipios. 1 fila lo trae vacío.',
     },
     estado_act: {
       target: 'coverage_status',
       sqlType: 'TEXT',
-      note: 'Estado de la actualización catastral. Se mapea a `full|partial|none|unknown` del contrato `Coverage`.',
+      note: 'Estado de la habilitación del gestor. Valor observado el 2026-09-21: "EN OPERACION" en 1 121 filas y vacío en 1. NO dice si el catastro está actualizado, así que no se puede derivar `full|partial|none` de él: se mapea a `unknown` y el estado real lo fija la carga de predios.',
     },
     ley617: { target: 'attrs.ley_617', sqlType: 'TEXT' },
-    acto_admin: { target: 'attrs.acto_administrativo', sqlType: 'TEXT' },
-    fecha_cont: { target: 'attrs.fecha_contrato', sqlType: 'DATE' },
-    inicio: { target: 'attrs.inicio', sqlType: 'DATE' },
-    restriccio: {
+    acto_admin: {
       target: 'notes',
       sqlType: 'TEXT',
-      note: 'Restricciones declaradas. Se muestra al usuario en el mensaje de cobertura.',
+      note: 'Acto administrativo que habilitó al gestor ("RESOLUCION 727 DEL 12/08/2020"). No nulo en 150 de 1 122 filas. Es lo único de la fuente que sirve como nota accionable para el usuario, así que va a core.cadastral_manager.notes.',
     },
-    url_habili: { target: 'attrs.url_habilitacion', sqlType: 'TEXT' },
-    url_servic: { target: 'attrs.url_servicio', sqlType: 'TEXT' },
+    fecha_cont: {
+      target: 'attrs.fecha_contrato',
+      sqlType: 'DATE',
+      note: 'No nulo en solo 20 de 1 122 filas.',
+    },
+    inicio: {
+      target: 'attrs.inicio',
+      sqlType: 'DATE',
+      note: 'Fecha de inicio de la habilitación ("2020-11-30T00:00:00.000"). No nulo en 168 de 1 122 filas.',
+    },
+    restriccio: {
+      target: 'attrs.restriccion_cartografica',
+      sqlType: 'TEXT',
+      note: 'NO son las restricciones del gestor: es un descargo cartográfico idéntico en las 1 122 filas (1 solo valor distinto, medido el 2026-09-21) y además truncado a media frase por una comilla mal cerrada en el origen. No se publica como nota al usuario; se queda en raw.',
+    },
+    url_habili: {
+      target: 'attrs.url_habilitacion',
+      sqlType: 'TEXT',
+      note: 'Enlace de SharePoint al documento de habilitación, no al portal del gestor. No nulo en 144 de 1 122 filas.',
+    },
+    url_servic: {
+      target: 'attrs.url_servicio',
+      sqlType: 'TEXT',
+      note: 'Enlace de SharePoint, igual que url_habili; no es el portal del gestor. No nulo en 138 de 1 122 filas. Por eso core.cadastral_manager.manager_url queda NULL: la fuente NO_DISPONIBLE el portal del gestor.',
+    },
     the_geom: {
-      target: 'geom',
+      target: 'raw.geom',
       sqlType: 'geometry(MultiPolygon,4326)',
       transform: 'ST_MakeValid(ST_Multi(ST_GeomFromGeoJSON(the_geom)))',
-      note: 'MultiPolygon GeoJSON embebido en el JSON de Socrata, ya en EPSG:4326.',
+      note: 'MultiPolygon GeoJSON embebido en el JSON de Socrata, ya en EPSG:4326. core.cadastral_manager NO tiene columna de geometría (es una tabla de atributos por municipio): el polígono se queda en raw.igac_gestores_catastrales.geom. El polígono municipal que usa el mapa viene de core.municipality.',
     },
   },
   // `contacto` trae datos de contacto del gestor: la lista negra lo descarta.
+  // Verificado el 2026-09-21 en la fuente: `responsabl` es el nombre completo de una
+  // persona natural y `contacto` un correo; no nulos en 282 de 1 122 filas (los gestores
+  // locales). Los tres se descartan en `stage` y quedan en meta.pii_discard_log.
   piiBlocklist: ['contacto', 'responsabl', 'gestor_con'],
   targetTable: 'core.cadastral_manager',
   validations: [
@@ -865,9 +1104,11 @@ const CADASTRAL_MANAGERS: DatasetDefinition = {
   priority: 1,
   phase: 2,
   notes: [
-    'Corte declarado: 2025-03-05. Los gestores catastrales cambian con frecuencia: hay que revisar la vigencia antes de cada lanzamiento.',
+    'Corte declarado: 2025-03-05 (`data_updated_at` del portal, reconfirmado el 2026-09-21). Los gestores catastrales cambian con frecuencia: hay que revisar la vigencia antes de cada lanzamiento.',
     'Existe también el servicio REST `catastro/Gestores_Catastrales/MapServer` (EPSG:9377, con paginación y estadísticas) como alternativa si el dataset de Socrata se queda atrás.',
-    'La columna `contacto` fue marcada por la lista negra de PII y se descarta.',
+    'La columna `contacto` fue marcada por la lista negra de PII y se descarta. `responsabl` y `gestor_con` van en la lista negra del dataset: `gestor_con` resultó ser un texto institucional ("GESTOR IGAC"), pero se descarta igual porque la fuente no garantiza que no traiga un nombre de funcionario.',
+    'HALLAZGO DE COBERTURA (regla 6): solo 836 de los 1 122 municipios (74,5 %) tienen al IGAC como gestor catastral. Los 286 restantes —Antioquia con 112, Cundinamarca con 76, Valle con 25 y 43 gestores locales más— NO están en la base abierta del IGAC. Sin esta tabla el producto mostraría mapa vacío sin explicación en una cuarta parte del país.',
+    '`estado_act` NO es el estado de actualización catastral sino el de la habilitación del gestor: todas las filas dicen "EN OPERACION". No sirve para poblar `coverage_status`, que queda en `unknown` hasta que se carguen predios del municipio.',
   ],
 };
 
@@ -991,6 +1232,59 @@ const REAL_ESTATE_TRANSACTIONS: DatasetDefinition = {
   ],
 };
 
+// ─── Un dataset por departamento ──────────────────────────────────────────────
+
+/**
+ * Los ocho datasets de arriba declaran **las capas**: qué campos trae cada una y
+ * cómo se mapean. Estos declaran **los cortes**: un `meta.dataset` y un
+ * `meta.snapshot` por departamento, que es lo que exige el linaje.
+ *
+ * Tiene que ser uno por departamento y no uno solo para todo el país por una
+ * razón de esquema, no de gusto: `meta.snapshot` tiene
+ * `UNIQUE (dataset_id, cut_date)` y el índice parcial `snapshot_one_active_per_dataset`
+ * deja **un único corte activo por dataset**. Con un solo `igac-cadastre`
+ * nacional, publicar Boyacá despublicaría Atlántico. Separándolos, cada
+ * departamento se carga, se publica y se reemplaza sin tocar a los demás, que es
+ * exactamente el motivo por el que `core.parcel` está particionada por
+ * `dept_code` (ver cabecera de la migración 0004).
+ */
+const DEPARTMENT_DATASETS: readonly DatasetDefinition[] = IGAC_DEPARTMENT_GDB_ITEMS.map((item) => ({
+  id: cadastreDatasetId(item.deptCode),
+  source: 'IGAC',
+  name: `Base Catastral Pública — ${item.deptName} (${item.deptCode})`,
+  url: arcgisItemDataUrl(item.itemId),
+  connector: 'file-download' as const,
+  format: 'gdb' as const,
+  crs: 9377,
+  frequency: 'mensual' as const,
+  license: IGAC_LICENSE,
+  // La atribución real se reescribe en cada corrida con el corte que declare el
+  // ítem ese día. Esta es la del corte verificado el 2026-09-21.
+  attribution: `Fuente: IGAC, Base Catastral, corte ${item.declaredCut.slice(0, 7)}, CC BY-SA 4.0`,
+  // El mapeo de campos NO se repite aquí: es el de las capas (GDB_URBAN_TERRAIN y
+  // compañía), que es donde se inspeccionó. Repetirlo invitaría a que las dos
+  // copias se separaran.
+  fieldMapping: GDB_URBAN_TERRAIN.fieldMapping,
+  piiBlocklist: ['USUARIO_LOGIN', 'USUARIO_LO', 'FECHA_LOG'],
+  targetTable: 'core.parcel',
+  validations: [...NPN_VALIDATIONS, ...GEOMETRY_VALIDATIONS],
+  modules: ['M1', 'M2', 'M3', 'M4', 'M5', 'M7', 'M8'] as const,
+  justification: `Corte catastral del departamento de ${item.deptName}. Es la unidad de descarga, de publicación y de partición: un ZIP, un corte, una partición de core.parcel.`,
+  inspection: 'inspeccionado' as const,
+  evidence: {
+    inspectedFrom: `${arcgisItemMetadataUrl(item.itemId)} → owner IGAC-Admin, type "File Geodatabase", access public, name ${item.fileName}, ${item.sizeBytes} bytes`,
+    catalogFile: GDB_EVIDENCE,
+    inspectedAt: INSPECTED_AT,
+  },
+  priority: 1 as const,
+  phase: 2,
+  notes: [
+    `Ítem de ArcGIS Online ${item.itemId} (${item.fileName}, ${item.sizeBytes} bytes el ${INSPECTED_AT}).`,
+    `Corte declarado por la fuente el ${INSPECTED_AT}: ${item.declaredCut}.`,
+    'La estructura de capas y campos se inspeccionó sobre Atlántico. El cargador vuelve a inspeccionar cada GDB con ogrinfo antes de cargarla y rechaza el departamento si le falta una capa o le sobra una columna de PII, en vez de suponer que todos los departamentos comparten esquema.',
+  ],
+}));
+
 export const CADASTRE_DATASETS: readonly DatasetDefinition[] = [
   GDB_URBAN_TERRAIN,
   GDB_RURAL_TERRAIN,
@@ -1000,6 +1294,7 @@ export const CADASTRE_DATASETS: readonly DatasetDefinition[] = [
   GDB_RURAL_HIERARCHY,
   GDB_ADDRESSES,
   GDB_URBAN_PERIMETER,
+  ...DEPARTMENT_DATASETS,
   REST_URBAN_TERRAIN,
   CADASTRAL_MANAGERS,
   REAL_ESTATE_TRANSACTIONS,

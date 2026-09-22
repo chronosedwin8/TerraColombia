@@ -1,6 +1,6 @@
 import type { SourceRef } from '@terracolombia/shared';
 import { query, queryOne, execute } from '../pool.js';
-import { sql, values } from '../sql.js';
+import { join, sql, values } from '../sql.js';
 
 export interface DatasetRow {
   id: string;
@@ -169,6 +169,53 @@ export async function getSourceRefs(datasetIds: string[]): Promise<SourceRef[]> 
   }));
 }
 
+/**
+ * Datasets catastrales que de verdad respaldan un ámbito concreto.
+ *
+ * Hace falta porque el catastro real está declarado **por departamento**
+ * (`igac-cadastre-08`, `igac-cadastre-25`…) y no como un único `igac-cadastre`.
+ * Eso no es capricho: `meta.snapshot` solo admite un corte activo por dataset, así
+ * que con un id nacional publicar Boyacá despublicaría Atlántico.
+ *
+ * La consecuencia es que una lista fija de ids como `['igac-cadastre',
+ * 'demo-cadastre']` no resuelve nada: `igac-cadastre` no existe como fila y el
+ * único que quedaba era el de demostración. Una ficha de un predio real de Baranoa
+ * salía citando el corte sintético y marcada como dato de demostración, que es
+ * justo lo contrario de las reglas 4 y 6.
+ *
+ * Qué devuelve:
+ *
+ *  - Si el ámbito tiene predios de un corte REAL, solo los cortes reales que lo
+ *    cubren. El sintético se excluye, aunque siga activo para otro municipio.
+ *  - Si el ámbito solo tiene predios sintéticos, el sintético, para que la UI
+ *    siga avisando de que son datos de demostración.
+ *  - Sin ámbito, todos los cortes catastrales activos que tengan predios.
+ *
+ * Se resuelve consultando qué cortes tienen predios ahí, no por el nombre del
+ * dataset: es la única forma de que la procedencia describa el dato que se acaba
+ * de leer y no el que suponemos que hay.
+ */
+export async function cadastreDatasetIdsFor(
+  scope: { muniCode?: string | null; deptCode?: string | null } = {},
+): Promise<string[]> {
+  const conditions = [sql`s.is_active`];
+  if (scope.muniCode) conditions.push(sql`p.muni_code = ${scope.muniCode}`);
+  // El filtro por departamento permite además podar particiones de core.parcel.
+  if (scope.deptCode) conditions.push(sql`p.dept_code = ${scope.deptCode}`);
+
+  const rows = await query<{ dataset_id: string; is_synthetic: boolean }>(sql`
+    SELECT DISTINCT s.dataset_id, s.is_synthetic
+    FROM core.parcel p
+    JOIN meta.snapshot s ON s.id = p.snapshot_id
+    WHERE ${join(conditions, ' AND ')}
+    ORDER BY s.is_synthetic, s.dataset_id
+  `);
+
+  const real = rows.filter((r) => !r.is_synthetic).map((r) => r.dataset_id);
+  if (real.length > 0) return real;
+  return rows.map((r) => r.dataset_id);
+}
+
 // ─── Linaje y validaciones ────────────────────────────────────────────────────
 
 export async function startRun(datasetId: string, step: string, snapshotId?: number): Promise<number> {
@@ -211,6 +258,19 @@ export async function recordValidation(input: {
     VALUES (${input.snapshotId}, ${input.checkName}, ${input.severity}, ${input.passed},
             ${input.affectedRows ?? 0}, ${input.message}, ${JSON.stringify(input.sample ?? [])}::jsonb)
   `);
+}
+
+/**
+ * Borra las validaciones de un corte antes de volver a correrlo.
+ *
+ * `meta.publish_snapshot` se niega a publicar un corte que tenga una validación con
+ * severidad error sin pasar. Como los hallazgos se acumulan, un corte que falló una vez
+ * quedaba imposible de publicar aunque la causa ya estuviera corregida: la corrida nueva
+ * añadía el hallazgo en verde y el rojo antiguo seguía ahí. La corrida vigente es la que
+ * manda, así que se limpia al empezar.
+ */
+export async function clearValidations(snapshotId: number): Promise<number> {
+  return execute(sql`DELETE FROM meta.validation WHERE snapshot_id = ${snapshotId}`);
 }
 
 export async function listValidations(snapshotId: number) {

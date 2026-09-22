@@ -17,7 +17,13 @@ export const GEOFABRIK_BASE = 'https://download.geofabrik.de';
 export const GEOFABRIK_COLOMBIA_PAGE = `${GEOFABRIK_BASE}/south-america/colombia.html`;
 export const GEOFABRIK_COLOMBIA_DIR = `${GEOFABRIK_BASE}/south-america`;
 
-export const OSM_LICENSE = 'ODbL 1.0 (Open Database License)';
+/**
+ * `ODbL 1.0` exactamente: `isShareAlike()` de `@terracolombia/shared` compara la licencia con
+ * el id `ODbL-1.0` de `LICENSES` normalizando separadores, y la forma larga
+ * («ODbL 1.0 (Open Database License)») no emparejaba, así que los informes imprimían
+ * «ShareAlike: No» para OpenStreetMap. Es la misma cadena que usa `crawler/sources.ts`.
+ */
+export const OSM_LICENSE = 'ODbL 1.0';
 export const OSM_ATTRIBUTION = '© colaboradores de OpenStreetMap, ODbL 1.0';
 
 export interface OsmExtractFile {

@@ -300,7 +300,19 @@ export default async function searchRoutes(app: FastifyInstance): Promise<void> 
       // ("Carrera 7A" contra "Cabrera"), y eso es ruido que confunde más de lo que ayuda.
       const esDireccionInequivoca =
         looksLikeAddress(trimmed) && parseAddress(trimmed).wayNumber !== null;
-      const textHits = esDireccionInequivoca ? [] : await searchText(trimmed, { limit, muniCode });
+
+      // Por el mismo motivo, una entrada de solo dígitos tampoco pasa por la búsqueda de
+      // texto. El índice contiene barrios y veredas cuya etiqueta ES un código numérico, así
+      // que los trigramas casan cualquier número con ellos: al cargar los datos reales, un
+      // código postal de seis dígitos empezó a devolver diez veredas llamadas «0001», y un
+      // código predial de treinta dígitos ponía un barrio por encima de su propia
+      // explicación. Los números ya los resuelven las ramas de arriba —código predial,
+      // DIVIPOLA, coordenadas—, que sí saben lo que están leyendo; y si ninguna reconoce la
+      // entrada, es mejor el motivo escrito que una lista de códigos parecidos.
+      const textHits =
+        esDireccionInequivoca || soloDigitos
+          ? []
+          : await searchText(trimmed, { limit, muniCode });
       for (const h of textHits) {
         const kind = h.kind as SearchResultKind;
         const target: SearchResult['target'] =

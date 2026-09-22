@@ -211,9 +211,9 @@ const DIVIPOLA_POPULATED_CENTERS: DatasetDefinition = {
     },
     nombre_municipio: { target: 'attrs.municipio_nombre', sqlType: 'TEXT' },
     codigo_centro_poblado: {
-      target: 'code',
+      target: 'attrs.codigo_centro_poblado',
       sqlType: 'VARCHAR(8)',
-      note: 'Código de 8 dígitos ("17050006"): municipio + secuencial del centro poblado.',
+      note: 'Código de 8 dígitos ("17050006"): municipio + secuencial del centro poblado. OJO: core.populated_place no tiene columna para él (su llave es `id` y así lo usa analytics.search_index), así que solo queda en raw.dane_divipola_centros_poblados.payload.',
     },
     nombre_centro_poblado: {
       target: 'name',
@@ -223,18 +223,22 @@ const DIVIPOLA_POPULATED_CENTERS: DatasetDefinition = {
     tipo_centro_poblado: {
       target: 'kind',
       sqlType: 'TEXT',
-      note: 'Valores observados: "CP" (centro poblado). Verificar el dominio completo.',
+      note: 'Dominio completo medido el 2026-09-21 con $group: "CP" = centro poblado (7 057 filas) y "CM" = cabecera municipal (1 104 filas). Se traducen a los valores de core.populated_place.kind: centro_poblado y cabecera.',
     },
     longitud: {
       target: 'lng',
       sqlType: 'NUMERIC',
       transform: "replace(longitud, ',', '.')::numeric",
-      note: 'Coma decimal, igual que en departamentos.',
+      note: 'Coma decimal ("-75,523505"), igual que en departamentos. El conector de Socrata construye el punto en el paso `stage` a partir de los campos con destino `lng`/`lat` y sustituye la coma allí, para que `raw.*.geom` ya venga en EPSG:4326.',
     },
     latitud: { target: 'lat', sqlType: 'NUMERIC', transform: "replace(latitud, ',', '.')::numeric" },
   },
   piiBlocklist: [],
-  targetTable: 'core.populated_center',
+  // Corregido el 2026-09-21: la declaración decía `core.populated_center`, una tabla que no
+  // existe. La tabla real, creada en packages/db/migrations/0003_core_admin.sql, es
+  // `core.populated_place` (id, muni_code, name, kind, geom, snapshot_id) y es la que
+  // consume analytics.search_index en 0008_search.sql.
+  targetTable: 'core.populated_place',
   validations: [
     {
       id: 'muni-code-exists',
@@ -266,6 +270,9 @@ const DIVIPOLA_POPULATED_CENTERS: DatasetDefinition = {
   notes: [
     'Es un punto por centro poblado, no un polígono: para el polígono está `U_PERIMETRO` del catastro.',
     'El dataset de municipios (`gdxc-w37w`) existe en el portal pero lo publica una gobernación, no el DANE: se prefiere el MGN como fuente de municipios.',
+    'Medido el 2026-09-21: 8 161 filas, 1 122 `codigo_municipio` distintos = los 1 122 municipios de la DIVIPOLA. Cobertura nacional completa (regla 6).',
+    '`core.populated_place.geom` es NOT NULL: una fila sin coordenada convertible no se puede cargar. El transform las descarta y la validación `coordinate-in-colombia` las cuenta.',
+    'El código de 8 dígitos del centro poblado no cabe en core.populated_place (no tiene columna `code`): queda solo en raw. Si M1 necesita buscar por ese código habrá que añadir la columna en una migración.',
   ],
 };
 

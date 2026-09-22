@@ -243,16 +243,35 @@ export async function checkPiiLeak(
   table: string,
   snapshotId: number,
   attrsColumn = 'attrs',
+  /**
+   * Clasificador autorizado de `etl/config/pii-blocklist.ts`. Cuando se pasa, decide él:
+   * la expresión regular de abajo no conoce la lista de permitidos y marca `nombre_municipio`,
+   * `nombre_establecimiento` o `nombre_sede`, que son topónimos y nombres de institución.
+   * Con esos falsos positivos ningún dataset de contexto podía publicarse.
+   */
+  isPii?: (name: string) => boolean,
 ): Promise<ValidationFinding> {
-  const rows = await query<{ key: string; n: number }>(sql`
-    SELECT key, count(*)::int AS n
-    FROM ${sqlTable(table)} t, LATERAL jsonb_object_keys(t.${sqlColumn(attrsColumn)}) AS key
-    WHERE t.snapshot_id = ${snapshotId}
-      AND public.tc_fold(key) ~ '(PROPIETARIO|TITULAR|NOMBRE|APELLIDO|CEDULA|DOCUMENTO|IDENTIFIC|TELEFONO|CELULAR|CORREO|EMAIL|MAIL|DIRECCION_CORRESPOND|RAZON_SOCIAL|NIT)'
-    GROUP BY key
-    ORDER BY n DESC
-    LIMIT 20
-  `);
+  const rows = isPii
+    ? (
+        await query<{ key: string; n: number }>(sql`
+          SELECT key, count(*)::int AS n
+          FROM ${sqlTable(table)} t, LATERAL jsonb_object_keys(t.${sqlColumn(attrsColumn)}) AS key
+          WHERE t.snapshot_id = ${snapshotId}
+          GROUP BY key
+          ORDER BY n DESC
+        `)
+      )
+        .filter((r) => isPii(r.key))
+        .slice(0, 20)
+    : await query<{ key: string; n: number }>(sql`
+        SELECT key, count(*)::int AS n
+        FROM ${sqlTable(table)} t, LATERAL jsonb_object_keys(t.${sqlColumn(attrsColumn)}) AS key
+        WHERE t.snapshot_id = ${snapshotId}
+          AND public.tc_fold(key) ~ '(PROPIETARIO|TITULAR|NOMBRE|APELLIDO|CEDULA|DOCUMENTO|IDENTIFIC|TELEFONO|CELULAR|CORREO|EMAIL|MAIL|DIRECCION_CORRESPOND|RAZON_SOCIAL|NIT)'
+        GROUP BY key
+        ORDER BY n DESC
+        LIMIT 20
+      `);
 
   return {
     checkName: 'pii_detected',
@@ -320,7 +339,12 @@ export async function validateContextSnapshot(
   table: string,
   snapshotId: number,
   previousSnapshotId: number | null,
-  opts: { geomColumn?: string; attrsColumn?: string | null } = {},
+  opts: {
+    geomColumn?: string;
+    attrsColumn?: string | null;
+    /** Clasificador de `etl/config/pii-blocklist.ts`. Ver `checkPiiLeak`. */
+    isPiiColumn?: (name: string) => boolean;
+  } = {},
 ): Promise<ValidationFinding[]> {
   const geomColumn = opts.geomColumn ?? 'geom';
   const findings: ValidationFinding[] = [];
@@ -329,7 +353,9 @@ export async function validateContextSnapshot(
   findings.push(await checkInvalidGeometries(table, snapshotId, geomColumn));
   findings.push(await checkGeometriesInsideColombia(table, snapshotId, geomColumn));
   if (opts.attrsColumn !== null) {
-    findings.push(await checkPiiLeak(table, snapshotId, opts.attrsColumn ?? 'attrs'));
+    findings.push(
+      await checkPiiLeak(table, snapshotId, opts.attrsColumn ?? 'attrs', opts.isPiiColumn),
+    );
   }
   return findings;
 }

@@ -113,6 +113,7 @@ async function main(): Promise<void> {
       const pipeline = buildPipeline(dataset, {
         isInspected: config.isInspected,
         isPiiColumn: config.isPiiColumn,
+        detectPiiContent: config.detectPiiContent,
       });
       const report = await runPipeline(pipeline, terminalContext(), {
         cutDate: typeof flags['cut-date'] === 'string' ? flags['cut-date'] : undefined,

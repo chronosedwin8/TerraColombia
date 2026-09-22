@@ -94,7 +94,10 @@ export default async function municipalityRoutes(app: FastifyInstance): Promise<
         geometry ? getMunicipalityGeoJson(code) : Promise.resolve(null),
       ]);
 
-      const datasets = await presentDatasets(['admin', 'cadastre', 'education', 'health', 'population']);
+      const datasets = await presentDatasets(
+        ['admin', 'cadastre', 'education', 'health', 'population'],
+        { muniCode: code },
+      );
       const warnings: string[] = [];
       if (!geom && geometry) {
         warnings.push(

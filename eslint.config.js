@@ -11,7 +11,17 @@ export default [
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          // `const { clave: _descartada, ...resto } = fila` es la forma idiomática de
+          // quitar una clave de un objeto. Sin esto, la variable intermedia se marca como
+          // no usada y obliga a silenciar la regla en cada sitio donde se usa el patrón.
+          ignoreRestSiblings: true,
+        },
+      ],
       'no-console': 'off',
     },
   },

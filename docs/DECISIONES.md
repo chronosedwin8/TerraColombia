@@ -135,3 +135,104 @@ etiquetadas que solo producen `$n` + arreglo de valores). Los nombres de columna
 un mapa blanco (`PARCEL_FILTER_COLUMNS`). `statement_timeout` por petición según plan.
 
 **Consecuencias.** No hay ruta de concatenación de cadenas a SQL en el código de consulta.
+
+---
+
+## ADR-009 · 2026-09-21 · Los límites administrativos vienen del IGAC, no del DANE, y llevan su propio snapshot
+
+**Contexto.** `core.municipality` tenía las 1.122 filas de DIVIPOLA con centroide pero `geom` NULL, y
+`core.department` las 33 filas también sin geometría: el mapa abría en zoom 5 sin un solo límite. La
+fuente prevista era el Marco Geoestadístico Nacional del DANE, pero su geoportal no publica un índice
+recorrible por máquina (verificado en la Fase 0, `etl/config/datasets/dane.ts`): la descarga es por
+formulario, así que no hay forma de automatizarla ni de fijar los nombres de campo reales.
+
+**Decisión.** Se usa el ArcGIS REST del IGAC,
+`https://mapas.igac.gov.co/server/rest/services/catastro/direccionesterritorialesigac/MapServer`,
+capas `1 departamento` y `2 municipio`. Es la «Base de Datos Geográfica de Entidades Territoriales»:
+límites de deslinde aprobados por la autoridad competente y elevados a norma (Ley 1447 de 2011,
+Decreto 1170 de 2015). Campos verificados con peticiones reales: `MpCodigo`, `MpNombre`, `MpArea`,
+`Depto` en municipios; `DeCodigo`, `DeNombre`, `DeArea`, `DeNorma` en departamentos.
+
+La geometría se guarda con un snapshot **distinto** del de DIVIPOLA. La migración `0013` añade
+`geom_snapshot_id` a `core.department` y `core.municipality`: `snapshot_id` sigue siendo el del padrón
+de códigos y nombres (DANE) y `geom_snapshot_id` es el del límite (IGAC). Reutilizar una sola columna
+habría hecho que la API atribuyera el límite municipal al DANE, que no lo produce, rompiendo la regla 4.
+
+**Consecuencias.**
+- El cargador (`packages/db/src/cli/load-admin-boundaries.ts`) solo hace `UPDATE`: nunca inserta
+  municipios ni departamentos. Un código de la fuente que no exista en la base se informa y se descarta.
+- El área se calcula en EPSG:9377 (convención del proyecto), no se copia `MpArea`/`DeArea`.
+- Bogotá, D.C. (código 11) **no está** en la capa de departamentos del IGAC. Su límite se DERIVA
+  disolviendo sus municipios con `ST_Union` y queda registrado como `derived_geometry` en
+  `meta.validation`: es un dato derivado, no el límite oficial publicado.
+- Nuevo Belén de Bajirá (27493) no está en la fuente —su pertenencia está en disputa— y queda con
+  `geom` NULL. No se inventa.
+- **Pendiente legal:** el servicio no declara licencia (`licenseInfo` vacío) ni fecha de corte
+  (`editingInfo` ausente). `meta.snapshot.cut_date` guarda la fecha de CONSULTA y así se declara en
+  `stats`. Hay que confirmar la licencia con el IGAC antes de redistribuir el dato derivado.
+
+---
+
+## ADR-010 · 2026-09-21 · OpenStreetMap se ingiere con un lector de PBF propio, no con osm2pgsql
+
+**Contexto.** Los datasets `osm-vias-colombia` y `osm-poi-colombia` se sirven del extracto de
+Colombia de Geofabrik (`colombia-latest.osm.pbf`, 330 MB, 47 799 384 nodos, 5 239 875 ways,
+37 868 relaciones). Antes de elegir herramienta se comprobó qué hay instalado en el equipo:
+
+| Herramienta | Estado |
+|---|---|
+| `osm2pgsql` | **no instalada** (tampoco en `.env`: `OSM2PGSQL=` vacío) |
+| `osmium` / `osmconvert` / `osmfilter` | **no instaladas** |
+| GDAL 3.9.2 (`ogr2ogr`, driver `OSM -vector- (rov)`) | sí, del *bundle* de PostGIS para pg17 |
+| Docker | instalado, **demonio caído** (igual que en ADR-001) |
+| `pbf@3.3.0` en `node_modules/.pnpm` | sí, pero como dependencia transitiva, no declarada |
+
+**Decisión.** Un lector propio de `.osm.pbf` en TypeScript (`packages/db/src/seed/osm-pbf.ts`) y un
+cargador (`packages/db/src/cli/load-osm.ts`), sin dependencias nuevas.
+
+Por qué no las alternativas:
+
+- **`osm2pgsql`** habría sido la opción natural, pero instalarlo (con sus DLL de GEOS/PROJ/LuaJIT) a
+  dos días del lanzamiento es un riesgo mayor que escribir el lector, y su esquema (`planet_osm_line`
+  con `hstore`) no es el de `ctx.road`/`ctx.poi`: habría hecho falta igual una capa de traducción.
+- **GDAL `ogr2ogr`** sí puede leer el PBF, pero su driver expone solo un puñado de campos como
+  columnas y mete el resto en `other_tags` (hstore): `amenity`, `shop` y `surface` habrían llegado
+  dentro de una cadena que hay que parsear en SQL. Además crea un SQLite temporal para resolver las
+  geometrías y, sobre todo, **escribe primero y filtra después**: las etiquetas `phone`,
+  `contact:phone` y `addr:*` pasarían por la base antes de poder descartarlas, lo que choca con la
+  regla 3 (cero datos personales, descarte *en la ingesta*).
+- **El extracto `-free.shp.zip`/`.gpkg.zip`** de Geofabrik es más cómodo, pero su esquema reducido no
+  trae `surface` ni `lanes`, que es justo de donde sale `is_paved`, y `is_paved` alimenta
+  `dist_paved_road_m` y `road_access_score`. Habría obligado a inventar el pavimento (regla 2).
+- **Añadir `pbf` como dependencia** no ahorraba casi nada: la parte laboriosa no es el varint, es el
+  esquema `DenseNodes`/`Way` y la resolución de geometrías.
+
+Cómo funciona: dos pasadas sobre el fichero en memoria (330 MB). La primera selecciona los ways de la
+red vehicular y los elementos con etiqueta de POI y anota qué nodos hacen falta; la segunda resuelve
+las coordenadas de **solo esos** nodos (índice ordenado + búsqueda binaria, `Float64Array`). Así no
+se guardan en memoria los 47,8 millones de nodos del extracto. Cada pasada tarda ~8 s. La escritura
+va por lotes de 2 000 filas, cada lote en su propia transacción con `statement_timeout` ampliado, y
+la geometría se construye en PostGIS (`ST_GeomFromText` + `ST_Multi`), nunca en Prisma (regla 8).
+
+**Consecuencias.**
+
+- El lector queda cubierto por `osm-pbf.test.ts`, que construye un PBF sintético byte a byte. Se
+  escribió después de encontrar un fallo real: saltar un campo de longitud variable dejaba el cursor
+  un byte corrido (`this.pos += this.varint()` usa el `pos` anterior a leer la longitud).
+- **No se ingieren relaciones** (37 868 en el extracto): armar su geometría exige ensamblar los ways
+  miembros. Queda declarado como faltante en `meta.snapshot.stats`, no disimulado.
+- `is_paved` se deriva **solo** de `surface`. Cobertura real de `surface` en este corte: `trunk` 96 %,
+  `primary` 71 %, `secondary` 67 %, `tertiary` 62 %, `residential` 26 %, `track` 25 %. Donde no hay
+  etiqueta, `is_paved` queda NULL y el motor declara el faltante en vez de suponer pavimento.
+- Hallazgo del dato: **en Colombia no existe ninguna vía `highway=motorway`**; la red principal se
+  etiqueta `trunk` (15 394) y `primary` (16 746). Las consultas que filtran
+  `class IN ('motorway','trunk','primary')` siguen siendo correctas, pero el primer valor no aporta
+  filas.
+- ODbL 1.0 es *share-alike*: los dos datasets quedan con `meta.dataset.share_alike = TRUE` y hay que
+  citar «© colaboradores de OpenStreetMap, ODbL 1.0» en mapa, ficha, informe y API, manteniendo la
+  base de OSM separada de la del IGAC en las exportaciones.
+- Los cortes sintéticos de demostración que ocupaban estas tablas (`demo-roads`, y los POIs de
+  `demo-facilities`) se retiran al cargar el dato real: las consultas del producto filtran por
+  `is_active` sin distinguir fuentes, y dejar los dos mezclaría 4 vías inventadas con la red
+  nacional. `pnpm db:seed` las volvería a crear, así que la siembra de demostración ya no debe
+  correrse sobre una base con OSM cargado (o hay que volver a correr `load:osm`).

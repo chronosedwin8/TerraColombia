@@ -41,7 +41,10 @@ export default async function indicatorRoutes(app: FastifyInstance): Promise<voi
         getCoverage(muniCode),
       ]);
 
-      const datasets = await presentDatasets(['admin', 'cadastre', 'population', 'education', 'health']);
+      const datasets = await presentDatasets(
+        ['admin', 'cadastre', 'population', 'education', 'health'],
+        { muniCode },
+      );
 
       return envelope(
         {

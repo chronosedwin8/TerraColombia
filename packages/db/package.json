@@ -15,15 +15,22 @@
     "migrate:status": "tsx src/cli/migrate.ts status",
     "migrate:down": "tsx src/cli/migrate.ts down",
     "seed": "tsx src/cli/seed.ts",
+    "load:boundaries": "tsx src/cli/load-admin-boundaries.ts",
+    "load:hazards": "tsx src/cli/load-hazards.ts",
+    "load:protected-areas": "tsx src/cli/load-protected-areas.ts",
+    "load:census-blocks": "tsx src/cli/load-census-blocks.ts",
+    "load:osm": "tsx --max-old-space-size=8192 src/cli/load-osm.ts",
     "reset": "tsx src/cli/migrate.ts reset",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "load:cadastre": "tsx src/cli/load-cadastre.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.1.0",
+    "@terracolombia/etl-config": "workspace:*",
     "@terracolombia/geo": "workspace:*",
     "@terracolombia/shared": "workspace:*",
     "pg": "^8.13.1"

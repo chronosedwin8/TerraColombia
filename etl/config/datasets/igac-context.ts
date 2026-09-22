@@ -62,7 +62,8 @@ const ROADS_100K: DatasetDefinition = {
   validations: [
     {
       id: 'road-class-domain',
-      description: 'Se reporta la distribución de VTipo para construir la jerarquía del motor de accesibilidad.',
+      description:
+        'Se reporta la distribución de VTipo para construir la jerarquía del motor de accesibilidad.',
       severity: 'warning',
     },
     {
@@ -215,7 +216,121 @@ const CONTOURS: DatasetDefinition = {
   ],
 };
 
+/**
+ * Límites de entidades territoriales.
+ *
+ * Es el único dataset de este archivo que NO pasa por el pipeline genérico del worker: lo
+ * carga `packages/db/src/cli/load-admin-boundaries.ts`, porque no inserta filas nuevas sino
+ * que actualiza la geometría de municipios y departamentos que ya existen con su código
+ * DIVIPOLA. Se declara aquí igualmente para que el catálogo diga de dónde sale el límite
+ * que pinta el mapa (regla 4 de CLAUDE.md).
+ */
+const ADMIN_BOUNDARIES: DatasetDefinition = {
+  id: 'igac-limites-entidades-territoriales',
+  source: 'IGAC',
+  name: 'Límites de entidades territoriales — departamentos y municipios',
+  url: `${IGAC_REST}/catastro/direccionesterritorialesigac/MapServer`,
+  connector: 'arcgis-rest',
+  format: 'geojson',
+  crs: 9377,
+  frequency: 'eventual',
+  license:
+    'NO_DECLARADA por el servicio: `licenseInfo` viene vacío. Se ingiere bajo el régimen de datos abiertos del Estado (Ley 1712 de 2014) y queda pendiente confirmarlo con el IGAC.',
+  attribution: 'Fuente: IGAC, Límites de entidades territoriales',
+  fieldMapping: {
+    MpCodigo: {
+      target: 'core.municipality.code',
+      sqlType: 'CHAR(5)',
+      note: 'Capa 2 (`municipio`). Código DIVIPOLA de 5 dígitos. Es la llave del cruce: no se insertan municipios, se actualiza `geom` de los que ya existen.',
+    },
+    MpNombre: {
+      target: 'NO_SE_USA',
+      sqlType: 'TEXT',
+      note: 'El nombre autoritativo es el de DIVIPOLA (DANE), que ya está cargado. Aquí solo sirve para contrastar.',
+    },
+    MpArea: {
+      target: 'NO_SE_USA',
+      sqlType: 'NUMERIC',
+      note: 'Área en km² declarada por la fuente. El producto calcula la suya en EPSG:9377 (convención del proyecto) y usa esta solo para contrastar.',
+    },
+    Depto: {
+      target: 'NO_SE_USA',
+      sqlType: 'TEXT',
+      note: 'ATENCIÓN: es el NOMBRE del departamento, no su código. El código sale de los dos primeros dígitos de MpCodigo.',
+    },
+    DeCodigo: {
+      target: 'core.department.code',
+      sqlType: 'CHAR(2)',
+      note: 'Capa 1 (`departamento`). Código DIVIPOLA de 2 dígitos.',
+    },
+    DeNombre: { target: 'NO_SE_USA', sqlType: 'TEXT' },
+    DeArea: {
+      target: 'NO_SE_USA',
+      sqlType: 'NUMERIC',
+      note: 'Área en km² declarada por la fuente.',
+    },
+    DeNorma: {
+      target: 'NO_SE_USA',
+      sqlType: 'TEXT',
+      note: 'Norma que fija el límite (Ley, Ordenanza, Decreto). Candidato a mostrarse en la ficha del municipio.',
+    },
+    SHAPE: {
+      target: 'geom',
+      sqlType: 'geometry(MultiPolygon,4326)',
+      transform: 'core.clean_polygon(ST_SetSRID(ST_GeomFromGeoJSON(...), 4326))',
+      note: 'Se pide al servicio con `outSR=4326` y `geometryPrecision=7`; el servidor reproyecta desde EPSG:9377.',
+    },
+  },
+  piiBlocklist: [],
+  targetTable: 'core.department.geom / core.municipality.geom',
+  validations: [
+    {
+      id: 'no-new-rows',
+      description:
+        'El cargador solo hace UPDATE. Un código que llegue de la fuente y no exista en core.municipality se cuenta e informa, nunca se inserta.',
+      severity: 'blocker',
+    },
+    {
+      id: 'outside_colombia',
+      description:
+        'Ninguna geometría cargada puede caer fuera de la extensión de Colombia: si ocurre, el CRS se leyó al revés y el corte no se publica.',
+      severity: 'blocker',
+    },
+    {
+      id: 'orphan_record',
+      description:
+        'Se registra cuántos municipios y departamentos quedaron SIN límite, para que la UI pueda decirlo (regla 6).',
+      severity: 'warning',
+    },
+    {
+      id: 'derived_geometry',
+      description:
+        'Todo límite departamental obtenido por disolución de sus municipios se marca como DERIVADO: no es el límite oficial publicado.',
+      severity: 'warning',
+    },
+  ],
+  modules: ['M1', 'M2', 'M3', 'M4', 'M9', 'M10'],
+  justification:
+    'Sin límites municipales el mapa abre vacío y no hay ni «¿en qué municipio cae este punto?» ni recorte de análisis por municipio. El MGN del DANE sería la fuente natural, pero su geoportal no publica índice recorrible; el IGAC sí sirve el mismo dato por ArcGIS REST y además es quien produce el deslinde.',
+  inspection: 'inspeccionado',
+  evidence: {
+    inspectedFrom: `${IGAC_REST}/catastro/direccionesterritorialesigac/MapServer — capa 1 (departamento, 33 entidades) y capa 2 (municipio, 1 122 entidades)`,
+    catalogFile: 'data-catalog/igac/manual__igac-limites-entidades-territoriales.json',
+    inspectedAt: INSPECTED_AT,
+  },
+  priority: 1,
+  phase: 2,
+  notes: [
+    'La capa de departamentos trae `DeCodigo = "00"` (Área en Litigio Cauca - Huila), que no es entidad DIVIPOLA, y NO trae el código `11` (Bogotá, D.C.): ese límite se deriva disolviendo el municipio 11001 y se marca como derivado.',
+    'La capa de municipios trae `MpCodigo = "00000"` (la misma área en litigio) y NO trae `27493` (Nuevo Belén de Bajirá), en disputa entre Chocó y Antioquia: ese municipio queda con `geom` NULL, no se inventa.',
+    'El servidor devuelve 502/503 con frecuencia: hay que paginar de 25 en 25 y reintentar con espera creciente.',
+    'Un WAF delante del servicio responde HTML con estado 200 ante cláusulas `where` con `LIKE`: se consulta con `where=1=1` y se pagina con `resultOffset`.',
+    'PENDIENTE: el servicio no declara licencia (`licenseInfo` vacío) ni fecha de corte (`editingInfo` ausente). La fecha registrada en meta.snapshot es la de consulta.',
+  ],
+};
+
 export const IGAC_CONTEXT_DATASETS: readonly DatasetDefinition[] = [
+  ADMIN_BOUNDARIES,
   ROADS_100K,
   WATER_BODIES,
   CONTOURS,

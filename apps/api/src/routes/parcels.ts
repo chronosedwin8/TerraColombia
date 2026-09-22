@@ -147,7 +147,7 @@ export default async function parcelRoutes(app: FastifyInstance): Promise<void> 
         getParcel(npn).then((p) => (p && !p.is_ph ? getParcelUnits(npn, 50) : [])),
       ]);
 
-      const datasets = await presentDatasets(['cadastre', 'admin']);
+      const datasets = await presentDatasets(['cadastre', 'admin'], { muniCode });
 
       recordUsage(req, 'parcel_detail', started, { detail: { muniCode } });
       await app.quota.consume(
@@ -237,7 +237,7 @@ export default async function parcelRoutes(app: FastifyInstance): Promise<void> 
         .parse(req.query);
       const geom = await getParcelGeoJson(npn, cutDate);
       if (!geom) throw AppError.parcelNotFound(npn);
-      const datasets = await presentDatasets(['cadastre']);
+      const datasets = await presentDatasets(['cadastre'], { muniCode: npn.slice(0, 5) });
       return envelope({ type: 'Feature', geometry: geom, properties: { npn } }, datasets);
     },
   );
@@ -405,7 +405,7 @@ export default async function parcelRoutes(app: FastifyInstance): Promise<void> 
     async (req) => {
       const npn = await requireNpn((req.params as { npn: string }).npn);
       const [changes, cuts] = await Promise.all([parcelHistory(npn), parcelCutDates(npn)]);
-      const datasets = await presentDatasets(['cadastre']);
+      const datasets = await presentDatasets(['cadastre'], { muniCode: npn.slice(0, 5) });
       return envelope(
         {
           npn,
@@ -464,7 +464,9 @@ export default async function parcelRoutes(app: FastifyInstance): Promise<void> 
       const coverage = parsed.scope.municipality
         ? await getCoverage(parsed.scope.municipality)
         : null;
-      const datasets = await presentDatasets(['cadastre', 'admin', 'osm', 'education', 'health']);
+      const datasets = await presentDatasets(['cadastre', 'admin', 'osm', 'education', 'health'], {
+        muniCode: parsed.scope.municipality ?? null,
+      });
 
       recordUsage(req, 'parcel_query', started, {
         units: result.rows.length,
@@ -522,7 +524,9 @@ export default async function parcelRoutes(app: FastifyInstance): Promise<void> 
     async (req) => {
       const parsed = ParcelQuerySchema.parse(req.body);
       const total = await countParcels(parsed, STATEMENT_TIMEOUT_MS.interactive);
-      const datasets = await presentDatasets(['cadastre']);
+      const datasets = await presentDatasets(['cadastre'], {
+        muniCode: parsed.scope.municipality ?? null,
+      });
       return envelope(
         {
           total,

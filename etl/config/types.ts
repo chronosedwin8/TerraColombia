@@ -107,6 +107,35 @@ export interface DatasetValidation {
   readonly severity: 'blocker' | 'warning';
 }
 
+/**
+ * Descarte de PII que depende del VALOR de otra columna, no del nombre de la columna.
+ *
+ * Existe por un caso real del REPS (`reps-prestadores-sedes`): cuando
+ * `claseprestador` es "Profesional Independiente", `nombreprestador` y `nombresede`
+ * son el nombre de una persona natural; cuando es una IPS, son la razón social de una
+ * institución, que sí es dato público. La lista negra por nombre de columna no puede
+ * distinguir los dos casos, así que la condición se declara aquí y el paso `stage`
+ * del pipeline la aplica ANTES de escribir en `raw.*`: el nombre de la persona no
+ * entra a la base en ningún momento (regla 3 de CLAUDE.md).
+ */
+export interface PiiRowRule {
+  /** Columna de origen que decide, con el nombre EXACTO de la fuente. */
+  readonly whenColumn: string;
+  /** Valores observados de `whenColumn` que activan el descarte. Comparación exacta. */
+  readonly whenValueIn?: readonly string[];
+  /**
+   * Alternativa a `whenValueIn`: expresión regular (en texto, sin barras) contra el valor de
+   * `whenColumn`. Sirve para las columnas cuyo NOMBRE es legítimo pero cuyo VALOR a veces
+   * trae un dato personal; el caso real es `web` del MEN, que en 153 de los 17 872
+   * establecimientos del último año contiene un correo en vez de una página.
+   */
+  readonly whenValueMatches?: string;
+  /** Columnas de origen que se eliminan de la fila cuando la condición se cumple. */
+  readonly redactColumns: readonly string[];
+  /** Motivo, en español, para `meta.pii_discard_log` y para el informe. */
+  readonly reason: string;
+}
+
 export interface DatasetSourceRef {
   /** Servicio/capa concreta de la que salió la inspección. */
   readonly inspectedFrom: string | null;
@@ -144,6 +173,11 @@ export interface DatasetDefinition {
    * negra global. Vacío no significa "no hay PII": la lista global siempre aplica.
    */
   readonly piiBlocklist: readonly string[];
+  /**
+   * Descartes de PII condicionados al valor de otra columna. Se aplican en `stage`,
+   * antes de escribir en `raw.*`. Ausente = no hace falta ninguno.
+   */
+  readonly piiRowRules?: readonly PiiRowRule[];
   /** Tabla destino, con esquema (`core.parcel`, `ctx.school`…). */
   readonly targetTable: string;
   readonly validations: readonly DatasetValidation[];

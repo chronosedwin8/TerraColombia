@@ -21,6 +21,26 @@ import { isInspected, sourceFieldsOf } from './types.js';
 export * from './types.js';
 export * from './pii-blocklist.js';
 
+/**
+ * Declaraciones del catastro que los cargadores necesitan por nombre: los 31
+ * ítems de ArcGIS Online, el inventario real de capas de la GDB, los campos que la
+ * fuente no trae y los departamentos sin base pública. Se reexportan porque
+ * `packages/db` tiene que leerlos de un único sitio: si el cargador llevara su
+ * propia copia de los identificadores, las dos listas acabarían discrepando y
+ * nadie se enteraría hasta cargar el departamento equivocado.
+ */
+export {
+  CADASTRE_DATASET_PREFIX,
+  CADASTRE_UNAVAILABLE_FIELDS,
+  DEPARTMENTS_WITHOUT_IGAC_GDB,
+  IGAC_DEPARTMENT_GDB_ITEMS,
+  IGAC_GDB_LAYER_INVENTORY,
+  arcgisItemDataUrl,
+  arcgisItemMetadataUrl,
+  cadastreDatasetId,
+  type DepartmentGdbItem,
+} from './datasets/igac-cadastre.js';
+
 const ALL: readonly DatasetDefinition[] = [
   ...CADASTRE_DATASETS,
   ...IGAC_CONTEXT_DATASETS,
