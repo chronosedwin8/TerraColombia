@@ -260,16 +260,44 @@ export async function extractGdb(
   mkdirSync(dest, { recursive: true });
 
   // `ogr2ogr` sabe leer /vsizip/ y escribir OpenFileGDB, pero copiar 18 capas capa
-  // a capa sería lento. `unzip` está en el entorno (Git for Windows lo trae) y es
-  // lo más directo; si no está, se cae a la copia por GDAL.
-  const unzipped = await run('unzip', ['-o', '-q', resolve(zipPath), '-d', dest]).catch(
-    () => ({ code: -1, stdout: '', stderr: 'unzip no disponible' }) as RunResult,
-  );
+  // a capa sería lento. Se descomprime con la primera herramienta disponible.
+  //
+  // Se prueban varias a propósito: `unzip` solo existe si la sesión corre bajo Git Bash,
+  // y bajo PowerShell la carga entera fallaba en el primer departamento con «unzip no
+  // disponible». `tar` viene con Windows 10 en adelante y con cualquier Unix, y
+  // `Expand-Archive` es el último recurso en Windows. Depender de una sola herramienta
+  // hacía que el cargador funcionara o no según desde qué terminal se lanzara.
+  const intentos: Array<{ cmd: string; args: string[] }> = [
+    { cmd: 'unzip', args: ['-o', '-q', resolve(zipPath), '-d', dest] },
+    // `tar` deduce el formato por el contenido y trata el ZIP sin problema.
+    { cmd: 'tar', args: ['-xf', resolve(zipPath), '-C', dest] },
+    {
+      cmd: 'powershell',
+      args: [
+        '-NoProfile',
+        '-Command',
+        `Expand-Archive -LiteralPath '${resolve(zipPath)}' -DestinationPath '${dest}' -Force`,
+      ],
+    },
+  ];
 
-  if (unzipped.code !== 0) {
+  const fallos: string[] = [];
+  let extraido = false;
+  for (const intento of intentos) {
+    const res = await run(intento.cmd, intento.args).catch(
+      () => ({ code: -1, stdout: '', stderr: `${intento.cmd} no disponible` }) as RunResult,
+    );
+    if (res.code === 0) {
+      extraido = true;
+      break;
+    }
+    fallos.push(`${intento.cmd}: ${res.stderr.slice(0, 120) || `código ${res.code}`}`);
+  }
+
+  if (!extraido) {
     throw new Error(
-      `No se pudo descomprimir ${zipPath}: ${unzipped.stderr.slice(0, 400)}. ` +
-        'Instala `unzip` o descomprime el ZIP a mano en ' + dest,
+      `No se pudo descomprimir ${zipPath}. Se intentó con ${fallos.join(' · ')}. ` +
+        `Descomprímelo a mano en ${dest}.`,
     );
   }
 

@@ -26,7 +26,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "lint": "eslint src",
-    "load:cadastre": "tsx src/cli/load-cadastre.ts"
+    "load:cadastre": "tsx src/cli/load-cadastre.ts",
+    "load:education": "tsx src/cli/load-education-indicators.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.1.0",
