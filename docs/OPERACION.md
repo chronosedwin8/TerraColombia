@@ -1156,3 +1156,62 @@ al IGAC y se declara en la ficha.
 - [`DECISIONES.md`](./DECISIONES.md) — registro de decisiones (ADR)
 - [`infra/caprover/README.md`](../infra/caprover/README.md) — imágenes y despliegue
 - [`../README.md`](../README.md) — presentación y puesta en marcha en cinco pasos
+
+## Actualización de los datos
+
+Los datos del Estado cambian, cada fuente a su ritmo, y ninguna avisa. Hay dos
+herramientas y una cadencia sugerida.
+
+### Ver qué está vencido
+
+```
+pnpm --filter @terracolombia/db freshness
+pnpm --filter @terracolombia/db freshness -- --vencidos
+```
+
+El criterio no está escrito a mano en ningún sitio: sale de la frecuencia que cada
+dataset declara en el catálogo (`meta.dataset.frequency`) y de la fecha del corte
+activo. El informe dice, para cada fuente, si está al día, conviene revisarla o está
+vencida, y qué orden la actualiza.
+
+El umbral lleva margen a propósito. Un catastro mensual se avisa a los 35 días y no a
+los 30, porque el IGAC no publica el día 1 en punto y avisar antes sería ruido.
+
+### Actualizar
+
+```
+powershell -NoProfile -File infra\scripts\refresh.ps1 -Seco          ver qué haría
+powershell -NoProfile -File infra\scripts\refresh.ps1 -SaltarCatastro
+powershell -NoProfile -File infra\scripts\refresh.ps1
+```
+
+Refresca solo lo vencido, de lo barato a lo caro, y recalcula los agregados por celda
+al terminar —sin eso los datos nuevos no se ven en el producto—. Un fallo no detiene
+el resto: los servicios del Estado se caen a rachas y quedarse sin actualizar siete
+fuentes porque una no responde sería peor. Las órdenes fallidas se listan al final.
+
+### Cadencia sugerida
+
+| Cuándo | Qué | Por qué |
+|---|---|---|
+| Semanal, domingo 03:00 | Todo salvo el catastro | Recoge OSM (cambia a diario), colegios, salud y las capas eventuales |
+| Mensual, día 5 a las 02:00 | Pasada completa | El IGAC publica corte mensual; el día 5 ya está arriba |
+| Diario, 02:15 | Respaldo (`backup.ps1`) | Restaurar desde volcado no depende de que las fuentes estén en pie |
+
+```
+schtasks /Create /TN "TerraColombia Actualizacion semanal" /SC WEEKLY /D SUN /ST 03:00 ^
+  /TR "powershell -NoProfile -File C:\ruta\repo\infra\scripts\refresh.ps1 -SaltarCatastro"
+
+schtasks /Create /TN "TerraColombia Actualizacion mensual" /SC MONTHLY /D 5 /ST 02:00 ^
+  /TR "powershell -NoProfile -File C:\ruta\repo\infra\scripts\refresh.ps1"
+```
+
+### Dos cosas aprendidas a la mala
+
+Los `.ps1` deben guardarse **con marca de orden de bytes**: Windows PowerShell 5.1 los
+lee como ANSI si no la llevan y los acentos rompen el guion antes de ejecutarse.
+
+Y nunca redirigir con `2>&1` la salida de un ejecutable nativo: esa versión de
+PowerShell convierte cada línea de stderr en un error que aborta el guion, aunque el
+programa termine bien. `pg_dump` escribe ahí sus mensajes de progreso, y por eso el
+respaldo fallaba siempre fuera de PowerShell 7.
