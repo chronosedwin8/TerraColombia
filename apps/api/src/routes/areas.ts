@@ -5,10 +5,12 @@ import {
   CREDIT_COST,
   DISCLAIMERS,
 } from '@terracolombia/shared';
-import { getPrisma } from '@terracolombia/db';
+import {
+  analyzeArea,
+  getPrisma,
+} from '@terracolombia/db';
 import { envelope, presentDatasets, recordUsage } from '../lib/envelope.js';
 import { resolveAreaScope } from '@terracolombia/db';
-import { analyzeArea } from '../services/area-analysis.js';
 
 export default async function areaRoutes(app: FastifyInstance): Promise<void> {
   app.post(

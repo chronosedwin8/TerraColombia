@@ -1,18 +1,7 @@
-import { AREA_ANALYSIS_HARD_LIMIT_KM2, getLogger } from '@terracolombia/shared';
+import { AREA_ANALYSIS_HARD_LIMIT_KM2, DISCLAIMERS, getLogger } from '@terracolombia/shared';
 import type { AreaScope } from '@terracolombia/shared';
-import {
-  facilitiesIn,
-  getCoverage,
-  hazardOverlaps,
-  parcelStatsIn,
-  populationIn,
-  protectedAreaOverlaps,
-  reliefFor,
-  resolveAreaScope,
-  soilOverlaps,
-} from '@terracolombia/db';
-import { approxAreaKm2 } from '@terracolombia/geo';
-import { getPrisma } from '@terracolombia/db';
+import { analyzeArea, getPrisma, resolveAreaScope } from '@terracolombia/db';
+import type { AreaSection } from '@terracolombia/db';
 import type { JobContext } from '../queue.js';
 
 const log = getLogger({ mod: 'job:area' });
@@ -28,8 +17,16 @@ export interface AreaJobPayload {
 }
 
 /**
- * Análisis de zonas grandes en segundo plano. El usuario ve el avance por SSE; cada bloque
- * que no tiene datos se declara en `missingSections` en vez de aparecer como cero.
+ * Análisis de zonas grandes en segundo plano.
+ *
+ * Calcula con `analyzeArea` de `packages/db`, LA MISMA función que usa la ruta síncrona.
+ * Antes este archivo tenía su propia versión: llamaba a los mismos repositorios pero
+ * devolvía sus filas crudas (`parcels.n_parcels`, `facilities.n_schools`) mientras la vía
+ * síncrona devolvía la forma presentada (`parcels.total`, `facilities.schools`). La pantalla,
+ * escrita contra la segunda, reventaba al pintar la primera («Cannot read properties of
+ * undefined»), así que TODA zona de más de 5 km² —las que se encolan— terminaba el cálculo
+ * y no mostraba nada. Además aquella versión ignoraba las secciones pedidas y se dejaba
+ * fuera la frontera agrícola, los resguardos, el POT y el municipio.
  */
 export async function runAreaAnalysisJob(jobId: string, ctx: JobContext): Promise<unknown> {
   const prisma = getPrisma();
@@ -39,7 +36,12 @@ export async function runAreaAnalysisJob(jobId: string, ctx: JobContext): Promis
 
   await prisma.job.update({
     where: { id: jobId },
-    data: { status: 'running', startedAt: new Date(), progress: 5, progressMessage: 'Preparando el área' },
+    data: {
+      status: 'running',
+      startedAt: new Date(),
+      progress: 5,
+      progressMessage: 'Preparando el área',
+    },
   });
 
   const payload = job.input as unknown as AreaJobPayload;
@@ -52,17 +54,12 @@ export async function runAreaAnalysisJob(jobId: string, ctx: JobContext): Promis
    * completo funcionaba cuando el área era pequeña y fallaba cuando era grande, que es
    * justo cuando hay que encolarlo.
    */
-  let geometry: unknown;
-  let scopeWarnings: string[] = [];
-  let scopeMuniCode: string | null = null;
+  let resolved;
   try {
-    const resolved = await resolveAreaScope(
+    resolved = await resolveAreaScope(
       payload.scope,
       payload.maxAnalysisAreaKm2 ?? AREA_ANALYSIS_HARD_LIMIT_KM2,
     );
-    geometry = resolved.geometry;
-    scopeWarnings = resolved.warnings;
-    scopeMuniCode = resolved.muniCode;
   } catch (err) {
     // El mensaje de `AppError` ya está en español y explica qué falta (por ejemplo, que no
     // tenemos el límite del municipio). Se propaga tal cual en vez de uno genérico.
@@ -74,81 +71,51 @@ export async function runAreaAnalysisJob(jobId: string, ctx: JobContext): Promis
     throw err;
   }
 
-  const areaKm2 = payload.areaKm2 ?? approxAreaKm2(geometry as never);
-  const steps: Array<[string, () => Promise<unknown>]> = [
-    ['Contando predios', () => parcelStatsIn(geometry as never, payload.cutDate ?? undefined)],
-    ['Estimando población', () => populationIn(geometry as never)],
-    ['Contando equipamientos', () => facilitiesIn(geometry as never)],
-    ['Cruzando suelos', () => soilOverlaps(geometry as never)],
-    ['Cruzando amenazas', () => hazardOverlaps(geometry as never)],
-    ['Cruzando áreas protegidas', () => protectedAreaOverlaps(geometry as never)],
-    ['Calculando relieve', () => reliefFor(geometry as never)],
-  ];
+  /*
+   * El avance se escribe en la base y se emite por el canal del worker. Se descartan los
+   * retrocesos porque los bloques terminan en paralelo y el orden no está garantizado.
+   */
+  let lastPct = 5;
+  const pending: Array<Promise<unknown>> = [];
+  const onProgress = (pct: number, label: string): void => {
+    if (pct <= lastPct) return;
+    lastPct = pct;
+    pending.push(
+      prisma.job
+        .update({ where: { id: jobId }, data: { progress: pct, progressMessage: label } })
+        .catch((err: unknown) => log.warn({ err }, 'No se pudo anotar el avance')),
+    );
+    pending.push(ctx.progress(pct, label).catch(() => undefined));
+  };
 
-  const results: Record<string, unknown> = {};
-  const keys = ['parcels', 'population', 'facilities', 'soils', 'hazards', 'protectedAreas', 'relief'];
-
-  for (const [i, [label, run]] of steps.entries()) {
-    const pct = 10 + Math.round(((i + 1) / steps.length) * 80);
+  let analysis;
+  try {
+    analysis = await analyzeArea(
+      resolved,
+      (payload.sections ?? []) as AreaSection[],
+      payload.cutDate ?? undefined,
+      onProgress,
+    );
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'El análisis de la zona falló.';
+    log.error({ err: message, jobId }, 'Análisis de zona fallido');
     await prisma.job.update({
       where: { id: jobId },
-      data: { progress: pct, progressMessage: label },
+      data: { status: 'failed', errorMessage: message, finishedAt: new Date() },
     });
-    await ctx.progress(pct, label);
-    try {
-      results[keys[i]!] = await run();
-    } catch (err) {
-      // Un bloque que falla no tumba el análisis completo: se declara y se sigue.
-      const message = err instanceof Error ? err.message : String(err);
-      log.warn({ step: keys[i], err: message }, 'Bloque del análisis fallido');
-      results[keys[i]!] = { error: message };
-    }
+    throw err;
   }
+  await Promise.allSettled(pending);
 
-  // El municipio lo deduce el resolutor incluso para un polígono o un radio, así que el
-  // bloque de cobertura aparece también en esos ámbitos; antes solo salía si la petición
-  // traía el código explícito.
-  const coverage = scopeMuniCode ? await getCoverage(scopeMuniCode) : null;
-
-  const missingSections: Array<{ section: string; reason: string }> = [];
-  const parcels = results.parcels as { n_parcels?: number } | null;
-  if ((parcels?.n_parcels ?? 0) === 0) {
-    missingSections.push({
-      section: 'parcels',
-      reason:
-        coverage?.status === 'none' && coverage.message
-          ? coverage.message
-          : 'No hay predios cargados dentro de esta zona en el corte activo.',
-    });
-  }
-  const population = results.population as { n_blocks?: number } | null;
-  if ((population?.n_blocks ?? 0) === 0) {
-    missingSections.push({
-      section: 'population',
-      reason: 'No hay manzanas censales del DANE cargadas para esta zona.',
-    });
-  }
-  if (Array.isArray(results.hazards) && results.hazards.length === 0) {
-    missingSections.push({
-      section: 'hazards',
-      reason:
-        'No hay capas de amenaza cargadas que cubran esta zona. Que no aparezcan no significa que no existan.',
-    });
-  }
-
+  /*
+   * Los avisos que la vía síncrona pone en `meta.warnings` del sobre tienen que viajar
+   * DENTRO del resultado: el trabajo encolado no tiene sobre, y sin esto el mismo análisis
+   * decía la verdad o se la callaba según su tamaño. El principal es que una isócrona es en
+   * realidad un círculo calculado con una velocidad media, no un alcance por red vial.
+   */
   const result = {
-    areaKm2: Number(areaKm2.toFixed(4)),
-    areaHa: Number((areaKm2 * 100).toFixed(2)),
-    coverage,
-    ...results,
-    missingSections,
-    /*
-     * Los avisos de cómo se resolvió el ámbito tienen que llegar al usuario: el principal es
-     * que una isócrona es en realidad un círculo calculado con una velocidad media, no un
-     * alcance por red vial. La vía síncrona ya los devolvía y la encolada los perdía, así que
-     * el mismo análisis decía la verdad o se la callaba según su tamaño.
-     */
-    warnings: scopeWarnings,
+    ...analysis,
+    warnings: [...new Set([...resolved.warnings, ...analysis.warnings, DISCLAIMERS.hazardScale])],
     computedAt: new Date().toISOString(),
   };
 

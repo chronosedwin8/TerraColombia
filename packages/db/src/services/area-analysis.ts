@@ -1,3 +1,14 @@
+/**
+ * Tablero de una zona: el ÚNICO cálculo del análisis de área.
+ *
+ * Vive en `packages/db` y no en la API porque tiene dos consumidores: la ruta síncrona
+ * (`POST /areas/analyze` con zonas pequeñas) y el trabajo en segundo plano del worker
+ * (zonas de más de 5 km²). Cuando eran dos implementaciones distintas devolvían formas
+ * distintas del mismo resultado —`parcels.total` frente a `parcels.n_parcels`,
+ * `facilities.schools` frente a `facilities.n_schools`—, así que la pantalla se rompía al
+ * pintar el resultado encolado y el usuario veía una zona que decía «Falló» sin motivo.
+ * Una sola función, un solo contrato.
+ */
 import { NOT_AVAILABLE } from '@terracolombia/shared';
 import type { Coverage } from '@terracolombia/shared';
 import {
@@ -12,8 +23,8 @@ import {
   protectedAreaOverlaps,
   reliefFor,
   soilOverlaps,
-} from '@terracolombia/db';
-import type { ResolvedScope } from '@terracolombia/db';
+} from '../repositories/index.js';
+import type { ResolvedScope } from '../repositories/area-scope.js';
 
 export type AreaSection =
   | 'parcels'
@@ -49,6 +60,9 @@ export interface AreaAnalysisResult {
   warnings: string[];
 }
 
+/** Bloques que informan avance: los diez de `Promise.all`. */
+const TRACKED_BLOCKS = 10;
+
 const ALL_SECTIONS: AreaSection[] = [
   'parcels',
   'population',
@@ -67,12 +81,31 @@ const ALL_SECTIONS: AreaSection[] = [
  * Tablero de una zona. Cada bloque se calcula solo si se pidió, y cuando no hay datos se
  * anota en `missingSections` con el motivo: nunca se devuelve un cero que parezca un dato.
  */
+/** Qué se está calculando, para que el worker pueda contarlo mientras tanto. */
+export type AreaProgress = (pct: number, label: string) => void;
+
 export async function analyzeArea(
   scope: ResolvedScope,
   sections: AreaSection[],
   cutDate?: string,
+  onProgress?: AreaProgress,
 ): Promise<AreaAnalysisResult> {
   const wanted = new Set(sections.length > 0 ? sections : ALL_SECTIONS);
+
+  /*
+   * Los bloques se calculan en paralelo, así que el avance no puede ser una lista de pasos:
+   * se cuenta cuántos han terminado. El rango va de 10 a 90 para dejar sitio a la
+   * preparación del ámbito y al guardado del resultado.
+   */
+  let done = 0;
+  const track = <T>(label: string, p: Promise<T>): Promise<T> =>
+    onProgress
+      ? p.then((value) => {
+          done += 1;
+          onProgress(10 + Math.round((done / TRACKED_BLOCKS) * 80), label);
+          return value;
+        })
+      : p;
   const missing: AreaAnalysisResult['missingSections'] = [];
   const warnings: string[] = [];
   const geom = scope.geometry;
@@ -89,20 +122,20 @@ export async function analyzeArea(
     frontier,
     relief,
   ] = await Promise.all([
-    wanted.has('parcels') ? parcelStatsIn(geom, cutDate) : Promise.resolve(null),
-    wanted.has('population') ? populationIn(geom) : Promise.resolve(null),
+    wanted.has('parcels') ? track('Contando predios', parcelStatsIn(geom, cutDate)) : Promise.resolve(null),
+    wanted.has('population') ? track('Estimando poblacion', populationIn(geom)) : Promise.resolve(null),
     wanted.has('education') || wanted.has('health') || wanted.has('commerce')
-      ? facilitiesIn(geom)
+      ? track('Contando equipamientos', facilitiesIn(geom))
       : Promise.resolve(null),
-    wanted.has('soils') ? soilOverlaps(geom) : Promise.resolve([]),
-    wanted.has('hazards') ? hazardOverlaps(geom) : Promise.resolve([]),
-    wanted.has('protected') ? protectedAreaOverlaps(geom) : Promise.resolve([]),
-    wanted.has('protected') ? ethnicTerritoryOverlaps(geom) : Promise.resolve([]),
+    wanted.has('soils') ? track('Cruzando suelos', soilOverlaps(geom)) : Promise.resolve([]),
+    wanted.has('hazards') ? track('Cruzando amenazas', hazardOverlaps(geom)) : Promise.resolve([]),
+    wanted.has('protected') ? track('Cruzando areas protegidas', protectedAreaOverlaps(geom)) : Promise.resolve([]),
+    wanted.has('protected') ? track('Cruzando resguardos y consejos comunitarios', ethnicTerritoryOverlaps(geom)) : Promise.resolve([]),
     wanted.has('pot')
-      ? potZoneOverlaps(geom, scope.muniCode ?? undefined)
+      ? track('Cruzando el POT', potZoneOverlaps(geom, scope.muniCode ?? undefined))
       : Promise.resolve([]),
-    wanted.has('soils') ? agriculturalFrontierOverlap(geom) : Promise.resolve([]),
-    wanted.has('relief') ? reliefFor(geom) : Promise.resolve(null),
+    wanted.has('soils') ? track('Cruzando la frontera agricola', agriculturalFrontierOverlap(geom)) : Promise.resolve([]),
+    wanted.has('relief') ? track('Calculando relieve', reliefFor(geom)) : Promise.resolve(null),
   ]);
 
   const coverage = scope.muniCode ? await getCoverage(scope.muniCode) : null;
