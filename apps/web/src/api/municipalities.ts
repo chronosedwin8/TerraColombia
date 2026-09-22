@@ -1,6 +1,6 @@
 import type { Envelope } from '@terracolombia/shared';
 import { request } from './client';
-import type { MunicipalityDetail, MunicipalityListItem } from './types';
+import type { DepartmentListItem, MunicipalityDetail, MunicipalityListItem } from './types';
 
 /**
  * Ficha del municipio.
@@ -25,4 +25,14 @@ export function getMunicipality(
 /** Municipios, opcionalmente filtrados por departamento. Arreglo pelado. */
 export function listMunicipalities(deptCode?: string): Promise<Envelope<MunicipalityListItem[]>> {
   return request<MunicipalityListItem[]>('/municipalities', { query: { deptCode } });
+}
+
+/**
+ * Departamentos del país. Arreglo pelado, 33 filas.
+ *
+ * Lo usa el selector del buscador avanzado: sin él, el formulario pedía el código DIVIPOLA
+ * escrito a mano, que es el dato que el usuario justamente no tiene.
+ */
+export function listDepartments(): Promise<Envelope<DepartmentListItem[]>> {
+  return request<DepartmentListItem[]>('/departments');
 }

@@ -22,15 +22,15 @@
     Empaqueta y sube el respaldo a S3 (requiere la CLI de AWS).
 
 .EXAMPLE
-    pwsh -File infra\scripts\backup.ps1
+    powershell -NoProfile -ExecutionPolicy Bypass -File infra\scripts\backup.ps1
 
 .EXAMPLE
-    pwsh -File infra\scripts\backup.ps1 -Completo -SubirS3 -RetencionDias 30
+    powershell -NoProfile -ExecutionPolicy Bypass -File infra\scripts\backup.ps1 -Completo -SubirS3 -RetencionDias 30
 
 .NOTES
     Tarea programada diaria (02:15, hora de Bogotá):
       schtasks /Create /TN "TerraColombia Respaldo" /SC DAILY /ST 02:15 ^
-        /TR "pwsh -NoProfile -File C:\ruta\repo\infra\scripts\backup.ps1 -SubirS3"
+        /TR "powershell -NoProfile -File C:\ruta\repo\infra\scripts\backup.ps1 -SubirS3"
 #>
 [CmdletBinding()]
 param(
@@ -157,8 +157,23 @@ if (-not $Completo) {
 
 Write-Log 'Iniciando pg_dump…'
 $inicio = Get-Date
-& $pgDump @argumentos 2>&1 | ForEach-Object { Write-Host "          $_" -ForegroundColor DarkGray }
-if ($LASTEXITCODE -ne 0) {
+
+# La salida de error se manda a un archivo en vez de a la tubería con `2>&1`.
+#
+# Windows PowerShell 5.1 envuelve CADA línea que un ejecutable nativo escribe en stderr en un
+# NativeCommandError y aborta el guion, aunque el programa termine con código 0. `pg_dump`
+# escribe ahí sus mensajes de progreso de `--verbose` y avisos informativos como «el último
+# OID interno es 16383», que no son fallos: con `2>&1` el respaldo moría siempre en esta
+# versión de PowerShell. Bajo pwsh 7 funcionaba, y por eso no se había notado. Un respaldo que
+# solo funciona en la máquina de quien lo escribió no es un respaldo.
+$errLog = Join-Path ([System.IO.Path]::GetTempPath()) "tc-pgdump-$PID.err"
+& $pgDump @argumentos 2> $errLog
+$codigoDump = $LASTEXITCODE
+if (Test-Path $errLog) {
+    Get-Content $errLog | ForEach-Object { Write-Host "          $_" -ForegroundColor DarkGray }
+    Remove-Item -Force $errLog -ErrorAction SilentlyContinue
+}
+if ($codigoDump -ne 0) {
     if (Test-Path $rutaDump) { Remove-Item -Recurse -Force $rutaDump }
     Stop-ConError 'pg_dump falló; el respaldo incompleto se eliminó.' `
         'Revise el mensaje anterior. Si es un fallo de conexión, verifique credenciales y que el servidor acepta conexiones.'
@@ -171,7 +186,8 @@ Write-Ok "Volcado terminado en ${duracion}s · tamaño $tamano"
 # ─── Verificación: el volcado tiene que ser legible ─────────────────────────
 if (Test-Path $pgRestore) {
     $indice = "$rutaDump.indice.txt"
-    & $pgRestore --list $rutaDump | Out-File -FilePath $indice -Encoding utf8
+    # Mismo motivo que arriba: nada de `2>&1` sobre un ejecutable nativo en PowerShell 5.1.
+    & $pgRestore --list $rutaDump 2> $null | Out-File -FilePath $indice -Encoding utf8
     if ($LASTEXITCODE -ne 0) {
         Stop-ConError 'El volcado generado no se puede leer con pg_restore.' `
             'El respaldo NO es válido. No lo suba ni confíe en él.'

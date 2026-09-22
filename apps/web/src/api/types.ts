@@ -260,6 +260,14 @@ export interface MunicipalityDetail {
 }
 
 /** `GET /municipalities` (arreglo pelado). */
+/** Fila de `GET /departments`. Arreglo pelado, 33 filas. */
+export interface DepartmentListItem {
+  code: string;
+  name: string;
+  region: string | null;
+  area_km2: number | null;
+}
+
 export interface MunicipalityListItem {
   code: string;
   name: string;

@@ -9,7 +9,7 @@
  *
  * Lista y mapa están sincronizados: pasar el cursor por una fila resalta el predio y al revés.
  */
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, shallowRef, watch } from 'vue';
 import {
   AppError,
   MESSAGES,
@@ -27,12 +27,14 @@ import { useMapStore } from '@/stores/map';
 import { useEntitlements } from '@/composables/useEntitlements';
 import { jsonCodec, useUrlState } from '@/composables/useUrlState';
 import { queryParcels } from '@/api/parcels';
+import { listDepartments, listMunicipalities } from '@/api/municipalities';
 import { emptyMeta } from '@/api/client';
-import type { ParcelQueryResponse } from '@/api/types';
+import type { MunicipalityListItem, ParcelQueryResponse } from '@/api/types';
 import MapView from '@/map/MapView.vue';
 import BaseCard from '@/components/ui/BaseCard.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseField from '@/components/ui/BaseField.vue';
+import PlaceSelect, { type PlaceOption } from '@/components/ui/PlaceSelect.vue';
 import EmptyState from '@/components/ui/EmptyState.vue';
 import GlossaryTerm from '@/components/ui/GlossaryTerm.vue';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton.vue';
@@ -85,6 +87,61 @@ const { state, shareUrl } = useUrlState({
 });
 
 const builder = computed(() => state.filtros);
+
+/*
+ * Listas de departamentos y municipios para los selectores.
+ *
+ * Se piden una vez al abrir la pantalla y se guardan: son 33 y 1.122 filas, pesan poco, y
+ * tenerlas en memoria permite buscar por nombre sin ir al servidor en cada tecla.
+ */
+const departamentos = shallowRef<PlaceOption[]>([]);
+const municipios = shallowRef<MunicipalityListItem[]>([]);
+const errorListas = ref<string | null>(null);
+
+onMounted(async () => {
+  try {
+    const [deps, munis] = await Promise.all([listDepartments(), listMunicipalities()]);
+    departamentos.value = deps.data.map((d) => ({
+      code: d.code,
+      name: d.name,
+      context: d.region,
+    }));
+    municipios.value = munis.data;
+  } catch {
+    // Que fallen las listas no debe impedir usar la pantalla: el selector lo explica y el
+    // usuario puede seguir buscando por otros filtros.
+    errorListas.value =
+      'No pudimos cargar la lista de municipios. Puedes seguir usando los demás filtros.';
+  }
+});
+
+const opcionesDepartamento = computed<PlaceOption[]>(() => departamentos.value);
+
+/** Al elegir departamento, el selector de municipio se acota a los suyos. */
+const opcionesMunicipio = computed<PlaceOption[]>(() => {
+  const dep = state.filtros.department;
+  return municipios.value
+    .filter((m) => dep === '' || m.deptCode === dep)
+    .map((m) => ({
+      code: m.code,
+      name: m.name,
+      context: dep === '' ? m.deptName : null,
+    }));
+});
+
+/*
+ * Elegir municipio rellena el departamento si estaba vacío. Sin esto, alguien que busca
+ * «Soledad» directamente dejaría el departamento en blanco y el formulario le pediría uno
+ * de los dos, que es precisamente el error que este selector viene a evitar.
+ */
+watch(
+  () => state.filtros.municipality,
+  (codigo) => {
+    if (codigo !== '' && state.filtros.department === '') {
+      state.filtros.department = codigo.slice(0, 2);
+    }
+  },
+);
 
 const NEAR_LABELS: Record<NearbyLayer, string> = {
   road: 'Vía',
@@ -327,31 +384,26 @@ watch(() => mapStore.cutDate, () => {
       <BaseCard title="Filtros" :heading-level="2">
         <form class="space-y-3" @submit.prevent="run">
           <div class="grid grid-cols-2 gap-2">
-            <BaseField label="Departamento" hint="Código de 2 dígitos">
-              <template #default="{ id, describedBy }">
-                <input
-                  :id="id"
-                  v-model="state.filtros.department"
-                  class="tc-input"
-                  inputmode="numeric"
-                  maxlength="2"
-                  :aria-describedby="describedBy"
-                />
-              </template>
-            </BaseField>
+            <PlaceSelect
+              v-model="state.filtros.department"
+              label="Departamento"
+              :options="opcionesDepartamento"
+              placeholder="Atlántico, Valle…"
+              hint="Escribe el nombre o el código"
+            />
 
-            <BaseField label="Municipio" hint="Código DIVIPOLA de 5 dígitos">
-              <template #default="{ id, describedBy }">
-                <input
-                  :id="id"
-                  v-model="state.filtros.municipality"
-                  class="tc-input"
-                  inputmode="numeric"
-                  maxlength="5"
-                  :aria-describedby="describedBy"
-                />
-              </template>
-            </BaseField>
+            <PlaceSelect
+              v-model="state.filtros.municipality"
+              label="Municipio"
+              :options="opcionesMunicipio"
+              placeholder="Soledad, Cali…"
+              :hint="
+                state.filtros.department
+                  ? 'Municipios del departamento elegido'
+                  : 'Escribe el nombre; el código lo ponemos nosotros'
+              "
+              empty-hint="No pudimos cargar la lista de municipios. Puedes escribir el código a mano en la barra de búsqueda de arriba."
+            />
           </div>
 
           <p class="text-xs text-slate-500">
@@ -387,6 +439,24 @@ watch(() => mapStore.cutDate, () => {
               <input :id="id" v-model="state.filtros.builtMin" class="tc-input" inputmode="decimal" />
             </template>
           </BaseField>
+
+          <!--
+            Aviso honesto sobre tres filtros que la fuente pública no alimenta.
+
+            La Base Catastral Pública del IGAC trae geometría y códigos: NO publica avalúo,
+            ni destino económico, ni dirección alfanumérica. Ofrecer esos filtros sin decirlo
+            hace que el usuario los rellene, no obtenga nada y crea que buscó mal. Se dejan
+            porque sí funcionan donde el municipio aporta esos datos por otra vía, pero con
+            la advertencia delante (regla 6).
+          -->
+          <div class="rounded-md border border-amber-200 bg-amber-50 p-2.5 text-xs text-amber-900">
+            <p class="font-medium">Tres filtros dependen de datos que la fuente no siempre publica</p>
+            <p class="mt-0.5 leading-snug">
+              La base catastral abierta del IGAC trae la geometría y los códigos del predio,
+              pero no el avalúo, el destino económico ni la dirección. Donde no existan, estos
+              tres filtros no encontrarán nada: no es que hayas buscado mal.
+            </p>
+          </div>
 
           <BaseField
             label="Avalúo catastral máximo (COP)"
