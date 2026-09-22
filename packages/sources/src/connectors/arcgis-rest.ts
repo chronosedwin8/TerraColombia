@@ -393,9 +393,31 @@ export class ArcgisServiceError extends Error {
   }
 }
 
+/**
+ * ArcGIS tiene DOS formas de decir que algo falló, y las dos llegan con HTTP 200 y un cuerpo
+ * JSON perfectamente válido:
+ *
+ *   1. `{"error": {"code": 400, "message": "…"}}` — la documentada.
+ *   2. `{"status": "error", "messages": ["Could not access any server machines…"]}` — la que
+ *      devuelve el propio servidor de mapas cuando no puede atender.
+ *
+ * Solo se comprobaba la primera. La segunda pasaba como respuesta buena, y una consulta de
+ * identificadores devolvía una lista vacía que el cargador leía como «esta capa no tiene
+ * entidades». Con eso se publicó un corte de amenaza por movimientos en masa con cero
+ * polígonos: afirmar que no hay amenaza en ninguna parte del país cuando lo que pasó es que
+ * el servidor estaba caído. Un error de red disfrazado de dato es el peor fallo que puede
+ * tener este producto, así que se comprueban las dos formas.
+ */
 function assertNoError(res: ArcgisQueryResponse | ArcgisGeoJsonResponse, url: string): void {
   if ('error' in res && res.error) {
     throw new ArcgisServiceError(res.error.message, res.error.code, url, res.error.details ?? []);
+  }
+  const conEstado = res as { status?: unknown; messages?: unknown };
+  if (conEstado.status === 'error') {
+    const mensajes = Array.isArray(conEstado.messages)
+      ? conEstado.messages.map(String)
+      : ['El servicio devolvió status=error sin mensajes.'];
+    throw new ArcgisServiceError(mensajes.join(' · '), 500, url, mensajes);
   }
 }
 
@@ -871,7 +893,8 @@ async function fetchPage(
         retryOnBodyError: false,
         ...reqOpts,
       });
-      if (res.error) throw new ArcgisServiceError(res.error.message, res.error.code, url);
+      // Las dos formas de error de ArcGIS, no solo la documentada.
+      assertNoError(res, url);
       return {
         features: res.features ?? [],
         format: 'geojson',

@@ -357,6 +357,28 @@ describe('getCount / getExtent', () => {
     expect(await getCount(client(fetchImpl), layerUrl)).toBeNull();
   });
 
+  /*
+   * El servidor de mapas, cuando no puede atender, responde HTTP 200 con un cuerpo JSON
+   * válido de la forma `{"status":"error","messages":[…]}`, que NO es la forma `error`
+   * documentada. Esa segunda forma no se comprobaba: pasaba como respuesta buena y una
+   * consulta de identificadores devolvía lista vacía, que el cargador leyó como «esta capa no
+   * tiene entidades». Con eso se publicó un corte de amenazas con cero polígonos —afirmar que
+   * no hay amenaza en el país cuando el servidor estaba caído—. Un error de red disfrazado de
+   * dato es el peor fallo posible aquí.
+   */
+  it('trata `status: error` como fallo, no como respuesta vacía', async () => {
+    const { fetchImpl } = makeFetch([
+      [
+        () => true,
+        () => ({
+          status: 'error',
+          messages: ['Could not access any server machines. Please contact your administrator.'],
+        }),
+      ],
+    ]);
+    expect(await getCount(client(fetchImpl), layerUrl)).toBeNull();
+  });
+
   it('devuelve la extensión y el wkid', async () => {
     const { fetchImpl } = makeFetch([
       [
