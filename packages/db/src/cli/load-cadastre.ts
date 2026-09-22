@@ -44,6 +44,7 @@ import {
   finishRun,
 } from '../repositories/meta.js';
 import { rebuildSearchIndex } from '../repositories/search.js';
+import { refreshMuniSummary } from '../repositories/analytics.js';
 import { CADASTRE_LAYERS } from '../cadastre/layers.js';
 import {
   downloadDepartmentZip,

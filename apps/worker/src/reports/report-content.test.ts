@@ -1,4 +1,4 @@
-import { afterAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { loadEnvFile } from '../env.js';
 
 /**
@@ -17,9 +17,32 @@ loadEnvFile();
 const HAS_DB = Boolean(process.env.DATABASE_URL);
 const d = HAS_DB ? describe : describe.skip;
 
-const DEMO_NPN = '087580101010200010001000000000';
+/*
+ * El predio del informe se descubre de la base, no se fija.
+ *
+ * Estaba clavado al corte de demostración de Soledad. Al apagar los datos sintéticos —lo
+ * que hay que hacer antes de producción, porque un corte inventado conviviendo con cinco
+ * millones de predios reales es un riesgo— estas doce pruebas se cayeron por un código que
+ * había dejado de existir, sin que nada del informe estuviera roto.
+ */
+let DEMO_NPN = '';
 
 d('contenido del Informe Territorial de Predio', () => {
+  beforeAll(async () => {
+    const { query } = await import('@terracolombia/db');
+    const { sql } = await import('@terracolombia/db/sql');
+    const fila = (
+      await query<{ npn: string }>(sql`
+        SELECT p.npn FROM core.parcel p
+        JOIN meta.snapshot s ON s.id = p.snapshot_id AND s.is_active
+        WHERE p.centroid IS NOT NULL
+        ORDER BY p.muni_code
+        LIMIT 1
+      `)
+    )[0];
+    DEMO_NPN = fila?.npn ?? '';
+  }, 60_000);
+
   afterAll(async () => {
     const { closePool } = await import('@terracolombia/db');
     await closePool();
@@ -68,10 +91,21 @@ d('contenido del Informe Territorial de Predio', () => {
     expect(html).toMatch(/CC[\s-]?BY[\s-]?SA/i);
   }, 120_000);
 
-  it('marca los datos de demostración', async () => {
+  /*
+   * El informe tiene que decir de qué pie cojea el dato que lleva dentro: si viene de un
+   * corte sintético lo grita, y si viene de una fuente real no debe insinuarlo. Las dos
+   * mitades importan — un aviso que se queda pegado cuando ya no aplica enseña a ignorarlo.
+   */
+  it('declara si el dato es de demostración o de fuente real', async () => {
     const { html, built } = await buildHtml();
-    expect(built.synthetic).toBe(true);
-    expect(html.toUpperCase()).toContain('DEMOSTRACI');
+    if (built.synthetic) {
+      expect(html.toUpperCase()).toContain('DEMOSTRACI');
+    } else {
+      expect(
+        html.toUpperCase(),
+        'el informe avisa de datos de demostración con un predio de fuente real',
+      ).not.toContain('DATOS DE DEMOSTRACIÓN');
+    }
   }, 120_000);
 
   it('advierte que el avalúo catastral no es valor comercial', async () => {

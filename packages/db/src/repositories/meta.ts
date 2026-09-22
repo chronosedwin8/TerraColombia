@@ -147,13 +147,24 @@ export async function getSourceRefs(datasetIds: string[]): Promise<SourceRef[]> 
     attribution: string;
     url: string | null;
     cut_date: string | null;
-    is_synthetic: boolean | null;
+    is_synthetic: boolean;
   }>(sql`
     SELECT
       d.id AS dataset_id, d.source, d.name, d.license, d.attribution, d.url,
       s.cut_date::text AS cut_date, s.is_synthetic
     FROM meta.dataset d
-    LEFT JOIN meta.snapshot s ON s.dataset_id = d.id AND s.is_active
+    /*
+     * JOIN y no LEFT JOIN: solo se cita como fuente lo que de verdad tiene un corte activo.
+     *
+     * Con LEFT JOIN se citaba cualquier dataset declarado en el catálogo aunque no
+     * aportara una sola fila, con la fecha de corte en "No disponible". Al apagar los datos
+     * de demostración, los informes de predios REALES seguían listando «Equipamientos de
+     * demostración» entre sus fuentes y arrastrando su texto de atribución, así que un
+     * informe con datos del IGAC mostraba el aviso de datos sintéticos. La regla 4 pide que
+     * toda cifra lleve su procedencia; citar una procedencia que no aportó nada es la misma
+     * falta al revés.
+     */
+    JOIN meta.snapshot s ON s.dataset_id = d.id AND s.is_active
     WHERE d.id IN (${values(datasetIds)})
     ORDER BY d.source, d.name
   `);
@@ -165,7 +176,7 @@ export async function getSourceRefs(datasetIds: string[]): Promise<SourceRef[]> 
     license: r.license,
     attribution: r.attribution,
     url: r.url,
-    synthetic: r.is_synthetic ?? false,
+    synthetic: r.is_synthetic,
   }));
 }
 

@@ -29,6 +29,8 @@ let DEMO_MUNI = '';
 let DEMO_NPN = '';
 /** Un predio de un corte SINTÉTICO, para comprobar que la API lo marca como tal. */
 let SYNTHETIC_NPN = '';
+/** Centroide del predio descubierto, para pedir una tesela donde de verdad haya algo. */
+let TILE_LNG_LAT: [number, number] | null = null;
 
 let app: FastifyInstance;
 let token = '';
@@ -48,8 +50,10 @@ d('API', () => {
     // Se prefiere un municipio con muchos predios: da más probabilidades de que las
     // consultas de contexto y cercanía tengan algo que devolver.
     const fila = (
-      await query<{ npn: string; muni_code: string }>(sql`
-        SELECT p.npn, p.muni_code
+      await query<{ npn: string; muni_code: string; lng: number; lat: number }>(sql`
+        SELECT p.npn, p.muni_code,
+               ST_X(p.centroid)::double precision AS lng,
+               ST_Y(p.centroid)::double precision AS lat
         FROM core.parcel p
         JOIN meta.snapshot s ON s.id = p.snapshot_id AND s.is_active
         WHERE p.centroid IS NOT NULL
@@ -60,6 +64,7 @@ d('API', () => {
     if (fila) {
       DEMO_NPN = fila.npn;
       DEMO_MUNI = fila.muni_code;
+      TILE_LNG_LAT = [fila.lng, fila.lat];
     }
 
     // El aviso de datos de demostración es una regla del producto, así que se comprueba
@@ -300,12 +305,26 @@ d('API', () => {
 
   // ─── Teselas ───────────────────────────────────────────────────────────────
   describe('teselas', () => {
-    it('sirve predios a zoom 15', async () => {
-      const res = await app.inject({
-        method: 'GET',
-        url: '/api/v1/tiles/parcel/15/9578/15384.mvt',
-      });
-      expect(res.statusCode).toBe(200);
+    /*
+     * La tesela se calcula desde el centroide del predio descubierto, no con unas
+     * coordenadas fijas. Estaban clavadas sobre Soledad, donde vivían los predios de
+     * demostración: al apagar el corte sintético la tesela quedó vacía y la prueba falló
+     * sin que nada estuviera roto.
+     */
+    it('sirve predios a zoom 15 donde hay predios', async () => {
+      if (!TILE_LNG_LAT) {
+        expect(TILE_LNG_LAT, 'no hay predios con centroide: nada que teselar').toBeNull();
+        return;
+      }
+      const [lng, lat] = TILE_LNG_LAT;
+      const z = 15;
+      const x = Math.floor(((lng + 180) / 360) * 2 ** z);
+      const latRad = (lat * Math.PI) / 180;
+      const y = Math.floor(
+        ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * 2 ** z,
+      );
+      const res = await app.inject({ method: 'GET', url: `/api/v1/tiles/parcel/${z}/${x}/${y}.mvt` });
+      expect(res.statusCode, `tesela ${z}/${x}/${y} sobre ${lng},${lat}`).toBe(200);
       expect(res.headers['content-type']).toContain('mapbox-vector-tile');
       expect(res.rawPayload.length).toBeGreaterThan(100);
     });

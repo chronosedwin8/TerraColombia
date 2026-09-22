@@ -204,9 +204,18 @@ export async function coverageSummary() {
     SELECT
       (SELECT count(*) FROM core.municipality)::int AS total_municipalities,
       (SELECT count(*) FROM core.cadastral_manager WHERE is_igac)::int AS igac_municipalities,
-      (SELECT count(DISTINCT p.muni_code)
-         FROM core.parcel p
-         JOIN meta.snapshot s ON s.id = p.snapshot_id AND s.is_active)::int AS with_parcels,
+      /*
+       * Se cuenta sobre analytics.muni_summary, no sobre core.parcel.
+       *
+       * count(DISTINCT muni_code) recorría los 5,1 millones de predios y sus 31
+       * particiones: 23 segundos medidos. Y esto se llama en CADA búsqueda que no encuentra
+       * nada, para poder explicar por qué -- "tenemos predios en N de 1.122 municipios" --,
+       * así que cualquiera que escribiera algo raro esperaba medio minuto por una frase.
+       *
+       * La vista materializada ya trae n_parcels por municipio y se refresca tras cada
+       * carga. Contar sus filas con predios da el mismo número leyendo 1.122 filas.
+       */
+      (SELECT count(*) FROM analytics.muni_summary WHERE n_parcels > 0)::int AS with_parcels,
       (SELECT count(*) FROM core.cadastral_manager WHERE NOT is_igac)::int AS other_managers
   `);
 }
