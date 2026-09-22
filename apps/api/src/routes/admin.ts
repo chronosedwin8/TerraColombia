@@ -485,13 +485,14 @@ export default async function adminRoutes(app: FastifyInstance): Promise<void> {
 
       const [parcelsIndexed, municipalitiesWithCadastre, apiCalls, reportsLast30d] =
         await Promise.all([
+          // Sobre analytics.muni_summary, no sobre core.parcel: contar 5,1 millones de
+          // predios en 31 particiones tardaba más que el statement_timeout de 30 s y el
+          // panel respondía 500. La vista se refresca tras cada carga (ADR-012).
           query<{ n: number }>(sql`
-            SELECT count(*)::int AS n FROM core.parcel p
-            JOIN meta.snapshot s ON s.id = p.snapshot_id AND s.is_active
+            SELECT COALESCE(sum(n_parcels), 0)::int AS n FROM analytics.muni_summary
           `),
           query<{ n: number }>(sql`
-            SELECT count(DISTINCT p.muni_code)::int AS n FROM core.parcel p
-            JOIN meta.snapshot s ON s.id = p.snapshot_id AND s.is_active
+            SELECT count(*)::int AS n FROM analytics.muni_summary WHERE n_parcels > 0
           `),
           prisma.usageEvent.count({ where: { createdAt: { gte: thirtyDaysAgo } } }),
           prisma.report.count({ where: { createdAt: { gte: thirtyDaysAgo }, status: 'done' } }),

@@ -27,7 +27,7 @@ const NPN_URBANO = '087580101010200010001000000000';
 /** Unidad de propiedad horizontal: mismo terreno, edificio 01, piso 03, unidad 0402. */
 const NPN_PH = '087580101010200010001101030402';
 /** Predio rural: zona 02, vereda 0007. */
-const NPN_RURAL = '087580201000000070003000000000';
+const NPN_RURAL = '087580001000000070003000000000';
 
 describe('normalizeNpnInput', () => {
   it('quita separadores y espacios', () => {
@@ -180,13 +180,12 @@ describe('validateNpn', () => {
     if (!r.ok) expect(r.reason).toContain('municipio');
   });
 
-  it('rechaza una zona distinta de 01 y 02 diciendo cuál llegó', () => {
-    const r = validateNpn('087580901010200010001000000000');
-    expect(r.ok).toBe(false);
-    if (!r.ok) {
-      expect(r.reason).toContain('Zona');
-      expect(r.reason).toContain('09');
-    }
+  it('acepta cualquier tramo de zona: 00 rural, 01 cabecera, 02+ otras áreas urbanas', () => {
+    // Datos reales del IGAC, no el supuesto del plan (01 urbano / 02 rural).
+    expect(validateNpn('087580001000000070003000000000').ok).toBe(true);
+    expect(validateNpn('087580101010200010001000000000').ok).toBe(true);
+    expect(validateNpn('765200301010200010001000000000').ok).toBe(true);
+    expect(validateNpn('087580901010200010001000000000').ok).toBe(true);
   });
 
   it('nunca lanza: devuelve el motivo aunque la entrada sea basura', () => {

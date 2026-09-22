@@ -16,6 +16,13 @@ export const H3_RES = {
   FINE: 9,
 } as const;
 
+/**
+ * Clasificación urbano/rural del predio EN ESTE PROYECTO (`core.parcel.zone`).
+ *
+ * Sale de la capa de origen —U_TERRENO es urbano, R_TERRENO es rural— y NO del código
+ * predial. No confundir con `NPN_ZONE_RURAL`: son dos cosas distintas y confundirlas dejó
+ * fuera del producto a la mitad de los predios reales del país. Ver el comentario de abajo.
+ */
 export const ZONE = {
   URBAN: '01',
   RURAL: '02',
@@ -26,6 +33,40 @@ export type ZoneCode = (typeof ZONE)[keyof typeof ZONE];
 export const ZONE_LABEL: Record<string, string> = {
   '01': 'Urbano',
   '02': 'Rural',
+};
+
+/**
+ * Tramo de zona del código predial nacional (posiciones 6 y 7), tal como lo usa el IGAC.
+ *
+ * El plan daba por hecho que ese tramo valía 01 para urbano y 02 para rural, y el validador
+ * rechazaba cualquier otro valor. Inspeccionados 5,1 millones de predios reales de 31
+ * departamentos (regla 2: el dato manda), la realidad es otra:
+ *
+ *   · `00` en TODOS los predios rurales (los de R_TERRENO).
+ *   · `01` en la cabecera urbana.
+ *   · `02` a `08` en las demás áreas urbanas del municipio: corregimientos y centros
+ *     poblados, cada uno con su número.
+ *
+ * Es decir, el tramo identifica el área urbana concreta, no la clase de suelo. Con el
+ * supuesto viejo, la ficha, el contexto y el historial devolvían «código inválido» para
+ * cada predio rural del país y para todo predio urbano fuera de la cabecera.
+ */
+export const NPN_ZONE_RURAL = '00';
+export const NPN_ZONE_URBAN_SEAT = '01';
+
+export type NpnZoneKind = 'rural' | 'urbano' | 'urbano_secundario';
+
+/** Qué clase de área nombra el tramo de zona de un código predial. */
+export function npnZoneKind(zoneSegment: string): NpnZoneKind {
+  if (zoneSegment === NPN_ZONE_RURAL) return 'rural';
+  if (zoneSegment === NPN_ZONE_URBAN_SEAT) return 'urbano';
+  return 'urbano_secundario';
+}
+
+export const NPN_ZONE_KIND_LABEL: Record<NpnZoneKind, string> = {
+  rural: 'rural',
+  urbano: 'urbano (cabecera municipal)',
+  urbano_secundario: 'urbano (corregimiento o centro poblado)',
 };
 
 /** Longitudes válidas de código predial nacional. */

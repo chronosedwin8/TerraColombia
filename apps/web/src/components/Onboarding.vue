@@ -7,7 +7,7 @@
  * saltar: nunca bloquea el producto.
  */
 import { computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useUiStore } from '@/stores/ui';
 import { GUIDED_EXAMPLES } from '@/mocks/examples';
 import BaseButton from '@/components/ui/BaseButton.vue';
@@ -16,6 +16,16 @@ import type { OnboardingStep } from './types';
 
 const ui = useUiStore();
 const router = useRouter();
+const route = useRoute();
+
+/**
+ * En ingresar y registro no se abre: el recorrido es sobre el mapa, y un diálogo modal
+ * encima del formulario deja la página inerte (el navegador ignora lo que se teclea
+ * detrás de un `<dialog>` modal). Se detectó con el recorrido automatizado de la interfaz,
+ * que no conseguía escribir el correo.
+ */
+const AUTH_PATHS = ['/ingresar', '/registro'];
+const allowedHere = computed(() => !AUTH_PATHS.includes(route.path));
 
 const STEPS: OnboardingStep[] = [
   {
@@ -64,7 +74,7 @@ function openExample(to: string): void {
 
 <template>
   <BaseModal
-    :open="ui.tourActive && step !== null"
+    :open="ui.tourActive && step !== null && allowedHere"
     title="Recorrido de un minuto"
     size="md"
     @close="ui.finishTour()"

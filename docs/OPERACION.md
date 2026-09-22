@@ -184,6 +184,7 @@ pnpm build                       # construir todo
 pnpm lint                        # ESLint
 pnpm typecheck                   # tsc --noEmit
 pnpm test                        # tests unitarios
+pnpm ui:audit                    # recorre la interfaz en un Chromium real (ver abajo)
 pnpm format                      # Prettier
 
 # Base de datos
@@ -196,6 +197,9 @@ pnpm catalog:crawl               # recorrer ArcGIS REST / Socrata
 pnpm catalog:report              # generar CATALOGO.md y SELECCION.md
 
 # ETL
+pnpm etl -- aggregate --loaded         # agregados H3 de todo municipio con predios (ADR-012)
+pnpm etl -- aggregate --loaded --from=<muniCode>   # retomar una corrida nacional interrumpida
+AGGREGATE_TRACE=1 pnpm etl -- aggregate <muniCode> # ver cuánto tarda cada paso
 pnpm etl -- run <datasetId>            # una corrida completa
 pnpm etl -- run <datasetId> --dry-run  # sin escribir en core/ctx
 pnpm etl -- status                     # estado de todos los datasets
@@ -208,6 +212,22 @@ pwsh -File infra\scripts\backup.ps1          # respaldo
 bash   infra/scripts/backup.sh --subir-s3    # respaldo + S3 (Linux)
 bash   infra/scripts/restore.sh <respaldo>   # restauración
 ```
+
+### Recorrido de la interfaz con un navegador real
+
+Las pruebas de API dicen si una ruta responde; no dicen si el usuario ve lo que debe ver.
+`pnpm ui:audit` (`infra/scripts/ui-audit.mjs`, Playwright) abre un Chromium sin ventana
+contra `http://localhost:5173`, crea una cuenta de prueba, inicia sesión por el formulario,
+recorre las 20 pantallas (escritorio y móvil) y guarda en `.ui-audit/shots/` una captura de
+cada una más `problemas.json` con los errores de consola, errores de página, peticiones
+fallidas y respuestas 4xx/5xx, agrupados por frecuencia. Requiere `pnpm dev` corriendo y,
+la primera vez, `pnpm exec playwright install chromium`.
+
+Lo que ya encontró y que ninguna prueba de API habría visto: las teselas propias nunca se
+cargaban (URL relativa dentro del *worker* de MapLibre), el recorrido de bienvenida
+bloqueaba el formulario de ingreso, la ficha no centraba el mapa en el predio, y la portada
+entraba en un bucle reactivo. Conviene correrlo antes de cada despliegue y después de tocar
+el mapa, la sesión o el enrutador.
 
 ---
 
@@ -974,7 +994,7 @@ pnpm etl -- resume <runId>     # reanudar desde el paso que falló
 | `stage` | **Falta GDAL**, o la fuente cambió de estructura | `ogr2ogr --version`. Si la estructura cambió, **reinspeccionar**: no inventar campos (regla 2). |
 | `validate` | El corte nuevo no pasa una comprobación | [Validaciones de carga](#validaciones-de-carga) |
 | `transform` | Un mapeo de campos ya no corresponde | Comparar `raw` con el mapeo de `etl/config/datasets/`. |
-| `aggregate` | Memoria, o H3 sin calcular | Bajar `ETL_CONCURRENCY`. |
+| `aggregate` | Un paso supera los 10 min de `executeMaintenance` | Correr `AGGREGATE_TRACE=1 pnpm etl -- aggregate <muni>` para ver qué paso se lleva el tiempo (ADR-012). Si es el 6, comprobar que `analytics.overlay_piece` tiene piezas de la capa (`SELECT layer, count(*) FROM analytics.overlay_piece GROUP BY 1`); si cargaste una capa de restricción con un cargador nuevo, llama a `refreshOverlayPieces()` al publicar. |
 | `publish` | Otro snapshot en publicación | Esperar; es una transacción. |
 
 <a id="validaciones-de-carga"></a>

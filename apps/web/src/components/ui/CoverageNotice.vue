@@ -13,8 +13,17 @@ import GlossaryTerm from './GlossaryTerm.vue';
 const props = defineProps<{ coverage: Coverage | null }>();
 
 const status = computed(() => props.coverage?.status ?? 'unknown');
-/** Solo se interrumpe al usuario cuando hay algo que advertir. */
-const shouldShow = computed(() => status.value === 'none' || status.value === 'partial' || status.value === 'unknown');
+/**
+ * Solo se interrumpe al usuario cuando hay algo que advertir. Sin objeto de cobertura no hay
+ * nada que advertir: es que todavía no se consultó ningún municipio (la portada antes de
+ * hacer clic en el mapa), y decir ahí «no sabemos qué cobertura tiene este municipio» era
+ * un aviso falso sobre un municipio que no existía.
+ */
+const shouldShow = computed(
+  () =>
+    props.coverage !== null &&
+    (status.value === 'none' || status.value === 'partial' || status.value === 'unknown'),
+);
 
 const managerName = computed(
   () => props.coverage?.cadastralManager ?? 'otro gestor catastral',
@@ -61,9 +70,9 @@ const tone = computed(() =>
     data-testid="coverage-notice"
   >
     <h3 class="text-sm font-semibold">{{ title }}</h3>
-    <p class="mt-1 text-sm leading-relaxed">{{ body }}</p>
-
-    <p v-if="coverage?.message" class="mt-1.5 text-sm">{{ coverage.message }}</p>
+    <!-- El API ya redacta el mensaje con el gestor y las capas; el texto local es solo el
+         respaldo para cuando no viene. Mostrar los dos era decir lo mismo dos veces. -->
+    <p class="mt-1 text-sm leading-relaxed">{{ coverage?.message ?? body }}</p>
 
     <ul
       v-if="coverage && coverage.availableLayers.length > 0"

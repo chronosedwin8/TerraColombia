@@ -1,5 +1,5 @@
 import type { Coverage } from '@terracolombia/shared';
-import { query, queryOne } from '../pool.js';
+import { execute, query, queryOne } from '../pool.js';
 import { sql } from '../sql.js';
 
 export interface MunicipalityRow {
@@ -156,12 +156,23 @@ export async function getCoverage(muniCode: string): Promise<Coverage> {
     };
   }
 
-  const status = (
-    row.n_parcels > 0 ? (row.coverage_status === 'unknown' ? 'partial' : row.coverage_status) : 'none'
-  ) as Coverage['status'];
+  /*
+   * El dato manda sobre el registro de gestores. Palmira (76520) figura en el registro del
+   * IGAC con la UAECD de Bogotá como gestor habilitado y, aun así, la Base Catastral Pública
+   * del IGAC trae sus 108.633 predios. Con la lógica anterior el registro decía «none» y la
+   * ficha de un predio real abría con «Aún no tenemos los predios de este municipio».
+   * Si hay predios cargados, la cobertura es plena salvo que el registro diga «partial»
+   * a propósito; sin predios, es «none» diga lo que diga el registro.
+   */
+  const status: Coverage['status'] =
+    row.n_parcels > 0 ? (row.coverage_status === 'partial' ? 'partial' : 'full') : 'none';
 
   let message: string | null = null;
-  if (status === 'none') {
+  if (status === 'full' && row.is_igac === false) {
+    message =
+      `El gestor catastral habilitado de este municipio es ${row.manager_name}; los predios que ` +
+      'mostramos provienen de la Base Catastral Pública que publica el IGAC.';
+  } else if (status === 'none') {
     const layers = row.available_layers.length > 0 ? row.available_layers.join(', ') : 'ninguna por ahora';
     message =
       `Este municipio lo gestiona ${row.manager_name}. Todavía no tenemos sus predios ` +
@@ -219,3 +230,28 @@ export async function coverageSummary() {
       (SELECT count(*) FROM core.cadastral_manager WHERE NOT is_igac)::int AS other_managers
   `);
 }
+
+/**
+ * Deja constancia en el registro de gestores de que un corte catastral cubre municipios:
+ * fecha del corte, dataset de origen y capas disponibles. Sin esto, la ficha municipal decía
+ * «no hay corte catastral cargado» para municipios con cien mil predios publicados, porque
+ * `last_cut_date` solo lo escribía la siembra de demostración.
+ */
+export async function markCadastreCoverage(snapshotId: number): Promise<number> {
+  return execute(sql`
+    UPDATE core.cadastral_manager cm
+    SET last_cut_date = s.cut_date,
+        source_id = s.dataset_id,
+        available_layers = (
+          SELECT array_agg(DISTINCT l ORDER BY l)
+          FROM unnest(cm.available_layers || ARRAY['parcel', 'building', 'block', 'vereda']::text[]) AS l
+        ),
+        updated_at = now()
+    FROM meta.snapshot s
+    WHERE s.id = ${snapshotId}
+      AND cm.muni_code IN (
+        SELECT DISTINCT p.muni_code FROM core.parcel p WHERE p.snapshot_id = s.id
+      )
+  `);
+}
+

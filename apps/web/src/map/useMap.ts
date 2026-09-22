@@ -184,13 +184,24 @@ export function useMap(options: UseMapOptions): UseMapReturn {
     return null;
   }
 
+  /**
+   * `setFeatureState` sobre una fuente que aún no está en el estilo lanza «The source … does
+   * not exist in the map's style»: pasa al abrir una ficha con el predio ya seleccionado
+   * antes de que la capa de predios se haya añadido. Se comprueba y se deja para más tarde.
+   */
+  function hasSource(instance: MapLibreMap, layer: TileLayer): boolean {
+    return Boolean(instance.getSource(sourceIdFor(layer)));
+  }
+
   function applyHover(instance: MapLibreMap, hit: MapFeatureHit | null): void {
     for (const [layer, id] of hoveredByLayer.entries()) {
       if (hit && hit.layer === layer && hit.id === id) continue;
-      instance.removeFeatureState({ source: sourceIdFor(layer), sourceLayer: layer, id }, 'hover');
+      if (hasSource(instance, layer)) {
+        instance.removeFeatureState({ source: sourceIdFor(layer), sourceLayer: layer, id }, 'hover');
+      }
       hoveredByLayer.delete(layer);
     }
-    if (!hit || hit.id === '') return;
+    if (!hit || hit.id === '' || !hasSource(instance, hit.layer)) return;
     instance.setFeatureState(
       { source: sourceIdFor(hit.layer), sourceLayer: hit.layer, id: hit.id },
       { hover: true },
@@ -204,13 +215,15 @@ export function useMap(options: UseMapOptions): UseMapReturn {
 
     const previous = selectedByLayer.get(layer);
     if (previous !== undefined) {
-      instance.removeFeatureState(
-        { source: sourceIdFor(layer), sourceLayer: layer, id: previous },
-        'selected',
-      );
+      if (hasSource(instance, layer)) {
+        instance.removeFeatureState(
+          { source: sourceIdFor(layer), sourceLayer: layer, id: previous },
+          'selected',
+        );
+      }
       selectedByLayer.delete(layer);
     }
-    if (id === null || id === '') return;
+    if (id === null || id === '' || !hasSource(instance, layer)) return;
 
     instance.setFeatureState(
       { source: sourceIdFor(layer), sourceLayer: layer, id },

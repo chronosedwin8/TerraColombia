@@ -8,6 +8,8 @@ import { computed, reactive, ref, shallowRef } from 'vue';
 import { PARCEL_MIN_ZOOM, type BBox, type GeoJsonGeometry, type TileLayer } from '@terracolombia/shared';
 import { DEFAULT_VISIBLE_LAYERS, LAYER_BY_ID, LAYER_DEFINITIONS, isTileLayer } from '@/map/layers';
 import { INITIAL_VIEW, isUsingDemoBasemap } from '@/map/style';
+import { getLayers } from '@/api/layers';
+import type { LayerSource } from '@/api/types';
 
 export interface HoveredFeature {
   layer: TileLayer;
@@ -27,8 +29,39 @@ export const useMapStore = defineStore('map', () => {
   const zoom = ref<number>(INITIAL_VIEW.zoom);
   const bbox = ref<BBox | null>(null);
 
-  /** Corte de la base catastral. `null` = snapshot activo. */
+  /** Corte de la base catastral elegido por el usuario. `null` = el corte activo. */
   const cutDate = ref<string | null>(null);
+
+  /**
+   * Procedencia de cada capa según el API (`GET /layers`): fuentes con su corte activo.
+   * Sirve para que la atribución del mapa diga el corte REAL de `meta.snapshot` cuando el
+   * usuario no ha elegido ninguno; antes decía «corte sin corte declarado» siempre, porque
+   * solo miraba la selección del usuario.
+   */
+  const layerSources = ref<Record<string, LayerSource[]>>({});
+  let provenanceLoaded = false;
+
+  async function loadProvenance(): Promise<void> {
+    if (provenanceLoaded) return;
+    provenanceLoaded = true;
+    try {
+      const { data } = await getLayers();
+      const out: Record<string, LayerSource[]> = {};
+      for (const l of data.layers) out[l.id] = l.sources ?? [];
+      layerSources.value = out;
+    } catch {
+      // Sin catálogo remoto la atribución dice que no hay corte declarado, que es verdad.
+      provenanceLoaded = false;
+    }
+  }
+
+  /** Corte más reciente de la primera fuente de una capa, o null si no hay nada cargado. */
+  function sourceCutDate(layer: TileLayer): string | null {
+    return layerSources.value[layer]?.[0]?.cutDate ?? null;
+  }
+
+  /** Corte que se muestra en la atribución: el elegido por el usuario o, si no, el activo. */
+  const attributionCutDate = computed(() => cutDate.value ?? sourceCutDate('parcel'));
   /** Cortes disponibles según el municipio en pantalla. */
   const availableCutDates = ref<string[]>([]);
 
@@ -107,6 +140,10 @@ export const useMapStore = defineStore('map', () => {
     bbox,
     cutDate,
     availableCutDates,
+    layerSources,
+    attributionCutDate,
+    loadProvenance,
+    sourceCutDate,
     visibleLayers,
     opacity,
     selectedNpn,

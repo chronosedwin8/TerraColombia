@@ -16,7 +16,13 @@
  */
 import { closePool, disconnectPrisma, listSnapshots, listValidations, query } from '@terracolombia/db';
 import { sql } from '@terracolombia/db/sql';
-import { rebuildCellsForMunicipality, refreshMuniSummary, computeParcelDiff, upsertMuniDynamics } from '@terracolombia/db';
+import {
+  rebuildCellsForMunicipality,
+  refreshMuniSummary,
+  refreshOverlayPieces,
+  computeParcelDiff,
+  upsertMuniDynamics,
+} from '@terracolombia/db';
 import { loadEnvFile } from '../env.js';
 import { formatRunReport, runPipeline } from '../etl/pipeline.js';
 import type { StepName } from '../etl/pipeline.js';
@@ -195,18 +201,30 @@ async function main(): Promise<void> {
           console.log('No hay municipios con predios cargados. Nada que recalcular.');
           return;
         }
+        // --from=<muniCode> retoma una corrida nacional interrumpida sin repetir lo hecho.
+        if (typeof flags.from === 'string') {
+          const desde = flags.from;
+          munis = munis.filter((m) => m >= desde);
+        }
         console.log(`Municipios con datos cargados: ${munis.length}`);
       } else {
         const muniCode = positional[0];
         if (!muniCode || !/^\d{5}$/.test(muniCode)) {
           console.error(
             'Uso: pnpm etl -- aggregate <muniCode de 5 dígitos> [resolución H3]\n' +
-              '     pnpm etl -- aggregate --loaded    (todo lo que tenga predios cargados)',
+              '     pnpm etl -- aggregate --loaded    (todo lo que tenga predios cargados)\n' +
+              '     pnpm etl -- aggregate --loaded --from=<muniCode>   (retomar una corrida)',
           );
           process.exitCode = 1;
           return;
         }
         munis = [muniCode];
+      }
+
+      // Las capas de restricción se cruzan troceadas (migración 0016). Si entró un corte
+      // nuevo de amenazas o RUNAP desde la última vez, aquí se rehacen las piezas.
+      for (const l of await refreshOverlayPieces()) {
+        if (l.refreshed) console.log(`  · piezas de ${l.layer} regeneradas: ${l.n_pieces}`);
       }
 
       for (const muni of munis) {

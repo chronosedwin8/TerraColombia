@@ -829,8 +829,14 @@ export interface MunicipalIndicator {
   latest: number | null;
   latestPeriod: string | null;
   rank: { position: number; of: number } | null;
+  /** Percentil nacional del valor más reciente (0–100), si el ETL lo calculó. */
+  nationalPct: number | null;
   series: IndicatorSeriesPoint[];
   formula: string;
+  /** true = más es mejor; false = menos es mejor; null = sin sentido definido. */
+  higherIsBetter: boolean | null;
+  /** Fuente en una línea, del catálogo `MUNI_INDICATORS` de `@terracolombia/shared`. */
+  source: string | null;
   sourceDatasetIds: string[];
 }
 
@@ -960,6 +966,20 @@ export interface LayerLegendItem {
  * Se llama `name` (no `label`), `minPlan` (no `requiresPlan`), y `glossary` es una lista
  * de términos embebidos, no un `glossaryId`. No hay `group` ni `unit`.
  */
+export interface LayerSource {
+  /** Primer dataset del grupo; `datasetIds` los trae todos. */
+  datasetId: string;
+  datasetIds: string[];
+  source: string;
+  name: string;
+  license: string;
+  attribution: string;
+  /** Corte más reciente del grupo. */
+  cutDate: string | null;
+  /** Corte más antiguo del grupo (difiere cuando un departamento va rezagado). */
+  cutDateMin: string | null;
+}
+
 export interface LayerCatalogEntry {
   id: string;
   name: string;
@@ -973,12 +993,16 @@ export interface LayerCatalogEntry {
   minPlanName: string;
   /** false si el plan del usuario no alcanza: la UI la muestra bloqueada con motivo. */
   accessible: boolean;
-  source: {
-    datasetId: string;
-    source: string;
-    license: string;
-    attribution: string;
-  } | null;
+  /** Compatibilidad: la primera de `sources`. */
+  source: LayerSource | null;
+  /**
+   * Procedencia real de la capa: los datasets con corte activo que alimentan su tabla,
+   * agrupados por fuente. El catastro (31 cortes departamentales) llega como una sola fuente
+   * con `cutDate` (el más reciente) y `cutDateMin` (el más antiguo).
+   */
+  sources: LayerSource[];
+  /** Corte más reciente entre las fuentes de la capa; null si no hay nada cargado. */
+  cutDate: string | null;
   /** Plantilla de teselas, ya con `{z}/{x}/{y}`. */
   tileUrl: string;
   // FALTA EN LA API: no hay `group` para agrupar el panel de capas ni `unit`.

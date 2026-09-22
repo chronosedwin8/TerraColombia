@@ -85,6 +85,7 @@ import {
   setSnapshotStatus,
   upsertDataset,
 } from '../repositories/meta.js';
+import { refreshOverlayPieces } from '../repositories/analytics.js';
 
 // ─── Argumentos ───────────────────────────────────────────────────────────────
 
@@ -1020,6 +1021,11 @@ async function loadOne(def: SourceDefinition): Promise<void> {
   }
 
   await publishSnapshot(snapshot.id);
+  // El agregado por celda cruza estas figuras troceadas (migración 0016); con el corte
+  // nuevo activo, las piezas viejas ya no valen.
+  for (const l of await refreshOverlayPieces()) {
+    if (l.refreshed) console.log(`Piezas de ${l.layer} regeneradas: ${l.n_pieces}`);
+  }
   console.log(
     `   publicado corte ${snapshot.id}: ${report.written} polígonos, ` +
       `${coverage.munis_con_dato}/${coverage.munis_totales} municipios, ` +

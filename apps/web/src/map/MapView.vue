@@ -12,7 +12,8 @@
  *  - atribución obligatoria del IGAC siempre presente, no plegable.
  */
 import { computed, onMounted, ref, watch } from 'vue';
-import type { GeoJSONSource, GeoJSONSourceSpecification } from 'maplibre-gl';
+import type { GeoJSONSource, GeoJSONSourceSpecification, Map as MapLibreMap } from 'maplibre-gl';
+import { geometryBBox } from '@terracolombia/geo';
 import {
   MESSAGES,
   PARCEL_MIN_ZOOM,
@@ -42,6 +43,8 @@ const props = withDefaults(
     heatCells?: ScoredCell[];
     /** Geometrías a resaltar: predio seleccionado, zona dibujada, cambios. */
     overlay?: GeoJsonFeatureCollection | null;
+    /** Encuadrar el mapa en `overlay` cuando cambia (ficha de predio). */
+    fitOverlay?: boolean;
     /** Altura del contenedor. El mapa necesita altura explícita. */
     height?: string;
   }>(),
@@ -52,6 +55,7 @@ const props = withDefaults(
     drawModes: () => ['polygon', 'circle', 'municipality'],
     heatCells: () => [],
     overlay: null,
+    fitOverlay: true,
     height: '100%',
   },
 );
@@ -92,6 +96,7 @@ const OVERLAY_FILL = 'tc-overlay-fill';
 const OVERLAY_LINE = 'tc-overlay-line';
 
 onMounted(() => {
+  void mapStore.loadProvenance();
   init();
 });
 
@@ -148,11 +153,34 @@ function applyOverlay(): void {
       source: OVERLAY_SOURCE,
       paint: { 'line-color': '#b45309', 'line-width': 2.5 },
     });
-    return;
+  } else {
+    const source = instance.getSource(OVERLAY_SOURCE) as GeoJSONSource | undefined;
+    if (source && payload !== undefined) source.setData(payload);
   }
 
-  const source = instance.getSource(OVERLAY_SOURCE) as GeoJSONSource | undefined;
-  if (source && payload !== undefined) source.setData(payload);
+  fitToOverlay(instance, data);
+}
+
+/**
+ * Encuadra el mapa en la geometría auxiliar. La ficha pintaba el predio pero dejaba la
+ * vista en todo el país: un polígono de 470 m² a escala nacional es invisible, y el usuario
+ * veía «el mapa no muestra mi predio». Se encuadra una vez por geometría, no en cada
+ * repintado, para no pelear con quien esté navegando.
+ */
+let lastFittedOverlay: GeoJsonFeatureCollection | null = null;
+function fitToOverlay(instance: MapLibreMap, data: GeoJsonFeatureCollection): void {
+  if (!props.fitOverlay || data === lastFittedOverlay) return;
+  lastFittedOverlay = data;
+  let box: BBox | null = null;
+  for (const f of data.features) {
+    if (!f.geometry) continue;
+    const b = geometryBBox(f.geometry);
+    box = box
+      ? [Math.min(box[0], b[0]), Math.min(box[1], b[1]), Math.max(box[2], b[2]), Math.max(box[3], b[3])]
+      : b;
+  }
+  if (!box) return;
+  instance.fitBounds([[box[0], box[1]], [box[2], box[3]]], { padding: 48, maxZoom: 17, duration: 600 });
 }
 
 /** Envuelve la geometría dibujada en una FeatureCollection tipada antes de emitirla. */
@@ -275,7 +303,7 @@ defineExpose({ fitBBox, flyTo, map });
       la API: la atribución del mapa base necesita el enlace a la licencia de OpenStreetMap.
     -->
     <p class="tc-map-attribution">
-      {{ igacAttribution(mapStore.cutDate) }} ·
+      {{ igacAttribution(mapStore.attributionCutDate) }} ·
       <!-- eslint-disable-next-line vue/no-v-html -- constante del código, nunca dato de la API -->
       <span v-html="BASEMAP_ATTRIBUTION" />
     </p>

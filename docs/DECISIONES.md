@@ -236,3 +236,117 @@ la geometría se construye en PostGIS (`ST_GeomFromText` + `ST_Multi`), nunca en
   `is_active` sin distinguir fuentes, y dejar los dos mezclaría 4 vías inventadas con la red
   nacional. `pnpm db:seed` las volvería a crear, así que la siembra de demostración ya no debe
   correrse sobre una base con OSM cargado (o hay que volver a correr `load:osm`).
+
+## ADR-011 · 2026-09-22 · El tramo de zona del código predial no significa urbano/rural
+
+**Contexto.** El plan (§ 4) daba por hecho que las posiciones 6 y 7 del código predial nacional
+valen `01` para urbano y `02` para rural, y el sistema lo tenía cableado en tres sitios:
+`validateNpn` rechazaba cualquier otro valor, `isUrban`/`isRural` comparaban contra esos dos y
+`core.npn_is_valid` en SQL exigía `IN ('01','02')`. Al cargar los 5,1 millones de predios reales
+de 31 departamentos (regla 2: inspección, no suposición) el tramo vale:
+
+| Tramo | Qué es | Capa de origen |
+|---|---|---|
+| `00` | **todos** los predios rurales | `R_TERRENO` |
+| `01` | cabecera municipal | `U_TERRENO` |
+| `02` a `08` | corregimientos y centros poblados, cada uno con su número | `U_TERRENO` |
+
+Es decir, identifica el **área urbana concreta**, no la clase de suelo. Con el supuesto viejo, la
+ficha, el contexto y el historial devolvían `400 INVALID_NPN` para cada predio rural del país y
+para todo predio urbano fuera de la cabecera: más de la mitad de la base. La prueba de humo con
+datos reales lo destapó en el primer predio rural de Palmira.
+
+**Decisión.**
+
+- `core.parcel.zone` (`01` urbano / `02` rural) **se mantiene** y se asigna desde la capa de
+  origen, no desde el código. Es la clasificación del producto y así la esperan la UI, los
+  filtros y las teselas. El tramo original queda en `attrs.tramo_zona_npn`.
+- `validateNpn` acepta cualquier par de dígitos en el tramo de zona (migración 0015 hace lo mismo
+  en `core.npn_is_valid`). `isRural` es «tramo = 00»; `isUrban`, lo contrario.
+- `@terracolombia/shared` separa los dos conceptos con nombres distintos: `ZONE` (columna del
+  producto) frente a `NPN_ZONE_RURAL` / `npnZoneKind()` (tramo del código), con el porqué en el
+  comentario para que nadie los vuelva a fundir.
+- `explainNpn` distingue «cabecera municipal» de «corregimiento o centro poblado» porque ahora
+  el código lo permite y es información útil para el usuario.
+
+**Consecuencias.** Ningún predio real queda fuera por su código. Los tests del paquete `geo` usan
+ahora un NPN rural con `00`. No se intenta derivar el nombre del corregimiento a partir del
+número: la fuente no publica esa tabla y no se inventa.
+
+## ADR-012 · 2026-09-22 · Los agregados por celda se calculan contra polígonos troceados, y con el plan forzado
+
+**Contexto.** `pnpm etl -- aggregate --loaded` (`rebuildCellsForMunicipality`) no terminaba con
+datos reales: `analytics.h3_cell` llevaba semanas con las 10 celdas de demostración. Medido paso
+por paso con `AGGREGATE_TRACE=1` sobre Palmira (108.633 predios, 8.853 celdas de resolución 9):
+
+| Paso | Antes | Causa | Después |
+|---|---|---|---|
+| 6 restricciones | > 8 min (cancelado) | `ST_Intersects` de cada celda contra polígonos de hasta 486.547 vértices (inundación IDEAM, 77 M de vértices en total; RUNAP hasta 130.668) | 1,5 s |
+| 7 vías | 206 s | vecino más cercano por celda recorriendo el índice general y descartando cientos de vías terciarias hasta dar con una primaria (8 ms por celda) | 6 s |
+| 7 vías, resolución 8 | 100 s para 320 celdas | con pocas celdas el planificador metía la CTE `acc` como lado interno de un bucle anidado y recalculaba los dos vecinos más cercanos por cada fila del `UPDATE`: celdas² búsquedas | 0,2 s |
+| `statement_timeout` | 30 s del pool | el agregado corría con el límite pensado para consultas interactivas | 10 min por sentencia, solo aquí |
+
+**Decisión.**
+
+1. **`analytics.overlay_piece`** (migración 0016): las capas de restricción —áreas protegidas,
+   resguardos, perímetros urbanos, amenazas, clase agrológica y vocación— se trocean con
+   `ST_Subdivide(…, 128)` en una tabla derivada con índice GiST, y el agregado cruza las celdas
+   contra las piezas. El solape de una celda con una figura es la suma de sus solapes con las
+   piezas de esa figura (no se pisan entre sí), así que el resultado es idéntico.
+   `analytics.refresh_overlay_pieces()` regenera solo las capas cuyo conjunto de cortes activos
+   cambió; la llaman `etl aggregate` al empezar y los cargadores de amenazas y RUNAP al publicar.
+   647.820 piezas para 51.083 polígonos; 4 min de generación una sola vez.
+2. **Índices parciales** `road_primary_geog_idx` y `road_paved_geog_idx` (migración 0017) con
+   exactamente el mismo `WHERE` que usa el paso 7, para que el vecino más cercano por clase salga
+   del índice en menos de 1 ms.
+3. **`AS MATERIALIZED`** en las CTE `acc` y `seat` del paso 7. Es la forma soportada de decirle al
+   planificador que se evalúan una sola vez; sin ella la elección depende de la estimación de filas
+   y falla justo en los municipios pequeños.
+4. **`executeMaintenance()`** en `packages/db/src/pool.ts`: transacción de escritura con su propio
+   `statement_timeout` (10 min por defecto, tope 1 h). Solo la usan los trabajos por lotes; las
+   rutas de la API siguen con los 30 s del pool.
+5. **`AGGREGATE_TRACE=1`** imprime la duración de cada paso. Es lo que permitió medir en vez de
+   adivinar y se deja para la próxima vez.
+
+Por qué no las alternativas: simplificar los polígonos de origen (`ST_SimplifyPreserveTopology`)
+cambia el dato y viola la regla 4; bajar la resolución a 8 solamente deja la ficha sin detalle;
+calcular en Node mueve millones de filas por la red (el comentario de cabecera del archivo ya lo
+descarta).
+
+**Consecuencias.** Palmira pasa de «no termina» a 10,6 s (resoluciones 8 y 9). El agregado
+nacional de los 819 municipios con predios corre en segundo plano en el orden de una hora y
+alimenta la capa H3 del mapa, la localización de negocio y la aptitud por celda. La tabla de piezas
+ocupa espacio adicional (derivado, se puede regenerar) y hay que acordarse de refrescarla al cargar
+una capa nueva de restricción: los cargadores existentes ya lo hacen y `docs/OPERACION.md` lo
+documenta para los futuros.
+
+## ADR-013 · 2026-09-22 · Recorrido de la interfaz en un navegador real, y lo que obligó a cambiar
+
+**Contexto.** La prueba de humo de la API daba 30 de 30 con datos reales y, aun así, el usuario
+pidió poder «ver la interfaz en algún tipo de navegador» para encontrar errores reales. Se añadió
+`pnpm ui:audit` (`infra/scripts/ui-audit.mjs`, Playwright + Chromium sin ventana): crea una cuenta,
+inicia sesión por el formulario, recorre las 20 pantallas en escritorio y móvil, y registra
+consola, errores de página, peticiones fallidas y 4xx/5xx, con una captura por pantalla.
+
+**Lo que encontró en la primera pasada (283 problemas) y ninguna prueba de API habría visto:**
+
+| Hallazgo | Causa | Arreglo |
+|---|---|---|
+| Ninguna capa propia se cargaba en el mapa (121 errores por página) | MapLibre pide las teselas desde un *worker* con `new Request(url)`; la URL relativa `/api/v1/tiles/…` no se resuelve ahí | `absoluteUrl()` en `apps/web/src/map/layers.ts` |
+| El formulario de ingreso no aceptaba lo tecleado | el recorrido de bienvenida es un `<dialog>` modal y deja inerte el resto de la página | el tour no se abre en `/ingresar` ni `/registro` |
+| La sesión se perdía al cambiar de página | arranque y reintento-401 refrescaban a la vez con la misma cookie; el servidor lo tomaba por reutilización y revocaba la familia | una sola puerta `refreshSession()` en `client.ts`, compartida por ambos |
+| Portada: «Maximum recursive updates exceeded» | los vigilantes URL↔mapa se copiaban arreglos nuevos entre sí sin comparar contenido | escriben solo cuando el contenido cambia |
+| Observatorio vacío con 112 errores de render | la ruta devolvía filas crudas y la vista esperaba tarjetas con etiqueta, serie y puesto | `presentIndicators()` en la API + catálogo `MUNI_INDICATORS` en `shared`; puestos nacionales calculados al cargar |
+| «Aún no tenemos los predios de este municipio» en una ficha de Palmira con 108 633 predios | el registro de gestores dice UAECD y la lógica de cobertura le creía más que a los datos | con predios cargados la cobertura es plena; `markCadastreCoverage()` escribe el corte en el registro |
+| «corte sin corte declarado» en la atribución del mapa | solo se miraba el corte elegido por el usuario | `GET /layers` sirve la procedencia real por capa y el mapa la usa |
+| 429 al abrir la séptima pantalla | 30 peticiones por minuto para anónimos y plan gratuito, con 4–6 por pantalla | 60 anónimo, 90 gratuito y 240 Pro; glosario, capas y cortes fuera del cubo |
+| Mensaje de cobertura repetido; aviso de cobertura en la portada sin municipio; la ficha no centraba el mapa | detalles de la vista | corregidos |
+
+**Decisión.** El recorrido se queda como herramienta del repositorio y se corre antes de cada
+despliegue y tras tocar mapa, sesión o enrutador (`docs/OPERACION.md` §3). Sus capturas y su
+`problemas.json` son la evidencia; no se da por resuelto lo que no se ha visto en pantalla.
+
+**Consecuencias.** Playwright es dependencia de desarrollo en la raíz (ya lo era). El aviso
+«Expected value to be of type number, but found null» que queda (uno por mapa) proviene del estilo
+de OpenFreeMap, no de nuestras capas: se verificó cargando el mapa sin ninguna capa propia.
+

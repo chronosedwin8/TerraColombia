@@ -14,6 +14,15 @@ const OID_NUMERIC = 1700;
 const OID_INT8 = 20;
 types.setTypeParser(OID_NUMERIC, (v) => (v === null ? null : Number(v)));
 types.setTypeParser(OID_INT8, (v) => (v === null ? null : Number(v)));
+/*
+ * DATE se devuelve como texto 'AAAA-MM-DD', no como Date de JavaScript. node-pg convierte
+ * un DATE en un Date a medianoche LOCAL, que al serializarse a JSON sale como
+ * '2026-08-31T05:00:00.000Z' (Colombia es UTC-5): el observatorio mostraba eso tal cual
+ * como «último corte catastral», y en un servidor con otra zona horaria el día cambia.
+ * Una fecha de corte es un día, no un instante.
+ */
+const OID_DATE = 1082;
+types.setTypeParser(OID_DATE, (v) => v);
 
 let pool: pg.Pool | null = null;
 
@@ -169,6 +178,37 @@ export async function queryWithTimeout<T extends pg.QueryResultRow = pg.QueryRes
         'Consulta cancelada por statement_timeout',
       );
     }
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+/**
+ * Escritura de mantenimiento con su propio `statement_timeout`.
+ *
+ * El pool fija 30 s para que una consulta interactiva descuidada no bloquee la base. Pero
+ * recalcular los agregados por celda de un municipio de 100.000 predios no es una consulta
+ * interactiva: es un trabajo por lotes, y con el tope de 30 s moría a mitad de camino en
+ * cuanto entraron los datos reales. Igual que `queryWithTimeout` para lecturas, pero en una
+ * transacción de escritura.
+ */
+export async function executeMaintenance(
+  q: SqlBuilder | SqlQuery | string,
+  timeoutMs = 600_000,
+  params?: unknown[],
+): Promise<number> {
+  const { text, values } = toQuery(q, params);
+  const client = await getPool().connect();
+  const ms = Math.min(3_600_000, Math.max(1_000, Math.floor(timeoutMs)));
+  try {
+    await client.query('BEGIN');
+    await client.query(`SET LOCAL statement_timeout = ${ms}`);
+    const res = await client.query(text, values);
+    await client.query('COMMIT');
+    return res.rowCount ?? 0;
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => undefined);
     throw err;
   } finally {
     client.release();

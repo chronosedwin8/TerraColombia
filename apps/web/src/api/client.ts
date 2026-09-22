@@ -53,13 +53,21 @@ function isErrorCode(v: unknown): v is ErrorCode {
 // ─── Estado del token ─────────────────────────────────────────────────────────
 
 let accessToken: string | null = null;
-/** Promesa de refresco en curso: varias peticiones en paralelo comparten un solo refresh. */
-let refreshInFlight: Promise<boolean> | null = null;
 /** Se invoca cuando el refresco falla definitivamente; el store de auth cierra la sesión. */
 let onSessionExpired: (() => void) | null = null;
 
+/**
+ * Se pone en true cuando `/auth/refresh` responde 401: no hay cookie de sesión. A partir de
+ * ahí, un 401 de cualquier otra petición NO vuelve a intentar el refresco hasta que alguien
+ * inicie sesión (`setAccessToken`). Sin esta marca, un visitante anónimo disparaba un refresco
+ * por cada petición protegida de cada pantalla —33 en un recorrido de 20 páginas— y acababa
+ * en 429 del propio límite de peticiones.
+ */
+let sessionAbsent = false;
+
 export function setAccessToken(token: string | null): void {
   accessToken = token;
+  if (token) sessionAbsent = false;
 }
 
 export function getAccessToken(): string | null {
@@ -197,30 +205,55 @@ function defaultMessageFor(code: ErrorCode): string {
 
 // ─── Refresco de token ────────────────────────────────────────────────────────
 
-async function refreshAccessToken(): Promise<boolean> {
-  if (refreshInFlight) return refreshInFlight;
+/** Lo que devuelve `/auth/refresh`: el usuario y el access token nuevo. */
+export interface RefreshedSession {
+  user: unknown;
+  accessToken: string;
+}
 
-  refreshInFlight = (async () => {
+let sessionRefreshInFlight: Promise<RefreshedSession | null> | null = null;
+
+/**
+ * ÚNICA puerta al refresco de sesión. La usan tanto el arranque de la app (`auth.bootstrap`)
+ * como el reintento automático ante un 401, y comparten la promesa en curso.
+ *
+ * El servidor rota el refresh token y revoca TODA la familia si ve reutilizar uno viejo
+ * (protección contra robo de cookie). Con dos caminos distintos al refresco —el arranque por
+ * un lado y el reintento de la primera petición protegida por otro— los dos disparaban a la
+ * vez con la misma cookie, el segundo contaba como reutilización y el usuario aparecía
+ * desconectado al cambiar de página. Lo destapó el recorrido automatizado de la interfaz.
+ */
+export async function refreshSession(): Promise<RefreshedSession | null> {
+  if (sessionRefreshInFlight) return sessionRefreshInFlight;
+  if (sessionAbsent) return null;
+
+  sessionRefreshInFlight = (async () => {
     try {
       const res = await fetch(buildUrl('/auth/refresh'), {
         method: 'POST',
         credentials: 'include',
         headers: { Accept: 'application/json' },
       });
-      if (!res.ok) return false;
+      if (res.status === 401) sessionAbsent = true;
+      if (!res.ok) return null;
       const body: unknown = await res.json();
       const token = extractAccessToken(body);
-      if (!token) return false;
+      if (!token) return null;
       accessToken = token;
-      return true;
+      const data = (body as { data?: { user?: unknown } }).data;
+      return { user: data?.user ?? null, accessToken: token };
     } catch {
-      return false;
+      return null;
     } finally {
-      refreshInFlight = null;
+      sessionRefreshInFlight = null;
     }
   })();
 
-  return refreshInFlight;
+  return sessionRefreshInFlight;
+}
+
+async function refreshAccessToken(): Promise<boolean> {
+  return (await refreshSession()) !== null;
 }
 
 function extractAccessToken(body: unknown): string | null {

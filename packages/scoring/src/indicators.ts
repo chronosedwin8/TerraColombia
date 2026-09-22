@@ -118,6 +118,13 @@ export interface IndicatorDefinition {
   glossaryId?: string;
   /** Advertencia sobre la calidad, escala o disponibilidad del dato. */
   caveat?: string;
+  /**
+   * Por qué puede faltar el dato aunque el sistema funcione. Se muestra junto a «No
+   * disponible» para que el usuario sepa si es un hueco de la fuente (p. ej. el IDEAM solo
+   * estudió 79 centros poblados) o un dato que todavía no integramos. Regla 6: la cobertura
+   * se declara, no se deja en blanco.
+   */
+  missingNote?: string;
 }
 
 // ─── Lectura de entradas ──────────────────────────────────────────────────────
@@ -540,6 +547,8 @@ export const INDICATORS: Record<IndicatorId, IndicatorDefinition> = {
       return `La pendiente media es de ${formatNumber(n, 1)} %, por encima del ${SLOPE_BLOCKER_PCT} % que suele tener restricción ambiental y constructiva. Para este uso lo tratamos como una restricción fuerte.`;
     }, 'No tenemos la pendiente de este terreno porque no hay cobertura del modelo de elevación en esta zona. No la estimamos.'),
     flagFor: flagAbove({ cautionAbove: SLOPE_CAUTION_PCT, blockerAbove: SLOPE_BLOCKER_PCT }),
+    missingNote:
+      'Todavía no integramos un modelo digital de elevación, así que la pendiente no se estima en ningún lugar del país.',
     requiredFor: ALL_CONSTRUCTION_USES,
   },
 
@@ -727,6 +736,8 @@ export const INDICATORS: Record<IndicatorId, IndicatorDefinition> = {
       return `${base}: no encontramos una restricción relevante por este factor.`;
     }),
     flagFor: flagByCategory(HAZARD_LEVEL_FLAGS, 'caution'),
+    missingNote:
+      'El Servicio Geológico Colombiano publica este mapa por planchas de estudio; donde no hay plancha cargada no se supone ningún nivel, ni alto ni bajo.',
     requiredFor: ALL_CONSTRUCTION_USES,
   },
 
@@ -779,6 +790,8 @@ export const INDICATORS: Record<IndicatorId, IndicatorDefinition> = {
       return `La amenaza de inundación está clasificada como ${v.replace(/_/g, ' ')}.`;
     }),
     flagFor: flagByCategory(HAZARD_LEVEL_FLAGS, 'caution'),
+    missingNote:
+      'El IDEAM solo publica amenaza por inundación para los centros poblados que ha estudiado (79 en el corte actual). Fuera de ellos no hay dato, lo que NO significa que no haya riesgo.',
     requiredFor: ALL_CONSTRUCTION_USES,
   },
 
@@ -962,6 +975,8 @@ export const INDICATORS: Record<IndicatorId, IndicatorDefinition> = {
       return `El POT clasifica este suelo como ${v.replace(/_/g, ' ')}. La clasificación dice qué tipo de norma aplica; los usos y aprovechamientos concretos (alturas, índices, usos permitidos) hay que consultarlos en la ficha normativa del municipio.`;
     }, 'No tenemos el POT de este municipio: no existe un repositorio nacional completo. Consulta la Secretaría de Planeación municipal. No inventamos la clasificación.'),
     flagFor: flagByCategory(POT_CLASSIFICATION_FLAGS, 'caution'),
+    missingNote:
+      'Los planes de ordenamiento no se publican como dato abierto unificado; solo se muestra donde el municipio lo publica y lo hemos integrado.',
     requiredFor: [],
   },
 
@@ -1095,6 +1110,8 @@ export const INDICATORS: Record<IndicatorId, IndicatorDefinition> = {
       return `La IPS más cercana está a ${formatDistance(n)}. Esta medida no distingue el nivel de complejidad del prestador: una IPS puede ser un puesto de salud o un hospital.`;
     }),
     flagFor: flagAbove({ cautionAbove: DISTANCE_SCALES.healthFacility.caution }),
+    missingNote:
+      'El registro REPS del Ministerio de Salud no publica coordenadas de los prestadores, así que no podemos medir distancias aunque sí sepamos cuántos hay en el municipio.',
     requiredFor: [],
   },
 
@@ -1145,6 +1162,8 @@ export const INDICATORS: Record<IndicatorId, IndicatorDefinition> = {
       return `Viven unas ${formatNumber(n)} personas por km²: es una zona densamente poblada, con mucho mercado potencial a pie.`;
     }),
     flagFor: flagNeutral(),
+    missingNote:
+      'El DANE no publica la población del censo 2018 por manzana en formato abierto, así que no repartimos población dentro del municipio.',
     requiredFor: [],
   },
 

@@ -64,6 +64,9 @@ function isTileRequest(req: { url: string }): boolean {
  * la ruta. El mínimo de 300 es lo que hace falta para que el mapa cargue de un tirón incluso
  * en el plan gratuito.
  */
+/** Rutas de catálogo exentas del límite de peticiones (ver `allowList`). */
+const CATALOG_PATHS = new Set(['/api/v1/glossary', '/api/v1/layers', '/api/v1/cuts']);
+
 function tileBurstLimit(tilesPerDay: number | undefined): number {
   return Math.max(300, Math.floor((tilesPerDay ?? 20_000) / 100));
 }
@@ -149,7 +152,9 @@ export async function buildApp(): Promise<FastifyInstance> {
       const override = Number(process.env.RATE_LIMIT_OVERRIDE ?? 0);
       if (override > 0) return override;
       const ent = req.auth?.entitlements;
-      return isTileRequest(req) ? tileBurstLimit(ent?.tilesPerDay) : (ent?.rateLimitPerMinute ?? 30);
+      // Anónimo: 60 por minuto. Basta para explorar el mapa y abrir fichas sin cuenta
+      // (unas diez pantallas por minuto) y sigue por debajo del plan gratuito (ADR-013).
+      return isTileRequest(req) ? tileBurstLimit(ent?.tilesPerDay) : (ent?.rateLimitPerMinute ?? 60);
     },
     timeWindow: '1 minute',
     /**
@@ -168,9 +173,16 @@ export async function buildApp(): Promise<FastifyInstance> {
      * Las sondas de salud y la documentación no se estrangulan: un orquestador que consulta
      * `/health` cada pocos segundos no debe quedarse sin cuota, y bloquear `/docs` solo
      * estorbaría a quien está aprendiendo a usar la API.
+     *
+     * Tampoco los catálogos públicos sin cifras (glosario, capas, cortes): la interfaz los
+     * pide en cada carga completa de página. Con ellos dentro del cubo, un visitante anónimo
+     * que abría seis pantallas seguidas agotaba sus 30 peticiones por minuto y la séptima le
+     * respondía 429 por pedir el glosario.
      */
     allowList: (req) =>
-      req.url.startsWith('/health') || req.url.startsWith('/docs'),
+      req.url.startsWith('/health') ||
+      req.url.startsWith('/docs') ||
+      (req.method === 'GET' && CATALOG_PATHS.has(req.url.split('?')[0] ?? '')),
     /**
      * El objeto que devuelve este constructor se propaga al manejador de errores. Si no es
      * un `AppError`, cae en la rama genérica y se responde 500 en vez de 429, que es

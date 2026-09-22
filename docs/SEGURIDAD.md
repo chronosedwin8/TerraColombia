@@ -507,7 +507,7 @@ paga y un raspador.
 | Nivel | Límite | Por qué |
 |---|---|---|
 | Por IP, sin autenticar | 60 por minuto | Freno básico contra el ruido de fondo |
-| Por cuenta o llave de API | `plan.entitlements.rateLimitPerMinute` | 30/min en gratis, 600/min en Business |
+| Por cuenta o llave de API | `plan.entitlements.rateLimitPerMinute` | 90/min en gratis (60 anónimo), 240 en Pro, 600 en Business; glosario, capas y cortes no cuentan (ADR-013) |
 | Por operación costosa | Contadores propios para informes, análisis grandes y exportaciones | Un informe cuesta 60 segundos de CPU: no puede compartir contador con un `GET` de 5 ms |
 | Global | Freno de emergencia | Si la base de datos está al límite, rechazar es mejor que caerse |
 

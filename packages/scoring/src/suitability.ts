@@ -130,7 +130,8 @@ function dedupe(values: readonly string[]): string[] {
 
 function describeMissing(factor: FactorScore, required: boolean): string {
   const suffix = required ? ' — es obligatorio para este uso' : '';
-  return `${factor.label}${suffix}: ${MESSAGES.common.notAvailable}.`;
+  const note = findIndicator(factor.indicator)?.missingNote;
+  return `${factor.label}${suffix}: ${MESSAGES.common.notAvailable}.${note ? ` ${note}` : ''}`;
 }
 
 /**

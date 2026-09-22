@@ -1,6 +1,6 @@
 # Estado del proyecto
 
-Actualizado: 2026-09-21
+Actualizado: 2026-09-22
 
 ## Resumen
 
@@ -8,14 +8,14 @@ Actualizado: 2026-09-21
 |---|---|---|
 | **0 Descubrimiento** | Crawler, catálogo, selección de datasets, diccionario | 🟢 hecho |
 | **1 Cimientos** | Monorepo, BD, auth, CI | 🟢 hecho |
-| **2 ETL catastro piloto** | Pipeline de un departamento | 🟡 motor completo, falta el corte real del IGAC |
+| **2 ETL catastro piloto** | Pipeline de un departamento | 🟢 corte nacional cargado: 5.124.105 predios en 819 municipios de 31 departamentos |
 | **3 Explorador + Ficha** | Mapa, buscador universal, ficha de predio | 🟢 hecho |
-| **4 Contexto** | DANE, MEN, REPS, OSM, suelos, amenazas, H3 | 🟡 OSM nacional cargado (vías y POIs); faltan las demás fuentes |
+| **4 Contexto** | DANE, MEN, REPS, OSM, suelos, amenazas, H3 | 🟡 MEN, REPS, OSM, RUNAP, amenazas (inundación y sismo) y el agregado H3 ya están cargados; faltan suelos del IGAC, movimientos en masa del SGC, población (DANE) y DEM |
 | **5 Buscador + Zona + Exportación** | M3, M4, exportes | 🟢 hecho |
 | **6 Informes + Pagos** | M7 PDF, planes, créditos, pasarela | 🟢 hecho (sandbox) |
-| **7 Escala nacional + gestores** | Todos los departamentos, adaptadores | 🟡 tabla de cobertura y adaptadores declarados |
+| **7 Escala nacional + gestores** | Todos los departamentos, adaptadores | 🟢 catastro cargado en 819 municipios de 31 departamentos (Antioquia y Bogotá tienen gestor catastral propio y no publican en la base del IGAC; cobertura declarada) |
 | **8 Inteligencia** | M5 aptitud, M6 localización, M11 asistente | 🟢 hecho |
-| **9 Cambio + Observatorio + Alertas** | M8, M9 | 🟡 motor listo, necesita dos cortes reales |
+| **9 Cambio + Observatorio + Alertas** | M8, M9 | 🟡 motor listo, sigue faltando un segundo corte catastral real para comparar |
 | **10 GeoAPI pública** | Llaves, cuotas, portal, SDK | 🟢 hecho |
 | **11 Endurecimiento y lanzamiento** | Rendimiento, seguridad, legal, analítica | 🟡 técnico hecho, legal pendiente |
 
@@ -24,9 +24,18 @@ Actualizado: 2026-09-21
 Entorno del equipo de desarrollo: PostgreSQL 17.10 con PostGIS 3.6.2, `h3`, `h3_postgis`,
 `postgis_raster`, `pg_trgm`, `unaccent`, `pgrouting`, y GDAL 3.9.2.
 
-- **Base de datos**: 13 migraciones aplicadas. 6 esquemas, `core.parcel` y `core.building`
-  particionadas en 34 particiones cada una, EPSG:9377 insertado y midiendo correctamente
-  (verificado: 0,01° × 0,01° cerca del ecuador = 1,22 km²).
+- **Base de datos**: 29 GB, 18 migraciones aplicadas (la última con datos reales es la 0017;
+  también existe la `0020_ctx_hidrografia_relieve`, que crea las tablas `ctx.water_body` y
+  `ctx.contour`, todavía sin ninguna carga: 0 filas en ambas). 6 esquemas, `core.parcel` y
+  `core.building` particionadas en 34 particiones cada una, EPSG:9377 insertado y midiendo
+  correctamente (verificado: 0,01° × 0,01° cerca del ecuador = 1,22 km²).
+- **Catastro del IGAC cargado a escala nacional**: Base Catastral Pública (CC BY-SA 4.0), corte
+  **2026-08-31** salvo Cauca (19), que quedó en **2026-07-31**. **5.124.105 predios**
+  (`core.parcel`), **3.840.750 construcciones**, **172.462 manzanas** y **16.913 veredas**, en
+  **819 municipios de 31 departamentos**. Antioquia (05) y Bogotá (11) no están: tienen gestor
+  catastral propio y no publican en la base del IGAC; la cobertura lo declara así, sin dejar un
+  mapa vacío sin explicación (regla 6). Snapshots activos: `igac-cadastre-08,13,15,17,18,19,20,
+  23,25,27,41,44,47,50,52,54,63,66,68,70,73,76,81,85,86,88,91,94,95,97,99`.
 - **Datos reales cargados**: 33 departamentos y **1.122 municipios de DIVIPOLA** descargados
   del portal de datos abiertos (`gdxc-w37w`), con gestor catastral asignado.
 - **Límites administrativos reales cargados** (ADR-009): **1.121 de 1.122 municipios** y
@@ -40,6 +49,15 @@ Entorno del equipo de desarrollo: PostgreSQL 17.10 con PostGIS 3.6.2, `h3`, `h3_
   - El límite del **departamento 11 (Bogotá, D.C.)** es DERIVADO por disolución de sus
     municipios: la capa de departamentos del IGAC no lo trae. Marcado como
     `derived_geometry` en `meta.validation`.
+- **MEN cargado**: **71.667 sedes educativas**, de las cuales **48.209 tienen coordenadas
+  (67 %)**. Snapshots `men-sedes-educativas` (corte 2021-03-19) y
+  `men-establecimientos-educativos` (corte 2026-09-03). Además, **124.867 filas** de
+  indicadores municipales de educación en `analytics.muni_indicator`
+  (`men-estadisticas-educacion-municipio`, corte 2024-12-31).
+- **REPS cargado**: **76.821 prestadores y sedes de salud**, **0 con coordenadas**: la fuente
+  no publica coordenadas geográficas. La API lo distingue de "no hay prestadores": cuando el
+  municipio sí tiene prestadores pero ninguno está localizado, responde "desconocido" y no `0`
+  (bug 13).
 - **OpenStreetMap nacional cargado** (ADR-010), del extracto de Geofabrik
   `colombia-latest.osm.pbf` (330 MB, md5 verificado contra el `.md5` publicado), corte
   **2026-09-20** declarado por el propio fichero:
@@ -59,14 +77,26 @@ Entorno del equipo de desarrollo: PostgreSQL 17.10 con PostGIS 3.6.2, `h3`, `h3_
     obligatoria: «© colaboradores de OpenStreetMap, ODbL 1.0».
   - Regla 3: 0 etiquetas de contacto o dirección de puerta en la base. Se descartaron por lista
     blanca 130.932 apariciones de `phone`, `email`, `operator`, `contact:*`, `addr:*`,
-    `description`, `note` y `fixme`, registradas en `meta.pii_discard_log`.
+    `description`, `note` y `fixme`.
   - Cobertura honesta (regla 6): 8 municipios sin ninguna vía y 14 sin ningún POI. La cobertura
     de OSM es muy desigual: Bogotá tiene 50.595 POIs y Vaupés 113 en todo el departamento.
-- **Datos de demostración**: 528 predios sintéticos en Soledad (08758) con construcciones,
-  colegios e IPS. Marcados `is_synthetic = true`; la API señala `meta.synthetic`
-  y `meta.publish_snapshot` impide que tapen un corte real (ADR-006). Las 4 vías y los 40 POIs
-  sintéticos se retiraron al cargar OSM: `pnpm db:seed` los volvería a crear, así que la
-  siembra de demostración no debe correrse sobre una base con OSM cargado.
+- **RUNAP cargado**: **1.924 áreas protegidas** (corte 2026-09-11).
+- **Amenazas cargadas parcialmente**: **49.159 polígonos activos** = inundación TR100 del
+  IDEAM (49.153 polígonos; solo 79 centros poblados fueron estudiados por la fuente, corte
+  2025-08-05) + amenaza sísmica NSR-10 del SGC (6 polígonos). Movimientos en masa del SGC
+  **no** están cargados (ver "Lo que falta").
+- **Agregado por celda H3 corriendo a escala nacional** (ADR-012): `analytics.h3_cell` tiene
+  **78.921 celdas y sigue creciendo** — el agregado nacional
+  (`pnpm etl -- aggregate --loaded`, 819 municipios con predios, resoluciones 8 y 9) está
+  corriendo hoy en segundo plano tras arreglar el rendimiento. `analytics.overlay_piece` tiene
+  **647.820 piezas** (capas de restricción trocedas para el cruce con las celdas).
+- **Protección de datos personales** (regla 3): `meta.pii_discard_log` tiene hoy **269
+  registros** — cada uno un nombre de columna descartado por dataset, nunca un valor — que
+  cubren las fuentes cargadas hasta hoy.
+- **Datos de demostración apagados**: los 10 cortes sintéticos se desactivaron
+  (`pnpm --filter @terracolombia/db demo -- --off`); la banda roja "DATOS DE DEMOSTRACIÓN" ya
+  no aparece en la UI. `meta.publish_snapshot` sigue impidiendo que un corte sintético tape uno
+  real si algún día se reactiva (ADR-006).
 - **API**: 126 rutas documentadas en OpenAPI 3.1, servida en `/api/v1` (sesión) y `/geo/v1`
   (llave). Autenticación con JWT y refresco rotativo con detección de reutilización, OAuth de
   Google, llaves de API con hash, cuotas y créditos.
@@ -76,6 +106,10 @@ Entorno del equipo de desarrollo: PostgreSQL 17.10 con PostGIS 3.6.2, `h3`, `h3_
   10 secciones del plan, XLSX de 28 KB, QR de verificación funcionando sin sesión, y créditos
   cobrados una sola vez de forma idempotente.
 - **Frontend**: 17 pantallas, compila y empaqueta (10,5 MB con MapLibre y ECharts separados).
+- **Prueba de humo con datos reales**: script temporal
+  `packages/db/src/cli/tmpK/smoke.ts` corrió hoy sobre Palmira (76520) y pasó **30 de 30
+  flujos**: búsqueda, ficha, contexto, historial, cercanías, municipio, observatorio, aptitud,
+  zona, localización, teselas, cambios, informe PDF, capas y cobertura.
 
 ### Rendimiento medido (mediana / p95, base del equipo)
 
@@ -89,21 +123,22 @@ Entorno del equipo de desarrollo: PostgreSQL 17.10 con PostGIS 3.6.2, `h3`, `h3_
 
 ### Pruebas
 
-871 pruebas automatizadas, todas en verde:
+Pruebas unitarias confirmadas hoy (2026-09-22), todas en verde:
 
 | Paquete | Pruebas |
 |---|---|
 | `shared` | 47 |
 | `geo` | 69 |
-| `db` | 52 (23 del constructor SQL + 29 de integración contra PostGIS real) |
-| `sources` | 141 |
+| `sources` | 152 |
 | `scoring` | 119 |
 | `ai` | 90 |
 | `reports` | 108 (incluye PDF real con Chromium) |
 | `payments` | 113 |
-| `api` | 48 (integración con Fastify `inject` contra la base real) |
-| `worker` | 21 |
 | `web` | 52 |
+
+`db`, `api` y `worker` seguían corriendo sus suites al redactar este documento y no se
+contabilizan aquí; puede verificarse con `pnpm test` (tarda ~10 min) cuando haga falta una
+cifra fresca de esos tres paquetes.
 
 `tsc --noEmit` limpio en los 11 paquetes. ESLint limpio.
 
@@ -129,28 +164,58 @@ Se listan porque cada uno cambió una decisión de diseño, no solo una línea:
    ambas. Dos escrituras de la misma dirección no se encontraban entre sí.
 8. **`UrlState` resolvía a `never`** cuando el valor por omisión y el codec no unificaban, lo
    que silenciaba el tipado del estado compartible por URL de siete pantallas.
+9. **El validador de NPN rechazaba todos los predios rurales reales** (tramo de zona `00`) y
+   los predios urbanos fuera de la cabecera (tramos `02` a `08`), porque solo aceptaba `01` o
+   `02`. Con los 5,1 millones de predios reales, esto tumbaba con `400 INVALID_NPN` a más de la
+   mitad de la base. (ADR-011, migración 0015.)
+10. **El agregado por celda no terminaba con datos reales**, por tres causas distintas:
+    polígonos de restricción de hasta 486.547 vértices sin trocear (`ST_Intersects` contra
+    inundación IDEAM y RUNAP completos), vecino más cercano por vía recorriendo el índice
+    general sin filtrar por clase, y una CTE que el planificador recalculaba dentro de un
+    bucle anidado (celdas² búsquedas). (ADR-012, migraciones 0016 y 0017.)
+11. **`analytics.muni_summary` no se refrescaba tras cargar el catastro**, así que `/coverage`
+    seguía respondiendo que solo había predios en 1 municipio; y `getSourceRefs` citaba
+    datasets inactivos de demostración por un `LEFT JOIN` que no filtraba por snapshot activo.
+12. **El respaldo `pg_dump --jobs=4` quedó colgado 2,5 horas**, con los procesos trabajadores en
+    estado «idle in transaction» sin escribir nada. Se está reintentando (pendiente, no
+    resuelto — ver "Lo que falta").
+13. **Los indicadores sin dato decían solo «No disponible»**, sin explicar por qué. Ahora cada
+    uno trae `missingNote` con la razón real (cobertura parcial de la fuente, servicio caído,
+    coordenadas no publicadas, etc.) en `packages/scoring`.
+14. **La interfaz tenía fallos que ninguna prueba de API veía** (ADR-013, encontrados con el
+    recorrido en navegador real `pnpm ui:audit`): ninguna capa propia se cargaba en el mapa
+    (URL relativa de teselas dentro del *worker* de MapLibre), el recorrido de bienvenida
+    bloqueaba el formulario de ingreso, la sesión se perdía al cambiar de página (dos
+    refrescos simultáneos del token), la portada entraba en bucle reactivo, el observatorio
+    fallaba al pintar los 112 indicadores (contrato distinto entre API y vista), la ficha de
+    Palmira decía «aún no tenemos los predios de este municipio» y no centraba el mapa, la
+    atribución decía «corte sin corte declarado» y el límite de 30 peticiones por minuto
+    cortaba a un usuario en la séptima pantalla. Todos corregidos y verificados con capturas.
 
 ## Lo que falta
 
-### Datos (bloquea Fases 2, 4 y 9 al 100 %)
+### Datos
 
-El motor de ingesta está completo y probado, pero **todavía no se ha corrido el corte real del
-IGAC**. Para cerrar esas fases hace falta:
+El catastro ya está cargado a escala nacional (819 municipios de 31 departamentos), lo que
+cierra la Fase 2 y la Fase 7. Lo que sigue pendiente:
 
-1. Descargar la base catastral del departamento piloto y cargarla con `ogr2ogr`
-   (`pnpm etl -- run igac-cadastre-<depto>`). Es una descarga de gigabytes.
-2. Cargar del DANE la **población por manzana censal**. Los límites municipales y
-   departamentales ya NO faltan: se cargaron del IGAC (ADR-009), así que el municipio se
-   resuelve por polígono y no por proximidad al centroide. Lo que sigue pendiente del Marco
-   Geoestadístico Nacional es la manzana censal con el CNPV 2018, y su geoportal sigue sin
-   índice recorrible.
-3. Ingerir MEN, REPS, suelos del IGAC, amenazas del SGC e IDEAM, RUNAP y el DEM. **OSM ya
-   está**: 965.695 vías y 199.607 POIs de todo el país (ADR-010,
-   `pnpm --filter @terracolombia/db load:osm`). Lo que le falta a OSM es el agregado por
-   celda: `analytics.h3_cell` solo tiene las 10 celdas del municipio de demostración, así que
-   la accesibilidad y la densidad de comercio por hexágono todavía no están calculadas para
-   el país.
-4. Un segundo corte catastral para que `M8 Cambio territorial` tenga qué comparar.
+1. **Movimientos en masa del SGC**: no cargado. El servicio del SGC no respondió durante la
+   carga; el snapshot quedó en estado `transformed` (inactivo). Cargador resumible:
+   `pnpm --filter @terracolombia/db load:hazards -- --only=mass-movement`.
+2. **Suelos del IGAC** (capacidad de uso, vocación): no cargados. El snapshot
+   `igac-capacidad-uso-tierras` quedó en estado `failed`: `mapas.igac.gov.co` estaba caído al
+   intentar la descarga.
+3. **Población por manzana censal del DANE**: no disponible como dato abierto descargable. Se
+   extrajeron **504.996 geometrías de manzana** del Marco Geoestadístico Nacional, pero sin
+   población asociada; no se cargaron.
+4. **Población municipal total**: no se encontró fuente abierta para este dato.
+5. **DEM / modelo de elevación**: no cargado.
+6. **Hidrografía y curvas de nivel** (`ctx.water_body`, `ctx.contour`): las tablas ya existen
+   (migración `0020_ctx_hidrografia_relieve`), pero siguen en 0 filas; falta la carga.
+7. **Segundo corte catastral** para que `M8 Cambio territorial` tenga qué comparar (bloquea la
+   Fase 9 al 100 %).
+8. **Respaldo verificado**: el intento de `pg_dump` de hoy quedó colgado (bug 12); se está
+   reintentando y todavía no hay un respaldo completo confirmado.
 
 ### Legal (bloquea el lanzamiento comercial)
 

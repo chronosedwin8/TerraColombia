@@ -34,6 +34,7 @@ import CoverageNotice from '@/components/ui/CoverageNotice.vue';
 import type { MapFeatureHit } from '@/map/useMap';
 import type { ResponseMeta } from '@terracolombia/shared';
 import { emptyMeta } from '@/api/client';
+import { getMunicipality } from '@/api/municipalities';
 
 const router = useRouter();
 const { navigateTo, destinationOf } = useSearchNavigation();
@@ -50,23 +51,35 @@ const { state, shareUrl } = useUrlState({
 });
 
 // La URL manda al entrar; luego el mapa la va actualizando.
+//
+// Los dos sentidos (URL → mapa y mapa → URL) se vigilan mutuamente, así que cada uno
+// solo escribe cuando el CONTENIDO cambia. Copiar el arreglo de capas en cada pasada
+// creaba una referencia nueva, el otro vigilante la veía como cambio, volvía a copiar…
+// y Vue cortaba con «Maximum recursive updates exceeded in component <HomeView>».
 watch(
   () => state.capas,
-  (value) => mapStore.setLayers(value.filter(isTileLayer)),
+  (value) => {
+    const wanted = value.filter(isTileLayer);
+    if (wanted.join(',') !== mapStore.visibleLayers.join(',')) mapStore.setLayers(wanted);
+  },
   { immediate: true },
 );
 
 watch(
   () => state.corte,
-  (value) => mapStore.setCutDate(value.length > 0 ? value : null),
+  (value) => {
+    const wanted = value.length > 0 ? value : null;
+    if (wanted !== mapStore.cutDate) mapStore.setCutDate(wanted);
+  },
   { immediate: true },
 );
 
 watch(
   () => [mapStore.visibleLayers, mapStore.cutDate, mapStore.zoom] as const,
   () => {
-    state.capas = [...mapStore.visibleLayers];
-    state.corte = mapStore.cutDate ?? '';
+    if (state.capas.join(',') !== mapStore.visibleLayers.join(',')) state.capas = [...mapStore.visibleLayers];
+    const corte = mapStore.cutDate ?? '';
+    if (state.corte !== corte) state.corte = corte;
     state.zoom = Math.round(mapStore.zoom * 100) / 100;
   },
   { deep: true },
@@ -178,7 +191,14 @@ function onSelectResult(result: SearchResultItem): void {
   if (navigateTo(result)) return;
 
   const destino = destinationOf(result.target);
-  if (destino.muniCode) mapStore.selectedMuniCode = destino.muniCode;
+  if (destino.muniCode) {
+    mapStore.selectedMuniCode = destino.muniCode;
+    // El resultado no trae coordenadas: se piden al API y se vuela al centroide. Antes elegir
+    // «Palmira» dejaba el mapa exactamente donde estaba, sin ninguna señal de haber elegido.
+    void getMunicipality(destino.muniCode).then(({ data }) => {
+      if (data.centroid) mapRef.value?.flyTo([data.centroid[0], data.centroid[1]], 11);
+    });
+  }
   if (destino.center) mapRef.value?.flyTo(destino.center, destino.zoom ?? 15);
 }
 

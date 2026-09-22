@@ -81,10 +81,23 @@ export interface LayerBuildContext {
 
 const TILES_BASE = (import.meta.env.VITE_TILES_BASE_URL ?? '/api/v1/tiles').replace(/\/$/, '');
 
+/**
+ * MapLibre pide las teselas desde un *web worker* con `new Request(url)`, y ahí una URL
+ * relativa como `/api/v1/tiles/...` no se resuelve: «Failed to parse URL». Con la base
+ * relativa por omisión NINGUNA capa propia llegaba a cargarse y el mapa mostraba solo el
+ * fondo, sin un error visible para el usuario. Lo destapó el recorrido automatizado de la
+ * interfaz (121 errores de consola por página). Aquí se vuelve absoluta contra el origen
+ * de la página; una base ya absoluta se respeta.
+ */
+export function absoluteUrl(base: string): string {
+  if (/^https?:\/\//i.test(base) || typeof window === 'undefined') return base;
+  return new URL(base, window.location.origin).href.replace(/\/$/, '');
+}
+
 /** Plantilla de teselas para MapLibre. El corte temporal viaja como query. */
 export function tileUrlTemplate(layer: TileLayer, cutDate: string | null): string {
   const suffix = cutDate ? `?cut=${encodeURIComponent(cutDate)}` : '';
-  return `${TILES_BASE}/${layer}/{z}/{x}/{y}.mvt${suffix}`;
+  return `${absoluteUrl(TILES_BASE)}/${layer}/{z}/{x}/{y}.mvt${suffix}`;
 }
 
 export function sourceIdFor(layer: TileLayer): string {
@@ -182,11 +195,16 @@ const LAYER_STYLES: readonly LayerStyle[] = [
         minzoom: PARCEL_MIN_ZOOM,
         paint: {
           'line-color': C.parcelLine,
+          // `zoom` solo puede ir en el nivel superior de un `interpolate`/`step`; con el
+          // `case` por fuera MapLibre rechazaba la expresión y la capa quedaba sin grosor.
           'line-width': [
-            'case',
-            ['boolean', ['feature-state', 'selected'], false],
-            3,
-            ['interpolate', ['linear'], ['zoom'], 14, 0.5, 18, 1.6],
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            14,
+            ['case', ['boolean', ['feature-state', 'selected'], false], 3, 0.5],
+            18,
+            ['case', ['boolean', ['feature-state', 'selected'], false], 3, 1.6],
           ],
         },
       },

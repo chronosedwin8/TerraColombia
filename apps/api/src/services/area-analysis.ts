@@ -198,7 +198,13 @@ export async function analyzeArea(
       ? {
           schools: facilities.n_schools,
           schoolEnrollment: facilities.school_enrollment ?? NOT_AVAILABLE,
-          healthFacilities: facilities.n_health,
+          // El registro del REPS no publica coordenadas, así que contar por intersección
+          // da 0 donde hay decenas de prestadores. Si no hay ninguno localizado pero sí
+          // registrados en los municipios de la zona, el conteo es desconocido, no cero.
+          healthFacilities:
+            facilities.n_health === 0 && facilities.n_health_unlocated > 0
+              ? NOT_AVAILABLE
+              : facilities.n_health,
           poisByCategory: facilities.poi_counts,
         }
       : null,

@@ -113,7 +113,7 @@ const coverage = computed(
 const sources = computed(() => indicatorsMeta.value.sources);
 
 function sourcesFor(indicator: MunicipalIndicators['indicators'][number]) {
-  return sources.value.filter((source) => indicator.sourceDatasetIds.includes(source.datasetId));
+  return sources.value.filter((source) => (indicator.sourceDatasetIds ?? []).includes(source.datasetId));
 }
 </script>
 

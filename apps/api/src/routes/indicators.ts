@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { AppError } from '@terracolombia/shared';
+import { AppError, MUNI_INDICATOR_BY_ID } from '@terracolombia/shared';
 import {
   getCoverage,
   getIndicators,
@@ -8,7 +8,46 @@ import {
   getMuniSummary,
   rankingFor,
 } from '@terracolombia/db';
+import type { MuniIndicatorRow } from '@terracolombia/db';
 import { envelope, presentDatasets } from '../lib/envelope.js';
+
+/**
+ * De filas crudas (indicador, periodo, valor) a lo que muestra el observatorio: una tarjeta
+ * por indicador con su etiqueta, el valor más reciente, el puesto nacional y la serie
+ * completa. Antes la ruta devolvía las filas tal cual y la interfaz, que esperaba esta
+ * forma, fallaba al pintar cada uno de los 112 indicadores del municipio.
+ */
+function presentIndicators(rows: MuniIndicatorRow[]) {
+  const byId = new Map<string, MuniIndicatorRow[]>();
+  for (const r of rows) (byId.get(r.indicator) ?? byId.set(r.indicator, []).get(r.indicator)!).push(r);
+
+  return [...byId.entries()].map(([key, series]) => {
+    // Las filas llegan con el periodo más reciente primero.
+    const latest = series[0]!;
+    const def = MUNI_INDICATOR_BY_ID[key];
+    const datasetIds = new Set<string>();
+    for (const r of series) for (const id of Object.keys(r.source_snapshots ?? {})) datasetIds.add(id);
+    return {
+      key,
+      label: def?.label ?? key,
+      unit: def?.unit ?? latest.unit,
+      latest: latest.value,
+      latestPeriod: latest.period,
+      rank:
+        latest.national_rank !== null && latest.n_ranked > 0
+          ? { position: latest.national_rank, of: latest.n_ranked }
+          : null,
+      nationalPct: latest.national_pct,
+      series: [...series]
+        .reverse()
+        .map((r) => ({ period: r.period, value: r.value })),
+      formula: def?.formula ?? 'Cómo se calcula: no documentado para este indicador.',
+      higherIsBetter: def?.higherIsBetter ?? null,
+      source: def?.source ?? null,
+      sourceDatasetIds: [...datasetIds],
+    };
+  });
+}
 
 export default async function indicatorRoutes(app: FastifyInstance): Promise<void> {
   app.get(
@@ -45,12 +84,20 @@ export default async function indicatorRoutes(app: FastifyInstance): Promise<voi
         ['admin', 'cadastre', 'population', 'education', 'health'],
         { muniCode },
       );
+      // Los indicadores citan su propio dataset en `source_snapshots`; si no entra en el
+      // sobre, la interfaz no encuentra la procedencia y muestra «No disponible» junto a un
+      // valor que sí existe (regla 4 aplicada al revés).
+      for (const row of indicators) {
+        for (const id of Object.keys(row.source_snapshots ?? {})) {
+          if (!datasets.includes(id)) datasets.push(id);
+        }
+      }
 
       return envelope(
         {
           municipality: { code: muni.code, name: muni.name, deptName: muni.dept_name },
           summary,
-          indicators,
+          indicators: presentIndicators(indicators),
           emptyReason:
             indicators.length === 0
               ? 'Todavía no hemos calculado indicadores para este municipio. Se generan en el paso de agregación del ETL, ' +

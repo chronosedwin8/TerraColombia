@@ -62,7 +62,14 @@ const base: Entitlements = {
   maxAnalysisAreaKm2: 1,
   maxExportRows: 0,
   maxQueryLimit: 50,
-  rateLimitPerMinute: 30,
+  /*
+   * 90, no 30: una sola pantalla de la interfaz hace entre 4 y 6 peticiones (ficha,
+   * contexto, historial, cobertura…) y con 30 por minuto un usuario gratuito que abría
+   * seis pantallas seguidas recibía 429 en la séptima. Lo midió el recorrido automatizado
+   * (ADR-013). El límite protege de abuso, no de usar el producto. Pro sube a 240 para que
+   * la escalera siga creciendo (los tests lo exigen).
+   */
+  rateLimitPerMinute: 90,
   tilesPerDay: 20_000,
   seats: 1,
   canExport: false,
@@ -130,7 +137,7 @@ export const PLANS: Record<PlanCode, PlanDefinition> = {
       maxAnalysisAreaKm2: 25,
       maxExportRows: 20_000,
       maxQueryLimit: 500,
-      rateLimitPerMinute: 120,
+      rateLimitPerMinute: 240,
       tilesPerDay: 200_000,
       canExport: true,
       canUseAdvancedSearch: true,

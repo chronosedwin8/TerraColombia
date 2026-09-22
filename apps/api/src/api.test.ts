@@ -674,7 +674,7 @@ d('API', () => {
       try {
         const codes: number[] = [];
         for (let i = 0; i < 6; i++) {
-          const res = await limited.inject({ method: 'GET', url: '/api/v1/glossary' });
+          const res = await limited.inject({ method: 'GET', url: '/api/v1/datasets' });
           codes.push(res.statusCode);
           if (res.statusCode === 429) {
             expect(res.json().error.code).toBe('RATE_LIMITED');

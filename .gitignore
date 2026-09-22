@@ -35,3 +35,9 @@ shapes.json
 
 # Registros de ejecución que dejan las herramientas al vuelo; no son del proyecto.
 *.log
+
+# Respaldos locales de la base (pg_dump): pesan gigas y nunca van al repositorio
+backups/
+
+# Capturas del recorrido de interfaz (pnpm ui:audit)
+.ui-audit/

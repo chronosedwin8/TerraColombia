@@ -45,6 +45,7 @@ import {
 } from '../repositories/meta.js';
 import { rebuildSearchIndex } from '../repositories/search.js';
 import { refreshMuniSummary } from '../repositories/analytics.js';
+import { markCadastreCoverage } from '../repositories/admin.js';
 import { CADASTRE_LAYERS } from '../cadastre/layers.js';
 import {
   downloadDepartmentZip,
@@ -470,8 +471,9 @@ async function loadDepartment(
       console.log('    --dry-run: el corte queda en `transformed`, sin publicar.');
     } else {
       await publishSnapshot(snapshot.id);
+      const cubiertos = await markCadastreCoverage(snapshot.id);
       report.status = 'published';
-      console.log(`    publicado · ${attribution}`);
+      console.log(`    publicado · ${attribution} · ${cubiertos} municipios marcados con este corte`);
     }
 
     await finishRun(runId, 'ok', {
@@ -809,6 +811,10 @@ async function main(): Promise<void> {
     console.log('\n  Reconstruyendo el índice de búsqueda…');
     const indexed = await rebuildSearchIndex();
     console.log(`  ${indexed.toLocaleString('es-CO')} entradas en analytics.search_index`);
+    // La vista municipal alimenta /coverage y la explicación de «por qué no hay resultados»;
+    // sin refrescarla, la UI seguía diciendo que había predios en un solo municipio.
+    await refreshMuniSummary();
+    console.log('  Vista analytics.muni_summary refrescada.');
     console.log(
       '  Recuerda recalcular los agregados por celda: `pnpm etl -- aggregate --loaded`',
     );

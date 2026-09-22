@@ -339,3 +339,36 @@ export async function listLayers(): Promise<LayerRow[]> {
 export async function getLayer(id: string): Promise<LayerRow | null> {
   return queryOne<LayerRow>(sql`SELECT * FROM meta.layer WHERE id = ${id} AND is_enabled`);
 }
+
+export interface LayerSourceRow {
+  dataset_id: string;
+  name: string;
+  source: string;
+  license: string;
+  attribution: string;
+  target_table: string;
+  cut_date: string | null;
+}
+
+/**
+ * Procedencia real de lo que hoy se sirve en teselas: cada dataset con corte activo (y no
+ * sintético) junto a la tabla que alimenta y la fecha de ese corte.
+ *
+ * `meta.layer.dataset_id` está vacío en todas las capas y no puede llenarse: el catastro
+ * son 31 datasets (uno por departamento) para una sola capa, y amenazas son dos. La
+ * relación correcta es tabla → datasets, y sale de `meta.dataset.target_table` cruzado
+ * con los cortes activos. Regla 4: la fecha de corte del mapa es la de `meta.snapshot`,
+ * no una constante.
+ */
+export async function listLayerSources(): Promise<LayerSourceRow[]> {
+  return query<LayerSourceRow>(sql`
+    SELECT d.id AS dataset_id, d.name, d.source, d.license, d.attribution, d.target_table,
+           max(s.cut_date)::text AS cut_date
+    FROM meta.dataset d
+    JOIN meta.snapshot s ON s.dataset_id = d.id AND s.is_active AND NOT s.is_synthetic
+    WHERE d.target_table IS NOT NULL
+    GROUP BY d.id, d.name, d.source, d.license, d.attribution, d.target_table
+    ORDER BY d.source, d.id
+  `);
+}
+

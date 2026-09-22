@@ -79,6 +79,7 @@ import {
   setSnapshotStatus,
   upsertDataset,
 } from '../repositories/meta.js';
+import { refreshOverlayPieces } from '../repositories/analytics.js';
 
 // ─── Argumentos ───────────────────────────────────────────────────────────────
 
@@ -643,6 +644,11 @@ async function main(): Promise<void> {
     return;
   }
   await publishSnapshot(snapshot.id);
+  // El agregado por celda cruza estas figuras troceadas (migración 0016); con el corte
+  // nuevo activo, las piezas viejas ya no valen.
+  for (const l of await refreshOverlayPieces()) {
+    if (l.refreshed) console.log(`Piezas de ${l.layer} regeneradas: ${l.n_pieces}`);
+  }
   console.log(`\n  publicado corte ${snapshot.id}: ${report.written} áreas protegidas.`);
 
   // Retira la demostración: no pueden convivir dos capas activas del mismo tema.

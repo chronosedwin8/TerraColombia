@@ -14,7 +14,10 @@ import type {
  */
 export function getParcel(npn: string, cutDate?: string): Promise<Envelope<ParcelDetail>> {
   return request<ParcelDetail>(`/parcels/${encodeURIComponent(npn)}`, {
-    query: { cutDate },
+    // Sin `geometry=true` el API omite el polígono y la ficha nunca podía centrar el mapa
+    // en el predio: se quedaba en la vista de todo el país. Detectado con el recorrido
+    // automatizado de la interfaz sobre un predio real.
+    query: { cutDate, geometry: true },
   });
 }
 

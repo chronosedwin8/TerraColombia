@@ -7,7 +7,7 @@ import { defineStore } from 'pinia';
 import { computed, ref, shallowRef } from 'vue';
 import { AppError, PLANS, entitlementsFor, type Entitlements, type PlanCode } from '@terracolombia/shared';
 import * as authApi from '@/api/auth';
-import { clearEtagCache, setAccessToken, setSessionExpiredHandler } from '@/api/client';
+import { clearEtagCache, refreshSession, setAccessToken, setSessionExpiredHandler } from '@/api/client';
 import type { AuthUser } from '@/api/types';
 
 export type AuthStatus = 'unknown' | 'anonymous' | 'authenticated';
@@ -44,12 +44,11 @@ export const useAuthStore = defineStore('auth', () => {
   /** Se llama una vez al arrancar la app. No lanza: la app debe funcionar sin sesión. */
   async function bootstrap(): Promise<void> {
     if (status.value !== 'unknown') return;
-    try {
-      const { data } = await authApi.refresh();
-      applySession(data.user, data.accessToken);
-    } catch {
-      clearSession();
-    }
+    // Por la puerta única de `client.ts`: si una petición protegida ya está refrescando,
+    // se comparte esa promesa en vez de gastar (y quemar) el refresh token dos veces.
+    const session = await refreshSession();
+    if (session?.user) applySession(session.user as AuthUser, session.accessToken);
+    else clearSession();
   }
 
   async function login(email: string, password: string): Promise<boolean> {

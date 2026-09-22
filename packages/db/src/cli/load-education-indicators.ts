@@ -30,7 +30,9 @@
  * del observatorio. Lo que NO da es población total: eso sigue pendiente y se
  * declara como tal (regla 6).
  */
+import { MUNI_INDICATOR_BY_ID } from '@terracolombia/shared';
 import { closePool, execute, query, queryOne } from '../pool.js';
+import { recomputeRanks } from '../repositories/analytics.js';
 import { sql } from '../sql.js';
 import { loadEnv } from '../env.js';
 
@@ -172,6 +174,20 @@ async function main(): Promise<void> {
   }
 
   await execute(sql`SELECT meta.publish_snapshot(${snapshotId})`);
+
+  // Puesto nacional por indicador y periodo, con la dirección del catálogo: en deserción,
+  // reprobación y repitencia gana el valor más bajo. Sin este paso el observatorio no podía
+  // decir «puesto N de M» (124.867 filas cargadas y ninguna con puesto).
+  const pares = await query<{ indicator: string; period: string }>(sql`
+    SELECT DISTINCT indicator, period FROM analytics.muni_indicator
+    WHERE jsonb_exists(source_snapshots, ${DATASET_ID})
+  `);
+  for (const par of pares) {
+    const def = MUNI_INDICATOR_BY_ID[par.indicator];
+    if (def?.higherIsBetter === null || def?.higherIsBetter === undefined) continue;
+    await recomputeRanks(par.indicator, par.period, def.higherIsBetter);
+  }
+  console.log(`puestos nacionales recalculados en ${pares.length} pares indicador/periodo`);
 
   const resumen = await query<{ indicator: string; n: number; municipios: number }>(sql`
     SELECT indicator, count(*)::int AS n, count(DISTINCT muni_code)::int AS municipios

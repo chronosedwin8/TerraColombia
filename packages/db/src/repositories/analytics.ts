@@ -1,4 +1,4 @@
-import { execute, query, queryOne, queryWithTimeout } from '../pool.js';
+import { execute, executeMaintenance, getPool, query, queryOne, queryWithTimeout } from '../pool.js';
 import { geoJson, sql } from '../sql.js';
 
 /**
@@ -67,25 +67,40 @@ export async function getCellAt(lng: number, lat: number, res: number): Promise<
 }
 
 /**
+ * Con `AGGREGATE_TRACE=1` imprime cuánto tarda cada bloque del agregado. Sirve para saber
+ * qué paso se lleva el tiempo cuando un municipio grande tarda minutos, sin adivinar.
+ */
+function tracedStep(muniCode: string, res: number) {
+  const trace = process.env['AGGREGATE_TRACE'] === '1';
+  return async <T>(name: string, fn: () => Promise<T>): Promise<T> => {
+    const t0 = Date.now();
+    const out = await fn();
+    if (trace) console.log(`    [${muniCode} r${res}] ${name.padEnd(12)} ${Date.now() - t0} ms`);
+    return out;
+  };
+}
+
+/**
  * Recalcula los agregados por celda de un municipio. Es el paso `aggregate` del ETL.
  * Se hace en una sola sentencia por bloque temático para que cada una pueda medirse.
  */
 export async function rebuildCellsForMunicipality(muniCode: string, res: number): Promise<number> {
   const deptCode = muniCode.slice(0, 2);
+  const paso = tracedStep(muniCode, res);
 
   // 1. Sembrar las celdas que cubren el municipio.
   //    Si aún no hay límite del MGN, se usa la envolvente convexa de los predios cargados:
   //    cubre lo que realmente tenemos y evita quedarse sin agregados por falta de límites.
-  const seeded = await execute(sql`
+  const seeded = await paso('seed', () => executeMaintenance(sql`
     INSERT INTO analytics.h3_cell (h3, res, muni_code, dept_code)
     SELECT h3_polygon_to_cells(m.geom, ${res}), ${res}, m.code, m.dept_code
     FROM core.municipality m
     WHERE m.code = ${muniCode} AND m.geom IS NOT NULL
     ON CONFLICT (h3) DO UPDATE SET muni_code = EXCLUDED.muni_code, dept_code = EXCLUDED.dept_code
-  `);
+  `));
 
   if (seeded === 0) {
-    await execute(sql`
+    await paso('seed_hull', () => executeMaintenance(sql`
       WITH hull AS (
         SELECT ST_Multi(ST_ConvexHull(ST_Collect(p.geom))) AS g
         FROM core.parcel p
@@ -97,12 +112,17 @@ export async function rebuildCellsForMunicipality(muniCode: string, res: number)
       FROM hull
       WHERE hull.g IS NOT NULL
       ON CONFLICT (h3) DO UPDATE SET muni_code = EXCLUDED.muni_code, dept_code = EXCLUDED.dept_code
-    `);
+    `));
   }
 
   // 2. Catastro: conteos, áreas y reparto por destino económico.
-  await execute(sql`
-    WITH agg AS (
+  //
+  // Toda CTE de un solo uso va AS MATERIALIZED (aquí y en los pasos siguientes). Sin ello el
+  // planificador puede meterla como lado interno de un bucle anidado y recalcular el agregado
+  // completo por cada celda: el paso 2 pasó de 0,2 s (resolución 8) a 76 s (resolución 9)
+  // en Santa Rosa del Sur por esa sola diferencia de plan. Medido con AGGREGATE_TRACE=1.
+  await paso('cadastre', () => executeMaintenance(sql`
+    WITH agg AS MATERIALIZED (
       SELECT
         p.h3_r8 AS h3_r8, p.h3_r9 AS h3_r9,
         CASE WHEN ${res} = 8 THEN p.h3_r8 ELSE p.h3_r9 END AS cell,
@@ -132,11 +152,11 @@ export async function rebuildCellsForMunicipality(muniCode: string, res: number)
       computed_at = now()
     FROM agg
     WHERE c.h3 = agg.cell AND c.res = ${res}
-  `);
+  `));
 
   // 3. Destino económico por celda.
-  await execute(sql`
-    WITH uc AS (
+  await paso('use', () => executeMaintenance(sql`
+    WITH uc AS MATERIALIZED (
       SELECT cell, jsonb_object_agg(use_label, n) AS counts FROM (
         SELECT
           CASE WHEN ${res} = 8 THEN p.h3_r8 ELSE p.h3_r9 END AS cell,
@@ -150,14 +170,14 @@ export async function rebuildCellsForMunicipality(muniCode: string, res: number)
     )
     UPDATE analytics.h3_cell c SET use_counts = uc.counts
     FROM uc WHERE c.h3 = uc.cell AND c.res = ${res}
-  `);
+  `));
 
   // 4. Población: reparto por área de manzana.
-  await execute(sql`
+  await paso('population', () => executeMaintenance(sql`
     WITH cells AS (
       SELECT h3, geom FROM analytics.h3_cell WHERE muni_code = ${muniCode} AND res = ${res}
     ),
-    pop AS (
+    pop AS MATERIALIZED (
       SELECT
         cl.h3,
         round(sum(cb.pop_total * core.overlap_pct(cb.geom, cl.geom) / 100.0))::int AS pop,
@@ -177,28 +197,28 @@ export async function rebuildCellsForMunicipality(muniCode: string, res: number)
       pop = pop.pop, households = pop.households, dwellings = pop.dwellings,
       pop_school_age = pop.school_age
     FROM pop WHERE c.h3 = pop.h3 AND c.res = ${res}
-  `);
+  `));
 
   // 5. Equipamientos y POIs.
-  await execute(sql`
+  await paso('facilities', () => executeMaintenance(sql`
     WITH cells AS (
       SELECT h3, geom FROM analytics.h3_cell WHERE muni_code = ${muniCode} AND res = ${res}
     ),
-    sc AS (
+    sc AS MATERIALIZED (
       SELECT cl.h3, count(*)::int AS n, sum(s2.enrollment)::int AS enrollment
       FROM cells cl
       JOIN ctx.school s2 ON ST_Intersects(s2.geom, cl.geom)
       JOIN meta.snapshot sn ON sn.id = s2.snapshot_id AND sn.is_active
       GROUP BY cl.h3
     ),
-    hf AS (
+    hf AS MATERIALIZED (
       SELECT cl.h3, count(*)::int AS n
       FROM cells cl
       JOIN ctx.health_facility h ON ST_Intersects(h.geom, cl.geom)
       JOIN meta.snapshot sn ON sn.id = h.snapshot_id AND sn.is_active
       GROUP BY cl.h3
     ),
-    po AS (
+    po AS MATERIALIZED (
       SELECT h3, jsonb_object_agg(category, n) AS counts FROM (
         SELECT cl.h3, p.category, count(*)::int AS n
         FROM cells cl
@@ -217,44 +237,44 @@ export async function rebuildCellsForMunicipality(muniCode: string, res: number)
     LEFT JOIN hf ON hf.h3 = cl.h3
     LEFT JOIN po ON po.h3 = cl.h3
     WHERE c.h3 = cl.h3 AND c.res = ${res}
-  `);
+  `));
 
   // 6. Restricciones y relieve.
-  await execute(sql`
+  //
+  // Se cruza contra `analytics.overlay_piece` (polígonos troceados por la migración 0016),
+  // no contra las capas originales: la de inundación del IDEAM tiene polígonos de medio
+  // millón de vértices y cruzar 9.000 celdas contra ellos no terminaba nunca. El solape de
+  // una celda con una figura es la suma de sus solapes con las piezas de esa figura, y
+  // analytics.overlap_area_m2 se ahorra la intersección cuando una contiene a la otra.
+  await paso('restrictions', () => executeMaintenance(sql`
     WITH cells AS (
-      SELECT h3, geom FROM analytics.h3_cell WHERE muni_code = ${muniCode} AND res = ${res}
+      SELECT h3, geom, ST_Area(ST_Transform(geom, 9377)) AS area_m2
+      FROM analytics.h3_cell WHERE muni_code = ${muniCode} AND res = ${res}
     ),
-    pa AS (
-      SELECT cl.h3, max(core.overlap_pct(cl.geom, a.geom)) AS pct
+    ov AS MATERIALIZED (
+      /* solape (%) de cada celda con cada figura de cada capa */
+      SELECT cl.h3, op.layer, op.source_id,
+             LEAST(100, round((sum(analytics.overlap_area_m2(cl.geom, cl.area_m2, op.geom, op.area_m2))
+                               / NULLIF(cl.area_m2, 0) * 100)::numeric, 3)) AS pct
       FROM cells cl
-      JOIN ctx.protected_area a ON a.geom && cl.geom AND ST_Intersects(a.geom, cl.geom)
-      JOIN meta.snapshot sn ON sn.id = a.snapshot_id AND sn.is_active
-      GROUP BY cl.h3
+      JOIN analytics.overlay_piece op
+        ON op.layer IN ('protected_area', 'ethnic_territory', 'urban_perimeter')
+       AND op.geom && cl.geom AND ST_Intersects(op.geom, cl.geom)
+      GROUP BY cl.h3, cl.area_m2, op.layer, op.source_id
     ),
-    et AS (
-      SELECT cl.h3, max(core.overlap_pct(cl.geom, e.geom)) AS pct
-      FROM cells cl
-      JOIN ctx.ethnic_territory e ON e.geom && cl.geom AND ST_Intersects(e.geom, cl.geom)
-      JOIN meta.snapshot sn ON sn.id = e.snapshot_id AND sn.is_active
-      GROUP BY cl.h3
-    ),
-    up AS (
-      SELECT cl.h3, max(core.overlap_pct(cl.geom, u.geom)) AS pct
-      FROM cells cl
-      JOIN core.urban_perimeter u ON u.geom && cl.geom AND ST_Intersects(u.geom, cl.geom)
-      JOIN meta.snapshot sn ON sn.id = u.snapshot_id AND sn.is_active
-      GROUP BY cl.h3
-    ),
-    hz AS (
+    pa AS (SELECT h3, max(pct) AS pct FROM ov WHERE layer = 'protected_area' GROUP BY h3),
+    et AS (SELECT h3, max(pct) AS pct FROM ov WHERE layer = 'ethnic_territory' GROUP BY h3),
+    up AS (SELECT h3, max(pct) AS pct FROM ov WHERE layer = 'urban_perimeter' GROUP BY h3),
+    hz AS MATERIALIZED (
       SELECT h3, jsonb_object_agg(kind, level) AS flags FROM (
-        SELECT DISTINCT ON (cl.h3, h.kind) cl.h3, h.kind, h.level
+        SELECT DISTINCT ON (cl.h3, op.key) cl.h3, op.key AS kind, op.value AS level
         FROM cells cl
-        JOIN ctx.hazard h ON h.geom && cl.geom AND ST_Intersects(h.geom, cl.geom)
-        JOIN meta.snapshot sn ON sn.id = h.snapshot_id AND sn.is_active
-        ORDER BY cl.h3, h.kind, h.level_rank DESC NULLS LAST
+        JOIN analytics.overlay_piece op
+          ON op.layer = 'hazard' AND op.geom && cl.geom AND ST_Intersects(op.geom, cl.geom)
+        ORDER BY cl.h3, op.key, op.rank DESC NULLS LAST
       ) t GROUP BY h3
     ),
-    el AS (
+    el AS MATERIALIZED (
       SELECT ec.h3, ec.elevation_mean_m, ec.slope_mean_pct
       FROM ctx.elevation_cell ec
       JOIN meta.snapshot sn ON sn.id = ec.snapshot_id AND sn.is_active
@@ -274,38 +294,29 @@ export async function rebuildCellsForMunicipality(muniCode: string, res: number)
     LEFT JOIN hz ON hz.h3 = cl.h3
     LEFT JOIN el ON el.h3 = cl.h3
     WHERE c.h3 = cl.h3 AND c.res = ${res}
-  `);
+  `));
 
   // 6b. Suelos: reparto de clase agrológica y de vocación dentro de la celda.
   //     Se guarda el reparto completo, no solo la clase dominante: una celda mitad clase 3
   //     y mitad clase 7 no es una celda de clase 5, y la ficha debe poder decirlo.
   //     `cell-inputs.ts` toma de aquí la clave dominante para puntuar.
-  await execute(sql`
+  await paso('soils', () => executeMaintenance(sql`
     WITH cells AS (
-      SELECT h3, geom FROM analytics.h3_cell WHERE muni_code = ${muniCode} AND res = ${res}
+      SELECT h3, geom, ST_Area(ST_Transform(geom, 9377)) AS area_m2
+      FROM analytics.h3_cell WHERE muni_code = ${muniCode} AND res = ${res}
     ),
-    cap AS (
-      SELECT cl.h3, jsonb_object_agg(k.class_code::text, k.pct) AS mix FROM (
-        SELECT cl2.h3, lc.class_code, round(sum(core.overlap_pct(cl2.geom, lc.geom))::numeric, 2) AS pct
-        FROM cells cl2
-        JOIN ctx.land_capability lc ON lc.geom && cl2.geom AND ST_Intersects(lc.geom, cl2.geom)
-        JOIN meta.snapshot sn ON sn.id = lc.snapshot_id AND sn.is_active
-        WHERE lc.class_code IS NOT NULL
-        GROUP BY cl2.h3, lc.class_code
-      ) k JOIN cells cl ON cl.h3 = k.h3
-      GROUP BY cl.h3
+    ov AS MATERIALIZED (
+      SELECT cl.h3, op.layer, op.key,
+             LEAST(100, round((sum(analytics.overlap_area_m2(cl.geom, cl.area_m2, op.geom, op.area_m2))
+                               / NULLIF(cl.area_m2, 0) * 100)::numeric, 2)) AS pct
+      FROM cells cl
+      JOIN analytics.overlay_piece op
+        ON op.layer IN ('land_capability', 'land_vocation') AND op.key IS NOT NULL
+       AND op.geom && cl.geom AND ST_Intersects(op.geom, cl.geom)
+      GROUP BY cl.h3, cl.area_m2, op.layer, op.key
     ),
-    voc AS (
-      SELECT cl.h3, jsonb_object_agg(k.vocation, k.pct) AS mix FROM (
-        SELECT cl2.h3, lv.vocation, round(sum(core.overlap_pct(cl2.geom, lv.geom))::numeric, 2) AS pct
-        FROM cells cl2
-        JOIN ctx.land_vocation lv ON lv.geom && cl2.geom AND ST_Intersects(lv.geom, cl2.geom)
-        JOIN meta.snapshot sn ON sn.id = lv.snapshot_id AND sn.is_active
-        WHERE lv.vocation IS NOT NULL
-        GROUP BY cl2.h3, lv.vocation
-      ) k JOIN cells cl ON cl.h3 = k.h3
-      GROUP BY cl.h3
-    )
+    cap AS (SELECT h3, jsonb_object_agg(key, pct) AS mix FROM ov WHERE layer = 'land_capability' GROUP BY h3),
+    voc AS (SELECT h3, jsonb_object_agg(key, pct) AS mix FROM ov WHERE layer = 'land_vocation' GROUP BY h3)
     UPDATE analytics.h3_cell c SET
       capability_mix = COALESCE(cap.mix, '{}'::jsonb),
       vocation_mix = COALESCE(voc.mix, '{}'::jsonb)
@@ -313,26 +324,45 @@ export async function rebuildCellsForMunicipality(muniCode: string, res: number)
     LEFT JOIN cap ON cap.h3 = cl.h3
     LEFT JOIN voc ON voc.h3 = cl.h3
     WHERE c.h3 = cl.h3 AND c.res = ${res}
-  `);
+  `));
 
   // 7. Accesibilidad vial desde el centro de cada celda.
-  await execute(sql`
+  //
+  // Un vecino más cercano por celda (LATERAL + ORDER BY <-> + LIMIT 1), no un join de cada
+  // celda contra todas las vías a 15 km con min(). Con cuatro vías de demostración daba
+  // igual; con 965.695 vías y un municipio de 10.000 celdas, el join cruzaba millones de
+  // pares y superaba cualquier tiempo de espera razonable. El operador <-> usa el índice
+  // geográfico de la migración 0014 y devuelve la distancia exacta en metros.
+  await paso('roads', () => executeMaintenance(sql`
     WITH cells AS (
       SELECT h3, ST_Centroid(geom)::geography AS pt
       FROM analytics.h3_cell WHERE muni_code = ${muniCode} AND res = ${res}
     ),
-    acc AS (
+    /* MATERIALIZED es obligatorio: sin él, con pocas celdas el planificador mete acc
+       como lado interno de un bucle anidado y recalcula las dos búsquedas de vecino más
+       cercano por cada fila del UPDATE, o sea celdas² consultas. Medido: 100 s para 320
+       celdas de resolución 8, frente a 3 s para las 2.240 de resolución 9 del mismo
+       municipio, donde el planificador sí elegía un hash join. */
+    acc AS MATERIALIZED (
       SELECT
         cl.h3,
-        min(ST_Distance(rd.geom::geography, cl.pt))
-          FILTER (WHERE rd.class IN ('motorway','trunk','primary')) AS d_primary,
-        min(ST_Distance(rd.geom::geography, cl.pt)) FILTER (WHERE rd.is_paved) AS d_paved
+        (SELECT ST_Distance(rd.geom::geography, cl.pt)
+           FROM ctx.road rd
+           JOIN meta.snapshot sn ON sn.id = rd.snapshot_id AND sn.is_active
+           WHERE rd.class IN ('motorway','trunk','primary')
+             AND ST_DWithin(rd.geom::geography, cl.pt, 15000)
+           ORDER BY rd.geom::geography <-> cl.pt
+           LIMIT 1) AS d_primary,
+        (SELECT ST_Distance(rd.geom::geography, cl.pt)
+           FROM ctx.road rd
+           JOIN meta.snapshot sn ON sn.id = rd.snapshot_id AND sn.is_active
+           WHERE rd.is_paved
+             AND ST_DWithin(rd.geom::geography, cl.pt, 15000)
+           ORDER BY rd.geom::geography <-> cl.pt
+           LIMIT 1) AS d_paved
       FROM cells cl
-      JOIN ctx.road rd ON ST_DWithin(rd.geom::geography, cl.pt, 15000)
-      JOIN meta.snapshot sn ON sn.id = rd.snapshot_id AND sn.is_active
-      GROUP BY cl.h3
     ),
-    seat AS (
+    seat AS MATERIALIZED (
       SELECT cl.h3, ST_Distance(COALESCE(m.seat_point, m.centroid)::geography, cl.pt) AS d_seat
       FROM cells cl CROSS JOIN core.municipality m WHERE m.code = ${muniCode}
     )
@@ -348,23 +378,50 @@ export async function rebuildCellsForMunicipality(muniCode: string, res: number)
     LEFT JOIN acc ON acc.h3 = cl.h3
     LEFT JOIN seat ON seat.h3 = cl.h3
     WHERE c.h3 = cl.h3 AND c.res = ${res}
-  `);
+  `));
 
   // 8. Linaje: qué snapshots alimentaron estas celdas.
-  await execute(sql`
-    WITH snaps AS (
+  await paso('lineage', () => executeMaintenance(sql`
+    WITH snaps AS MATERIALIZED (
       SELECT jsonb_object_agg(dataset_id, id) AS m FROM meta.snapshot WHERE is_active
     )
     UPDATE analytics.h3_cell c
     SET source_snapshots = snaps.m, computed_at = now()
     FROM snaps
     WHERE c.muni_code = ${muniCode} AND c.res = ${res}
-  `);
+  `));
 
   const row = await queryOne<{ n: number }>(sql`
     SELECT count(*)::int AS n FROM analytics.h3_cell WHERE muni_code = ${muniCode} AND res = ${res}
   `);
   return row?.n ?? 0;
+}
+
+/**
+ * Regenera las piezas troceadas de las capas de restricción (migración 0016) si cambió el
+ * conjunto de cortes activos. Hay que llamarla antes de recalcular celdas y después de
+ * cargar amenazas, RUNAP, resguardos, perímetros o suelos. Devuelve qué capas rehízo.
+ */
+export async function refreshOverlayPieces(
+  force = false,
+): Promise<Array<{ layer: string; refreshed: boolean; n_pieces: number }>> {
+  const client = await getPool().connect();
+  try {
+    await client.query('BEGIN');
+    // Trocear 77 millones de vértices de amenazas tarda minutos; no es una consulta interactiva.
+    await client.query('SET LOCAL statement_timeout = 3600000');
+    const res = await client.query<{ layer: string; refreshed: boolean; n_pieces: string }>(
+      'SELECT layer, refreshed, n_pieces FROM analytics.refresh_overlay_pieces($1)',
+      [force],
+    );
+    await client.query('COMMIT');
+    return res.rows.map((r) => ({ layer: r.layer, refreshed: r.refreshed, n_pieces: Number(r.n_pieces) }));
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => undefined);
+    throw err;
+  } finally {
+    client.release();
+  }
 }
 
 export async function refreshMuniSummary(): Promise<void> {
@@ -376,12 +433,27 @@ export async function getMuniSummary(muniCode: string) {
   return queryOne(sql`SELECT * FROM analytics.muni_summary WHERE muni_code = ${muniCode}`);
 }
 
-export async function getIndicators(muniCode: string, period?: string) {
-  return query(sql`
-    SELECT indicator, period, value, unit, national_rank, national_pct, source_snapshots
-    FROM analytics.muni_indicator
-    WHERE muni_code = ${muniCode} ${period ? sql`AND period = ${period}` : sql``}
-    ORDER BY indicator, period DESC
+export interface MuniIndicatorRow {
+  indicator: string;
+  period: string;
+  value: number | null;
+  unit: string | null;
+  national_rank: number | null;
+  national_pct: number | null;
+  source_snapshots: Record<string, number>;
+  /** Municipios con valor en ese indicador y periodo: el «de M» del puesto. */
+  n_ranked: number;
+}
+
+export async function getIndicators(muniCode: string, period?: string): Promise<MuniIndicatorRow[]> {
+  return query<MuniIndicatorRow>(sql`
+    SELECT mi.indicator, mi.period, mi.value, mi.unit, mi.national_rank, mi.national_pct,
+           mi.source_snapshots,
+           (SELECT count(*)::int FROM analytics.muni_indicator x
+             WHERE x.indicator = mi.indicator AND x.period = mi.period AND x.value IS NOT NULL) AS n_ranked
+    FROM analytics.muni_indicator mi
+    WHERE mi.muni_code = ${muniCode} ${period ? sql`AND mi.period = ${period}` : sql``}
+    ORDER BY mi.indicator, mi.period DESC
   `);
 }
 
@@ -403,13 +475,21 @@ export async function upsertIndicator(input: {
   `);
 }
 
-/** Recalcula el ranking nacional de un indicador en un periodo. */
-export async function recomputeRanks(indicator: string, period: string): Promise<void> {
+/**
+ * Recalcula el puesto nacional de un indicador en un periodo. El puesto 1 es el MEJOR
+ * municipio, así que la dirección importa: en deserción o repitencia gana el valor más
+ * bajo. `national_pct` es el percentil en la misma dirección (100 = mejor que todos).
+ */
+export async function recomputeRanks(
+  indicator: string,
+  period: string,
+  higherIsBetter = true,
+): Promise<void> {
   await execute(sql`
     WITH ranked AS (
       SELECT muni_code,
-             rank() OVER (ORDER BY value DESC NULLS LAST) AS r,
-             percent_rank() OVER (ORDER BY value ASC NULLS FIRST) * 100 AS pct
+             rank() OVER (ORDER BY value ${higherIsBetter ? sql`DESC` : sql`ASC`}) AS r,
+             percent_rank() OVER (ORDER BY value ${higherIsBetter ? sql`ASC` : sql`DESC`}) * 100 AS pct
       FROM analytics.muni_indicator
       WHERE indicator = ${indicator} AND period = ${period} AND value IS NOT NULL
     )

@@ -1,4 +1,9 @@
-import { NPN_LENGTH_20, NPN_LENGTH_30, ZONE } from '@terracolombia/shared';
+import {
+  NPN_LENGTH_20,
+  NPN_LENGTH_30,
+  NPN_ZONE_KIND_LABEL,
+  npnZoneKind,
+} from '@terracolombia/shared';
 import type { NpnParts } from '@terracolombia/shared';
 
 /**
@@ -143,12 +148,17 @@ export function deptCodeOf(raw: string): string {
   return parseNpn(raw).department;
 }
 
+/*
+ * Urbano/rural se lee del tramo de zona con el criterio del IGAC, no con el del plan: `00`
+ * es rural y cualquier otro valor es un área urbana (cabecera, corregimiento o centro
+ * poblado). El detalle y la evidencia están junto a `NPN_ZONE_RURAL` en `@terracolombia/shared`.
+ */
 export function isUrban(raw: string): boolean {
-  return parseNpn(raw).zone === ZONE.URBAN;
+  return npnZoneKind(parseNpn(raw).zone) !== 'rural';
 }
 
 export function isRural(raw: string): boolean {
-  return parseNpn(raw).zone === ZONE.RURAL;
+  return npnZoneKind(parseNpn(raw).zone) === 'rural';
 }
 
 /** true si el NPN identifica una unidad de propiedad horizontal, no el predio completo. */
@@ -183,7 +193,12 @@ export function matrixNpn(raw: string): string {
 
 /**
  * Validación estructural. No comprueba existencia en la base: eso lo hace la consulta.
- * `department` debe estar en el rango de códigos DIVIPOLA (01–99, sin 00) y `zone` en {01,02}.
+ * `department` debe estar en el rango de códigos DIVIPOLA (01–99, sin 00).
+ *
+ * El tramo de zona NO se restringe. Antes se exigía 01 o 02 y con eso se rechazaba, con un
+ * «código inválido», cada predio rural del país (zona `00`) y todo predio urbano fuera de
+ * la cabecera (zonas `02` a `08`): más de la mitad de los 5,1 millones cargados. Cualquier
+ * par de dígitos es un tramo de zona legítimo para el IGAC.
  */
 export function validateNpn(
   raw: string,
@@ -201,12 +216,6 @@ export function validateNpn(
     if (parts.department === '00') return { ok: false, reason: 'Código de departamento inválido (00)' };
     if (parts.municipality === '000')
       return { ok: false, reason: 'Código de municipio inválido (000)' };
-    if (parts.zone !== ZONE.URBAN && parts.zone !== ZONE.RURAL) {
-      return {
-        ok: false,
-        reason: `Zona inválida: se espera 01 (urbano) o 02 (rural), llegó ${parts.zone}`,
-      };
-    }
     return { ok: true, parts };
   } catch (e) {
     return { ok: false, reason: e instanceof Error ? e.message : 'NPN inválido' };
@@ -216,9 +225,10 @@ export function validateNpn(
 /** Describe el NPN en lenguaje claro, para el botón "Explícame esto". */
 export function explainNpn(raw: string): string {
   const p = parseNpn(raw);
-  const zone = p.zone === ZONE.URBAN ? 'urbano' : p.zone === ZONE.RURAL ? 'rural' : 'de zona no estándar';
+  const kind = npnZoneKind(p.zone);
+  const zone = NPN_ZONE_KIND_LABEL[kind];
   const base = `Este código identifica un predio ${zone} en el municipio ${p.department}${p.municipality}. Dentro del municipio está en el sector ${p.sector}, comuna ${p.commune}, barrio ${p.neighborhood}, ${
-    p.zone === ZONE.RURAL ? 'vereda' : 'manzana'
+    kind === 'rural' ? 'vereda' : 'manzana'
   } ${p.blockOrVereda}, y es el terreno ${p.parcel}.`;
   if (!isHorizontalProperty(raw)) {
     return `${base} Los últimos dígitos están en ceros, lo que significa que se refiere al predio completo y no a una unidad dentro de un edificio.`;
