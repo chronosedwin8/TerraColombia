@@ -2,7 +2,12 @@ import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import fp from 'fastify-plugin';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import argon2 from 'argon2';
-import { AppError, PLANS, entitlementsFor } from '@terracolombia/shared';
+import {
+  AppError,
+  PLANS,
+  entitlementsFor,
+  entitlementsForPlatformAdmin,
+} from '@terracolombia/shared';
 import type { Entitlements, PlanCode } from '@terracolombia/shared';
 import { getPrisma } from '@terracolombia/db';
 import { loadConfig } from '../config.js';
@@ -180,12 +185,18 @@ export default fp(
           role: AuthContext['role'];
         }>(token);
         const { plan, entitlements } = await resolvePlan(payload.org ?? null);
+        const role = payload.role ?? 'user';
         req.auth = {
           userId: payload.sub,
           organizationId: payload.org ?? null,
           plan,
-          entitlements,
-          role: payload.role ?? 'user',
+          /*
+           * Quien opera la plataforma no tiene plan que comprar: sus permisos no salen de la
+           * suscripción. Sin esto, revisar el propio producto chocaba con «tu plan no incluye
+           * esta función» y con los topes de área del plan contratado.
+           */
+          entitlements: role === 'admin' ? entitlementsForPlatformAdmin() : entitlements,
+          role,
           channel: 'session',
           apiKeyId: null,
           environment: null,

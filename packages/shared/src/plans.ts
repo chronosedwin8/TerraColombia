@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { AREA_ANALYSIS_HARD_LIMIT_KM2, MAX_PAGE_SIZE } from './constants.js';
 
 /**
  * Definición canónica de planes. Los precios son **hipótesis a validar** (PLAN.md §12)
@@ -264,4 +265,42 @@ export type CreditOperation = keyof typeof CREDIT_COST;
 
 export function entitlementsFor(plan: PlanCode): Entitlements {
   return PLANS[plan].entitlements;
+}
+
+/**
+ * Permisos de quien opera la plataforma (rol `admin`), sin límites comerciales.
+ *
+ * Un administrador no es un cliente: no tiene a quién comprarle un plan superior, y pedirle
+ * que lo haga para revisar su propio producto no tiene sentido. Aquí no hay cupos, ni marca
+ * de agua, ni funciones cerradas.
+ *
+ * El ÚNICO tope que se conserva es `maxAnalysisAreaKm2`, y no por comercial: analizar de una
+ * sola vez un polígono mayor que ese techo cruza millones de geometrías en una petición
+ * síncrona y tumbaría el servidor para todos. Es una barrera técnica y aplica a cualquiera,
+ * incluido quien opera la plataforma; para más superficie está el análisis por municipios.
+ */
+export function entitlementsForPlatformAdmin(): Entitlements {
+  return {
+    ...PLANS.enterprise.entitlements,
+    detailedQueriesPerMonth: null,
+    reportsPerMonth: null,
+    maxAnalysisAreaKm2: AREA_ANALYSIS_HARD_LIMIT_KM2,
+    maxExportRows: Number.MAX_SAFE_INTEGER,
+    maxQueryLimit: MAX_PAGE_SIZE,
+    rateLimitPerMinute: 6000,
+    tilesPerDay: Number.MAX_SAFE_INTEGER,
+    seats: Number.MAX_SAFE_INTEGER,
+    canExport: true,
+    canUseAdvancedSearch: true,
+    canUseAreaAnalysis: true,
+    canUseSuitability: true,
+    canUseLocationIntel: true,
+    canUseChangeDetection: true,
+    canUseApi: true,
+    canUseWhiteLabel: true,
+    canUseAlerts: true,
+    canUseBulk: true,
+    watermark: false,
+    exportFormats: ['pdf', 'xlsx', 'csv', 'geojson', 'gpkg', 'shp', 'kml'],
+  };
 }

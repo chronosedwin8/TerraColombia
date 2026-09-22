@@ -84,6 +84,7 @@ export default async function areaRoutes(app: FastifyInstance): Promise<void> {
           'area_analysis_large',
           `area:${job.id}`,
           job.id,
+          req.auth.role,
         );
 
         recordUsage(req, 'area_analyze_queued', started, {

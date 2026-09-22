@@ -9,7 +9,7 @@
  * lista de cambios por NPN, pero **no** las geometrías de cada corte: pintar un antes/después
  * exigiría inventar los polígonos. Se dice en pantalla en vez de simularlo (regla 6).
  */
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import {
   AppError,
   MESSAGES,
@@ -19,11 +19,10 @@ import {
   type GeoJsonGeometry,
   type ResponseMeta,
 } from '@terracolombia/shared';
-import { compareChanges } from '@/api/changes';
+import { compareChanges, getAvailableCuts } from '@/api/changes';
 import { emptyMeta } from '@/api/client';
 import { useJob } from '@/composables/useJob';
 import { jsonCodec, listCodec, stringCodec, useUrlState } from '@/composables/useUrlState';
-import { useMapStore } from '@/stores/map';
 import type { ChangeCompareResult, ParcelChangeType } from '@/api/types';
 import MapView from '@/map/MapView.vue';
 import JobProgress from '@/components/JobProgress.vue';
@@ -38,7 +37,6 @@ import ProvenanceFooter from '@/components/ui/ProvenanceFooter.vue';
 import ResultActionBar from '@/components/ui/ResultActionBar.vue';
 import SyntheticDataBanner from '@/components/ui/SyntheticDataBanner.vue';
 
-const mapStore = useMapStore();
 const job = useJob<ChangeCompareResult>();
 
 type BadgeTone = 'success' | 'danger' | 'info' | 'warning' | 'brand';
@@ -181,7 +179,54 @@ const summaryRows = computed(() => result.value?.summary ?? []);
 const totalChanges = computed(() =>
   summaryRows.value.reduce((total, row) => total + row.count, 0),
 );
-const cutDates = computed(() => mapStore.availableCutDates);
+/*
+ * Los cortes que EXISTEN, no una fecha cualquiera.
+ *
+ * Antes eran dos campos de texto libre con un `datalist` que nunca se llenaba (nadie escribía
+ * `mapStore.availableCutDates`), así que el usuario tenía que adivinar una fecha con formato
+ * AAAA-MM-DD y acertar además un corte cargado. Un calendario tampoco sirve: solo se puede
+ * comparar contra los cortes que tenemos publicados —hoy dos—, y ofrecer los 365 días del año
+ * es ofrecer 363 respuestas vacías. Se eligen de una lista y no hay forma de equivocarse.
+ */
+const cutDates = ref<string[]>([]);
+const comparablePairs = ref<Array<{ from: string; to: string }>>([]);
+const cutsReason = ref<string | null>(null);
+
+/** «2026-08-31» → «31 de agosto de 2026», que es como se lee una fecha en español. */
+function cutLabel(iso: string): string {
+  const [y, m, d] = iso.split('-').map(Number);
+  if (!y || !m || !d) return iso;
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString('es-CO', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+}
+
+/** Cortes que pueden ir como «anterior», dado el reciente elegido, y viceversa. */
+const opcionesDesde = computed(() => cutDates.value.filter((c) => !state.hasta || c < state.hasta));
+const opcionesHasta = computed(() => cutDates.value.filter((c) => !state.desde || c > state.desde));
+
+const puedeCompararse = computed(() => comparablePairs.value.length > 0);
+
+onMounted(async () => {
+  try {
+    const { data } = await getAvailableCuts();
+    // De más antiguo a más reciente: así se leen los desplegables.
+    cutDates.value = [...data.cuts].sort();
+    comparablePairs.value = data.comparablePairs;
+    cutsReason.value = data.emptyReason;
+    // Con un solo par posible no tiene sentido hacer elegir: se deja puesto.
+    const ultimo = data.comparablePairs.at(-1);
+    if (ultimo && !state.desde && !state.hasta) {
+      state.desde = ultimo.from;
+      state.hasta = ultimo.to;
+    }
+  } catch {
+    cutsReason.value = 'No pudimos consultar qué cortes hay cargados. Vuelve a intentarlo.';
+  }
+});
 
 /** Solape de geometrías (IoU) en porcentaje, cuando el cambio es geométrico. */
 function overlapPct(overlap: number | null): string | null {
@@ -206,34 +251,45 @@ function overlapPct(overlap: number | null): string | null {
       <div class="space-y-3">
         <BaseCard title="Qué comparar" :heading-level="2">
           <div class="space-y-3">
-            <BaseField label="Corte anterior" hint="Formato AAAA-MM-DD">
+            <BaseField label="Corte anterior" hint="Solo los cortes que tenemos cargados">
               <template #default="{ id, describedBy }">
-                <input
+                <select
                   :id="id"
                   v-model="state.desde"
                   class="tc-input"
-                  list="cortes-disponibles"
-                  placeholder="2025-01-01"
+                  :disabled="!puedeCompararse"
                   :aria-describedby="describedBy"
-                />
+                >
+                  <option value="">Elige un corte…</option>
+                  <option v-for="date in opcionesDesde" :key="date" :value="date">
+                    {{ cutLabel(date) }}
+                  </option>
+                </select>
               </template>
             </BaseField>
 
             <BaseField label="Corte más reciente">
               <template #default="{ id }">
-                <input
+                <select
                   :id="id"
                   v-model="state.hasta"
                   class="tc-input"
-                  list="cortes-disponibles"
-                  placeholder="2025-07-01"
-                />
+                  :disabled="!puedeCompararse"
+                >
+                  <option value="">Elige un corte…</option>
+                  <option v-for="date in opcionesHasta" :key="date" :value="date">
+                    {{ cutLabel(date) }}
+                  </option>
+                </select>
               </template>
             </BaseField>
 
-            <datalist id="cortes-disponibles">
-              <option v-for="date in cutDates" :key="date" :value="date" />
-            </datalist>
+            <p v-if="!puedeCompararse" class="text-xs text-amber-800" role="note">
+              {{
+                cutsReason ??
+                `Todavía no hay dos cortes catastrales que comparar: tenemos ${cutDates.length === 1 ? 'uno solo' : 'ninguno'}. El comparador se activa cuando el IGAC publique el siguiente y lo carguemos.`
+              }}
+            </p>
 
             <fieldset>
               <legend class="tc-label mb-1.5">Tipos de cambio (ninguno = todos)</legend>

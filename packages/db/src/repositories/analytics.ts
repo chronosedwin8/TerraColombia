@@ -87,6 +87,13 @@ function tracedStep(muniCode: string, res: number) {
 }
 
 /**
+ * Por encima de esta superficie, la malla se siembra solo donde hay predios. Es el tamaño a
+ * partir del cual un municipio deja de ser una ciudad con su área rural y pasa a ser
+ * territorio amazónico: 21 municipios suman 292.528 km², un cuarto del país.
+ */
+const HUGE_MUNICIPALITY_KM2 = 3000;
+
+/**
  * Recalcula los agregados por celda de un municipio. Es el paso `aggregate` del ETL.
  * Se hace en una sola sentencia por bloque temático para que cada una pueda medirse.
  */
@@ -94,16 +101,62 @@ export async function rebuildCellsForMunicipality(muniCode: string, res: number)
   const deptCode = muniCode.slice(0, 2);
   const paso = tracedStep(muniCode, res);
 
-  // 1. Sembrar las celdas que cubren el municipio.
-  //    Si aún no hay límite del MGN, se usa la envolvente convexa de los predios cargados:
-  //    cubre lo que realmente tenemos y evita quedarse sin agregados por falta de límites.
-  const seeded = await paso('seed', () => executeMaintenance(sql`
-    INSERT INTO analytics.h3_cell (h3, res, muni_code, dept_code)
-    SELECT h3_polygon_to_cells(m.geom, ${res}), ${res}, m.code, m.dept_code
-    FROM core.municipality m
-    WHERE m.code = ${muniCode} AND m.geom IS NOT NULL
-    ON CONFLICT (h3) DO UPDATE SET muni_code = EXCLUDED.muni_code, dept_code = EXCLUDED.dept_code
-  `));
+  /*
+   * 1. Sembrar las celdas.
+   *
+   * Lo normal es cubrir el municipio entero. Pero en los municipios inmensos de la Amazonía
+   * y la Orinoquía eso no es viable ni útil: Cumaribo tiene 65.188 km², que a resolución 9
+   * son más de medio millón de celdas de selva sin un solo predio. La corrida nacional murió
+   * ahí por tiempo de espera tras procesar 703 municipios.
+   *
+   * Por encima del umbral se siembra SOLO donde hay predios, usando la celda que cada predio
+   * ya lleva calculada (`h3_r8`/`h3_r9`). Se pierde la malla sobre la selva deshabitada, que
+   * es justo lo que no aporta nada: sin predios, esas celdas salen vacías de todas formas y
+   * el mapa de calor las descarta. Los municipios normales no cambian.
+   */
+  const grande = await queryOne<{ enorme: boolean }>(sql`
+    SELECT (area_km2 > ${HUGE_MUNICIPALITY_KM2}) AS enorme
+    FROM core.municipality WHERE code = ${muniCode}
+  `);
+
+  if (grande?.enorme) {
+    /*
+     * Una corrida anterior pudo haber sembrado el municipio entero. Esas celdas sin un solo
+     * predio no aportan nada y son las que hacen que los pasos siguientes no terminen, así
+     * que se retiran antes de recalcular.
+     */
+    const borradas = await paso('limpiar_vacias', () => executeMaintenance(sql`
+      DELETE FROM analytics.h3_cell c
+      WHERE c.muni_code = ${muniCode} AND c.res = ${res}
+        AND NOT EXISTS (
+          SELECT 1 FROM core.parcel p
+          JOIN meta.snapshot s ON s.id = p.snapshot_id AND s.is_active
+          WHERE p.dept_code = ${deptCode} AND p.muni_code = ${muniCode}
+            AND (CASE WHEN ${res} = 8 THEN p.h3_r8 ELSE p.h3_r9 END) = c.h3
+        )
+    `));
+    if (borradas > 0) {
+      console.log(`    [${muniCode} r${res}] ${borradas} celdas sin predios retiradas`);
+    }
+  }
+
+  const seeded = grande?.enorme
+    ? await paso('seed_predios', () => executeMaintenance(sql`
+        INSERT INTO analytics.h3_cell (h3, res, muni_code, dept_code)
+        SELECT DISTINCT CASE WHEN ${res} = 8 THEN p.h3_r8 ELSE p.h3_r9 END, ${res}::int, ${muniCode}, ${deptCode}
+        FROM core.parcel p
+        JOIN meta.snapshot s ON s.id = p.snapshot_id AND s.is_active
+        WHERE p.dept_code = ${deptCode} AND p.muni_code = ${muniCode}
+          AND (CASE WHEN ${res} = 8 THEN p.h3_r8 ELSE p.h3_r9 END) IS NOT NULL
+        ON CONFLICT (h3) DO UPDATE SET muni_code = EXCLUDED.muni_code, dept_code = EXCLUDED.dept_code
+      `))
+    : await paso('seed', () => executeMaintenance(sql`
+        INSERT INTO analytics.h3_cell (h3, res, muni_code, dept_code)
+        SELECT h3_polygon_to_cells(m.geom, ${res}), ${res}, m.code, m.dept_code
+        FROM core.municipality m
+        WHERE m.code = ${muniCode} AND m.geom IS NOT NULL
+        ON CONFLICT (h3) DO UPDATE SET muni_code = EXCLUDED.muni_code, dept_code = EXCLUDED.dept_code
+      `));
 
   if (seeded === 0) {
     await paso('seed_hull', () => executeMaintenance(sql`

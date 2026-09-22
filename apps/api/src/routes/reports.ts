@@ -200,7 +200,13 @@ export default async function reportRoutes(app: FastifyInstance): Promise<void> 
         const operation = CREDIT_BY_LEVEL[body.level] ?? 'report_full';
         let creditsCharged = 0;
         try {
-          const delta = await app.quota.charge(orgId, operation, `report:${report.id}`, report.id);
+          const delta = await app.quota.charge(
+            orgId,
+            operation,
+            `report:${report.id}`,
+            report.id,
+            req.auth.role,
+          );
           creditsCharged = Math.abs(delta);
           await prisma.report.update({
             where: { id: report.id },

@@ -65,6 +65,7 @@ export default async function changeRoutes(app: FastifyInstance): Promise<void> 
           req.auth.organizationId,
           'change_compare',
           `change:${req.auth.organizationId}:${parsed.fromCutDate}:${parsed.toCutDate}:${Math.round(resolved.areaKm2 * 1000)}`,
+          req.auth.role,
         );
       }
 

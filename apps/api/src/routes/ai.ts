@@ -50,6 +50,7 @@ export default async function aiRoutes(app: FastifyInstance): Promise<void> {
           req.auth.organizationId,
           'ai_ask',
           `ai:${req.auth.organizationId}:${hash}:${Math.floor(Date.now() / 60_000)}`,
+          req.auth.role,
         );
       }
 

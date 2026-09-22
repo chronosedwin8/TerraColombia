@@ -82,6 +82,7 @@ export default async function locationIntelRoutes(app: FastifyInstance): Promise
           req.auth.organizationId,
           'location_intel',
           `intel:${req.auth.organizationId}:${parsed.templateId}:${Math.round(resolved.areaKm2 * 1000)}:${parsed.resolution}`,
+          req.auth.role,
         );
       }
 
@@ -89,11 +90,22 @@ export default async function locationIntelRoutes(app: FastifyInstance): Promise
       const warnings = [...resolved.warnings];
 
       if (cellRows.length === 0) {
-        warnings.push(
-          'No hay celdas de análisis calculadas para esta zona. Los agregados por celda se generan en el ' +
-            'paso de agregación del ETL, después de cargar catastro y contexto del municipio ' +
-            '(`pnpm etl -- aggregate <muniCode>`).',
-        );
+        /*
+         * «No hay celdas» tiene dos causas muy distintas y hay que decir cuál es. La malla se
+         * siembra por municipio a partir de sus predios, así que donde el catastro lo gestiona
+         * otra entidad —Santa Marta, Bogotá, Medellín— nunca habrá celdas, por mucho que se
+         * espere. Decir «hay que calcular los agregados» en ese caso manda al usuario a
+         * esperar algo que no va a llegar.
+         */
+        const coverage = resolved.muniCode ? await getCoverage(resolved.muniCode) : null;
+        const sinCatastro = coverage?.status === 'none';
+        const emptyReason = sinCatastro
+          ? `Aquí no podemos calcular el mapa de calor: ${coverage?.cadastralManager ?? 'otra entidad'} ` +
+            'gestiona el catastro de este municipio y no lo publica como dato abierto, así que no ' +
+            'tenemos predios con los que construir la malla de celdas. Prueba en un municipio vecino.'
+          : 'Todavía no hemos calculado los agregados por celda de esta zona. Si acabas de cargar ' +
+            'el catastro del municipio, el cálculo está en camino; vuelve a intentarlo más tarde.';
+        warnings.push(emptyReason);
         const datasets = await presentDatasets(['cadastre', 'admin']);
         return envelope(
           {
@@ -106,11 +118,10 @@ export default async function locationIntelRoutes(app: FastifyInstance): Promise
             topZones: [],
             weightsApplied: null,
             explanation: null,
-            emptyReason:
-              'No hay celdas de análisis para esta zona todavía. Hay que calcular los agregados por celda.',
+            emptyReason,
           },
           datasets,
-          { coverage: resolved.muniCode ? await getCoverage(resolved.muniCode) : null, warnings },
+          { coverage, warnings },
         );
       }
 

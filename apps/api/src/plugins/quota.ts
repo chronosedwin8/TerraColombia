@@ -20,12 +20,16 @@ declare module 'fastify' {
       consume(req: FastifyRequest, metric: string, limit: number | null, amount?: number): Promise<void>;
       /** Saldo de créditos de la organización. */
       balance(organizationId: string): Promise<number>;
-      /** Cobra créditos de forma idempotente. */
+      /**
+       * Cobra créditos de forma idempotente. Con `role: 'admin'` no cobra ni bloquea: quien
+       * opera la plataforma no compra créditos a nadie.
+       */
       charge(
         organizationId: string,
         operation: CreditOperation,
         idempotencyKey: string,
         refId?: string,
+        role?: 'user' | 'admin' | 'support',
       ): Promise<number>;
       /** Registra el uso para analítica y facturación. */
       record(req: FastifyRequest, input: {
@@ -85,9 +89,12 @@ export default fp(
         return agg._sum.delta ?? 0;
       },
 
-      async charge(organizationId, operation, idempotencyKey, refId) {
+      async charge(organizationId, operation, idempotencyKey, refId, role) {
         const prisma = getPrisma();
         const cost = CREDIT_COST[operation];
+
+        // El administrador de la plataforma no consume créditos: no tiene a quién comprarlos.
+        if (role === 'admin') return 0;
 
         // Idempotencia: si ya se cobró con esta clave, no se vuelve a cobrar.
         const existing = await prisma.creditLedgerEntry.findUnique({ where: { idempotencyKey } });
