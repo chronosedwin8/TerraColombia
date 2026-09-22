@@ -41,3 +41,6 @@ backups/
 
 # Capturas del recorrido de interfaz (pnpm ui:audit)
 .ui-audit/
+
+# Archivos temporales que vitest deja junto a su configuración
+*.config.ts.timestamp-*.mjs
