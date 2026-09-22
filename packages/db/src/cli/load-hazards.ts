@@ -238,8 +238,25 @@ async function fetchJson<T>(url: string, label: string, attempts = 8, timeoutMs 
           });
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
           // Un bloqueo de WAF llega con 200 y cuerpo HTML: no es JSON y hay que reintentar.
-          const body = JSON.parse(await res.text()) as T & { error?: { code: number; message: string } };
+          const body = JSON.parse(await res.text()) as T & {
+            error?: { code: number; message: string };
+            status?: string;
+            messages?: string[];
+          };
           if (body.error) throw new Error(`${body.error.code}: ${body.error.message}`);
+          /*
+           * ArcGIS tiene DOS formas de decir que algo falló. Además de `error`, devuelve
+           * `{"status":"error","messages":[…]}` con HTTP 200 cuando el servidor no puede
+           * atender —por ejemplo «Could not access any server machines»—. Esa segunda forma
+           * no se comprobaba: el cuerpo era JSON válido, no lanzaba, y la lista de OBJECTID
+           * salía vacía. El cargador lo leyó como «esta capa no tiene entidades» y publicó un
+           * corte de amenazas con cero polígonos, que es afirmar que no hay amenaza donde lo
+           * que pasó es que no se pudo preguntar. Es el peor fallo posible en este producto:
+           * un error de red disfrazado de dato.
+           */
+          if (body.status === 'error') {
+            throw new Error(`ArcGIS: ${(body.messages ?? ['error sin mensaje']).join(' · ')}`);
+          }
           return body as T;
         },
         timeoutMs,
@@ -984,6 +1001,24 @@ async function loadOne(def: SourceDefinition): Promise<void> {
     console.log(`   corte ${snapshot.id} dejado en 'transformed' (--no-publish).`);
     return;
   }
+
+  /*
+   * Un corte de amenazas sin un solo polígono NO se publica.
+   *
+   * Publicarlo equivale a decir «no hay amenaza en ninguna parte del país», y eso no es un
+   * hueco de cobertura: es una afirmación falsa sobre algo que le importa a quien decide
+   * dónde construir. Si la carga acabó en cero es porque la fuente no respondió, no porque
+   * no exista el dato, y ese corte tiene que quedarse fuera hasta que se pueda descargar.
+   */
+  if (report.written === 0) {
+    console.log(
+      `   NO se publica el corte ${snapshot.id}: la carga terminó con 0 polígonos. ` +
+        'Publicarlo afirmaría que no hay amenaza donde lo que pasó es que la fuente no ' +
+        'respondió. Queda en «transformed»; relanza cuando el servicio vuelva.',
+    );
+    return;
+  }
+
   await publishSnapshot(snapshot.id);
   console.log(
     `   publicado corte ${snapshot.id}: ${report.written} polígonos, ` +
