@@ -100,6 +100,8 @@ function has(name: string): boolean {
 type Target = 'mass-movement' | 'seismic' | 'flood';
 const ONLY = flag('only') as Target | null;
 const NO_PUBLISH = has('no-publish');
+/** Vacía el corte antes de cargar, en vez de reanudar. Ver el comentario en `cargar`. */
+const RESET = has('reset');
 
 /** Fecha de la consulta. Es lo único cierto cuando la fuente no declara fecha de corte. */
 const CONSULTED_ON = new Date().toISOString().slice(0, 10);
@@ -299,7 +301,8 @@ const SIMMA_HAZARD_LAYERS: readonly ArcgisHazardLayer[] = [
     layerId: 15,
     scale: '1:100.000',
     levelField: 'CATAME',
-    outFields: ['CATAME', 'LEYENDA', 'PLANCHA', 'MAPA'],
+    // OBJECTID se pide explícitamente: es lo que permite reanudar sin repetir trabajo.
+    outFields: ['OBJECTID', 'CATAME', 'LEYENDA', 'PLANCHA', 'MAPA'],
     phenomenon: 'movimientos en masa',
   },
 ];
@@ -358,10 +361,19 @@ interface LoadReport {
   emptyGeometry: number;
   /** Conteo por (escala, nivel), que es la cifra de cobertura honesta. */
   byScaleAndLevel: Record<string, number>;
+  /** Lotes que el servicio no llegó a entregar. Se declaran en el linaje del corte. */
+  failedChunks: string[];
 }
 
 function emptyReport(): LoadReport {
-  return { fetched: 0, written: 0, unmappedLevels: {}, emptyGeometry: 0, byScaleAndLevel: {} };
+  return {
+    fetched: 0,
+    written: 0,
+    unmappedLevels: {},
+    emptyGeometry: 0,
+    byScaleAndLevel: {},
+    failedChunks: [],
+  };
 }
 
 function tally(report: LoadReport, scale: string | null, level: string | null): void {
@@ -410,12 +422,42 @@ async function loadArcgisHazardLayers(
   const report = emptyReport();
 
   for (const layer of layers) {
-    const ids = await fetchIds(baseUrl, layer.layerId);
-    if (ids.length === 0) {
+    const todosLosIds = await fetchIds(baseUrl, layer.layerId);
+    if (todosLosIds.length === 0) {
       console.log(`  · capa ${layer.layerId} (${layer.scale}, ${layer.phenomenon}): 0 entidades`);
       continue;
     }
+
+    /*
+     * Se salta lo que ya está cargado en este corte.
+     *
+     * El servicio del SGC se cae a rachas: una corrida llegó al 87 % y murió, y la siguiente
+     * no pasó del 22 %. Sin esto, cada intento empieza de cero y la capa no termina nunca.
+     * Con el OBJECTID guardado en `attrs`, relanzar el cargador continúa donde se quedó y
+     * cada intento suma progreso en vez de repetir trabajo.
+     */
+    const yaCargados = new Set(
+      (
+        await query<{ oid: number }>(sql`
+          SELECT (attrs->>'objectid')::int AS oid
+          FROM ctx.hazard
+          WHERE snapshot_id = ${snapshotId}
+            AND attrs->>'capa_origen' = ${`${baseUrl}/${layer.layerId}`}
+            AND attrs->>'objectid' IS NOT NULL
+        `)
+      ).map((r) => r.oid),
+    );
+    const ids = todosLosIds.filter((id) => !yaCargados.has(id));
+    if (yaCargados.size > 0) {
+      console.log(
+        `  · capa ${layer.layerId}: ${yaCargados.size} entidades ya cargadas de una corrida ` +
+          `anterior; se piden las ${ids.length} que faltan`,
+      );
+    }
+
     const fields = layer.outFields.join(',');
+    /** Trozos que el servicio no llegó a entregar. Se declaran; no se dan por vacíos. */
+    const trozosFallidos: string[] = [];
     let written = 0;
 
     for (let i = 0; i < ids.length; i += OID_CHUNK) {
@@ -425,10 +467,23 @@ async function loadArcgisHazardLayers(
         `${baseUrl}/${layer.layerId}/query?where=${where}` +
         `&outFields=${encodeURIComponent(fields)}&returnGeometry=true&outSR=4326` +
         `&geometryPrecision=6&maxAllowableOffset=${MAX_ALLOWABLE_OFFSET_DEG}&f=geojson`;
-      const body = await fetchJson<GeoJsonCollection>(
-        url,
-        `${baseUrl}/${layer.layerId} (oid ${chunk[0]}…)`,
-      );
+      /*
+       * Un trozo que no llega NO aborta la capa entera. Se anota y se sigue: con un servicio
+       * que se cae a rachas, perder una hora de descarga por diez polígonos es peor que
+       * terminar con una cobertura parcial y DECLARARLA, que es lo que pide la regla 6.
+       */
+      let body: GeoJsonCollection;
+      try {
+        body = await fetchJson<GeoJsonCollection>(
+          url,
+          `${baseUrl}/${layer.layerId} (oid ${chunk[0]}…)`,
+        );
+      } catch (err) {
+        trozosFallidos.push(
+          `oid ${chunk[0]}…${chunk[chunk.length - 1]}: ${err instanceof Error ? err.message.slice(0, 120) : String(err)}`,
+        );
+        continue;
+      }
 
       const rows: HazardRow[] = [];
       for (const f of body.features ?? []) {
@@ -461,6 +516,8 @@ async function loadArcgisHazardLayers(
             plancha: props.PLANCHA ?? null,
             mapa: props.MAPA ?? null,
             generalizacion_m: MAX_ALLOWABLE_OFFSET_M_APPROX,
+            // Identificador de la fuente: es lo que permite reanudar sin repetir.
+            objectid: props.OBJECTID ?? props.objectid ?? null,
             dataset_url: datasetUrl,
           },
           geometry: f.geometry,
@@ -882,10 +939,21 @@ async function loadOne(def: SourceDefinition): Promise<void> {
     stageMethod: def.connector,
   });
 
-  // Reejecutar el mismo día reutiliza el corte (la clave es dataset + cut_date): hay que
-  // vaciarlo antes o las filas se duplicarían.
-  const removed = await execute(sql`DELETE FROM ctx.hazard WHERE snapshot_id = ${snapshot.id}`);
-  if (removed > 0) console.log(`   (se vaciaron ${removed} filas de una corrida anterior del mismo corte)`);
+  /*
+   * Por omisión NO se vacía el corte: se reanuda.
+   *
+   * Reejecutar el mismo día reutiliza el corte (la clave es dataset + cut_date), y antes se
+   * vaciaba para que las filas no se duplicaran. Pero con un servicio que se cae a mitad de
+   * descarga, vaciar significa empezar de cero cada vez y no terminar nunca. Ahora se saltan
+   * los OBJECTID ya cargados, que es lo que evita el duplicado, y relanzar suma progreso.
+   *
+   * `--reset` fuerza el vaciado, que es lo que hay que usar cuando la fuente publica una
+   * versión nueva del mismo día y hay que rehacer el corte entero.
+   */
+  if (RESET) {
+    const removed = await execute(sql`DELETE FROM ctx.hazard WHERE snapshot_id = ${snapshot.id}`);
+    console.log(`   (--reset: se vaciaron ${removed} filas del corte)`);
+  }
 
   await setSnapshotStatus(snapshot.id, 'downloading');
   const report = await def.load(snapshot.id);
@@ -901,6 +969,8 @@ async function loadOne(def: SourceDefinition): Promise<void> {
       entidades_descargadas: report.fetched,
       poligonos_cargados: report.written,
       poligonos_sin_geometria_utilizable: report.emptyGeometry,
+      lotes_que_la_fuente_no_entrego: report.failedChunks.length,
+      detalle_lotes_fallidos: report.failedChunks.slice(0, 20),
       niveles_sin_mapeo: report.unmappedLevels,
       filas_por_escala_y_nivel: report.byScaleAndLevel,
       cobertura: coverage,
