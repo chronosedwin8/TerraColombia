@@ -360,6 +360,18 @@ export async function facilitiesIn(geometry: unknown) {
     n_schools: number;
     school_enrollment: number | null;
     n_health: number;
+    /**
+     * Prestadores de salud registrados en los municipios que toca el ámbito pero SIN
+     * coordenadas, así que no se pueden contar por intersección.
+     *
+     * Existe porque el registro oficial del REPS no publica coordenadas: de 76.824 sedes
+     * cargadas, solo 3 traen geometría. Contar por intersección devolvía 0 en zonas con
+     * decenas de prestadores, y mostrar «0 prestadores de salud» ahí no es un hueco de
+     * datos: es una afirmación falsa. Con este número, quien consume puede decir la verdad
+     * —«hay N registrados en el municipio, pero la fuente no dice dónde están»— en vez de
+     * inventar un cero (reglas 4 y 6).
+     */
+    n_health_unlocated: number;
     poi_counts: Record<string, number>;
   }>(sql`
     WITH scope AS (SELECT ${geoJson(geometry)} AS g)
@@ -373,6 +385,13 @@ export async function facilitiesIn(geometry: unknown) {
       (SELECT count(*)::int FROM ctx.health_facility hf
         JOIN meta.snapshot s ON s.id = hf.snapshot_id AND s.is_active
         CROSS JOIN scope WHERE hf.geom && scope.g AND ST_Intersects(hf.geom, scope.g)) AS n_health,
+      (SELECT count(*)::int FROM ctx.health_facility hf
+        JOIN meta.snapshot s ON s.id = hf.snapshot_id AND s.is_active
+        WHERE hf.geom IS NULL
+          AND hf.muni_code IN (
+            SELECT m.code FROM core.municipality m CROSS JOIN scope
+            WHERE m.geom IS NOT NULL AND m.geom && scope.g AND ST_Intersects(m.geom, scope.g)
+          )) AS n_health_unlocated,
       COALESCE((
         SELECT jsonb_object_agg(category, n) FROM (
           SELECT p.category, count(*)::int AS n
@@ -387,6 +406,38 @@ export async function facilitiesIn(geometry: unknown) {
 }
 
 /** Accesibilidad: distancia a la vía más cercana de cada clase relevante. */
+/**
+ * Distancia en metros al colegio y al prestador de salud más cercanos.
+ *
+ * Existe porque estos dos valores estaban clavados a `null` en el recolector de
+ * indicadores, con un comentario que explicaba la política para cuando no hay nada cerca
+ * —no inventar un «muy lejos»— pero sin código que llegara a mirar. Con los datos de
+ * demostración daba igual; con 71.673 sedes educativas y 76.824 prestadores cargados, deja
+ * sin dato un indicador que el motor exige para la plantilla de colegio.
+ *
+ * `maxSearchM` acota la búsqueda: más allá de ese radio se devuelve `null`, que es la
+ * respuesta honesta —«no hay ninguno cerca»— y además evita recorrer el país entero cuando
+ * el punto cae en una zona sin equipamientos. El filtro usa `ST_DWithin` sobre
+ * `geom::geography`, que es lo que indexa la migración 0014.
+ */
+export async function nearestFacilities(lng: number, lat: number, maxSearchM = 20_000) {
+  return queryOne<{ dist_school_m: number | null; dist_health_m: number | null }>(sql`
+    WITH pt AS (SELECT ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326)::geography AS g)
+    SELECT
+      (SELECT min(ST_Distance(sc.geom::geography, pt.g))
+         FROM ctx.school sc
+         JOIN meta.snapshot s ON s.id = sc.snapshot_id AND s.is_active
+         WHERE sc.geom IS NOT NULL
+           AND ST_DWithin(sc.geom::geography, pt.g, ${maxSearchM})) AS dist_school_m,
+      (SELECT min(ST_Distance(hf.geom::geography, pt.g))
+         FROM ctx.health_facility hf
+         JOIN meta.snapshot s ON s.id = hf.snapshot_id AND s.is_active
+         WHERE hf.geom IS NOT NULL
+           AND ST_DWithin(hf.geom::geography, pt.g, ${maxSearchM})) AS dist_health_m
+    FROM pt
+  `);
+}
+
 export async function roadAccess(lng: number, lat: number, maxSearchM = 10_000) {
   return queryOne<{
     dist_primary_m: number | null;

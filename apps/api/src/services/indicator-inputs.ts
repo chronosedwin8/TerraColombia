@@ -7,6 +7,7 @@ import {
   hazardOverlaps,
   insideUrbanPerimeter,
   miningTitleOverlaps,
+  nearestFacilities,
   parcelStatsIn,
   populationIn,
   potZoneOverlaps,
@@ -103,6 +104,7 @@ export async function collectIndicatorInputs(
     pot,
     urban,
     access,
+    facilityDistances,
     distSeat,
     population,
     facilities,
@@ -118,6 +120,7 @@ export async function collectIndicatorInputs(
     potZoneOverlaps(geometry, muniCode ?? undefined),
     muniCode ? insideUrbanPerimeter(geometry, muniCode) : Promise.resolve(null),
     roadAccess(center[0], center[1]),
+    nearestFacilities(center[0], center[1]),
     muniCode ? distanceToMuniSeat(center[0], center[1], muniCode) : Promise.resolve(null),
     populationIn(geometry),
     facilitiesIn(geometry),
@@ -179,10 +182,10 @@ export async function collectIndicatorInputs(
     dist_secondary_road_m: access?.dist_secondary_m ?? null,
     dist_paved_road_m: access?.dist_paved_m ?? null,
     dist_muni_seat_m: distSeat,
-    // La distancia a colegio e IPS se deja en null cuando no hay ninguno en el radio de
-    // búsqueda: un "muy lejos" inventado sería peor que declarar el hueco.
-    dist_school_m: null,
-    dist_health_m: null,
+    // Si no hay ninguno dentro del radio de búsqueda queda en null: un "muy lejos"
+    // inventado sería peor que declarar el hueco.
+    dist_school_m: facilityDistances?.dist_school_m ?? null,
+    dist_health_m: facilityDistances?.dist_health_m ?? null,
     road_access_score: roadAccessScore(access?.dist_paved_m ?? null),
 
     population_density_per_km2:
@@ -197,7 +200,19 @@ export async function collectIndicatorInputs(
     poi_total_count: facilities ? poiTotal : null,
     school_count: facilities?.n_schools ?? null,
     school_enrollment: facilities?.school_enrollment ?? null,
-    health_facility_count: facilities?.n_health ?? null,
+    /*
+     * Si el ámbito no tiene ninguna IPS localizada pero sí hay prestadores registrados en
+     * sus municipios sin coordenadas, el conteo es DESCONOCIDO, no cero. El registro
+     * oficial del REPS no publica coordenadas —de 76.824 sedes, 3 traen geometría—, así que
+     * contar por intersección devolvía 0 en zonas con decenas de prestadores. Un cero ahí no
+     * es un hueco: es una afirmación falsa.
+     */
+    health_facility_count:
+      facilities === null
+        ? null
+        : facilities.n_health === 0 && facilities.n_health_unlocated > 0
+          ? null
+          : facilities.n_health,
 
     parcel_area_m2: parcels?.area_sum_m2 ?? null,
     parcel_built_area_m2: parcels?.built_area_sum_m2 ?? null,
