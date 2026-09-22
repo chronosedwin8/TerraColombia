@@ -212,7 +212,16 @@ async function withDeadline<T>(
   }
 }
 
-async function fetchJson<T>(url: string, label: string, attempts = 4, timeoutMs = 120_000): Promise<T> {
+/*
+ * Ocho intentos y no cuatro, con espera creciente hasta medio minuto.
+ *
+ * El servicio del SGC responde bien la mayor parte del tiempo pero se cae a rachas: una
+ * carga llegó al 87 % de los 890 polígonos —780— antes de que devolviera una página HTML de
+ * error en vez de JSON, y con cuatro intentos se perdió la hora larga de descarga. Como cada
+ * trozo es un lote de OBJECTID y el corte se vacía al empezar, insistir más sale mucho más
+ * barato que volver a empezar.
+ */
+async function fetchJson<T>(url: string, label: string, attempts = 8, timeoutMs = 120_000): Promise<T> {
   let lastError: unknown;
   for (let attempt = 1; attempt <= attempts; attempt++) {
     try {
@@ -236,7 +245,9 @@ async function fetchJson<T>(url: string, label: string, attempts = 4, timeoutMs 
       );
     } catch (err) {
       lastError = err;
-      if (attempt < attempts) await sleep(2000 * attempt);
+      // Espera creciente, con techo: si la caída dura un minuto, insistir cada dos segundos
+      // solo añade carga a un servicio que ya está mal.
+      if (attempt < attempts) await sleep(Math.min(30_000, 2000 * attempt));
     }
   }
   throw new Error(
