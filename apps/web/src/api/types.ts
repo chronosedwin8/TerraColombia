@@ -554,7 +554,12 @@ export interface AreaParcelStats {
   rural: number;
   areaSumM2: Maybe<number>;
   areaMedianM2: Maybe<number>;
+  /** Área construida del catastro (todos los pisos). El IGAC no la publica en su base abierta. */
   builtAreaSumM2: Maybe<number>;
+  /** Superficie que ocupan las construcciones en el suelo, medida sobre su geometría. */
+  builtFootprintSumM2: Maybe<number>;
+  /** Construcciones dentro de la zona. */
+  buildings: number;
   withBuilding: number;
   withoutBuilding: number;
   /** Conteo por destino económico: «Habitacional», «Comercial»… */

@@ -424,6 +424,8 @@ export async function parcelStatsIn(geometry: unknown, cutDate?: string) {
     area_median_m2: number | null;
     built_area_sum_m2: number | null;
     n_with_building: number;
+    n_buildings: number;
+    built_footprint_sum_m2: number | null;
     use_counts: Record<string, number>;
   }>(sql`
     WITH scope AS (SELECT ${geoJson(geometry)} AS g),
@@ -434,6 +436,24 @@ export async function parcelStatsIn(geometry: unknown, cutDate?: string) {
       CROSS JOIN scope
       WHERE ${cutDate ? sql`s.cut_date = ${cutDate}::date` : sql`s.is_active`}
         AND p.geom && scope.g AND ST_Intersects(p.geom, scope.g)
+    ),
+    /*
+     * Las construcciones se cuentan en su propia tabla, no por built_area_m2 del predio.
+     * La Base Catastral Pública del IGAC no publica ese campo —está vacío en los 5,1 millones
+     * de predios—, así que «predios con construcción» daba 0 en municipios con cientos de
+     * miles de edificaciones cargadas: Palmira tiene 165.531. La huella es la superficie que
+     * ocupan en el suelo, medida sobre la geometría; NO es el área construida del catastro,
+     * que suma todos los pisos y que la fuente tampoco publica.
+     */
+    cons AS (
+      SELECT
+        count(*)::int AS n_buildings,
+        count(DISTINCT b.parcel_npn)::int AS n_with_building,
+        sum(ST_Area(ST_Transform(b.geom, 9377))) AS footprint_m2
+      FROM core.building b
+      JOIN meta.snapshot s2 ON s2.id = b.snapshot_id AND s2.is_active
+      CROSS JOIN scope
+      WHERE b.geom && scope.g AND ST_Intersects(b.geom, scope.g)
     )
     SELECT
       count(*)::int AS n_parcels,
@@ -442,7 +462,9 @@ export async function parcelStatsIn(geometry: unknown, cutDate?: string) {
       sum(area_geom_m2) AS area_sum_m2,
       percentile_cont(0.5) WITHIN GROUP (ORDER BY area_geom_m2) AS area_median_m2,
       sum(built_area_m2) AS built_area_sum_m2,
-      count(*) FILTER (WHERE built_area_m2 > 0)::int AS n_with_building,
+      (SELECT n_with_building FROM cons) AS n_with_building,
+      (SELECT n_buildings FROM cons) AS n_buildings,
+      (SELECT footprint_m2 FROM cons) AS built_footprint_sum_m2,
       COALESCE(
         (SELECT jsonb_object_agg(COALESCE(economic_use, 'NO_DISPONIBLE'), n)
          FROM (SELECT economic_use, count(*)::int AS n FROM sel GROUP BY economic_use

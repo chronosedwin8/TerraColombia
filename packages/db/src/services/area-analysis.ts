@@ -203,9 +203,13 @@ export async function analyzeArea(
           rural: parcelStats.n_rural,
           areaSumM2: parcelStats.area_sum_m2 ?? NOT_AVAILABLE,
           areaMedianM2: parcelStats.area_median_m2 ?? NOT_AVAILABLE,
+          /* El catastro público no publica el área construida (todos los pisos sumados). */
           builtAreaSumM2: parcelStats.built_area_sum_m2 ?? NOT_AVAILABLE,
+          /** Superficie que ocupan las construcciones en el suelo, medida sobre su geometría. */
+          builtFootprintSumM2: parcelStats.built_footprint_sum_m2 ?? NOT_AVAILABLE,
+          buildings: parcelStats.n_buildings,
           withBuilding: parcelStats.n_with_building,
-          withoutBuilding: parcelStats.n_parcels - parcelStats.n_with_building,
+          withoutBuilding: Math.max(0, parcelStats.n_parcels - parcelStats.n_with_building),
           byEconomicUse: parcelStats.use_counts,
           /** Densidad predial: útil para comparar zonas de tamaño distinto. */
           parcelsPerKm2:

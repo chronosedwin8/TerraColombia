@@ -1,8 +1,13 @@
 /**
  * Seguimiento de una operación asíncrona (análisis grandes e informes).
  *
- * Estrategia: SSE por `GET /jobs/:id/stream` como canal principal y un sondeo de respaldo
- * a `GET /jobs/:id` cada 4 s, porque un proxy intermedio puede cortar el stream sin avisar.
+ * Estrategia: sondeo a `GET /jobs/:id`. El flujo de eventos (`/jobs/:id/stream`) NO se usa
+ * desde el navegador: `EventSource` no puede enviar cabeceras y la API autentica con
+ * `Authorization: Bearer`, así que la conexión respondía 401 SIN EXCEPCIÓN y dejaba un error
+ * rojo en la consola en cada trabajo. El sondeo ya hacía todo el trabajo; el stream solo
+ * aportaba ruido. Queda la ruta en la API para clientes que sí pueden poner cabeceras (y para
+ * el día que la sesión viaje en cookie), y `subscribeToJob` sigue en `client.ts` para
+ * entonces.
  *
  * VERIFICADO CONTRA LA API VIVA (`apps/api/src/routes/jobs.ts`). La versión anterior no
  * terminaba NUNCA un trabajo en la UI por tres motivos, todos corregidos aquí:
@@ -14,7 +19,6 @@
  */
 import { onScopeDispose, ref, shallowRef, type Ref, type ShallowRef } from 'vue';
 import { AppError, MESSAGES, type JobStatus } from '@terracolombia/shared';
-import { subscribeToJob } from '@/api/client';
 import { getJob } from '@/api/jobs';
 
 export interface UseJobReturn<T> {
@@ -31,12 +35,8 @@ export interface UseJobReturn<T> {
   stop: () => void;
 }
 
-const POLL_INTERVAL_MS = 4000;
-
-/** Estados terminales del worker: en ellos se deja de sondear y de escuchar el stream. */
-function isTerminal(status: JobStatus): boolean {
-  return status === 'done' || status === 'failed' || status === 'canceled';
-}
+/** Cada cuánto se pregunta por el trabajo. Es el único canal, así que no conviene alargarlo. */
+const POLL_INTERVAL_MS = 2500;
 
 export function useJob<T>(): UseJobReturn<T> {
   const jobId = ref<string | null>(null);
@@ -47,12 +47,9 @@ export function useJob<T>(): UseJobReturn<T> {
   const error = shallowRef<AppError | null>(null);
   const isActive = ref(false);
 
-  let unsubscribe: (() => void) | null = null;
   let poll: ReturnType<typeof setInterval> | null = null;
 
   const stop = (): void => {
-    unsubscribe?.();
-    unsubscribe = null;
     if (poll) clearInterval(poll);
     poll = null;
     isActive.value = false;
@@ -99,31 +96,6 @@ export function useJob<T>(): UseJobReturn<T> {
     result.value = null;
     error.value = null;
     isActive.value = true;
-
-    unsubscribe = subscribeToJob<T>(id, {
-      onProgress: (payload) => {
-        // El evento trae su propio estado: puede seguir en cola aunque ya emita progreso.
-        status.value = payload.status;
-        progress.value = payload.progress;
-        progressMessage.value = payload.message;
-      },
-      onDone: (payload) => {
-        // El resultado va ANIDADO: `payload` es el sobre `{id, status, result, errorMessage}`.
-        result.value = payload.result;
-        progress.value = 100;
-        finish(isTerminal(payload.status) ? payload.status : 'done');
-      },
-      onFailed: (payload) => {
-        error.value = new AppError('INTERNAL', payload.errorMessage ?? MESSAGES.common.error);
-        finish(isTerminal(payload.status) ? payload.status : 'failed');
-      },
-      onError: (err) => {
-        // El stream falló (red o trabajo inexistente): el sondeo decide si el trabajo
-        // realmente falló. No se marca `failed` aquí para no mentir ante un corte de red.
-        error.value = err;
-        void pollOnce(id);
-      },
-    });
 
     poll = setInterval(() => {
       void pollOnce(id);

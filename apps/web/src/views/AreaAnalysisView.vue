@@ -17,6 +17,7 @@ import {
   type GeoJsonFeatureCollection,
   type GeoJsonGeometry,
   type Maybe,
+  type ResponseMeta,
 } from '@terracolombia/shared';
 import { useAreaStore, MAX_COMPARED_AREAS } from '@/stores/area';
 import { useMapStore } from '@/stores/map';
@@ -111,7 +112,10 @@ async function analyze(): Promise<void> {
 // Cuando el trabajo termina, el resultado se asienta en la zona que lo lanzó.
 watch(job.result, (result) => {
   if (!result || !pendingJobKey.value) return;
-  area.settleFromJob(pendingJobKey.value, result);
+  // El trabajo encolado no tiene sobre: trae su procedencia dentro del propio resultado.
+  // Sin separarla aquí, el tablero salía entero como «No disponible» (regla 4).
+  const { meta, ...data } = result as AreaAnalysisResult & { meta?: ResponseMeta };
+  area.settleFromJob(pendingJobKey.value, data as AreaAnalysisResult, meta);
   pendingJobKey.value = null;
 });
 
@@ -218,14 +222,26 @@ function sectionsOf(result: AreaAnalysisResult): AreaSectionView[] {
           format: 'area',
         },
         {
+          key: 'parcels_built_footprint',
+          label: 'Huella de las construcciones',
+          value: p.builtFootprintSumM2,
+          format: 'area',
+        },
+        {
+          key: 'buildings',
+          label: 'Construcciones',
+          value: p.buildings,
+          format: 'number',
+        },
+        {
           key: 'parcels_with_building',
-          label: 'Con construcción',
+          label: 'Predios con construcción',
           value: p.withBuilding,
           format: 'number',
         },
         {
           key: 'parcels_without_building',
-          label: 'Sin construcción',
+          label: 'Predios sin construcción',
           value: p.withoutBuilding,
           format: 'number',
         },

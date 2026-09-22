@@ -1,6 +1,17 @@
-import { AREA_ANALYSIS_HARD_LIMIT_KM2, DISCLAIMERS, getLogger } from '@terracolombia/shared';
+import {
+  AREA_ANALYSIS_HARD_LIMIT_KM2,
+  DISCLAIMERS,
+  buildMeta,
+  getLogger,
+} from '@terracolombia/shared';
 import type { AreaScope } from '@terracolombia/shared';
-import { analyzeArea, getPrisma, resolveAreaScope } from '@terracolombia/db';
+import {
+  analyzeArea,
+  getPrisma,
+  getSourceRefs,
+  presentDatasets,
+  resolveAreaScope,
+} from '@terracolombia/db';
 import type { AreaSection } from '@terracolombia/db';
 import type { JobContext } from '../queue.js';
 
@@ -108,15 +119,27 @@ export async function runAreaAnalysisJob(jobId: string, ctx: JobContext): Promis
   await Promise.allSettled(pending);
 
   /*
-   * Los avisos que la vía síncrona pone en `meta.warnings` del sobre tienen que viajar
-   * DENTRO del resultado: el trabajo encolado no tiene sobre, y sin esto el mismo análisis
-   * decía la verdad o se la callaba según su tamaño. El principal es que una isócrona es en
-   * realidad un círculo calculado con una velocidad media, no un alcance por red vial.
+   * Avisos y procedencia viajan DENTRO del resultado, porque el trabajo encolado no tiene
+   * sobre donde ponerlos y los necesita por dos razones distintas:
+   *
+   *  · Los avisos, para no callarse lo que la vía síncrona sí dice —sobre todo que una
+   *    isócrona es en realidad un círculo con velocidad media, no un alcance por red vial—.
+   *  · La procedencia, porque la interfaz no muestra una cifra sin su fuente, su fecha de
+   *    corte y su licencia (regla 4): sin ella, el tablero de una zona con 108.633 predios
+   *    salía entero como «No disponible» con el dato ya calculado al lado.
    */
+  const warnings = [...new Set([...resolved.warnings, ...analysis.warnings, DISCLAIMERS.hazardScale])];
+  const datasetIds = await presentDatasets(
+    ['cadastre', 'admin', 'population', 'education', 'health', 'osm', 'soils', 'hazards', 'protected', 'ethnic', 'pot', 'relief'],
+    { muniCode: resolved.muniCode },
+  );
+  const sources = datasetIds.length > 0 ? await getSourceRefs(datasetIds) : [];
+
   const result = {
     ...analysis,
-    warnings: [...new Set([...resolved.warnings, ...analysis.warnings, DISCLAIMERS.hazardScale])],
+    warnings,
     computedAt: new Date().toISOString(),
+    meta: buildMeta(sources, { coverage: analysis.coverage, warnings }),
   };
 
   await prisma.job.update({
