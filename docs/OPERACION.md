@@ -1206,12 +1206,23 @@ schtasks /Create /TN "TerraColombia Actualizacion mensual" /SC MONTHLY /D 5 /ST 
   /TR "powershell -NoProfile -File C:\ruta\repo\infra\scripts\refresh.ps1"
 ```
 
-### Dos cosas aprendidas a la mala
+### PowerShell: qué versión hace falta
 
-Los `.ps1` deben guardarse **con marca de orden de bytes**: Windows PowerShell 5.1 los
-lee como ANSI si no la llevan y los acentos rompen el guion antes de ejecutarse.
+En el equipo de desarrollo está instalado **PowerShell 7.6** (`winget install --id
+Microsoft.PowerShell`). Los guiones funcionan igual con él y con el **Windows PowerShell
+5.1** que trae Windows de fábrica, y eso es deliberado: un servidor recién montado puede
+no tener el 7, y un guion de respaldo que solo corre en la máquina de quien lo escribió
+no sirve de nada.
 
-Y nunca redirigir con `2>&1` la salida de un ejecutable nativo: esa versión de
-PowerShell convierte cada línea de stderr en un error que aborta el guion, aunque el
-programa termine bien. `pg_dump` escribe ahí sus mensajes de progreso, y por eso el
-respaldo fallaba siempre fuera de PowerShell 7.
+Mantener la compatibilidad con 5.1 cuesta dos reglas, ambas aprendidas a la mala:
+
+**Guardar los `.ps1` con marca de orden de bytes.** Windows PowerShell 5.1 los lee como
+ANSI si no la llevan, y los acentos rompen el guion *antes* de ejecutarse: el error que
+sale es de sintaxis y no dice nada de codificación.
+
+**Nunca redirigir con `2>&1` la salida de un ejecutable nativo.** Esa versión convierte
+cada línea de stderr en un error que aborta el guion, aunque el programa termine bien.
+`pg_dump` escribe ahí sus mensajes de progreso y sus avisos informativos, así que el
+respaldo fallaba siempre fuera de PowerShell 7 — y como en la máquina de desarrollo
+estaba el 7, nadie lo había notado. La salida de error se manda a un archivo y se lee
+después.
