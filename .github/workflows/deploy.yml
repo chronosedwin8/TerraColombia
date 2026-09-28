@@ -72,7 +72,7 @@ jobs:
       etiqueta: ${{ steps.calcular.outputs.etiqueta }}
       sufijo: ${{ steps.calcular.outputs.sufijo }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - id: calcular
         run: |
@@ -124,7 +124,7 @@ jobs:
     needs: [decidir]
     steps:
       - name: Autenticarse en GHCR
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -167,7 +167,7 @@ jobs:
       ETIQUETA: ${{ needs.decidir.outputs.etiqueta }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Instalar la CLI de CapRover
         run: npm install --global caprover@2
@@ -349,7 +349,7 @@ jobs:
       issues: write
     steps:
       - name: Abrir una incidencia
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const titulo = `Falló el despliegue a producción (${context.sha.substring(0, 7)})`;
