@@ -36,7 +36,7 @@
     "@terracolombia/etl-config": "workspace:*",
     "@terracolombia/geo": "workspace:*",
     "@terracolombia/shared": "workspace:*",
-    "pg": "^8.13.1"
+    "pg": "^8.23.1"
   },
   "devDependencies": {
     "@types/pg": "^8.11.10",
